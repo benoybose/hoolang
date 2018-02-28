@@ -14,7 +14,7 @@ typedef enum {
     LITERAL_TYPE_BOOL
 } hcliteral_type;
 
-typedef struct {
+struct hclieral_node {
     hcliteral_type type;
     union {
         int32_t intval;
@@ -25,9 +25,8 @@ typedef struct {
         bool boolval;
     } value;
     size_t size;
+};
 
-} hclieral_node;
-
-hclieral_node* hcliteral_create(char* text, hcliteral_type literal_type);
+struct hclieral_node* hcliteral_create(char* text, hcliteral_type literal_type);
 
 #endif

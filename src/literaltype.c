@@ -3,8 +3,8 @@
 #include <memory.h>
 #include "literaltype.h"
 
-hclieral_node* hcliteral_create(char* text, hcliteral_type literal_type) {
-    hclieral_node* node = (hclieral_node*) malloc(sizeof (hclieral_node));
+struct hclieral_node* hcliteral_create(char* text, hcliteral_type literal_type) {
+    struct hclieral_node* node = (struct hclieral_node*) malloc(sizeof (struct hclieral_node));
     switch (literal_type) {
         case LITERAL_TYPE_INT:
             node->value.intval = atol(text);

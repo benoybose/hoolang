@@ -1,11 +1,13 @@
 %{
-    #include <stdio.h>
-    #include "hcparser.h"
+#include <stdio.h>
+#include "literaltype.h"
+#include "hcparser.h"
 
-    extern int yylex();
-    extern int yyparse();
-    extern FILE* yyin;
-    void yyerror(const char* s);
+extern int yylex();
+extern int yyparse();
+extern FILE* yyin;
+extern char* yytext;
+void yyerror(const char* s);
 %}
 
 %token TOKEN_OPR_ADD
@@ -13,20 +15,27 @@
 %token TOKEN_OPR_MUL
 %token TOKEN_OPR_DIV
 %token TOKEN_OPR_MOD
-
 %token TOKEN_LITERAL_INT
 
+%union {
+    struct hclieral_node* liternalnode;
+}
+
+%type<liternalnode> literal
 
 %%
-    expr_binary:  expr
-        |
-        expr operator expr
+    expr_binary: expr operator expr
         ;
 
-    expr: literal
+    expr: literal   {
+                        printf("literal expression found.");
+                    }
         ;
 
-    literal: TOKEN_LITERAL_INT
+    literal: TOKEN_LITERAL_INT { $$ = hcliteral_create(
+                                            yytext, 
+                                            LITERAL_TYPE_INT); 
+                                }
         ;
 
     operator:   TOKEN_OPR_ADD
