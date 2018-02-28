@@ -16,4 +16,9 @@ parser:
 		./grammar/hcparser.y
 		
 clean:
-	rm hc.exe
+	rm -f ./hc.exe
+	rm -f ./hc
+	rm -f ./include/hclexer.h
+	rm -f ./include/hcparser.h
+	rm -f ./src/hclexer.c
+	rm -f ./src/hcparser.c
