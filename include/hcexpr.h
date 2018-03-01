@@ -20,17 +20,41 @@
 extern "C" {
 #endif
 
-    typedef enum {
+    enum hcexpr_type {
         EXPR_TYPE_LITERAL,
         EXPR_TYPE_BINARY
-    } hcexpr_type;
-    
-    struct hcexpr_node{
-        hcexpr_type type;
-        union {
-            struct hclieral_node* value;
-        };
     };
+
+    enum hcoperator_type {
+        OPERATOR_ADD,
+        OPERATOR_SUB,
+        OPERATOR_DIV,
+        OPERATOR_MUL,
+        OPERATOR_MOD
+    };
+
+    struct hcexpr_node;
+    struct hcexpr_binary_node {
+        struct hcexpr_node* lvalue;
+        enum hcoperator_type op;
+        struct hcexpr_node* rvalue;
+    };
+
+    struct hcexpr_node {
+        enum hcexpr_type type;
+
+        union {
+            struct hclieral_node* literal;
+            struct hcexpr_binary_node* binary;
+            void* generic;
+        } value;
+    };
+    
+    struct hcexpr_binary_node* hcexpr_binary_node_create(struct hcexpr_node* lvalue,
+            enum hcoperator_type opr, 
+            struct hcexpr_node* rvalue);
+    struct hcexpr_node* hcexpr_node_create(enum hcexpr_type type, void* value);
+    
 
 #ifdef __cplusplus
 }

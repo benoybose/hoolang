@@ -32,7 +32,7 @@ extern "C" {
         size_t size;
     };
 
-    struct hclieral_node* hcliteral_create(char* text, hcliteral_type literal_type);
+    struct hclieral_node* hcliteral_node_create(char* text, hcliteral_type literal_type);
 
 #ifdef __cplusplus
 }

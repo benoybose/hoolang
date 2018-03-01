@@ -3,7 +3,9 @@ hc: lexer
 		src/main.c \
 		src/hclexer.c \
 		src/hcparser.c \
-		src/literaltype.c
+		src/literaltype.c \
+		src/hclogger.c \
+		src/hcexpr.c
 
 lexer: parser
 	flex --outfile=./src/hclexer.c \
