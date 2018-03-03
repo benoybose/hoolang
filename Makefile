@@ -1,11 +1,15 @@
+hoo: hc
+	gcc -m32 -I ./include -o hoo \
+		src/hoomain.c
 hc: lexer
-	gcc -I ./include -o ./hc \
-		src/main.c \
+	gcc -m32 -I ./include -o ./hc \
+		src/hcmain.c \
 		src/hclexer.c \
 		src/hcparser.c \
 		src/literaltype.c \
 		src/hclogger.c \
-		src/hcexpr.c
+		src/hcexpr.c \
+		src/hcintops.c
 
 lexer: parser
 	flex --outfile=./src/hclexer.c \
