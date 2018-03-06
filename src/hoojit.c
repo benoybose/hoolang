@@ -1,8 +1,11 @@
 #include <string.h>
+#include <stdint.h>
+#include <stdio.h>
 
 #include "hoojit.h"
 #include "stdlib.h"
 #include "hoocodebuffer.h"
+#include "hooutil.h"
 
 struct hoo_jit* hoo_jit_init() {
     struct hoo_jit* jit = malloc(sizeof(struct hoo_jit));
@@ -58,7 +61,8 @@ size_t hoo_jit_calculate_buffer_size(struct hoo_jit* jit) {
         struct hoo_jit_ins ins = jit->ins[index];
         buffer_size += ins.bytes_count;
     }
-
+    
+    buffer_size += 1; // for appending 0xC3 (RET)
     return buffer_size;
 }
 
@@ -73,7 +77,9 @@ struct hoo_codebuffer hoo_jit_get_codebuffer(struct hoo_jit* jit) {
                 ins.bytes, 
                 ins.bytes_count);
         pos += ins.bytes_count;
-    }    
+    }
+    
+    buffer.code[buffer_size - 1] = 0xC3; // Appending 0xC3 (RET)
     return buffer;
 }
 
@@ -84,4 +90,32 @@ hoo_jit_exec hoo_jit_compile(struct hoo_jit* jit) {
     jit->buffer = hoo_jit_get_codebuffer(jit);
     hoo_codebuffer_lock(jit->buffer);    
     return (hoo_jit_exec) jit->buffer.code;
+}
+
+int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call func_call) {
+    if(4 == sizeof(size_t)) {
+        uint32_t address = (uint32_t) func_call.func;
+        struct hoo_int32_decoded decoded = hoo_int32_get_decoded(address);
+        
+        // Creating MOV EAX, ADDRESS
+        struct hoo_jit_ins ins_mov_eax_adr = {
+            .bytes = { 0xB8, decoded.byte1, decoded.byte2, 
+                decoded.byte3, decoded.byte4 },
+            .bytes_count = 5
+        };
+        
+        // Creating CALL EAX
+        struct hoo_jit_ins ins_call_eax = {
+            .bytes = { 0xFF, 0xD0 },
+            .bytes_count = 2
+        };
+        
+        hoo_jit_add_instruction(jit, ins_mov_eax_adr);
+        hoo_jit_add_instruction(jit, ins_call_eax);
+        return jit->ins_count;
+        
+    } else {
+        // todo: Implement for x64
+    }
+    return 0;
 }

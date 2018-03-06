@@ -34,7 +34,7 @@ void hoo_codebuffer_free(struct hoo_codebuffer codebuffer) {
 void hoo_codebuffer_printf(struct hoo_codebuffer codebuffer) {
     printf("[");
     for(int index = 0; index < codebuffer.code_size; index++) {
-        printf("%x", codebuffer.code[index]);
+        printf("%02x", codebuffer.code[index]);
         if(index < (codebuffer.code_size - 1)) {
             printf(" ");
         }

@@ -2,7 +2,8 @@ hoo: hc
 	gcc -g -m32 -I ./include -o hoo \
 		src/hoomain.c \
 		src/hoocodebuffer.c \
-		src/hoojit.c
+		src/hoojit.c \
+		src\hooutil.c
 hc: lexer
 	gcc -g -m32 -I ./include -o ./hc \
 		src/hcmain.c \
