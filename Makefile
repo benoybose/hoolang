@@ -3,7 +3,9 @@ hoo: hc
 		src/hoomain.c \
 		src/hoocodebuffer.c \
 		src/hoojit.c \
-		src\hooutil.c
+		src/hooutil.c \
+		src/hootype.c
+		
 hc: lexer
 	gcc -g -m32 -I ./include -o ./hc \
 		src/hcmain.c \
@@ -11,8 +13,7 @@ hc: lexer
 		src/hcparser.c \
 		src/literaltype.c \
 		src/hclogger.c \
-		src/hcexpr.c \
-		src/hcintops.c
+		src/hcexpr.c
 
 lexer: parser
 	flex --outfile=./src/hclexer.c \

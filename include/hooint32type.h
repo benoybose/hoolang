@@ -14,17 +14,16 @@
 #ifndef HCINTOPS_H
 #define HCINTOPS_H
 
+#include <stdint.h>
+#include "hooint32type.h"
+#include "hootype.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <stdint.h>
     
-    int32_t __hc_op_add(int32_t value1, int32_t value2);
-    int32_t __hc_op_sub(int32_t value1, int32_t value2);
-    int32_t __hc_op_mul(int32_t value1, int32_t value2);
-    int32_t __hc_op_div(int32_t value1, int32_t value2);
-    int32_t __hc_op_mod(int32_t value1, int32_t value2);
+    hoo_metaobject hoo_int32_create_from_text(char* text);
+    hoo_metaobject hoo_int32_create_from_int32(int32_t value);
 
 #ifdef __cplusplus
 }
