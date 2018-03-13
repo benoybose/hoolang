@@ -2,6 +2,8 @@
 #define HOOJIT_H
 
 #include "hoocodebuffer.h"
+#include "hootype.h"
+#include "hoojitfunccall.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,10 +39,6 @@ extern "C" {
          * Compiled output as code buffer
          */
         struct hoo_codebuffer buffer;
-    };
-    
-    struct hoo_jit_func_call {
-        void* func;
     };
     
     /**
@@ -87,7 +85,7 @@ extern "C" {
      */
     hoo_jit_exec hoo_jit_compile(struct hoo_jit* jit);
     
-    int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call func_call);
+    int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call* func_call);
 
 
 #ifdef __cplusplus

@@ -9,8 +9,7 @@ void test_func() {
 
 int main() {   
     struct hoo_jit* jit = hoo_jit_init();
-    struct hoo_jit_func_call func_call;
-    func_call.func = &test_func;
+    struct hoo_jit_func_call* func_call = hoo_jit_func_call_create(&test_func);
     hoo_jit_add_func_call(jit, func_call);
     hoo_jit_exec test = hoo_jit_compile(jit);
     test();

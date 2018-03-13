@@ -4,7 +4,8 @@ hoo: hc
 		src/hoocodebuffer.c \
 		src/hoojit.c \
 		src/hooutil.c \
-		src/hootype.c
+		src/hootype.c \
+		src/hoojitfunccall.c
 		
 hc: lexer
 	gcc -g -m32 -I ./include -o ./hc \

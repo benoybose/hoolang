@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "hootype.h"
 #include "hoojit.h"
 #include "stdlib.h"
 #include "hoocodebuffer.h"
@@ -92,11 +93,10 @@ hoo_jit_exec hoo_jit_compile(struct hoo_jit* jit) {
     return (hoo_jit_exec) jit->buffer.code;
 }
 
-int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call func_call) {
+int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call* call) {
     if(4 == sizeof(size_t)) {
-        uint32_t address = (uint32_t) func_call.func;
-        struct hoo_int32_decoded decoded = hoo_int32_get_decoded(address);
-        
+        uint32_t address = (uint32_t) call->func;
+        struct hoo_int32_decoded decoded = hoo_int32_get_decoded(address);        
         // Creating MOV EAX, ADDRESS
         struct hoo_jit_ins ins_mov_eax_adr = {
             .bytes = { 0xB8, decoded.byte1, decoded.byte2, 
@@ -110,8 +110,34 @@ int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call func_cal
             .bytes_count = 2
         };
         
+        if(0 < call->param_count) {
+            
+            size_t stack_offset = call->param_count * 4;
+            struct hoo_jit_ins ins_sub_esp = {
+                .bytes = { 0x83, 0xEC, stack_offset },
+                .bytes_count = 3
+            };
+            
+            if(127 < stack_offset) {
+                ins_sub_esp.bytes[0] = 0x81;
+            }
+            
+            for(int index = 0; index < call->param_count; index++) {
+                int reverse_index = call->param_count - (index + 1);
+                struct hoo_metaobject* object = call->params[reverse_index];
+            }
+        }
+        
         hoo_jit_add_instruction(jit, ins_mov_eax_adr);
         hoo_jit_add_instruction(jit, ins_call_eax);
+        
+        if(call) {
+            if(call->param_count) {
+                free(call->params);
+            }
+            free(call);
+        }
+        
         return jit->ins_count;
         
     } else {

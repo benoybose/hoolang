@@ -96,9 +96,6 @@ extern "C" {
     struct hoo_metaobject* hoo_metaobject_create_array(struct hoo_array* value);
     struct hoo_metaobject* hoo_metaobject_create_object(struct hoo_object* value);
     
-    
-    
-    
 
 #ifdef __cplusplus
 }
