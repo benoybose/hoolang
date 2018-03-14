@@ -37,6 +37,8 @@ void hoo_codebuffer_lock(struct hoo_codebuffer codebuffer) {
 void hoo_codebuffer_free(struct hoo_codebuffer codebuffer) {
 #ifdef _WIN32
     VirtualFree(codebuffer.code, codebuffer.code_size, MEM_RELEASE);
+#else
+    munmap(codebuffer.code, codebuffer.code_size);
 #endif
 }
 
