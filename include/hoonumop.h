@@ -28,7 +28,7 @@ extern "C" {
         HOO_NUM_OP_MOD
     };
     
-    struct hoo_metaobject* __hoo_num_cal(struct hoo_metaobject* op1, struct hoo_metaobject* op2,
+    struct hoo_metaobject* __hoo_num_calc(struct hoo_metaobject* op1, struct hoo_metaobject* op2,
             enum HOO_NUM_OPERATORS op);
     struct hoo_metaobject* __hoo_num_add(struct hoo_metaobject* op1, struct hoo_metaobject* op2);
     struct hoo_metaobject* __hoo_num_sub(struct hoo_metaobject* op1, struct hoo_metaobject* op2);
