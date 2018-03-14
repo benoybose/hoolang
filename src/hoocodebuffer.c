@@ -1,6 +1,8 @@
 #include <stdio.h>
 #ifdef _WIN32
-#include "windows.h"
+#include <windows.h>
+#else
+#include <sys/mman.h>
 #endif
 
 #include "hoocodebuffer.h"
@@ -10,6 +12,10 @@ struct hoo_codebuffer hoo_codebuffer_allocate (size_t size) {
 #ifdef _WIN32
     buffer = VirtualAlloc(NULL, size, 
             MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+#else
+    buffer = mmap(0, size, 
+        PROT_READ | PROT_WRITE, 
+        MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 #endif
     struct hoo_codebuffer codebuffer;
     codebuffer.code = buffer;
@@ -22,6 +28,9 @@ void hoo_codebuffer_lock(struct hoo_codebuffer codebuffer) {
     DWORD old = 0;
     VirtualProtect(codebuffer.code, codebuffer.code_size, 
             PAGE_EXECUTE_READ, &old);
+#else
+    mprotect(codebuffer.code, codebuffer.code_size, 
+        PROT_READ | PROT_EXEC);
 #endif
 }
 
