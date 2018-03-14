@@ -14,6 +14,20 @@ struct hoo_jit* hoo_jit_init() {
     jit->ins_count = 0;
     jit->buffer.code = 0;
     jit->buffer.code_size = 0;
+    
+    struct hoo_jit_ins ins_push_ebp = {
+        .bytes = { 0x55 },
+        .bytes_count = 1
+    };
+    
+    struct hoo_jit_ins ins_mov_esp_ebp = {
+        .bytes = { 0x89, 0xE5 },
+        .bytes_count = 2
+    };
+    
+    hoo_jit_add_instruction(jit, ins_push_ebp);
+    hoo_jit_add_instruction(jit, ins_mov_esp_ebp);
+    
     return jit;
 }
 
@@ -63,14 +77,14 @@ size_t hoo_jit_calculate_buffer_size(struct hoo_jit* jit) {
         buffer_size += ins.bytes_count;
     }
     
-    buffer_size += 1; // for appending 0xC3 (RET)
     return buffer_size;
 }
 
 struct hoo_codebuffer hoo_jit_get_codebuffer(struct hoo_jit* jit) {
     size_t buffer_size = hoo_jit_calculate_buffer_size(jit);
-    struct hoo_codebuffer buffer = hoo_codebuffer_allocate(buffer_size);
+    buffer_size += 2;
     
+    struct hoo_codebuffer buffer = hoo_codebuffer_allocate(buffer_size);    
     size_t pos = 0;
     for(int index = 0; index < jit->ins_count; index++) {
         struct hoo_jit_ins ins = jit->ins[index];
@@ -80,6 +94,7 @@ struct hoo_codebuffer hoo_jit_get_codebuffer(struct hoo_jit* jit) {
         pos += ins.bytes_count;
     }
     
+    buffer.code[buffer_size - 2] = 0xC9; // Appending 0xC9 LEAVE
     buffer.code[buffer_size - 1] = 0xC3; // Appending 0xC3 (RET)
     return buffer;
 }
@@ -96,7 +111,9 @@ hoo_jit_exec hoo_jit_compile(struct hoo_jit* jit) {
 int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call* call) {
     if(4 == sizeof(size_t)) {
         uint32_t address = (uint32_t) call->func;
-        struct hoo_int32_decoded decoded = hoo_int32_get_decoded(address);        
+        
+        // Decoding function address to four bytes
+        struct hoo_uint32_decoded decoded = hoo_uint32_get_decoded(address);        
         // Creating MOV EAX, ADDRESS
         struct hoo_jit_ins ins_mov_eax_adr = {
             .bytes = { 0xB8, decoded.byte1, decoded.byte2, 
@@ -112,19 +129,46 @@ int hoo_jit_add_func_call(struct hoo_jit* jit, struct hoo_jit_func_call* call) {
         
         if(0 < call->param_count) {
             
-            size_t stack_offset = call->param_count * 4;
+            // Calculating total size in stack for function parameters
+            uint8_t stack_offset = call->param_count * 4;
+            
+            // JIT instruction to expand stack for function parameters by
+            // substracting the ESP
             struct hoo_jit_ins ins_sub_esp = {
                 .bytes = { 0x83, 0xEC, stack_offset },
                 .bytes_count = 3
-            };
-            
-            if(127 < stack_offset) {
+            };            
+            if(0x80 == (0x80 & stack_offset)) {
                 ins_sub_esp.bytes[0] = 0x81;
-            }
+            }            
+            hoo_jit_add_instruction(jit, ins_sub_esp);
             
             for(int index = 0; index < call->param_count; index++) {
-                int reverse_index = call->param_count - (index + 1);
+                uint8_t reverse_index = call->param_count - (index + 1);
+                uint8_t param_pos = reverse_index * 4;
                 struct hoo_metaobject* object = call->params[reverse_index];
+                struct hoo_uint32_decoded param_address = hoo_uint32_get_decoded((uint32_t) object);
+                if(0 < param_pos) {
+                    struct hoo_jit_ins ins_mov_esp = {
+                        .bytes = { 0xC7, 0x44, 0x24, param_pos,
+                        param_address.byte1,
+                        param_address.byte2,
+                        param_address.byte3,
+                        param_address.byte4},
+                        .bytes_count = 8
+                    };
+                    hoo_jit_add_instruction(jit, ins_mov_esp);
+                } else {
+                    struct hoo_jit_ins ins_mov_esp = {
+                        .bytes = { 0xC7, 0x04, 0x24, 
+                        param_address.byte1,
+                        param_address.byte2,
+                        param_address.byte3,
+                        param_address.byte4},
+                        .bytes_count = 7
+                    };
+                    hoo_jit_add_instruction(jit, ins_mov_esp);
+                }                
             }
         }
         

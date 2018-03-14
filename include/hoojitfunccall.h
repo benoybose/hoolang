@@ -51,8 +51,9 @@ extern "C" {
      * Add a new parameter to the function call
      * @param call instance of JIT function call
      * @param param Parameters as hoo metaobject
+     * @return Total number of parameters on success, -1 on error
      */
-    void hoo_jit_func_call_add_param(struct hoo_jit_func_call* call,
+    int hoo_jit_func_call_add_param(struct hoo_jit_func_call* call,
             struct hoo_metaobject* param);
 
 #ifdef __cplusplus

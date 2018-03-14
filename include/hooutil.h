@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-    struct hoo_int32_decoded {
+    struct hoo_uint32_decoded {
         uint8_t byte1;
         uint8_t byte2;
         uint8_t byte3;
@@ -29,7 +29,7 @@ extern "C" {
         uint32_t input;
     };
     
-    struct hoo_int32_decoded hoo_int32_get_decoded(uint32_t value);
+    struct hoo_uint32_decoded hoo_uint32_get_decoded(uint32_t value);
 
 
 #ifdef __cplusplus

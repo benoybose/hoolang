@@ -29,4 +29,5 @@ int hoo_jit_func_call_add_param(struct hoo_jit_func_call* call,
     
     call->params[call->param_count] = param;
     call->param_count ++;
+    return call->param_count;
 }
