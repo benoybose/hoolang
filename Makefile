@@ -1,20 +1,30 @@
-hoo: hc
-	gcc -g -m32 -I ./include -o hoo \
-		src/hoomain.c \
-		src/hoocodebuffer.c \
+HOO_BASE_SOURCE=src/hoocodebuffer.c \
 		src/hoojit.c \
 		src/hooutil.c \
 		src/hootype.c \
-		src/hoojitfunccall.c
-		
-hc: lexer
-	gcc -g -m32 -I ./include -o ./hc \
-		src/hcmain.c \
-		src/hclexer.c \
+		src/hoojitfunccall.c \
+		src/hoonumop.c
+
+HOO_SOURCE=$(HOO_BASE_SOURCE) src/hoomain.c
+	
+HC_BASE_SOURCE=src/hclexer.c \
 		src/hcparser.c \
 		src/literaltype.c \
 		src/hclogger.c \
 		src/hcexpr.c
+	
+HC_SOURCE=$(HC_BASE_SOURCE) src/hcmain.c
+
+HOO_CFLAGS= -g -m32
+
+hoo: hc
+	gcc -g -m32 -I ./include -o hoo $(HOO_SOURCE)
+		
+		
+hc: lexer
+	gcc -g -m32 -I ./include -o ./hc $(HC_SOURCE)
+		
+		
 
 lexer: parser
 	flex --outfile=./src/hclexer.c \
