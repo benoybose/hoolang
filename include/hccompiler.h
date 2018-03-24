@@ -14,6 +14,8 @@
 #ifndef HCCOMPILER_H
 #define HCCOMPILER_H
 
+#include <stdlib.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,7 +30,6 @@ extern "C" {
             const char* source_file_path);
     int hc_compiler_context_compile(struct hc_compiler_context* context);
     void hc_compiler_context_free(struct hc_compiler_context* context);
-
 
 #ifdef __cplusplus
 }

@@ -11,13 +11,14 @@ HC_BASE_SOURCE=src/hclexer.c \
 		src/hcparser.c \
 		src/literaltype.c \
 		src/hclogger.c \
-		src/hcexpr.c
+		src/hcexpr.c \
+		src/hccompiler.c
 	
 HC_SOURCE=$(HC_BASE_SOURCE) src/hcmain.c
 
-HOO_CFLAGS= -g -m32
+all: hc hoo
 
-hoo: hc
+hoo:
 	gcc -g -m32 -I ./include -o hoo $(HOO_SOURCE)
 		
 		

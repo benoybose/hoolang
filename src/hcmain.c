@@ -14,7 +14,3 @@ int main() {
     hclog_close();
     return 0;
 }
-
-void yyerror(const char* message) {
-    printf("Syntax error: %s.\r\n", message);
-}

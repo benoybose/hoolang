@@ -15,13 +15,13 @@ struct hoo_metaobject* __hoo_num_int32_int32_calc(int32_t value1,
             if(0 != value2) {
                 return hoo_metaobject_create_int32(value1 / value2);
             }
-            // todo: Handle error for divide by zero
+            // TODO: Handle error for divide by zero
             break;
         case HOO_NUM_OP_MOD:
             if(0 != value2) {
                 return hoo_metaobject_create_int32(value1 % value2);
             }
-            // todo: Handle error for divide by zero
+            // TODO: Handle error for divide by zero
             break;
             
     }
@@ -48,8 +48,28 @@ struct hoo_metaobject* __hoo_num_calc(struct hoo_metaobject* op1, struct hoo_met
     
     return 0;
 }
-struct hoo_metaobject* __hoo_num_add(struct hoo_metaobject* op1, struct hoo_metaobject* op2);
-struct hoo_metaobject* __hoo_num_sub(struct hoo_metaobject* op1, struct hoo_metaobject* op2);
-struct hoo_metaobject* __hoo_num_div(struct hoo_metaobject* op1, struct hoo_metaobject* op2);
-struct hoo_metaobject* __hoo_num_mul(struct hoo_metaobject* op1, struct hoo_metaobject* op2);
-struct hoo_metaobject* __hoo_num_mod(struct hoo_metaobject* op1, struct hoo_metaobject* op2);
+
+struct hoo_metaobject* __hoo_num_add(struct hoo_metaobject* op1,
+		struct hoo_metaobject* op2) {
+	return __hoo_num_calc(op1, op2, HOO_NUM_OP_ADD);
+}
+
+struct hoo_metaobject* __hoo_num_sub(struct hoo_metaobject* op1,
+		struct hoo_metaobject* op2) {
+	return __hoo_num_calc(op1, op2,HOO_NUM_OP_SUB);
+}
+
+struct hoo_metaobject* __hoo_num_div(struct hoo_metaobject* op1,
+		struct hoo_metaobject* op2) {
+	return __hoo_num_calc(op1, op2, HOO_NUM_OP_DIV);
+}
+
+struct hoo_metaobject* __hoo_num_mul(struct hoo_metaobject* op1,
+		struct hoo_metaobject* op2) {
+	return __hoo_num_calc(op1, op2, HOO_NUM_OP_MUL);
+}
+
+struct hoo_metaobject* __hoo_num_mod(struct hoo_metaobject* op1,
+		struct hoo_metaobject* op2) {
+	return __hoo_num_calc(op1, op2, HOO_NUM_OP_MOD);
+}

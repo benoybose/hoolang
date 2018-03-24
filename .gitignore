@@ -7,3 +7,7 @@ hc
 hc.exe
 hoo
 hoo.exe
+.cproject
+.project
+.settings/
+

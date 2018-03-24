@@ -10,6 +10,7 @@ void test_func() {
 int test_int(struct hoo_metaobject* p1, struct hoo_metaobject* p2) {
     printf("%d + %d = %d\n", p1->value._int32, p2->value._int32, 
             (p1->value._int32 + p2->value._int32));
+    return 0;
 }
 
 int main() {   
