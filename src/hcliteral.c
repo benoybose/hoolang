@@ -17,64 +17,44 @@
  */
 
 /**
- * File: hcexpr.h
+ * File: literaltype.c
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#ifndef HCEXPR_H
-#define HCEXPR_H
+#include <stdlib.h>
+#include <stdint.h>
+#include <memory.h>
 
-#include "hcliteral.h"
+#include "../include/hcliteral.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-	struct hc_node_expr;
-	struct hc_node_expr_binary;
-
-    enum hc_type_expr {
-        EXPR_TYPE_LITERAL,
-        EXPR_TYPE_BINARY
-    };
-
-    enum hc_type_operator {
-        OPERATOR_ADD,
-        OPERATOR_SUB,
-        OPERATOR_DIV,
-        OPERATOR_MUL,
-        OPERATOR_MOD
-    };
-
-    struct hc_node_expr_binary {
-        struct hc_node_expr* lvalue;
-        enum hc_type_operator op;
-        struct hc_node_expr* rvalue;
-    };
-
-    struct hc_node_expr {
-        enum hc_type_expr type;
-        union {
-            struct hc_node_literal* literal;
-            struct hc_node_expr_binary* binary;
-            void* generic;
-        } value;
-    };
-    
-    struct hc_node_expr_binary* hc_node_expr_binary_create(
-    		struct hc_node_expr* lvalue,
-            enum hc_type_operator opr, 
-            struct hc_node_expr* rvalue);
-
-    struct hc_node_expr* hc_node_expr_create(
-    		enum hc_type_expr type,
-			void* value);
-    
-
-#ifdef __cplusplus
+struct hc_node_literal* hc_node_literal_create(char* text, hc_type_literal literal_type) {
+    struct hc_node_literal* node = (struct hc_node_literal*) malloc(sizeof (struct hc_node_literal));
+    switch (literal_type) {
+        case LITERAL_TYPE_INT:
+            node->value.intval = atol(text);
+            node->size = sizeof (int32_t);
+            break;
+            
+        case LITERAL_TYPE_LONG: 
+            node->value.longval = atoll(text);
+            node->size = sizeof (int64_t);
+            break;
+            
+        case LITERAL_TYPE_CHAR: 
+            node->value.charval = text[0];
+            node->size = sizeof (int8_t);
+            break;
+            
+        case LITERAL_TYPE_BYTE:
+            node->value.byteval = (uint8_t) text[0];
+            node->size = sizeof(uint8_t);
+            break;
+            
+        case LITERAL_TYPE_STRING:
+            node->value.stringval = text;
+            node->size = strlen(text);
+            break;
+    }
+    return node;
 }
-#endif
-
-#endif /* HCEXPR_H */
-

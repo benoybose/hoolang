@@ -9,7 +9,7 @@ HOO_SOURCE=$(HOO_BASE_SOURCE) src/hoomain.c
 	
 HC_BASE_SOURCE=src/hclexer.c \
 		src/hcparser.c \
-		src/literaltype.c \
+		src/hcliteral.c \
 		src/hclogger.c \
 		src/hcexpr.c \
 		src/hccompiler.c
@@ -40,6 +40,8 @@ parser:
 clean:
 	rm -f ./hc.exe
 	rm -f ./hc
+	rm -f ./hoo.exe
+	rm -f ./hoo
 	rm -f ./include/hclexer.h
 	rm -f ./include/hcparser.h
 	rm -f ./src/hclexer.c
