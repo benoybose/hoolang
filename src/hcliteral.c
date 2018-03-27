@@ -26,32 +26,34 @@
 #include <stdint.h>
 #include <memory.h>
 
-#include "../include/hcliteral.h"
+#include "nodes/hcliteral.h"
+#include "nodes/hcnode.h"
 
-struct hc_node_literal* hc_node_literal_create(char* text, hc_type_literal literal_type) {
+struct hc_node_literal* hc_node_literal_create(char* text, enum HC_TYPE_LITERAL literal_type) {
     struct hc_node_literal* node = (struct hc_node_literal*) malloc(sizeof (struct hc_node_literal));
+    node->node_type = HC_NODE_LITERAL;
     switch (literal_type) {
-        case LITERAL_TYPE_INT:
+        case HC_LITERAL_INT32:
             node->value.intval = atol(text);
             node->size = sizeof (int32_t);
             break;
             
-        case LITERAL_TYPE_LONG: 
+        case HC_LITERAL_INT64: 
             node->value.longval = atoll(text);
             node->size = sizeof (int64_t);
             break;
             
-        case LITERAL_TYPE_CHAR: 
+        case HC_LITERAL_CHAR: 
             node->value.charval = text[0];
             node->size = sizeof (int8_t);
             break;
             
-        case LITERAL_TYPE_BYTE:
+        case HC_LITERAL_BYTE:
             node->value.byteval = (uint8_t) text[0];
             node->size = sizeof(uint8_t);
             break;
             
-        case LITERAL_TYPE_STRING:
+        case HC_LITERAL_STRING:
             node->value.stringval = text;
             node->size = strlen(text);
             break;

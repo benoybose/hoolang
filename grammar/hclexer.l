@@ -1,6 +1,5 @@
 %{
     #include<stdio.h>
-    #include "hcliteral.h"
     #include "hcparser.h"
     #include "hclogger.h"
 %}

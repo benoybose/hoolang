@@ -17,64 +17,53 @@
  */
 
 /**
- * File: hcexpr.h
+ * File: hcliteral.h
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#ifndef HCEXPR_H
-#define HCEXPR_H
+#ifndef _LITERALTYPE_H_
+#define _LITERALTYPE_H_
 
-#include "nodes/hcliteral.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
+
+#include "hcnode.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-	struct hc_node_expr;
-	struct hc_node_expr_binary;
-
-    enum hc_type_expr {
-        EXPR_TYPE_LITERAL,
-        EXPR_TYPE_BINARY
+    enum HC_TYPE_LITERAL{
+        HC_LITERAL_SBYTE,
+        HC_LITERAL_BYTE,
+        HC_LITERAL_INT32,
+        HC_LITERAL_INT64,
+        HC_LITERAL_FLOAT,
+        HC_LITERAL_DOUBLE,
+        HC_LITERAL_CHAR,
+        HC_LITERAL_STRING,
+        HC_LITERAL_BOOL
     };
 
-    enum hc_type_operator {
-        OPERATOR_ADD,
-        OPERATOR_SUB,
-        OPERATOR_DIV,
-        OPERATOR_MUL,
-        OPERATOR_MOD
-    };
-
-    struct hc_node_expr_binary {
-        struct hc_node_expr* lvalue;
-        enum hc_type_operator op;
-        struct hc_node_expr* rvalue;
-    };
-
-    struct hc_node_expr {
-        enum hc_type_expr type;
+    struct hc_node_literal {
+        enum HC_TYPE_NODE node_type;
+        enum HC_TYPE_LITERAL type;
         union {
-            struct hc_node_literal* literal;
-            struct hc_node_expr_binary* binary;
-            void* generic;
+            int32_t intval;
+            int64_t longval;
+            uint8_t byteval;
+            char charval;
+            char* stringval;
+            bool boolval;
         } value;
+        size_t size;
     };
-    
-    struct hc_node_expr_binary* hc_node_expr_binary_create(
-    		struct hc_node_expr* lvalue,
-            enum hc_type_operator opr, 
-            struct hc_node_expr* rvalue);
 
-    struct hc_node_expr* hc_node_expr_create(
-    		enum hc_type_expr type,
-			void* value);
-    
+    struct hc_node_literal* hc_node_literal_create(char* text, enum HC_TYPE_LITERAL literal_type);
 
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* HCEXPR_H */
-
+#endif

@@ -1,6 +1,6 @@
 %{
 #include <stdio.h>
-#include "hcliteral.h"
+#include "nodes/hcliteral.h"
 #include "hclogger.h"
 #include "hcexpr.h"
 #include "hcparser.h"
@@ -50,7 +50,7 @@ void yyerror(const char* s);
     literal:
         TOKEN_LITERAL_INT { 
             hclog_print("literal: TOKEN_LITERAL_INT %s", yytext);
-            $$ = hc_node_literal_create(yytext, LITERAL_TYPE_INT); 
+            $$ = hc_node_literal_create(yytext, HC_LITERAL_INT32); 
         };
 
     operator:   

@@ -17,47 +17,38 @@
  */
 
 /**
- * File: hcliteral.h
+ * File: hcbaseexpression.h
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#ifndef _LITERALTYPE_H_
-#define _LITERALTYPE_H_
+#ifndef HCBASEEXPRESSION_H
+#define HCBASEEXPRESSION_H
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
+#include "hcnode.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-    typedef enum {
-        LITERAL_TYPE_INT,
-        LITERAL_TYPE_LONG,
-        LITERAL_TYPE_BYTE,
-        LITERAL_TYPE_CHAR,
-        LITERAL_TYPE_STRING,
-        LITERAL_TYPE_BOOL
-    } hc_type_literal;
-
-    struct hc_node_literal {
-        hc_type_literal type;
-        union {
-            int32_t intval;
-            int64_t longval;
-            uint8_t byteval;
-            char charval;
-            char* stringval;
-            bool boolval;
-        } value;
-        size_t size;
+    enum HC_TYPE_BASE_EXPRESSION {
+        HC_BASE_EXPRESSION_LITERAL,
+        HC_BASE_EXPRESSION_VAR_REFERENCE
     };
-
-    struct hc_node_literal* hc_node_literal_create(char* text, hc_type_literal literal_type);
+    
+    struct hc_base_expression {
+        enum HC_TYPE_NODE node_type;
+        enum HC_TYPE_BASE_EXPRESSION base_expression_type;
+        struct hc_node* node;
+    };
+    
+    struct hc_base_expression* hc_base_expression_create(
+            enum HC_TYPE_BASE_EXPRESSION base_expression_type,
+            struct hc_node* node);
 
 #ifdef __cplusplus
 }
 #endif
-#endif
+
+#endif /* HCBASEEXPRESSION_H */
+

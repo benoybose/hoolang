@@ -17,64 +17,19 @@
  */
 
 /**
- * File: hcexpr.h
+ * File: hcoperator.c
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 27, March 2018
  */
 
-#ifndef HCEXPR_H
-#define HCEXPR_H
+#include <stdlib.h>
 
-#include "nodes/hcliteral.h"
+#include "nodes/hcnode.h"
+#include "nodes/hcoperator.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-	struct hc_node_expr;
-	struct hc_node_expr_binary;
-
-    enum hc_type_expr {
-        EXPR_TYPE_LITERAL,
-        EXPR_TYPE_BINARY
-    };
-
-    enum hc_type_operator {
-        OPERATOR_ADD,
-        OPERATOR_SUB,
-        OPERATOR_DIV,
-        OPERATOR_MUL,
-        OPERATOR_MOD
-    };
-
-    struct hc_node_expr_binary {
-        struct hc_node_expr* lvalue;
-        enum hc_type_operator op;
-        struct hc_node_expr* rvalue;
-    };
-
-    struct hc_node_expr {
-        enum hc_type_expr type;
-        union {
-            struct hc_node_literal* literal;
-            struct hc_node_expr_binary* binary;
-            void* generic;
-        } value;
-    };
-    
-    struct hc_node_expr_binary* hc_node_expr_binary_create(
-    		struct hc_node_expr* lvalue,
-            enum hc_type_operator opr, 
-            struct hc_node_expr* rvalue);
-
-    struct hc_node_expr* hc_node_expr_create(
-    		enum hc_type_expr type,
-			void* value);
-    
-
-#ifdef __cplusplus
+struct hc_node_operator* hc_node_operator_create(enum HC_TYPE_OPERATOR operator_type) {
+    struct hc_node_operator* opr = (struct hc_node_operator*) malloc(sizeof(struct hc_node_operator));
+    opr->node_type = HC_NODE_OPERATOR;
+    opr->operator_type = operator_type;
+    return opr;
 }
-#endif
-
-#endif /* HCEXPR_H */
-
