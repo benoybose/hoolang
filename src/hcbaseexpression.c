@@ -27,11 +27,11 @@
 #include "nodes/hcnode.h"
 #include "nodes/hcbaseexpression.h"
 
-struct hc_base_expression* hc_base_expression_create(
+struct hc_node_base_expression* hc_base_expression_create(
             enum HC_TYPE_BASE_EXPRESSION base_expression_type,
             struct hc_node* node) {
-    struct hc_base_expression* base_expression = (struct hc_base_expression*)
-        malloc(sizeof(struct hc_base_expression));
+    struct hc_node_base_expression* base_expression = (struct hc_node_base_expression*)
+        malloc(sizeof(struct hc_node_base_expression));
     base_expression->node_type = HC_NODE_BASE_EXPRESSION;
     base_expression->base_expression_type = base_expression_type;
     base_expression->node = node;

@@ -17,38 +17,24 @@
  */
 
 /**
- * File: hcbaseexpression.h
+ * File: hcbinaryexpression.c
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 28, March 2018
  */
 
-#ifndef HCBASEEXPRESSION_H
-#define HCBASEEXPRESSION_H
+#include <stdlib.h>
 
-#include "hcnode.h"
+#include "nodes/hcbinaryexpression.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    enum HC_TYPE_BASE_EXPRESSION {
-        HC_BASE_EXPRESSION_LITERAL,
-        HC_BASE_EXPRESSION_VAR_REFERENCE
-    };
-    
-    struct hc_node_base_expression {
-        enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_BASE_EXPRESSION base_expression_type;
-        struct hc_node* node;
-    };
-    
-    struct hc_node_base_expression* hc_base_expression_create(
-            enum HC_TYPE_BASE_EXPRESSION base_expression_type,
-            struct hc_node* node);
-
-#ifdef __cplusplus
+struct hc_node_binary_expression* hc_node_binary_expression_create(
+            struct hc_node* lvalue,
+            struct hc_node_operator* opr,
+            struct hc_node* rvalue) {
+    struct hc_node_binary_expression* binary_expr = (struct hc_node_binary_expression*)
+        malloc(sizeof(struct hc_node_binary_expression));
+    binary_expr->node_type = HC_NODE_BINARY_EXPRESSION;
+    binary_expr->lvalue = lvalue;
+    binary_expr->opr = opr;
+    binary_expr->rvalue = rvalue;
+    return binary_expr;
 }
-#endif
-
-#endif /* HCBASEEXPRESSION_H */
-
