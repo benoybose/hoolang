@@ -19,13 +19,13 @@ HC_BASE_SOURCE=src/hclexer.c \
 	
 HC_SOURCE=$(HC_BASE_SOURCE) src/hcmain.c
 
-all: hc hoo
+all: hc hoo # Build everything
 
-hoo:
+hoo: # Build hoo
 	gcc -g -m32 -I ./include -o hoo $(HOO_SOURCE)
 		
 		
-hc: lexer
+hc: lexer # Build hc
 	gcc -g -m32 -I ./include -o ./hc $(HC_SOURCE)
 		
 		
