@@ -17,7 +17,7 @@
  */
 
 /**
- * File: hcbaseexpression.c
+ * File: hcbaseexpr.c
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
@@ -25,13 +25,13 @@
 #include <stdlib.h>
 
 #include "nodes/hcnode.h"
-#include "nodes/hcbaseexpression.h"
+#include "nodes/hcbaseexpr.h"
 
-struct hc_node_base_expression* hc_base_expression_create(
+struct hc_node_base_expr* hc_base_expr_create(
             enum HC_TYPE_BASE_EXPRESSION base_expression_type,
             struct hc_node* node) {
-    struct hc_node_base_expression* base_expression = (struct hc_node_base_expression*)
-        malloc(sizeof(struct hc_node_base_expression));
+    struct hc_node_base_expr* base_expression = (struct hc_node_base_expr*)
+        malloc(sizeof(struct hc_node_base_expr));
     base_expression->node_type = HC_NODE_BASE_EXPRESSION;
     base_expression->base_expression_type = base_expression_type;
     base_expression->node = node;

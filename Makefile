@@ -9,13 +9,12 @@ HOO_SOURCE=$(HOO_BASE_SOURCE) src/hoomain.c
 	
 HC_BASE_SOURCE=src/hclexer.c \
 		src/hcparser.c \
-		src/hcliteral.c \
+		src/hcliteralexpr.c \
 		src/hclogger.c \
-		src/hcexpr.c \
 		src/hccompiler.c \
 		src/hcoperator.c \
-		src/hcbaseexpression.c \
-		src/hcbinaryexpression.c
+		src/hcbaseexpr.c \
+		src/hcbinaryexpr.c
 	
 HC_SOURCE=$(HC_BASE_SOURCE) src/hcmain.c
 

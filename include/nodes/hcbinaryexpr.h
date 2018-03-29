@@ -17,53 +17,36 @@
  */
 
 /**
- * File: hcliteral.h
+ * File: hcbinaryexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 28, March 2018
  */
 
-#ifndef _LITERALTYPE_H_
-#define _LITERALTYPE_H_
-
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
+#ifndef HCBINARYEXP_H
+#define HCBINARYEXP_H
 
 #include "hcnode.h"
+#include "hcoperator.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-    enum HC_TYPE_LITERAL{
-        HC_LITERAL_SBYTE,
-        HC_LITERAL_BYTE,
-        HC_LITERAL_INT32,
-        HC_LITERAL_INT64,
-        HC_LITERAL_FLOAT,
-        HC_LITERAL_DOUBLE,
-        HC_LITERAL_CHAR,
-        HC_LITERAL_STRING,
-        HC_LITERAL_BOOL
-    };
-
-    struct hc_node_literal {
+    
+    struct hc_node_binary_expr {
         enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_LITERAL type;
-        union {
-            int32_t intval;
-            int64_t longval;
-            uint8_t byteval;
-            char charval;
-            char* stringval;
-            bool boolval;
-        } value;
-        size_t size;
+        struct hc_node* lvalue;
+        struct hc_node_operator* opr;
+        struct hc_node* rvalue;
     };
-
-    struct hc_node_literal* hc_node_literal_create(char* text, enum HC_TYPE_LITERAL literal_type);
+    
+    struct hc_node_binary_expr* hc_node_binary_expr_create(
+            struct hc_node* lvalue,
+            struct hc_node_operator* opr,
+            struct hc_node* rvalue);
 
 #ifdef __cplusplus
 }
 #endif
-#endif
+
+#endif /* HCBINARYEXPR_H */
+

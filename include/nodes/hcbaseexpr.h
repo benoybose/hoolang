@@ -17,46 +17,38 @@
  */
 
 /**
- * File: literaltype.c
+ * File: hcbaseexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <memory.h>
+#ifndef HCBASEEXP_H
+#define HCBASEEXP_H
 
-#include "nodes/hcliteral.h"
-#include "nodes/hcnode.h"
+#include "hcnode.h"
 
-struct hc_node_literal* hc_node_literal_create(char* text, enum HC_TYPE_LITERAL literal_type) {
-    struct hc_node_literal* node = (struct hc_node_literal*) malloc(sizeof (struct hc_node_literal));
-    node->node_type = HC_NODE_LITERAL;
-    switch (literal_type) {
-        case HC_LITERAL_INT32:
-            node->value.intval = atol(text);
-            node->size = sizeof (int32_t);
-            break;
-            
-        case HC_LITERAL_INT64: 
-            node->value.longval = atoll(text);
-            node->size = sizeof (int64_t);
-            break;
-            
-        case HC_LITERAL_CHAR: 
-            node->value.charval = text[0];
-            node->size = sizeof (int8_t);
-            break;
-            
-        case HC_LITERAL_BYTE:
-            node->value.byteval = (uint8_t) text[0];
-            node->size = sizeof(uint8_t);
-            break;
-            
-        case HC_LITERAL_STRING:
-            node->value.stringval = text;
-            node->size = strlen(text);
-            break;
-    }
-    return node;
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+    enum HC_TYPE_BASE_EXPRESSION {
+        HC_BASE_EXPRESSION_LITERAL,
+        HC_BASE_EXPRESSION_VAR_REFERENCE
+    };
+    
+    struct hc_node_base_expr {
+        enum HC_TYPE_NODE node_type;
+        enum HC_TYPE_BASE_EXPRESSION base_expression_type;
+        struct hc_node* node;
+    };
+    
+    struct hc_node_base_expr* hc_base_expr_create(
+            enum HC_TYPE_BASE_EXPRESSION base_expression_type,
+            struct hc_node* node);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* HCBASEEXPR_H */
+

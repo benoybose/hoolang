@@ -1,11 +1,10 @@
 %{
 #include <stdio.h>
-#include "nodes/hcliteral.h"
+#include "nodes/hcliteralexpr.h"
 #include "nodes/hcoperator.h"
-#include "nodes/hcbaseexpression.h"
-#include "nodes/hcbinaryexpression.h"
+#include "nodes/hcbaseexpr.h"
+#include "nodes/hcbinaryexpr.h"
 #include "hclogger.h"
-#include "hcexpr.h"
 #include "hcparser.h"
 
 extern int yylex();
@@ -24,9 +23,9 @@ void yyerror(const char* s);
 
 %union {
     struct hc_node_operator* node_operator;
-    struct hc_node_literal* node_literal;
-    struct hc_node_base_expression* node_base_expression;
-    struct hc_node_binary_expression* node_binary_expression;
+    struct hc_node_literal_expr* node_literal;
+    struct hc_node_base_expr* node_base_expression;
+    struct hc_node_binary_expr* node_binary_expression;
 }
 
 %type<node_literal> literal
@@ -42,27 +41,20 @@ void yyerror(const char* s);
         ;
 
     binary_expression:
-        base_expression operator base_expression {
-            hclog_print("binary expression");
-            $$ = hc_node_binary_expression_create((struct hc_node*) $1, 
-                    $2, (struct hc_node*) $3);
-        }
-        |
-        binary_expression operator base_expression {
-            hclog_print("compound binary expression");
-        };
+        base_expression operator expression
+        ;
 
     base_expression:    
         literal {
             hclog_print("base_expression: literal");
-            $$ = hc_base_expression_create(HC_BASE_EXPRESSION_LITERAL, 
-                    (struct hc_node*) $1); 
+            $$ = hc_base_expr_create(HC_BASE_EXPRESSION_LITERAL, 
+                    (struct hc_node*) $1);
         };
 
     literal:
         TOKEN_LITERAL_INT { 
             hclog_print("literal: TOKEN_LITERAL_INT %s", yytext);
-            $$ = hc_node_literal_create(yytext, HC_LITERAL_INT32); 
+            $$ = hc_node_literal_expr_create(yytext, HC_LITERAL_INT32); 
         };
 
     operator:   
