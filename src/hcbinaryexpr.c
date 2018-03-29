@@ -27,12 +27,15 @@
 #include "nodes/hcbinaryexpr.h"
 
 struct hc_node_binary_expr* hc_node_binary_expr_create(
-            struct hc_node* lvalue,
+            struct hc_node_expr* lvalue,
             struct hc_node_operator* opr,
-            struct hc_node* rvalue) {
+            struct hc_node_expr* rvalue) {
     struct hc_node_binary_expr* binary_expr = (struct hc_node_binary_expr*)
         malloc(sizeof(struct hc_node_binary_expr));
+    
     binary_expr->node_type = HC_NODE_BINARY_EXPRESSION;
+    binary_expr->expr_type = HC_EXPR_BINARY;
+    
     binary_expr->lvalue = lvalue;
     binary_expr->opr = opr;
     binary_expr->rvalue = rvalue;

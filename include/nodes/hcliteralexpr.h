@@ -30,6 +30,7 @@
 #include <stddef.h>
 
 #include "hcnode.h"
+#include "hcexpr.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +50,8 @@ extern "C" {
 
     struct hc_node_literal_expr {
         enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_LITERAL type;
+        enum HC_TYPE_EXPR expr_type;
+        enum HC_TYPE_LITERAL literal_type;
         union {
             int32_t intval;
             int64_t longval;

@@ -17,38 +17,34 @@
  */
 
 /**
- * File: hcbinaryexpr.h
+ * File: hcexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 28, March 2018
+ * Date: 29, March 2018
  */
 
-#ifndef HCBINARYEXP_H
-#define HCBINARYEXP_H
+#ifndef HCEXPR_H
+#define HCEXPR_H
 
 #include "hcnode.h"
-#include "hcexpr.h"
-#include "hcoperator.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
     
-    struct hc_node_binary_expr {
-        enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_EXPR expr_type;
-        struct hc_node_expr* lvalue;
-        struct hc_node_operator* opr;
-        struct hc_node_expr* rvalue;
+    enum HC_TYPE_EXPR {
+        HC_EXPR_LITERAL,
+        HC_EXPR_BASE,
+        HC_EXPR_BINARY
     };
     
-    struct hc_node_binary_expr* hc_node_binary_expr_create(
-            struct hc_node_expr* lvalue,
-            struct hc_node_operator* opr,
-            struct hc_node_expr* rvalue);
+    struct hc_node_expr {
+        enum HC_TYPE_NODE node_type;
+        enum HC_TYPE_EXPR expr_type;
+    };
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* HCBINARYEXPR_H */
+#endif /* HCEXPR_H */
 

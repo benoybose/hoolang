@@ -28,10 +28,14 @@
 
 #include "nodes/hcliteralexpr.h"
 #include "nodes/hcnode.h"
+#include "nodes/hcexpr.h"
 
 struct hc_node_literal_expr* hc_node_literal_expr_create(char* text, enum HC_TYPE_LITERAL literal_type) {
     struct hc_node_literal_expr* node = (struct hc_node_literal_expr*) malloc(sizeof (struct hc_node_literal_expr));
+
     node->node_type = HC_NODE_LITERAL;
+    node->expr_type = HC_EXPR_LITERAL;
+    
     switch (literal_type) {
         case HC_LITERAL_INT32:
             node->value.intval = atol(text);
