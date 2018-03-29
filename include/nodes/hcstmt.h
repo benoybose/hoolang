@@ -17,36 +17,33 @@
  */
 
 /**
- * File: hcnode.h
+ * File: hcstmt.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 27, March 2018
+ * Date: 29, March 2018
  */
 
-#ifndef HCNODE_H
-#define HCNODE_H
+#ifndef HCSTMT_H
+#define HCSTMT_H
+
+#include "hcnode.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
-    enum HC_TYPE_NODE {
-        HC_NODE_LITERAL,
-        HC_NODE_OPERATOR,
-        HC_NODE_EXPRESSION,
-        HC_NODE_BASE_EXPRESSION,
-        HC_NODE_BINARY_EXPRESSION,
-        HC_NODE_STMT
-    };
-    
-    struct hc_node {
-        enum HC_TYPE_NODE node_type;
-    };
 
+    enum HC_TYPE_STMT {
+        HC_STMT_EXPR
+    };
+    
+    struct hc_node_stmt {
+        enum HC_TYPE_NODE node_type;
+        enum HC_TYPE_STMT stmt_type;
+    };
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* HCNODE_H */
+#endif /* HCSTMT_H */
 
