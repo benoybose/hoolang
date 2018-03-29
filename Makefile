@@ -13,7 +13,6 @@ HC_BASE_SOURCE=src/hclexer.c \
 		src/hclogger.c \
 		src/hccompiler.c \
 		src/hcoperator.c \
-		src/hcbaseexpr.c \
 		src/hcbinaryexpr.c
 	
 HC_SOURCE=$(HC_BASE_SOURCE) src/hcmain.c

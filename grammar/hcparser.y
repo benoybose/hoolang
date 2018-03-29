@@ -4,7 +4,6 @@
 #include "nodes/hcoperator.h"
 #include "nodes/hcexpr.h"
 #include "nodes/hcliteralexpr.h"
-#include "nodes/hcbaseexpr.h"
 #include "nodes/hcbinaryexpr.h"
 #include "hclogger.h"
 #include "hcparser.h"
@@ -16,6 +15,7 @@ extern char* yytext;
 void yyerror(const char* s);
 %}
 
+%token TOKEN_PUC_SEMICOLON
 %token TOKEN_OPR_ADD
 %token TOKEN_OPR_SUB
 %token TOKEN_OPR_MUL
@@ -37,7 +37,32 @@ void yyerror(const char* s);
 %type<node_binary_expr> binary_expr
 
 %%
-    expr: 
+    prog: /* empty */
+        |
+        stmt_list {
+            hclog_print("prog: stmt_list");
+        };
+
+    stmt_list:
+        stmt {
+            hclog_print("stmt_list: stmt");
+        }
+        |
+        stmt_list stmt {
+            hclog_print("stmt_list: stmt_list stmt");
+        };
+
+    stmt:
+        base_stmt {
+            hclog_print("stmt: base_stmt");
+        };
+
+    base_stmt:
+        expr TOKEN_PUC_SEMICOLON {
+            hclog_print("basestmt: expr");
+        };
+
+    expr:
         binary_expr { 
             hclog_print("expr: binary_expr");
             $$ = (struct hc_node_expr*) $1;
