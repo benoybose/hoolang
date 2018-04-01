@@ -33,11 +33,29 @@
 extern "C" {
 #endif
 
-    struct hc_node_expr_stmt {
+    /**
+     *Expression as a statement
+     */
+	struct hc_node_expr_stmt {
+		/**
+		 * Node type must be HC_NODE_STMT
+		 */
         enum HC_TYPE_NODE node_type;
+        /**
+         * Statement type must be HC_STMT_EXPR
+         */
         enum HC_TYPE_STMT stmt_type;
+        /**
+         * Pointer to expression
+         */
         struct hc_node_expr* expr;
     };
+
+	/**
+	 * Creates an expression statement
+	 */
+    struct hc_node_expr_stmt* hc_node_expr_stmt_create(
+    		struct hc_node_expr* expr);
 
 #ifdef __cplusplus
 }

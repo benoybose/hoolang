@@ -5,6 +5,9 @@
 #include "nodes/hcexpr.h"
 #include "nodes/hcliteralexpr.h"
 #include "nodes/hcbinaryexpr.h"
+#include "nodes/hcexprstmt.h"
+#include "nodes/hcstmt.h"
+#include "nodes/hcstmtlist.h"
 #include "hclogger.h"
 #include "hcparser.h"
 
@@ -28,6 +31,8 @@ void yyerror(const char* s);
     struct hc_node_literal_expr* node_literal;
     struct hc_node_expr* node_expr;
     struct hc_node_binary_expr* node_binary_expr;
+    struct hc_node_stmt* node_stmt;
+    struct hc_node_stmt_list* node_stmt_list;
 }
 
 %type<node_operator> operator
@@ -35,6 +40,9 @@ void yyerror(const char* s);
 %type<node_literal> literal_expr
 %type<node_expr> base_expr
 %type<node_binary_expr> binary_expr
+%type<node_stmt> base_stmt
+%type<node_stmt> stmt
+%type<node_stmt_list> stmt_list;
 
 %%
     prog: /* empty */
@@ -46,20 +54,27 @@ void yyerror(const char* s);
     stmt_list:
         stmt {
             hclog_print("stmt_list: stmt");
+            struct hc_node_stmt_list* list = hc_node_stmt_list_create();
+            hc_node_stlt_list_add(list, $1);
+            $$ = list;
         }
         |
         stmt_list stmt {
             hclog_print("stmt_list: stmt_list stmt");
+            hc_node_stlt_list_add($1, $2);
+            $$ = $1;
         };
 
     stmt:
         base_stmt {
             hclog_print("stmt: base_stmt");
+            $$ = $1;
         };
 
     base_stmt:
         expr TOKEN_PUC_SEMICOLON {
             hclog_print("basestmt: expr");
+            $$ = (struct hc_node_stmt*) hc_node_expr_stmt_create($1);
         };
 
     expr:

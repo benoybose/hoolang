@@ -17,37 +17,36 @@
  */
 
 /**
- * File: hcnode.h
+ * File: hcstmtlist.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 27, March 2018
+ * Date: 31, March 2018
  */
 
-#ifndef HCNODE_H
-#define HCNODE_H
+#include <stdlib.h>
+#include <stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-    
-    enum HC_TYPE_NODE {
-        HC_NODE_LITERAL,
-        HC_NODE_OPERATOR,
-        HC_NODE_EXPRESSION,
-        HC_NODE_BASE_EXPRESSION,
-        HC_NODE_BINARY_EXPRESSION,
-        HC_NODE_STMT,
-		HC_NODE_STMT_LIST
-    };
-    
-    struct hc_node {
-        enum HC_TYPE_NODE node_type;
-    };
+#include "nodes/hcnode.h"
+#include "nodes/hcstmt.h"
+#include "nodes/hcstmtlist.h"
 
-
-
-#ifdef __cplusplus
+struct hc_node_stmt_list* hc_node_stmt_list_create() {
+	struct hc_node_stmt_list* list = (struct hc_node_stmt_list*)
+			malloc(sizeof(struct hc_node_stmt_list));
+	list->node_type = HC_NODE_STMT_LIST;
+	list->stmts_count = 0;
+	list->stmts = 0;
+	return list;
 }
-#endif
 
-#endif /* HCNODE_H */
-
+size_t hc_node_stlt_list_add(struct hc_node_stmt_list* list,
+		struct hc_node_stmt* stmt) {
+	list->stmts_count ++;
+	size_t unit_size = sizeof(struct hc_node_stmt*) * list->stmts_count;
+	if(1 == list->stmts_count) {
+		list->stmts = (struct hc_node_stmt**) malloc(unit_size);
+	} else {
+		list->stmts = (struct hc_node_stmt**) malloc(unit_size);
+	}
+	list->stmts[list->stmts_count - 1] = stmt;
+	return list->stmts_count;
+}
