@@ -34,13 +34,15 @@ extern "C" {
     struct hc_compiler_context {
         size_t source_files_count;
         char** source_files;
+        size_t progs_count;
+        struct hc_node_prog** progs;
     };
     
-    struct hc_compiler_context* hc_compiler_context_create();
-    int hc_compiler_context_add_source_file(struct hc_compiler_context* context, 
-            const char* source_file_path);
-    int hc_compiler_context_compile(struct hc_compiler_context* context);
-    void hc_compiler_context_free(struct hc_compiler_context* context);
+    void hc_compiler_context_init();
+    size_t hc_compiler_context_add_source_file(const char* source_file_path);
+    size_t hc_compiler_contect_add_prog(struct hc_node_prog* prog);
+    int hc_compiler_context_compile();
+    void hc_compiler_context_free();
 
 #ifdef __cplusplus
 }

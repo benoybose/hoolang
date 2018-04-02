@@ -17,32 +17,33 @@
  */
 
 /**
- * File: hcmain.c
+ * File: hcprog.h
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#include <stdio.h>
-#include "hclogger.h"
-#include "hccompiler.h"
+#ifndef HCPROG_H
+#define HCPROG_H
 
-int main(int argc, char** argv) {
-    hclog_init(stdout);
+#include "hcnode.h"
+#include "hcstmtlist.h"
 
-    if(1 >= argc) {
-    	printf("No source files specified.\n");
-    	return 1;
-    } else {
-    	hc_compiler_context_init();
-    	for(int index = 1; index < argc; index++) {
-    		char* file_path = argv[index];
-    		hc_compiler_context_add_source_file(file_path);
-    	}
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-    	hc_compiler_context_compile();
-    	hc_compiler_context_free();
-    }
+    struct hc_node_prog {
+        enum HC_TYPE_NODE node_type;
+        char* source_file;
+        struct hc_node_stmt_list* stmt_list;
+    };
+    
+    struct hc_node_prog* hc_node_prog_create(const char* source_file);
 
-    hclog_close();
-    return 0;
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* HCPROG_H */
+

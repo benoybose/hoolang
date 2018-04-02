@@ -26,6 +26,7 @@
 #include "hclogger.h"
 #include "hclexer.h"
 #include "hcparser.h"
+#include "nodes/hcprog.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -34,32 +35,52 @@
 struct hc_compiler_context* __hc_compiler_context = 0;
 extern int yyparse();
 
-struct hc_compiler_context* hc_compiler_context_create() {
-    struct hc_compiler_context* context = (struct hc_compiler_context*)
-    malloc(sizeof(struct hc_compiler_context));
-    context->source_files = 0;
-    context->source_files_count = 0;
-    return context;
+void hc_compiler_context_init() {
+    if(0 == __hc_compiler_context) {
+        __hc_compiler_context = (struct hc_compiler_context*)
+            malloc(sizeof(struct hc_compiler_context));
+        __hc_compiler_context->source_files = 0;
+        __hc_compiler_context->source_files_count = 0;
+        __hc_compiler_context->progs_count = 0;
+        __hc_compiler_context->progs = 0;
+    }
 }
 
-int hc_compiler_context_add_source_file(struct hc_compiler_context* context,
-            const char* source_file_path) {
-	size_t count = context->source_files_count + 1;
+size_t hc_compiler_context_add_source_file(const char* source_file_path) {
+	size_t count = __hc_compiler_context->source_files_count + 1;
 	if(1 == count) {
-		context->source_files = (char**) malloc(sizeof(char*) * count);
+		__hc_compiler_context->source_files = 
+                        (char**) malloc(sizeof(char*) * count);
 	} else {
-		context->source_files = (char**) realloc(context->source_files, count);
+		__hc_compiler_context->source_files = 
+                        (char**) realloc(__hc_compiler_context->source_files, count);
 	}
 
 	size_t path_lengh = strlen(source_file_path) + 1;
-	context->source_files[context->source_files_count] = (char*) malloc(sizeof(char) * path_lengh);
-	strcpy(context->source_files[context->source_files_count], source_file_path);
-	context->source_files_count = count;
-	return context->source_files_count;
+	__hc_compiler_context->source_files[__hc_compiler_context->source_files_count] = 
+                (char*) malloc(sizeof(char) * path_lengh);
+	strcpy(__hc_compiler_context->source_files[__hc_compiler_context->source_files_count], 
+                source_file_path);
+	__hc_compiler_context->source_files_count = count;
+	return __hc_compiler_context->source_files_count;
 }
 
-int hc_compiler_context_compile(struct hc_compiler_context* context) {
-	__hc_compiler_context = context;
+size_t hc_compiler_context_add_prog(struct hc_node_prog* prog) {
+    
+    __hc_compiler_context->progs_count += 1;
+    if(1 == __hc_compiler_context->progs_count) {
+        __hc_compiler_context->progs = (struct hc_node_prog**)
+                malloc(sizeof(struct hc_node_prog*) * __hc_compiler_context->progs_count);
+    } else {
+        __hc_compiler_context->progs = (struct hc_node_prog**)
+                realloc(__hc_compiler_context->progs, __hc_compiler_context->progs_count);
+    }
+    __hc_compiler_context->progs[__hc_compiler_context->progs_count - 1] = prog;
+    return __hc_compiler_context->progs_count;
+}
+
+int hc_compiler_context_compile() {
+	struct hc_compiler_context* context = __hc_compiler_context;
 	for(size_t index = 0; index < context->source_files_count; index++) {
 		char* file_path = context->source_files[index];
 		FILE* stream = fopen(file_path, "rb");
@@ -79,7 +100,8 @@ int hc_compiler_context_compile(struct hc_compiler_context* context) {
 	}
 }
 
-void hc_compiler_context_free(struct hc_compiler_context* context) {
+void hc_compiler_context_free() {
+    struct hc_compiler_context* context = __hc_compiler_context;
     for(size_t index = 0; index < context->source_files_count; index++) {
         char* file_path = context->source_files[index];
         free(file_path);

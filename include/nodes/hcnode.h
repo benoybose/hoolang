@@ -36,7 +36,8 @@ extern "C" {
         HC_NODE_BASE_EXPRESSION,
         HC_NODE_BINARY_EXPRESSION,
         HC_NODE_STMT,
-		HC_NODE_STMT_LIST
+        HC_NODE_STMT_LIST,
+        HC_NODE_PROG
     };
     
     struct hc_node {

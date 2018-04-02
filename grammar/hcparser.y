@@ -61,7 +61,8 @@ void yyerror(const char* s);
         |
         stmt_list stmt {
             hclog_print("stmt_list: stmt_list stmt");
-            hc_node_stlt_list_add($1, $2);
+            size_t stmt_count = hc_node_stlt_list_add($1, $2);
+            hclog_print("stmt count: %u", stmt_count);
             $$ = $1;
         };
 

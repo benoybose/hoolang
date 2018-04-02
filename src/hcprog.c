@@ -17,32 +17,27 @@
  */
 
 /**
- * File: hcmain.c
+ * File: hcprog.h
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#include <stdio.h>
-#include "hclogger.h"
-#include "hccompiler.h"
+#include <stdlib.h>
+#include <string.h>
+#include <memory.h>
 
-int main(int argc, char** argv) {
-    hclog_init(stdout);
+#include "nodes/hcnode.h"
+#include "nodes/hcprog.h"
+#include "nodes/hcstmtlist.h"
 
-    if(1 >= argc) {
-    	printf("No source files specified.\n");
-    	return 1;
-    } else {
-    	hc_compiler_context_init();
-    	for(int index = 1; index < argc; index++) {
-    		char* file_path = argv[index];
-    		hc_compiler_context_add_source_file(file_path);
-    	}
-
-    	hc_compiler_context_compile();
-    	hc_compiler_context_free();
-    }
-
-    hclog_close();
-    return 0;
+struct hc_node_prog* hc_node_prog_create(const char* source_file) {
+    struct hc_node_prog* prog = (struct hc_node_prog*)
+    malloc(sizeof(struct hc_node_prog));
+    prog->node_type = HC_NODE_PROG;
+    size_t file_name_length = strlen(source_file) + 1;
+    prog->source_file = malloc(sizeof(char) * file_name_length);
+    memset(prog->source_file, 0, file_name_length);
+    strcpy(prog->source_file, source_file);
+    prog->stmt_list = 0;
+    return prog;
 }
