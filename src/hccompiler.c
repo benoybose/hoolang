@@ -33,6 +33,8 @@
 #include <stdio.h>
 
 struct hc_compiler_context* __hc_compiler_context = 0;
+struct hc_node_prog* __hc_currrent_prog = 0;
+
 extern int yyparse();
 
 void hc_compiler_context_init() {
@@ -88,6 +90,10 @@ int hc_compiler_context_compile() {
 			hclog_print("Failed to open the source file '%s'.\n", file_path);
 			return -1;
 		}
+                
+                struct hc_node_prog* prog = hc_node_prog_create(file_path);
+                hc_compiler_context_add_prog(prog);
+                __hc_currrent_prog = prog;
 
 		yyin = stream;
 		do {
@@ -96,6 +102,7 @@ int hc_compiler_context_compile() {
 				return -2;
 			}
 		} while(!feof(yyin));
+                __hc_currrent_prog = 0;
 		fclose(stream);
 	}
 }

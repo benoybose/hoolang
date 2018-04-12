@@ -23,24 +23,40 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "hclogger.h"
 #include "hccompiler.h"
 
 int main(int argc, char** argv) {
     hclog_init(stdout);
 
-    if(1 >= argc) {
-    	printf("No source files specified.\n");
-    	return 1;
+    if (1 >= argc) {
+        printf("No source files specified.\n");
+        return 1;
     } else {
-    	hc_compiler_context_init();
-    	for(int index = 1; index < argc; index++) {
-    		char* file_path = argv[index];
-    		hc_compiler_context_add_source_file(file_path);
-    	}
+        hc_compiler_context_init();
+        for (int index = 1; index < argc; index++) {
+            const char* parameter = argv[index];
+            if('-' == parameter[0]) {                
+                if(1 == strlen(parameter)) {
+                    printf("Invalid command line argument.\n");
+                    return 2;
+                }                
+                switch(parameter[1]) {
+                    case 'i':
+                        break;
+                    default:
+                        printf("Invalid option.\n");
+                        return 3;
+                }                
+            } else {
+                char* file_path = argv[index];
+                hc_compiler_context_add_source_file(file_path);
+            }
+        }
 
-    	hc_compiler_context_compile();
-    	hc_compiler_context_free();
+        hc_compiler_context_compile();
+        hc_compiler_context_free();
     }
 
     hclog_close();

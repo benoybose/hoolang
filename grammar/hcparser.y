@@ -8,6 +8,7 @@
 #include "nodes/hcexprstmt.h"
 #include "nodes/hcstmt.h"
 #include "nodes/hcstmtlist.h"
+#include "nodes/hcprog.h"
 #include "hclogger.h"
 #include "hcparser.h"
 
@@ -15,6 +16,7 @@ extern int yylex();
 extern int yyparse();
 extern FILE* yyin;
 extern char* yytext;
+struct hc_node_prog* __hc_currrent_prog;
 void yyerror(const char* s);
 %}
 
@@ -49,6 +51,10 @@ void yyerror(const char* s);
         |
         stmt_list {
             hclog_print("prog: stmt_list");
+            if(0 != __hc_currrent_prog) {
+                __hc_currrent_prog->stmt_list = $1;
+                hclog_print("statement list assigned.");
+            }
         };
 
     stmt_list:
