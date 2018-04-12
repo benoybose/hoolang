@@ -17,32 +17,40 @@
  */
 
 /**
- * File: hcprog.h
+ * File: hcbuffer.c
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 12, April 2018
  */
 
-#ifndef HCPROG_H
-#define HCPROG_H
+#include <stdlib.h>
+#include <memory.h>
 
-#include "hcnode.h"
-#include "hcstmtlist.h"
+#include "hcbuffer.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    struct hc_node_prog {
-        enum HC_TYPE_NODE node_type;
-        char* source_file;
-        struct hc_node_stmt_list* stmt_list;
-    };
-    
-    struct hc_node_prog* hc_node_prog_create(const char* source_file);
-
-#ifdef __cplusplus
+struct hc_buffer* hc_buffer_create() {
+    struct hc_buffer* buffer = (struct hc_buffer*) malloc(sizeof(struct hc_buffer));
+    buffer->data = 0;
+    buffer->size = 0;
+    return buffer;
 }
-#endif
 
-#endif /* HCPROG_H */
+size_t hc_buffer_append(struct hc_buffer* buffer, const char* data, size_t size) {
+    size_t total_size = buffer->size + size;
+    if(0 == buffer->data) {
+        buffer->data = (char*) malloc(sizeof(char) * (total_size + 1));
+    } else {
+        buffer->data = (char*) realloc(buffer->data, sizeof(char) * (total_size + 1));
+    }
+    
+    memcpy(&buffer->data[buffer->size], data, size);
+    buffer->data[total_size] = 0;
+    buffer->size = total_size;
+    return total_size;
+}
+
+void hc_buffer_free(struct hc_buffer* buffer) {
+    free(buffer->data);
+    buffer->data = 0;
+    free(buffer);
+}
 

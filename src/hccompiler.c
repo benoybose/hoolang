@@ -105,6 +105,7 @@ int hc_compiler_context_compile() {
                 __hc_currrent_prog = 0;
 		fclose(stream);
 	}
+        return 0;
 }
 
 void hc_compiler_context_free() {

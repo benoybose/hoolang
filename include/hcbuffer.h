@@ -17,32 +17,32 @@
  */
 
 /**
- * File: hcprog.h
+ * File: hcbuffer.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 12, April 2018
  */
 
-#ifndef HCPROG_H
-#define HCPROG_H
+#ifndef HCBUFFER_H
+#define HCBUFFER_H
 
-#include "hcnode.h"
-#include "hcstmtlist.h"
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-    struct hc_node_prog {
-        enum HC_TYPE_NODE node_type;
-        char* source_file;
-        struct hc_node_stmt_list* stmt_list;
+    
+    struct hc_buffer {
+        char* data;
+        size_t size;
     };
     
-    struct hc_node_prog* hc_node_prog_create(const char* source_file);
+    struct hc_buffer* hc_buffer_create();
+    size_t hc_buffer_append(struct hc_buffer* buffer, const char* data, size_t size);
+    void hc_buffer_free(struct hc_buffer* buffer);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* HCPROG_H */
+#endif /* HCBUFFER_H */
 

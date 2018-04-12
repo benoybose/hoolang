@@ -55,8 +55,11 @@ int main(int argc, char** argv) {
             }
         }
 
-        hc_compiler_context_compile();
+        if(0 == hc_compiler_context_compile()) {
+            hclog_print("compilation is successfull.");
+        }
         hc_compiler_context_free();
+        
     }
 
     hclog_close();
