@@ -28,6 +28,7 @@
 #include "hcnode.h"
 #include "hcstmt.h"
 #include "hcexpr.h"
+#include "hcbuffer.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,10 +37,10 @@ extern "C" {
     /**
      *Expression as a statement
      */
-	struct hc_node_expr_stmt {
-		/**
-		 * Node type must be HC_NODE_STMT
-		 */
+    struct hc_node_expr_stmt {
+        /**
+         * Node type must be HC_NODE_STMT
+         */
         enum HC_TYPE_NODE node_type;
         /**
          * Statement type must be HC_STMT_EXPR
@@ -51,11 +52,13 @@ extern "C" {
         struct hc_node_expr* expr;
     };
 
-	/**
-	 * Creates an expression statement
-	 */
+    /**
+     * Creates an expression statement
+     */
     struct hc_node_expr_stmt* hc_node_expr_stmt_create(
-    		struct hc_node_expr* expr);
+            struct hc_node_expr* expr);
+    void hc_node_expr_stmt_serialize(struct hc_node_expr_stmt* stmt,
+            struct hc_buffer* buffer);
 
 #ifdef __cplusplus
 }

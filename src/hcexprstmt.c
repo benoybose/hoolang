@@ -25,13 +25,20 @@
 #include <stdlib.h>
 
 #include "nodes/hcexprstmt.h"
+#include "hcbuffer.h"
 
 struct hc_node_expr_stmt* hc_node_expr_stmt_create(
-    		struct hc_node_expr* expr) {
-	struct hc_node_expr_stmt* stmt = (struct hc_node_expr_stmt*)
-			malloc(sizeof(struct hc_node_expr_stmt));
-	stmt->node_type = HC_NODE_STMT;
-	stmt->stmt_type = HC_STMT_EXPR;
-	stmt->expr = expr;
-	return stmt;
+        struct hc_node_expr* expr) {
+    struct hc_node_expr_stmt* stmt = (struct hc_node_expr_stmt*)
+            malloc(sizeof (struct hc_node_expr_stmt));
+    stmt->node_type = HC_NODE_STMT;
+    stmt->stmt_type = HC_STMT_EXPR;
+    stmt->expr = expr;
+    return stmt;
+}
+
+void hc_node_expr_stmt_serialize(struct hc_node_expr_stmt* stmt,
+        struct hc_buffer* buffer) {
+    hc_buffer_printf(buffer, "<stmt type=\"expr\">");
+    hc_buffer_printf(buffer, "</stmt>");
 }

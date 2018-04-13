@@ -27,6 +27,7 @@
 
 #include "hcnode.h"
 #include "hcstmtlist.h"
+#include "..\hcbuffer.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,6 +40,7 @@ extern "C" {
     };
     
     struct hc_node_prog* hc_node_prog_create(const char* source_file);
+    void hc_node_prog_serialize(struct hc_node_prog* prog, struct hc_buffer* buffer);
 
 #ifdef __cplusplus
 }

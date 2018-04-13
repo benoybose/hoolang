@@ -27,6 +27,8 @@
 
 #include <stdlib.h>
 
+#include "hcbuffer.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -42,6 +44,7 @@ extern "C" {
     size_t hc_compiler_context_add_source_file(const char* source_file_path);
     size_t hc_compiler_contect_add_prog(struct hc_node_prog* prog);
     int hc_compiler_context_compile();
+    size_t hc_compiler_context_serialize(struct hc_buffer* buffer);
     void hc_compiler_context_free();
 
 #ifdef __cplusplus

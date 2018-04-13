@@ -23,7 +23,9 @@
  */
 
 #include <stdlib.h>
-#include <memory.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
 
 #include "hcbuffer.h"
 
@@ -46,6 +48,19 @@ size_t hc_buffer_append(struct hc_buffer* buffer, const char* data, size_t size)
     buffer->data[total_size] = 0;
     buffer->size = total_size;
     return total_size;
+}
+
+size_t hc_buffer_printf(struct hc_buffer* buffer, const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+    size_t length = strlen(format) + 4098;
+    char* temp_string = (char*) malloc(sizeof(char) * length);
+    vsprintf(temp_string, format, args);
+    va_end(args);
+    length = strlen(temp_string);
+    length = hc_buffer_append(buffer, temp_string, length);
+    free(temp_string);
+    return length;
 }
 
 void hc_buffer_free(struct hc_buffer* buffer) {

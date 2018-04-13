@@ -28,7 +28,10 @@
 
 #include "nodes/hcnode.h"
 #include "nodes/hcprog.h"
+#include "nodes/hcstmt.h"
 #include "nodes/hcstmtlist.h"
+#include "nodes/hcexprstmt.h"
+#include "hcbuffer.h"
 
 struct hc_node_prog* hc_node_prog_create(const char* source_file) {
     struct hc_node_prog* prog = (struct hc_node_prog*)
@@ -40,4 +43,22 @@ struct hc_node_prog* hc_node_prog_create(const char* source_file) {
     strcpy(prog->source_file, source_file);
     prog->stmt_list = 0;
     return prog;
+}
+
+void hc_node_prog_serialize(struct hc_node_prog* prog, 
+        struct hc_buffer* buffer) {
+    hc_buffer_printf(buffer, "<prog file-path=\"%s\">", prog->source_file);
+    if(0 != prog->stmt_list) {
+        for(size_t index = 0; index < prog->stmt_list->stmts_count; index++) {
+            struct hc_node_stmt* stmt = prog->stmt_list->stmts[index];
+            switch(stmt->stmt_type) {
+                case HC_STMT_EXPR: {
+                    struct hc_node_expr_stmt* expr_stmt = (struct hc_node_expr_stmt*) stmt;
+                    hc_node_expr_stmt_serialize(expr_stmt, buffer);
+                    break;
+                }
+            }
+        }
+    }
+    hc_buffer_printf(buffer, "</prog>");
 }

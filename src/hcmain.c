@@ -26,6 +26,7 @@
 #include <string.h>
 #include "hclogger.h"
 #include "hccompiler.h"
+#include "hcbuffer.h"
 
 int main(int argc, char** argv) {
     hclog_init(stdout);
@@ -58,6 +59,9 @@ int main(int argc, char** argv) {
         if(0 == hc_compiler_context_compile()) {
             hclog_print("compilation is successfull.");
         }
+        struct hc_buffer* context_buffer = hc_buffer_create();
+        hc_compiler_context_serialize(context_buffer);
+        hclog_print(context_buffer->data);
         hc_compiler_context_free();
         
     }

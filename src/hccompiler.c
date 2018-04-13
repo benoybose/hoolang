@@ -27,6 +27,7 @@
 #include "hclexer.h"
 #include "hcparser.h"
 #include "nodes/hcprog.h"
+#include "hcbuffer.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -106,6 +107,16 @@ int hc_compiler_context_compile() {
 		fclose(stream);
 	}
         return 0;
+}
+
+size_t hc_compiler_context_serialize(struct hc_buffer* buffer) {
+    struct hc_compiler_context* context = __hc_compiler_context;
+    hc_buffer_printf(buffer, "<context>");
+    for(size_t index = 0; index < context->progs_count; index++) {
+        struct hc_node_prog* prog = context->progs[index];
+        hc_node_prog_serialize(prog, buffer);
+    }
+    return hc_buffer_printf(buffer, "</context>");
 }
 
 void hc_compiler_context_free() {

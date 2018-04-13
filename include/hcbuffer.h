@@ -38,6 +38,7 @@ extern "C" {
     
     struct hc_buffer* hc_buffer_create();
     size_t hc_buffer_append(struct hc_buffer* buffer, const char* data, size_t size);
+    size_t hc_buffer_printf(struct hc_buffer* buffer, const char* format, ...);
     void hc_buffer_free(struct hc_buffer* buffer);
 
 #ifdef __cplusplus
