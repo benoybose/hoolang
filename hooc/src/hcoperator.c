@@ -24,8 +24,8 @@
 
 #include <stdlib.h>
 
-#include "nodes/hcnode.h"
-#include "nodes/hcoperator.h"
+#include "hcnode.h"
+#include "hcoperator.h"
 
 struct hc_node_operator* hc_node_operator_create(enum HC_TYPE_OPERATOR operator_type) {
     struct hc_node_operator* opr = (struct hc_node_operator*) malloc(sizeof(struct hc_node_operator));

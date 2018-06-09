@@ -24,7 +24,7 @@
 
 #include <stdlib.h>
 
-#include "nodes/hcexprstmt.h"
+#include "hcexprstmt.h"
 #include "hcbuffer.h"
 
 struct hc_node_expr_stmt* hc_node_expr_stmt_create(

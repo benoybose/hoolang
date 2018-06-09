@@ -25,9 +25,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "nodes/hcnode.h"
-#include "nodes/hcstmt.h"
-#include "nodes/hcstmtlist.h"
+#include "hcnode.h"
+#include "hcstmt.h"
+#include "hcstmtlist.h"
 
 struct hc_node_stmt_list* hc_node_stmt_list_create() {
 	struct hc_node_stmt_list* list = (struct hc_node_stmt_list*)

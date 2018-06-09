@@ -1,14 +1,14 @@
 %{
 #include <stdio.h>
 
-#include "nodes/hcoperator.h"
-#include "nodes/hcexpr.h"
-#include "nodes/hcliteralexpr.h"
-#include "nodes/hcbinaryexpr.h"
-#include "nodes/hcexprstmt.h"
-#include "nodes/hcstmt.h"
-#include "nodes/hcstmtlist.h"
-#include "nodes/hcprog.h"
+#include "hcoperator.h"
+#include "hcexpr.h"
+#include "hcliteralexpr.h"
+#include "hcbinaryexpr.h"
+#include "hcexprstmt.h"
+#include "hcstmt.h"
+#include "hcstmtlist.h"
+#include "hcprog.h"
 #include "hclogger.h"
 #include "hcparser.h"
 

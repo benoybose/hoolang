@@ -24,7 +24,7 @@
 
 #include <stdlib.h>
 
-#include "nodes/hcbinaryexpr.h"
+#include "hcbinaryexpr.h"
 
 struct hc_node_binary_expr* hc_node_binary_expr_create(
             struct hc_node_expr* lvalue,

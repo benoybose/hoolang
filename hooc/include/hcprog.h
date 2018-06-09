@@ -27,7 +27,7 @@
 
 #include "hcnode.h"
 #include "hcstmtlist.h"
-#include "..\hcbuffer.h"
+#include "hcbuffer.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -26,7 +26,7 @@
 #include "hclogger.h"
 #include "hclexer.h"
 #include "hcparser.h"
-#include "nodes/hcprog.h"
+#include "hcprog.h"
 #include "hcbuffer.h"
 
 #include <stdlib.h>

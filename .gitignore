@@ -1,8 +1,8 @@
 nbproject/
-include/hclexer.h
-include/hcparser.h
-src/hclexer.c
-src/hcparser.c
+*hclexer.h
+*hcparser.h
+*hclexer.c
+*hcparser.c
 hc
 hc.exe
 hoo
@@ -10,4 +10,7 @@ hoo.exe
 .cproject
 .project
 .settings/
+.vs
+.idea
+*cmake-build-*
 

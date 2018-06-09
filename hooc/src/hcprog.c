@@ -26,11 +26,11 @@
 #include <string.h>
 #include <memory.h>
 
-#include "nodes/hcnode.h"
-#include "nodes/hcprog.h"
-#include "nodes/hcstmt.h"
-#include "nodes/hcstmtlist.h"
-#include "nodes/hcexprstmt.h"
+#include "hcnode.h"
+#include "hcprog.h"
+#include "hcstmt.h"
+#include "hcstmtlist.h"
+#include "hcexprstmt.h"
 #include "hcbuffer.h"
 
 struct hc_node_prog* hc_node_prog_create(const char* source_file) {
