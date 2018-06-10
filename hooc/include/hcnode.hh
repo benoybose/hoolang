@@ -17,34 +17,41 @@
  */
 
 /**
- * File: hcexpr.h
+ * File: hcnode.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 29, March 2018
+ * Date: 27, March 2018
  */
 
-#ifndef HCEXPR_H
-#define HCEXPR_H
+#ifndef HCNODE_H
+#define HCNODE_H
 
-#include "hcnode.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-    
-    enum HC_TYPE_EXPR {
-        HC_EXPR_LITERAL,
-        HC_EXPR_BASE,
-        HC_EXPR_BINARY
-    };
-    
-    struct hc_node_expr {
-        enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_EXPR expr_type;
+namespace hooc {
+    enum NodeType {
+        HC_NODE_LITERAL,
+        HC_NODE_OPERATOR,
+        HC_NODE_EXPRESSION,
+        HC_NODE_BASE_EXPRESSION,
+        HC_NODE_BINARY_EXPRESSION,
+        HC_NODE_STMT,
+        HC_NODE_STMT_LIST,
+        HC_NODE_PROG
     };
 
-#ifdef __cplusplus
-}
-#endif
+    class Node {
+    private:
+        NodeType _nodeType;
 
-#endif /* HCEXPR_H */
+    protected:
+        Node(NodeType nodeType) {
+            this->_nodeType = nodeType;
+        }
+
+    public:
+        NodeType getNodeType() {
+            return _nodeType;
+        }
+    };
+};
+
+#endif /* HCNODE_H */
 

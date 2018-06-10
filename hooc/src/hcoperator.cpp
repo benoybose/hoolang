@@ -17,41 +17,22 @@
  */
 
 /**
- * File: hclogger.c
+ * File: hcoperator.c
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 27, March 2018
  */
 
-#include "hclogger.h"
-#include <stdarg.h>
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include <hcoperator.hh>
 
-FILE* __hc_logfile = 0;
-
-int hclog_print(const char* format, ...) {
-    if (0 != __hc_logfile) {
-        va_list args;
-        va_start(args, format);
-        int returnCode = vfprintf(__hc_logfile, format, args);
-        if(0 < returnCode) {
-            fprintf(__hc_logfile, "%s", "\n");
-        }
-        va_end(args);
-        return returnCode;
-    } else {
-        return 0;
+namespace hooc {
+    Operator::Operator(hooc::OperatorType operatorType):
+            Node(NodeType::HC_NODE_OPERATOR)
+    {
+        this->_operatorType = operatorType;
     }
-}
 
-void hclog_init(FILE* stream) {
-    if (0 == __hc_logfile) {
-        __hc_logfile = stream;
-    }
-}
-
-void hclog_close() {
-    if((0 != __hc_logfile) && (stdout != __hc_logfile)) {
-        fclose(__hc_logfile);
+    OperatorType Operator::getOperatorType() {
+        return this->_operatorType;
     }
 }

@@ -26,9 +26,9 @@
 #include <stdint.h>
 #include <memory.h>
 
-#include "hcliteralexpr.h"
-#include "hcnode.h"
-#include "hcexpr.h"
+#include "hcliteralexpr.hh"
+#include "hcnode.hh"
+#include "hcexpr.hh"
 
 struct hc_node_literal_expr* hc_node_literal_expr_create(char* text, enum HC_TYPE_LITERAL literal_type) {
     struct hc_node_literal_expr* node = (struct hc_node_literal_expr*) malloc(sizeof (struct hc_node_literal_expr));

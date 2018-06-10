@@ -22,33 +22,32 @@
  * Date: 27, March 2018
  */
 
+#include <hcnode.hh>
+#include "hcnode.hh"
+
 #ifndef HCOPERATOR_H
 #define HCOPERATOR_H
 
-#include "hcnode.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    enum HC_TYPE_OPERATOR {
+namespace hooc {
+    enum OperatorType {
         HC_OPERATOR_ADD,
         HC_OPERATOR_SUB,
         HC_OPERATOR_DIV,
         HC_OPERATOR_MUL,
         HC_OPERATOR_MOD
     };
-    
-    struct hc_node_operator {
-        enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_OPERATOR operator_type;
-    };
-    
-    struct hc_node_operator* hc_node_operator_create(enum HC_TYPE_OPERATOR operator_type);
 
-#ifdef __cplusplus
-}
-#endif
+    class Operator: public Node {
+    private:
+        OperatorType _operatorType;
+    public:
+        Operator(OperatorType operatorType);
+
+    public:
+        OperatorType getOperatorType();
+    };
+};
 
 #endif /* HCOPERATOR_H */
 

@@ -17,38 +17,57 @@
  */
 
 /**
- * File: hcnode.h
+ * File: hcliteralexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 27, March 2018
+ * Date: 25, March 2018
  */
 
-#ifndef HCNODE_H
-#define HCNODE_H
+#ifndef _LITERALTYPEEXPR_H_
+#define _LITERALTYPEEXPR_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-    
-    enum HC_TYPE_NODE {
-        HC_NODE_LITERAL,
-        HC_NODE_OPERATOR,
-        HC_NODE_EXPRESSION,
-        HC_NODE_BASE_EXPRESSION,
-        HC_NODE_BINARY_EXPRESSION,
-        HC_NODE_STMT,
-        HC_NODE_STMT_LIST,
-        HC_NODE_PROG
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
+
+#include "hcnode.hh"
+#include "hcexpr.hh"
+
+namespace hooc {
+    enum LiteralType {
+        HC_LITERAL_SBYTE,
+        HC_LITERAL_BYTE,
+        HC_LITERAL_INT32,
+        HC_LITERAL_INT64,
+        HC_LITERAL_FLOAT,
+        HC_LITERAL_DOUBLE,
+        HC_LITERAL_CHAR,
+        HC_LITERAL_STRING,
+        HC_LITERAL_BOOL
     };
-    
-    struct hc_node {
-        enum HC_TYPE_NODE node_type;
+
+    union LiteralValue {
+        int32_t intval;
+        int64_t longval;
+        uint8_t byteval;
+        char charval;
+        char* stringval;
+        bool boolval;
     };
 
+    class LiteralExpression: Expression {
+    private:
+        LiteralType _literalType;
+        LiteralValue _value;
+        size_t _size;
 
+    public:
+        LiteralExpression(LiteralType literaltype, LiteralValue value, size_t size);
 
-#ifdef __cplusplus
-}
+    public:
+        LiteralType getLiteralType();
+        LiteralValue getValue();
+        size_t getSize();
+    };
+};
+
 #endif
-
-#endif /* HCNODE_H */
-

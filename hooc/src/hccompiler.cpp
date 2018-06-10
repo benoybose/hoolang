@@ -23,10 +23,10 @@
  */
 
 #include "hccompiler.h"
-#include "hclogger.h"
+#include "hclogger.hh"
 #include "hclexer.h"
 #include "hcparser.h"
-#include "hcprog.h"
+#include "hcprog.hh"
 #include "hcbuffer.h"
 
 #include <stdlib.h>

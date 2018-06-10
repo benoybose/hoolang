@@ -17,56 +17,35 @@
  */
 
 /**
- * File: hcliteralexpr.h
+ * File: hcexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 29, March 2018
  */
 
-#ifndef _LITERALTYPEEXPR_H_
-#define _LITERALTYPEEXPR_H_
+#ifndef HCEXPR_H
+#define HCEXPR_H
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
+#include "hcnode.hh"
 
-#include "hcnode.h"
-#include "hcexpr.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-    enum HC_TYPE_LITERAL{
-        HC_LITERAL_SBYTE,
-        HC_LITERAL_BYTE,
-        HC_LITERAL_INT32,
-        HC_LITERAL_INT64,
-        HC_LITERAL_FLOAT,
-        HC_LITERAL_DOUBLE,
-        HC_LITERAL_CHAR,
-        HC_LITERAL_STRING,
-        HC_LITERAL_BOOL
+namespace hooc {
+    enum ExpressionType {
+        HC_EXPR_LITERAL,
+        HC_EXPR_BASE,
+        HC_EXPR_BINARY
     };
 
-    struct hc_node_literal_expr {
-        enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_EXPR expr_type;
-        enum HC_TYPE_LITERAL literal_type;
-        union {
-            int32_t intval;
-            int64_t longval;
-            uint8_t byteval;
-            char charval;
-            char* stringval;
-            bool boolval;
-        } value;
-        size_t size;
+    class Expression: public Node {
+    private:
+        ExpressionType _expressionType;
+
+    protected:
+        Expression(ExpressionType);
+
+    public:
+        ExpressionType getExpressionType();
+
     };
-
-    struct hc_node_literal_expr* hc_node_literal_expr_create(char* text, 
-            enum HC_TYPE_LITERAL literal_type);
-
-#ifdef __cplusplus
 }
-#endif
-#endif
+
+#endif /* HCEXPR_H */
+

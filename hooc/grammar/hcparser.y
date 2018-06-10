@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 
-#include "hcoperator.h"
+#include "hcoperator.hh"
 #include "hcexpr.h"
 #include "hcliteralexpr.h"
 #include "hcbinaryexpr.h"
@@ -29,7 +29,7 @@ void yyerror(const char* s);
 %token TOKEN_LITERAL_INT
 
 %union {
-    struct hc_node_operator* node_operator;
+    hooc::Operator* node_operator;
     struct hc_node_literal_expr* node_literal;
     struct hc_node_expr* node_expr;
     struct hc_node_binary_expr* node_binary_expr;
@@ -115,26 +115,26 @@ void yyerror(const char* s);
     operator:   
         TOKEN_OPR_ADD {
             hclog_print("operator: +");
-            $$ = hc_node_operator_create(HC_OPERATOR_ADD); 
+            $$ = new hooc::Operator(hooc::OperatorType::HC_OPERATOR_ADD);
         }
         | 
         TOKEN_OPR_SUB { 
             hclog_print("operator: -");
-            $$ = hc_node_operator_create(HC_OPERATOR_SUB); 
+            $$ = new hooc::Operator(hooc::OperatorType::HC_OPERATOR_SUB);
         }
         |   
         TOKEN_OPR_MUL { 
             hclog_print("operator: *");
-            $$ = hc_node_operator_create(HC_OPERATOR_MUL); 
+            $$ = new hooc::Operator(hooc::OperatorType::HC_OPERATOR_MUL);
         }
         | 
         TOKEN_OPR_DIV {
             hclog_print("operator: /");
-            $$ = hc_node_operator_create(HC_OPERATOR_DIV); 
+            $$ = new hooc::Operator(hooc::OperatorType::HC_OPERATOR_DIV);
         }
         | 
         TOKEN_OPR_MOD {
             hclog_print("operator: %");
-            $$ = hc_node_operator_create(HC_OPERATOR_MOD); 
+            $$ = new hooc::Operator(hooc::OperatorType::HC_OPERATOR_MOD);
         };
 %%

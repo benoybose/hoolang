@@ -17,19 +17,41 @@
  */
 
 /**
- * File: hcoperator.c
+ * File: hclogger.c
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 27, March 2018
+ * Date: 25, March 2018
  */
 
-#include <stdlib.h>
+#include "hclogger.hh"
+#include <stdarg.h>
+#include <string.h>
+#include <stdio.h>
 
-#include "hcnode.h"
-#include "hcoperator.h"
+FILE* __hc_logfile = 0;
 
-struct hc_node_operator* hc_node_operator_create(enum HC_TYPE_OPERATOR operator_type) {
-    struct hc_node_operator* opr = (struct hc_node_operator*) malloc(sizeof(struct hc_node_operator));
-    opr->node_type = HC_NODE_OPERATOR;
-    opr->operator_type = operator_type;
-    return opr;
+int hclog_print(const char* format, ...) {
+    if (0 != __hc_logfile) {
+        va_list args;
+        va_start(args, format);
+        int returnCode = vfprintf(__hc_logfile, format, args);
+        if(0 < returnCode) {
+            fprintf(__hc_logfile, "%s", "\n");
+        }
+        va_end(args);
+        return returnCode;
+    } else {
+        return 0;
+    }
+}
+
+void hclog_init(FILE* stream) {
+    if (0 == __hc_logfile) {
+        __hc_logfile = stream;
+    }
+}
+
+void hclog_close() {
+    if((0 != __hc_logfile) && (stdout != __hc_logfile)) {
+        fclose(__hc_logfile);
+    }
 }
