@@ -46,6 +46,10 @@ namespace hooc {
             this->_nodeType = nodeType;
         }
 
+        Node(const Node& node) {
+            this->_nodeType = node._nodeType;
+        }
+
     public:
         NodeType getNodeType() {
             return _nodeType;

@@ -26,10 +26,19 @@
 #include <hcoperator.hh>
 
 namespace hooc {
+    Operator::Operator():
+            Node(NodeType::HC_NODE_OPERATOR) {
+        this->_operatorType = OperatorType ::Invalid;
+    }
+
     Operator::Operator(hooc::OperatorType operatorType):
             Node(NodeType::HC_NODE_OPERATOR)
     {
         this->_operatorType = operatorType;
+    }
+
+    Operator::Operator(const hooc::Operator &opr): Node(*(this)) {
+        this->_operatorType = opr._operatorType;
     }
 
     OperatorType Operator::getOperatorType() {

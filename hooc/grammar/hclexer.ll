@@ -4,7 +4,6 @@
 %}
 
 %option debug
-%option nodefault
 %option c++
 %option nowarn
 

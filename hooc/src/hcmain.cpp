@@ -21,11 +21,17 @@
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
-
+#include <sstream>
 #include "ParserDriver.hh"
 
 int main(int argc, char** argv) {
-    hooc::ParserDriver driver("");
-    driver.Parse();
+    std::istringstream inputStream("10 + 20 - 30;");
+    hooc::ParserDriver driver(&inputStream, "test");
+    if(0 == driver.Parse()){
+        std::cout << "Parsed successfully.";
+    }
+    else {
+        std::cout << "Parse failed.";
+    }
     return 0;
 }

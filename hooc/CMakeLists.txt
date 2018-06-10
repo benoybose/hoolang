@@ -7,14 +7,14 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/src)
 
 ADD_CUSTOM_COMMAND(
-        OUTPUT ${PROJECT_SOURCE_DIR}/src/FlexScanner.cpp
+        OUTPUT ${PROJECT_SOURCE_DIR}/src/FlexScanner.cpp ${PROJECT_SOURCE_DIR}/include/FlexScanner.hh
         COMMAND flex
         ARGS    --header-file=${PROJECT_SOURCE_DIR}/include/FlexScanner.hh
                 --outfile=${PROJECT_SOURCE_DIR}/src/FlexScanner.cpp
                 ${PROJECT_SOURCE_DIR}/grammar/hclexer.ll
         DEPENDS ${PROJECT_SOURCE_DIR}/src/Parser.cpp)
 
-ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp
+ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp ${PROJECT_SOURCE_DIR}/include/Parser.hh
         COMMAND bison
         ARGS    --output=${PROJECT_SOURCE_DIR}/src/Parser.cpp
                 --defines=${PROJECT_SOURCE_DIR}/include/Parser.hh
@@ -23,6 +23,10 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp
 
 ADD_EXECUTABLE(hooc src/Parser.cpp
         src/FlexScanner.cpp
-        src/hcmain.cpp include/ParserDriver.hh src/ParserDriver.cpp)
+        src/hcmain.cpp
+        include/ParserDriver.hh
+        src/ParserDriver.cpp
+        include/hcoperator.hh
+        src/hcoperator.cpp)
 
 

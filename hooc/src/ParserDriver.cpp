@@ -19,6 +19,12 @@ namespace hooc {
         this->_parser = new Parser(*this);
     }
 
+    ParserDriver::ParserDriver(std::istream *stream, std::string file) {
+        this->_file = file;
+        this->_scanner = new yyFlexLexer(*stream, std::cout);
+        this->_parser = new Parser(*this);
+    }
+
     ParserDriver::~ParserDriver() {
         if(nullptr != this->_fileInputStream) {
             delete this->_fileInputStream;
@@ -39,8 +45,17 @@ namespace hooc {
     }
 
     int ParserDriver::Scan(hooc::Parser::semantic_type *lval) {
-        int token = this->_scanner->yylex();
-        return token;
+        Token inputToken =  (Token) this->_scanner->yylex();
+        switch(inputToken) {
+            case Token::TOKEN_OPR_ADD:
+            case Token::TOKEN_OPR_DIV:
+            case Token::TOKEN_OPR_MUL:
+            case Token::TOKEN_OPR_SUB:
+            case Token::TOKEN_OPR_MOD:
+                lval->build(this->CreateOperator(inputToken));
+                break;
+        }
+        return inputToken;
     }
 
     std::string* ParserDriver::getFile() {
@@ -49,6 +64,17 @@ namespace hooc {
 
     void Parser::error(const std::string &msg) {
 
+    }
+
+    Operator ParserDriver::CreateOperator(hooc::Token inputToken) {
+        switch (inputToken) {
+            case Token::TOKEN_OPR_ADD: return Operator(OperatorType::Add);
+            case Token::TOKEN_OPR_SUB: return Operator(OperatorType::Subtract);
+            case Token::TOKEN_OPR_MUL: return Operator(OperatorType::Multiplication);
+            case Token::TOKEN_OPR_DIV: return Operator(OperatorType::Division);
+            case Token::TOKEN_OPR_MOD: return Operator(OperatorType::Modulation);
+            default: return Operator();
+        }
     }
 }
 

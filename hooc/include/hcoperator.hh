@@ -31,18 +31,21 @@
 
 namespace hooc {
     enum OperatorType {
-        HC_OPERATOR_ADD,
-        HC_OPERATOR_SUB,
-        HC_OPERATOR_DIV,
-        HC_OPERATOR_MUL,
-        HC_OPERATOR_MOD
+        Invalid,
+        Add,
+        Subtract,
+        Division,
+        Multiplication,
+        Modulation
     };
 
     class Operator: public Node {
     private:
         OperatorType _operatorType;
     public:
+        Operator();
         Operator(OperatorType operatorType);
+        Operator(const Operator& opr);
 
     public:
         OperatorType getOperatorType();

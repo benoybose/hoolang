@@ -9,27 +9,31 @@
 %define api.namespace {hooc}
 %define api.value.type variant
 %define parse.error verbose
-
-%code requires {
-    namespace hooc {
-        class ParserDriver;
-    }
-}
-
 %parse-param { ParserDriver &driver }
+
 %code {
     #include "ParserDriver.hh"
     #undef yylex
     #define yylex driver.Scan
 }
 
+%code requires {
+    #include "hcoperator.hh"
+    namespace hooc {
+        class ParserDriver;
+    }
+
+}
+
 %token TOKEN_PUC_SEMICOLON
-%token TOKEN_OPR_ADD
-%token TOKEN_OPR_SUB
-%token TOKEN_OPR_MUL
-%token TOKEN_OPR_DIV
-%token TOKEN_OPR_MOD
+%token<hooc::Operator> TOKEN_OPR_ADD
+%token<hooc::Operator> TOKEN_OPR_SUB
+%token<hooc::Operator> TOKEN_OPR_MUL
+%token<hooc::Operator> TOKEN_OPR_DIV
+%token<hooc::Operator> TOKEN_OPR_MOD
 %token TOKEN_LITERAL_INT
+
+%type<hooc::Operator> operator
 
 %%
     prog: /* empty */
