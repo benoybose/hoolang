@@ -1,19 +1,27 @@
 %{
-#include <stdio.h>
-extern int yylex();
-extern int yyparse();
-extern FILE* yyin;
-extern char* yytext;
-void yyerror(const char* s);
-%}
 
+%}
+%skeleton "lalr1.cc"
 %require "3.0"
 %debug
-%skeleton "lalr1.cc"
-%name-prefix "hooc"
 %define parser_class_name {Parser}
-%locations
-%error-verbose
+
+%define api.namespace {hooc}
+%define api.value.type variant
+%define parse.error verbose
+
+%code requires {
+    namespace hooc {
+        class ParserDriver;
+    }
+}
+
+%parse-param { ParserDriver &driver }
+%code {
+    #include "ParserDriver.hh"
+    #undef yylex
+    #define yylex driver.Scan
+}
 
 %token TOKEN_PUC_SEMICOLON
 %token TOKEN_OPR_ADD
@@ -22,7 +30,6 @@ void yyerror(const char* s);
 %token TOKEN_OPR_DIV
 %token TOKEN_OPR_MOD
 %token TOKEN_LITERAL_INT
-
 
 %%
     prog: /* empty */

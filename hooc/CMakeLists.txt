@@ -23,6 +23,6 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp
 
 ADD_EXECUTABLE(hooc src/Parser.cpp
         src/FlexScanner.cpp
-        src/hcmain.cpp)
+        src/hcmain.cpp include/ParserDriver.hh src/ParserDriver.cpp)
 
 

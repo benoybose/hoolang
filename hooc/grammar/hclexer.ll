@@ -1,16 +1,12 @@
 %{
-    #include<stdio.h>
     #include "Parser.hh"
-
     typedef hooc::Parser::token token;
 %}
 
 %option debug
 %option nodefault
-%option yyclass="hooc::Scanner"
-%option noyywrap
 %option c++
-
+%option nowarn
 
 %%
 ";"     { return token::TOKEN_PUC_SEMICOLON; }

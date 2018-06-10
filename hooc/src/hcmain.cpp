@@ -22,8 +22,10 @@
  * Date: 25, March 2018
  */
 
-#include "Parser.hh"
+#include "ParserDriver.hh"
 
 int main(int argc, char** argv) {
+    hooc::ParserDriver driver("");
+    driver.Parse();
     return 0;
 }
