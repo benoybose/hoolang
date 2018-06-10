@@ -18,7 +18,7 @@
 }
 
 %code requires {
-    #include "hcoperator.hh"
+    #include "Operator.hh"
     namespace hooc {
         class ParserDriver;
     }

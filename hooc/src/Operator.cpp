@@ -22,8 +22,9 @@
  * Date: 27, March 2018
  */
 
+#include "Operator.hh"
+
 #include <stdlib.h>
-#include <hcoperator.hh>
 
 namespace hooc {
     Operator::Operator():

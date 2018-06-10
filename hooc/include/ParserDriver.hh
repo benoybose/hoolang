@@ -8,7 +8,7 @@
 #include <string>
 #include "Parser.hh"
 #include "FlexScanner.hh"
-#include "hcoperator.hh"
+#include "Operator.hh"
 #include <istream>
 
 

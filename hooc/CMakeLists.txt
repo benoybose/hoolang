@@ -21,12 +21,14 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp ${PROJECT_SOURCE_
                 ${PROJECT_SOURCE_DIR}/grammar/hcparser.yy
         COMMENT "Invoking bison")
 
-ADD_EXECUTABLE(hooc src/Parser.cpp
+ADD_EXECUTABLE(hooc
+        include/Node.hh
+        include/Operator.hh
+        src/Operator.cpp
+        src/Parser.cpp
         src/FlexScanner.cpp
         src/hcmain.cpp
         include/ParserDriver.hh
-        src/ParserDriver.cpp
-        include/hcoperator.hh
-        src/hcoperator.cpp)
+        src/ParserDriver.cpp)
 
 

@@ -22,12 +22,10 @@
  * Date: 27, March 2018
  */
 
-#include <hcnode.hh>
-#include "hcnode.hh"
+#include "Node.hh"
 
 #ifndef HCOPERATOR_H
 #define HCOPERATOR_H
-
 
 namespace hooc {
     enum OperatorType {
