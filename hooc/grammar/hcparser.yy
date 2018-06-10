@@ -19,10 +19,10 @@
 
 %code requires {
     #include "Operator.hh"
+    #include "LiteralExpression.hh"
     namespace hooc {
         class ParserDriver;
     }
-
 }
 
 %token TOKEN_PUC_SEMICOLON
@@ -31,7 +31,7 @@
 %token<hooc::Operator> TOKEN_OPR_MUL
 %token<hooc::Operator> TOKEN_OPR_DIV
 %token<hooc::Operator> TOKEN_OPR_MOD
-%token TOKEN_LITERAL_INT
+%token<hooc::LiteralExpression> TOKEN_LITERAL_INT
 
 %type<hooc::Operator> operator
 

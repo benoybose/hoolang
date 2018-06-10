@@ -29,7 +29,7 @@
 namespace hooc {
     Operator::Operator():
             Node(NodeType::HC_NODE_OPERATOR) {
-        this->_operatorType = OperatorType ::Invalid;
+        this->_operatorType = OperatorType ::InvalidExpression;
     }
 
     Operator::Operator(hooc::OperatorType operatorType):

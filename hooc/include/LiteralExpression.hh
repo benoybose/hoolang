@@ -17,38 +17,57 @@
  */
 
 /**
- * File: hcoperator.h
+ * File: hcliteralexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 27, March 2018
+ * Date: 25, March 2018
  */
 
-#include "Node.hh"
+#ifndef _LITERALTYPEEXPR_H_
+#define _LITERALTYPEEXPR_H_
 
-#ifndef HCOPERATOR_H
-#define HCOPERATOR_H
+#include "Expression.hh"
+
+#include <cstdint>
+#include <cstdbool>
+#include <string>
+
 
 namespace hooc {
-    enum OperatorType {
-        InvalidExpression,
-        Add,
-        Subtract,
-        Division,
-        Multiplication,
-        Modulation
+    enum LiteralType {
+        InvalidLiteral,
+        Integer,
+        Long,
+        Character,
+        String,
+        Boolean,
+        Double
     };
 
-    class Operator: public Node {
+    class LiteralExpression: Expression {
     private:
-        OperatorType _operatorType;
-    public:
-        Operator();
-        Operator(OperatorType operatorType);
-        Operator(const Operator& opr);
+        LiteralType _literalType = LiteralType::InvalidLiteral;
+        int32_t _integerValue = 0;
+        int64_t _longValue = 0;
+        char _characterValue;
+        std::string _stringValue;
+        bool _booleanValue;
+        long double _doubleValue;
+
 
     public:
-        OperatorType getOperatorType();
+        LiteralExpression();
+        LiteralExpression(LiteralType literaltype, const char* value);
+        LiteralExpression(const LiteralExpression& literalExpression);
+
+    public:
+        LiteralType GetListeralType();
+        inline int32_t GetInteger() { return _integerValue; }
+        inline int64_t GetLong() { return _longValue; };
+        inline char GetCharacter() { return _characterValue; }
+        inline std::string GetString() { return _stringValue; }
+        inline bool GetBoolean() { return _booleanValue; }
+        inline long double GetDouble() { return _doubleValue; }
     };
 };
 
-#endif /* HCOPERATOR_H */
-
+#endif

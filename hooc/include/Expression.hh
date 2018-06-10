@@ -17,57 +17,38 @@
  */
 
 /**
- * File: hcliteralexpr.h
+ * File: hcexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
+ * Date: 29, March 2018
  */
 
-#ifndef _LITERALTYPEEXPR_H_
-#define _LITERALTYPEEXPR_H_
+#ifndef HCEXPR_H
+#define HCEXPR_H
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-
-#include "hcnode.hh"
-#include "hcexpr.hh"
+#include "Node.hh"
 
 namespace hooc {
-    enum LiteralType {
-        HC_LITERAL_SBYTE,
-        HC_LITERAL_BYTE,
-        HC_LITERAL_INT32,
-        HC_LITERAL_INT64,
-        HC_LITERAL_FLOAT,
-        HC_LITERAL_DOUBLE,
-        HC_LITERAL_CHAR,
-        HC_LITERAL_STRING,
-        HC_LITERAL_BOOL
+    enum ExpressionType {
+        InvalidExpr,
+        LiteralExpr,
+        BinaryExpr
     };
 
-    union LiteralValue {
-        int32_t intval;
-        int64_t longval;
-        uint8_t byteval;
-        char charval;
-        char* stringval;
-        bool boolval;
-    };
+    class Expression: public Node {
 
-    class LiteralExpression: Expression {
     private:
-        LiteralType _literalType;
-        LiteralValue _value;
-        size_t _size;
+        ExpressionType _expressionType;
 
     public:
-        LiteralExpression(LiteralType literaltype, LiteralValue value, size_t size);
+        Expression();
+        explicit Expression(ExpressionType expressionType);
+        Expression(const Expression& expression);
 
     public:
-        LiteralType getLiteralType();
-        LiteralValue getValue();
-        size_t getSize();
+        ExpressionType getExpressionType();
+
     };
-};
+}
 
-#endif
+#endif /* HCEXPR_H */
+

@@ -2,7 +2,6 @@
 #include "ParserDriver.hh"
 #include "FlexScanner.hh"
 #include <fstream>
-
 #include <string>
 
 namespace hooc {
@@ -53,6 +52,10 @@ namespace hooc {
             case Token::TOKEN_OPR_SUB:
             case Token::TOKEN_OPR_MOD:
                 lval->build(this->CreateOperator(inputToken));
+                break;
+
+            case Token::TOKEN_LITERAL_INT:
+                lval->build(LiteralExpression(LiteralType::Integer, this->_scanner->YYText()));
                 break;
         }
         return inputToken;
