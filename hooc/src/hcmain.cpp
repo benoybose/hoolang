@@ -22,50 +22,8 @@
  * Date: 25, March 2018
  */
 
-#include <stdio.h>
-#include <string.h>
-#include "hclogger.h"
-#include "hccompiler.h"
-#include "hcbuffer.h"
+#include "Parser.hh"
 
 int main(int argc, char** argv) {
-    hclog_init(stdout);
-
-    if (1 >= argc) {
-        printf("No source files specified.\n");
-        return 1;
-    } else {
-        hc_compiler_context_init();
-        for (int index = 1; index < argc; index++) {
-            const char* parameter = argv[index];
-            if('-' == parameter[0]) {                
-                if(1 == strlen(parameter)) {
-                    printf("Invalid command line argument.\n");
-                    return 2;
-                }                
-                switch(parameter[1]) {
-                    case 'i':
-                        break;
-                    default:
-                        printf("Invalid option.\n");
-                        return 3;
-                }                
-            } else {
-                char* file_path = argv[index];
-                hc_compiler_context_add_source_file(file_path);
-            }
-        }
-
-        if(0 == hc_compiler_context_compile()) {
-            hclog_print("compilation is successfull.");
-        }
-        struct hc_buffer* context_buffer = hc_buffer_create();
-        hc_compiler_context_serialize(context_buffer);
-        hclog_print(context_buffer->data);
-        hc_compiler_context_free();
-        
-    }
-
-    hclog_close();
     return 0;
 }
