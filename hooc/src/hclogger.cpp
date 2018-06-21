@@ -23,35 +23,70 @@
  */
 
 #include "hclogger.hh"
-#include <stdarg.h>
-#include <string.h>
-#include <stdio.h>
 
-FILE* __hc_logfile = 0;
+#include <iostream>
+#include <istream>
+#include <sstream>
+#include <mutex>
 
-int hclog_print(const char* format, ...) {
-    if (0 != __hc_logfile) {
-        va_list args;
-        va_start(args, format);
-        int returnCode = vfprintf(__hc_logfile, format, args);
-        if(0 < returnCode) {
-            fprintf(__hc_logfile, "%s", "\n");
+#include <Poco/DateTime.h>
+#include <Poco/DateTimeFormatter.h>
+
+
+std::ofstream* hooc::Logger::_stream = nullptr;
+std::mutex hooc::Logger::_write_lock;
+namespace hooc {
+    void Logger::Init(std::string fileName) {
+        if(fileName.empty()) {
+            hooc::Logger::_stream = nullptr;
+        } else {
+            hooc::Logger::_stream = new std::ofstream(fileName, std::ios_base::out);
         }
-        va_end(args);
-        return returnCode;
-    } else {
-        return 0;
     }
-}
 
-void hclog_init(FILE* stream) {
-    if (0 == __hc_logfile) {
-        __hc_logfile = stream;
+    void Logger::Close() {
+        if(nullptr != hooc::Logger::_stream) {
+            hooc::Logger::_stream->close();
+            delete hooc::Logger::_stream;
+        }
     }
-}
 
-void hclog_close() {
-    if((0 != __hc_logfile) && (stdout != __hc_logfile)) {
-        fclose(__hc_logfile);
+    void Logger::Log(LogLevel logLevel, std::string message) {
+        std::lock_guard<std::mutex> guard(hooc::Logger::_write_lock);
+        std::stringstream text(std::ios_base::in);
+        std::string currentTime = Poco::DateTimeFormatter::format(Poco::DateTime(), "%Y-%m-%d %h:%M:%S");
+        text    << "[" << currentTime << "] ["
+                << hooc::Logger::GetLogLevelName(logLevel)
+                << "] " << message << std::endl;
+        auto length = text.gcount();
+        auto data = new char[length];
+        text.read(data, length);
+        if(nullptr != hooc::Logger::_stream) {
+            hooc::Logger::_stream->write(data, length);
+        } else {
+            std::cout.write(data, length);
+        }
+        delete data;
+    }
+
+    void Logger::Info(std::string message) {
+        Logger::Log(LogLevel::info, message);
+    }
+
+    void Logger::Warning(std::string message) {
+        Logger::Log(LogLevel::warning, message);
+    }
+
+    void Logger::Error(std::string message) {
+        Logger::Log(LogLevel::error, message);
+    }
+
+    const std::string Logger::GetLogLevelName(LogLevel logLevel) {
+        switch(logLevel)  {
+            case hooc::Logger::error: return std::string("Error");
+            case hooc::Logger::warning: return std::string("Warning");
+            case hooc::Logger::info: return std::string("Information");
+            default: return std::string("Verbose");
+        }
     }
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(hooc, CXX)
+project(hooc CXX)
 
 SET(CMAKE_CXX_STANDARD 11)
 include_directories(
@@ -22,18 +22,23 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp ${PROJECT_SOURCE_
                 ${PROJECT_SOURCE_DIR}/grammar/hcparser.yy
         COMMENT "Invoking bison to generate grammar files")
 
-ADD_EXECUTABLE(hooc
-        include/Node.hh
+SET(hooc_header_files include/Node.hh
         include/Operator.hh
         include/Expression.hh
         include/LiteralExpression.hh
-        src/Operator.cpp
+        include/hclogger.hh)
+
+SET(hooc_source_files src/Operator.cpp
         src/Expression.cpp
         src/LiteralExpression.cpp
         src/Parser.cpp
         src/FlexScanner.cpp
-        src/hcmain.cpp
         include/ParserDriver.hh
-        src/ParserDriver.cpp)
+        src/ParserDriver.cpp
+        src/hclogger.cpp)
+SET(hooc_link_libraries libPocoFoundation)
+
+ADD_EXECUTABLE(hooc ${hooc_header_files} ${hooc_source_files} src/hcmain.cpp)
+TARGET_LINK_LIBRARIES(hooc ${hooc_link_libraries})
 
 
