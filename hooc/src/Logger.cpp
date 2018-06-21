@@ -17,12 +17,12 @@
  */
 
 /**
- * File: hclogger.c
+ * File: Logger.cpp
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#include "hclogger.hh"
+#include "Logger.hh"
 
 #include <iostream>
 #include <istream>

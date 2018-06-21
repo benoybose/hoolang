@@ -17,7 +17,7 @@
  */
 
 /**
- * File: hclogger.h
+ * File: Logger.hh
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
