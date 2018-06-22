@@ -53,20 +53,18 @@ namespace hooc {
 
     void Logger::Log(LogLevel logLevel, std::string message) {
         std::lock_guard<std::mutex> guard(hooc::Logger::_write_lock);
-        std::stringstream text(std::ios_base::in);
+        std::ostringstream text;
         std::string currentTime = Poco::DateTimeFormatter::format(Poco::DateTime(), "%Y-%m-%d %h:%M:%S");
         text    << "[" << currentTime << "] ["
                 << hooc::Logger::GetLogLevelName(logLevel)
                 << "] " << message << std::endl;
-        auto length = text.gcount();
-        auto data = new char[length];
-        text.read(data, length);
+        text.flush();
+        std::string content = text.str();
         if(nullptr != hooc::Logger::_stream) {
-            hooc::Logger::_stream->write(data, length);
+            *hooc::Logger::_stream << content;
         } else {
-            std::cout.write(data, length);
+            std::cout << content;
         }
-        delete data;
     }
 
     void Logger::Info(std::string message) {
