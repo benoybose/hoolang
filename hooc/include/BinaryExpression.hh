@@ -31,13 +31,13 @@
 namespace hooc {
     class BinaryExpression: public Expression {
     private:
-        const Expression& _lvalue;
-        const Operator& _operator;
-        const Expression& _rvalue;
+        ast::Expression _lvalue;
+        ast::Operator _operator;
+        ast::Expression _rvalue;
 
     public:
         BinaryExpression();
-        BinaryExpression(Expression& lvalue, Operator& opr, Expression& rvalue);
+        BinaryExpression(ast::Expression lvalue, ast::Operator opr, ast::Expression rvalue);
         BinaryExpression(const BinaryExpression& binaryExpression);
 
     };

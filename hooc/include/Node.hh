@@ -26,6 +26,7 @@
 #define HCNODE_H
 
 #include <string>
+#include <memory>
 
 namespace hooc {
     enum NodeType {
@@ -47,8 +48,8 @@ namespace hooc {
         Node(const Node& node);
 
     public:
-        NodeType getNodeType();
-        std::string getNodeTypeName();
+        NodeType GetNodeType();
+        std::string GetNodeTypeName();
     };
 };
 

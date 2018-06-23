@@ -26,6 +26,8 @@
 #define HCEXPR_H
 
 #include "Node.hh"
+#include <memory>
+#include <string>
 
 namespace hooc {
     enum ExpressionType {
@@ -45,9 +47,13 @@ namespace hooc {
         Expression(const Expression& expression);
 
     public:
-        ExpressionType getExpressionType();
-
+        ExpressionType GetExpressionType();
+        std::string GetExpressionTypeName();
     };
+
+    namespace ast {
+        typedef std::shared_ptr<hooc::Expression> Expression;
+    }
 }
 
 #endif /* HCEXPR_H */

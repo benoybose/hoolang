@@ -35,9 +35,11 @@
 %token<hooc::Operator> TOKEN_OPR_MOD
 %token<std::string> TOKEN_LITERAL_INT
 
-%type<hooc::Operator> operator
-%type<hooc::Expression> literal_expr
-%type<hooc::Expression> unary_expression
+%type<hooc::ast::Operator> operator
+%type<hooc::ast::Expression> literal_expr
+%type<hooc::ast::Expression> unary_expression
+%type<hooc::ast::Expression> binary_expression
+%type<hooc::ast::Expression> expr
 
 %%
     prog: /* empty */
@@ -59,16 +61,16 @@
         ;
 
     expr:
-        binary_expression
+        binary_expression { $$ = $1; }
         ;
 
     binary_expression:
         unary_expression operator unary_expression {
-            hooc::Logger::Info($1.getNodeTypeName());
-            hooc::Logger::Info($2.getNodeTypeName());
-            hooc::Logger::Info($3.getNodeTypeName());
+            $$ = driver.CreateBinaryExpression($1, $2, $3);
         }|
-        binary_expression operator unary_expression;
+        binary_expression operator unary_expression {
+            $$ = driver.CreateBinaryExpression($1, $2, $3);
+        }
 
     unary_expression:
         literal_expr { $$ = $1; }

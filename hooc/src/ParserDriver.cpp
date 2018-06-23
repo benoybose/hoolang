@@ -58,19 +58,27 @@ namespace hooc {
         return inputToken;
     }
 
-    Operator ParserDriver::CreateOperator(char op) {
+    ast::Operator ParserDriver::CreateOperator(char op) {
         switch(op) {
-            case '+': return Operator(hooc::OperatorType::AddOperator);
-            case '-': return Operator(hooc::OperatorType::SubtractOperator);
-            case '*': return Operator(hooc::OperatorType::ModulationOperator);
-            case '/': return Operator(hooc::OperatorType::DivisionOperator);
-            case '%': return Operator(hooc::OperatorType::ModulationOperator);
+            case '+': return ast::Operator(new Operator(hooc::OperatorType::AddOperator));
+            case '-': return ast::Operator(new Operator(hooc::OperatorType::SubtractOperator));
+            case '*': return ast::Operator(new Operator(hooc::OperatorType::MultiplicationOperator));
+            case '/': return ast::Operator(new Operator(hooc::OperatorType::DivisionOperator));
+            case '%': return ast::Operator(new Operator(hooc::OperatorType::ModulationOperator));
         }
     }
 
-    Expression ParserDriver::CreateLiteralExpression(hooc::LiteralType literalType, std::string input) {
-        LiteralExpression expression = LiteralExpression(literalType, input.c_str());
+    ast::Expression ParserDriver::CreateLiteralExpression(hooc::LiteralType literalType,
+                                                          std::string input) {
+        ast::Expression expression = ast::Expression(new LiteralExpression(literalType, input.c_str()));
         return expression;
+    }
+
+    ast::Expression ParserDriver::CreateBinaryExpression(ast::Expression &lvalue,
+                                                         ast::Operator &opr,
+                                                         ast::Expression &rvalue) {
+        ast::Expression binaryExpression = ast::Expression(new BinaryExpression(lvalue, opr, rvalue));
+        return binaryExpression;
     }
 
     std::string* ParserDriver::getFile() {

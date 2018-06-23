@@ -1,6 +1,7 @@
 #include "Expression.hh"
 
 namespace hooc {
+
     Expression::Expression() : Node(NodeType::ExpressionNode) {
         this->_expressionType = hooc::ExpressionType::InvalidExpr;
     }
@@ -14,7 +15,16 @@ namespace hooc {
         this->_expressionType = expression._expressionType;
     }
 
-    ExpressionType Expression::getExpressionType() {
+    ExpressionType Expression::GetExpressionType() {
         return this->_expressionType;
+    }
+
+    std::string Expression::GetExpressionTypeName() {
+        switch(this->_expressionType) {
+            case hooc::ExpressionType ::InvalidExpr: return "Invalid Expression";
+            case hooc::ExpressionType ::BinaryExpr: return "Binary Expression";
+            case hooc::ExpressionType ::LiteralExpr: return "Literal Expression";
+            default: return "Unknown Expression";
+        }
     }
 }

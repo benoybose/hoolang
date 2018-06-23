@@ -25,25 +25,33 @@
 #ifndef HCSTMT_H
 #define HCSTMT_H
 
-#include "hcnode.h"
+#include "Node.hh"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <memory>
+#include <string>
 
-    enum HC_TYPE_STMT {
-        HC_STMT_EXPR
+namespace hooc {
+    enum StatementType {
+        InvalidStateMent,
+        ExpressionStatement
     };
-    
-    struct hc_node_stmt {
-        enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_STMT stmt_type;
+    class Statement: public Node {
+    private:
+        StatementType _statementType;
+
+    public:
+        Statement();
+        Statement(StatementType statementType);
+
+    public:
+        StatementType GetStatementType();
+        std::string GetStatementTypeName();
     };
 
-
-#ifdef __cplusplus
+    namespace ast {
+        typedef std::shared_ptr<hooc::Statement> Statement;
+    }
 }
-#endif
 
 #endif /* HCSTMT_H */
 

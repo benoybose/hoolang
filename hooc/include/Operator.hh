@@ -27,6 +27,8 @@
 #ifndef HCOPERATOR_H
 #define HCOPERATOR_H
 
+#include <memory>
+
 namespace hooc {
     enum OperatorType {
         InvalidOperator,
@@ -48,6 +50,10 @@ namespace hooc {
     public:
         OperatorType getOperatorType();
     };
+
+    namespace ast {
+        typedef std::shared_ptr<hooc::Operator> Operator;
+    }
 };
 
 #endif /* HCOPERATOR_H */

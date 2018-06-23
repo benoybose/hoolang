@@ -29,18 +29,13 @@
 #include "Operator.hh"
 
 namespace hooc {
-    const Expression& invalidExpression = Expression(ExpressionType::InvalidExpr);
-    const Operator& invalidOperator = Operator(OperatorType::InvalidOperator);
     BinaryExpression::BinaryExpression():
-        Expression(hooc::ExpressionType::InvalidExpr),
-        _lvalue(invalidExpression),
-        _operator(invalidOperator),
-        _rvalue(invalidExpression){
+        Expression(hooc::ExpressionType::InvalidExpr){
     }
 
-    BinaryExpression::BinaryExpression(hooc::Expression &lvalue,
-                                       hooc::Operator &opr,
-                                       hooc::Expression &rvalue):
+    BinaryExpression::BinaryExpression(ast::Expression lvalue,
+                                       ast::Operator opr,
+                                       ast::Expression rvalue):
         Expression(hooc::ExpressionType::BinaryExpr),
         _lvalue(lvalue),
         _operator(opr),
