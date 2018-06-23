@@ -32,9 +32,10 @@
 
 namespace hooc {
     enum StatementType {
-        InvalidStateMent,
-        ExpressionStatement
+        InvalidStmt,
+        ExpressionStmt
     };
+
     class Statement: public Node {
     private:
         StatementType _statementType;

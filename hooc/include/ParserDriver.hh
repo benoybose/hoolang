@@ -12,6 +12,8 @@
 #include "Expression.hh"
 #include "LiteralExpression.hh"
 #include "BinaryExpression.hh"
+#include "Statement.hh"
+#include "ExpressionStatement.hh"
 
 #include <istream>
 
@@ -37,10 +39,11 @@ namespace hooc {
         std::string* getFile();
 
     public:
-        ast::Operator CreateOperator(char op);
-        ast::Expression CreateLiteralExpression(hooc::LiteralType literalType, std::string input);
-        ast::Expression CreateBinaryExpression(ast::Expression& lvalue, ast::Operator& opr, ast::Expression& rvalue);
-
+        ast::Operator Operator(char op);
+        ast::Expression LiteralExpression(hooc::LiteralType literalType, std::string input);
+        ast::Expression BinaryExpression(ast::Expression& lvalue,
+                                               ast::Operator& opr, ast::Expression& rvalue);
+        ast::Statement ExpressionStatement(ast::Expression expression);
     };
 }
 

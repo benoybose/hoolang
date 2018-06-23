@@ -3,7 +3,12 @@
 #include "FlexScanner.hh"
 #include "Logger.hh"
 
+#include "Operator.hh"
+#include "Expression.hh"
 #include "LiteralExpression.hh"
+#include "BinaryExpression.hh"
+#include "Statement.hh"
+#include "ExpressionStatement.hh"
 
 #include <fstream>
 #include <string>
@@ -58,27 +63,32 @@ namespace hooc {
         return inputToken;
     }
 
-    ast::Operator ParserDriver::CreateOperator(char op) {
+    ast::Operator ParserDriver::Operator(char op) {
         switch(op) {
-            case '+': return ast::Operator(new Operator(hooc::OperatorType::AddOperator));
-            case '-': return ast::Operator(new Operator(hooc::OperatorType::SubtractOperator));
-            case '*': return ast::Operator(new Operator(hooc::OperatorType::MultiplicationOperator));
-            case '/': return ast::Operator(new Operator(hooc::OperatorType::DivisionOperator));
-            case '%': return ast::Operator(new Operator(hooc::OperatorType::ModulationOperator));
+            case '+': return ast::Operator(new hooc::Operator(hooc::OperatorType::AddOperator));
+            case '-': return ast::Operator(new hooc::Operator(hooc::OperatorType::SubtractOperator));
+            case '*': return ast::Operator(new hooc::Operator(hooc::OperatorType::MultiplicationOperator));
+            case '/': return ast::Operator(new hooc::Operator(hooc::OperatorType::DivisionOperator));
+            case '%': return ast::Operator(new hooc::Operator(hooc::OperatorType::ModulationOperator));
         }
     }
 
-    ast::Expression ParserDriver::CreateLiteralExpression(hooc::LiteralType literalType,
+    ast::Expression ParserDriver::LiteralExpression(hooc::LiteralType literalType,
                                                           std::string input) {
-        ast::Expression expression = ast::Expression(new LiteralExpression(literalType, input.c_str()));
+        ast::Expression expression(new hooc::LiteralExpression(literalType, input.c_str()));
         return expression;
     }
 
-    ast::Expression ParserDriver::CreateBinaryExpression(ast::Expression &lvalue,
+    ast::Expression ParserDriver::BinaryExpression(ast::Expression &lvalue,
                                                          ast::Operator &opr,
                                                          ast::Expression &rvalue) {
-        ast::Expression binaryExpression = ast::Expression(new BinaryExpression(lvalue, opr, rvalue));
+        ast::Expression binaryExpression(new hooc::BinaryExpression(lvalue, opr, rvalue));
         return binaryExpression;
+    }
+
+    ast::Statement ParserDriver::ExpressionStatement(hooc::ast::Expression expression) {
+        ast::Statement statement(new hooc::ExpressionStatement(expression));
+        return statement;
     }
 
     std::string* ParserDriver::getFile() {

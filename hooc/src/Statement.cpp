@@ -3,7 +3,7 @@
 namespace hooc {
     Statement::Statement():
             Node(NodeType::StatementNode),
-            _statementType(StatementType::InvalidStateMent) {
+            _statementType(StatementType::ExpressionStmt) {
     }
 
     Statement::Statement(hooc::StatementType statementType):
@@ -16,8 +16,8 @@ namespace hooc {
 
     std::string Statement::GetStatementTypeName() {
         switch(this->_statementType) {
-            case StatementType ::InvalidStateMent: return "Invalid Statement";
-            case StatementType ::ExpressionStatement: return "Expression Statement";
+            case StatementType ::InvalidStmt : return "Invalid Statement";
+            case StatementType ::ExpressionStmt : return "Expression Statement";
             default: return "Unknown Statement";
         }
     }

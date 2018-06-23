@@ -21,6 +21,7 @@
 %code requires {
     #include "Operator.hh"
     #include "Expression.hh"
+    #include "Statement.hh"
     #include <string>
     namespace hooc {
         class ParserDriver;
@@ -40,6 +41,8 @@
 %type<hooc::ast::Expression> unary_expression
 %type<hooc::ast::Expression> binary_expression
 %type<hooc::ast::Expression> expr
+%type<hooc::ast::Statement> base_stmt
+%type<hooc::ast::Statement> stmt
 
 %%
     prog: /* empty */
@@ -54,11 +57,13 @@
         ;
 
     stmt:
-        base_stmt;
+        base_stmt { $$ = $1; }
+        ;
 
     base_stmt:
-        expr TOKEN_PUC_SEMICOLON
-        ;
+        expr TOKEN_PUC_SEMICOLON {
+            $$ = driver.ExpressionStatement($1);
+        };
 
     expr:
         binary_expression { $$ = $1; }
@@ -66,11 +71,11 @@
 
     binary_expression:
         unary_expression operator unary_expression {
-            $$ = driver.CreateBinaryExpression($1, $2, $3);
+            $$ = driver.BinaryExpression($1, $2, $3);
         }|
         binary_expression operator unary_expression {
-            $$ = driver.CreateBinaryExpression($1, $2, $3);
-        }
+            $$ = driver.BinaryExpression($1, $2, $3);
+        };
 
     unary_expression:
         literal_expr { $$ = $1; }
@@ -78,18 +83,18 @@
 
     literal_expr:
         TOKEN_LITERAL_INT { hooc::Logger::Info($1);
-            $$ = driver.CreateLiteralExpression(hooc::LiteralType::IntegerLiteral, $1);
+            $$ = driver.LiteralExpression(hooc::LiteralType::IntegerLiteral, $1);
         };
 
     operator:   
-        TOKEN_OPR_ADD { $$ = driver.CreateOperator('+'); }
+        TOKEN_OPR_ADD { $$ = driver.Operator('+'); }
         | 
-        TOKEN_OPR_SUB { $$ = driver.CreateOperator('-'); }
+        TOKEN_OPR_SUB { $$ = driver.Operator('-'); }
         |   
-        TOKEN_OPR_MUL { $$ = driver.CreateOperator('*'); }
+        TOKEN_OPR_MUL { $$ = driver.Operator('*'); }
         | 
-        TOKEN_OPR_DIV { $$ = driver.CreateOperator('/'); }
+        TOKEN_OPR_DIV { $$ = driver.Operator('/'); }
         | 
-        TOKEN_OPR_MOD { $$ = driver.CreateOperator('%'); }
+        TOKEN_OPR_MOD { $$ = driver.Operator('%'); }
         ;
 %%

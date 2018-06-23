@@ -28,8 +28,12 @@
 #include "ExpressionStatement.hh"
 
 namespace hooc {
-    ExpressionStatement::ExpressionStatement(hooc::ast::Expression expression):
-            Statement(StatementType::ExpressionStatement), _expression(expression) {
+    ExpressionStatement::ExpressionStatement():
+            Statement(StatementType::InvalidStmt) {
+    }
 
+    ExpressionStatement::ExpressionStatement(hooc::ast::Expression expression):
+            Statement(StatementType::ExpressionStmt),
+            _expression(expression) {
     }
 }
