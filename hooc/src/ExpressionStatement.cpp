@@ -17,52 +17,19 @@
  */
 
 /**
- * File: hcexprstmt.h
+ * File: ExpressionStatement.cpp
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 29, March 2018
+ * Date: 30, March 2018
  */
 
-#ifndef HCEXPRSTMT_H
-#define HCEXPRSTMT_H
+#include <stdlib.h>
 
-#include "hcnode.h"
-#include "hcstmt.h"
-#include "hcexpr.h"
-#include "hcbuffer.h"
+#include "Expression.hh"
+#include "ExpressionStatement.hh"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace hooc {
+    ExpressionStatement::ExpressionStatement(hooc::ast::Expression expression):
+            Statement(StatementType::ExpressionStatement), _expression(expression) {
 
-    /**
-     *Expression as a statement
-     */
-    struct hc_node_expr_stmt {
-        /**
-         * Node type must be HC_NODE_STMT
-         */
-        enum HC_TYPE_NODE node_type;
-        /**
-         * Statement type must be HC_STMT_EXPR
-         */
-        enum HC_TYPE_STMT stmt_type;
-        /**
-         * Pointer to expression
-         */
-        struct hc_node_expr* expr;
-    };
-
-    /**
-     * Creates an expression statement
-     */
-    struct hc_node_expr_stmt* hc_node_expr_stmt_create(
-            struct hc_node_expr* expr);
-    void hc_node_expr_stmt_serialize(struct hc_node_expr_stmt* stmt,
-            struct hc_buffer* buffer);
-
-#ifdef __cplusplus
+    }
 }
-#endif
-
-#endif /* HCEXPRSTMT_H */
-

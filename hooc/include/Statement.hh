@@ -17,28 +17,41 @@
  */
 
 /**
- * File: hcexprstmt.c
+ * File: Statement.hh
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 30, March 2018
+ * Date: 29, March 2018
  */
 
-#include <stdlib.h>
+#ifndef HCSTMT_H
+#define HCSTMT_H
 
-#include "hcexprstmt.h"
-#include "hcbuffer.h"
+#include "Node.hh"
 
-struct hc_node_expr_stmt* hc_node_expr_stmt_create(
-        struct hc_node_expr* expr) {
-    struct hc_node_expr_stmt* stmt = (struct hc_node_expr_stmt*)
-            malloc(sizeof (struct hc_node_expr_stmt));
-    stmt->node_type = HC_NODE_STMT;
-    stmt->stmt_type = HC_STMT_EXPR;
-    stmt->expr = expr;
-    return stmt;
+#include <memory>
+#include <string>
+
+namespace hooc {
+    enum StatementType {
+        InvalidStateMent,
+        ExpressionStatement
+    };
+    class Statement: public Node {
+    private:
+        StatementType _statementType;
+
+    public:
+        Statement();
+        Statement(StatementType statementType);
+
+    public:
+        StatementType GetStatementType();
+        std::string GetStatementTypeName();
+    };
+
+    namespace ast {
+        typedef std::shared_ptr<hooc::Statement> Statement;
+    }
 }
 
-void hc_node_expr_stmt_serialize(struct hc_node_expr_stmt* stmt,
-        struct hc_buffer* buffer) {
-    hc_buffer_printf(buffer, "<stmt type=\"expr\">");
-    hc_buffer_printf(buffer, "</stmt>");
-}
+#endif /* HCSTMT_H */
+

@@ -1,4 +1,4 @@
-#include "hcstmt.hh"
+#include "Statement.hh"
 
 namespace hooc {
     Statement::Statement():

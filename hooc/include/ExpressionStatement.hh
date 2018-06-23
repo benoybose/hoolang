@@ -17,41 +17,26 @@
  */
 
 /**
- * File: hcstmt.h
+ * File: ExpressionStatement.hh
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 29, March 2018
  */
 
-#ifndef HCSTMT_H
-#define HCSTMT_H
+#ifndef HCEXPRSTMT_H
+#define HCEXPRSTMT_H
 
-#include "Node.hh"
-
-#include <memory>
-#include <string>
+#include "Statement.hh"
+#include "Expression.hh"
 
 namespace hooc {
-    enum StatementType {
-        InvalidStateMent,
-        ExpressionStatement
-    };
-    class Statement: public Node {
+    class ExpressionStatement: public Statement {
     private:
-        StatementType _statementType;
+        ast::Expression _expression;
 
     public:
-        Statement();
-        Statement(StatementType statementType);
-
-    public:
-        StatementType GetStatementType();
-        std::string GetStatementTypeName();
+        explicit ExpressionStatement(ast::Expression expression);
     };
-
-    namespace ast {
-        typedef std::shared_ptr<hooc::Statement> Statement;
-    }
 }
 
-#endif /* HCSTMT_H */
+#endif /* HCEXPRSTMT_H */
 
