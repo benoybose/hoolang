@@ -11,17 +11,17 @@ ADD_CUSTOM_COMMAND(
         COMMAND flex
         ARGS    --header-file=${PROJECT_SOURCE_DIR}/include/FlexScanner.hh
                 --outfile=${PROJECT_SOURCE_DIR}/src/FlexScanner.cpp
-                ${PROJECT_SOURCE_DIR}/grammar/hclexer.ll
+                ${PROJECT_SOURCE_DIR}/grammar/Lexer.l
         DEPENDS ${PROJECT_SOURCE_DIR}/src/Parser.cpp
-        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/hclexer.ll
+        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/Lexer.l
         COMMENT "Invoking flex to generate lexer files")
 
 ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp ${PROJECT_SOURCE_DIR}/include/Parser.hh
         COMMAND bison
         ARGS    --output=${PROJECT_SOURCE_DIR}/src/Parser.cpp
                 --defines=${PROJECT_SOURCE_DIR}/include/Parser.hh
-                ${PROJECT_SOURCE_DIR}/grammar/hcparser.yy
-        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/hcparser.yy
+                ${PROJECT_SOURCE_DIR}/grammar/Parser.y
+        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/Parser.y
         COMMENT "Invoking bison to generate grammar files")
 
 SET(hooc_header_files include/Node.hh
