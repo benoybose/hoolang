@@ -17,34 +17,19 @@
  */
 
 /**
- * File: hcstmtlist.h
+ * File: StatementList.cpp
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 31, March 2018
  */
 
-#ifndef INCLUDE_NODES_HCSTMTLIST_H_
-#define INCLUDE_NODES_HCSTMTLIST_H_
-
-#include "Statement.hh"
-
-#include <list>
-#include <memory>
+#include "StatementList.hh"
 
 namespace hooc {
-    class StatementList {
-    private:
-        std::list<ast::Statement> _statements;
+    StatementList::StatementList(hooc::ast::Statement statement) {
+        this->_statements.push_back(statement);
+    }
 
-    public:
-        StatementList(ast::Statement statement);
-
-    public:
-        void Add(ast::Statement statement);
-    };
-
-    namespace ast {
-        typedef std::shared_ptr<hooc::StatementList> StatementList;
+    void StatementList::Add(hooc::ast::Statement statement) {
+        this->_statements.push_back(statement);
     }
 }
-
-#endif /* INCLUDE_NODES_HCSTMTLIST_H_ */

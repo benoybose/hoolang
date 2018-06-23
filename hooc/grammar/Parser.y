@@ -22,7 +22,7 @@
     #include "Operator.hh"
     #include "Expression.hh"
     #include "Statement.hh"
-    #include "hcstmtlist.hh"
+    #include "StatementList.hh"
     #include <string>
     namespace hooc {
         class ParserDriver;
