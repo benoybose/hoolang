@@ -17,7 +17,7 @@
  */
 
 /**
- * File: hcbinaryexpr.h
+ * File: BinaryExpression.hh
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 28, March 2018
  */

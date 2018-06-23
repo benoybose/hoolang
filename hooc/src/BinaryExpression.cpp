@@ -17,14 +17,14 @@
  */
 
 /**
- * File: hcbinaryexpr.c
+ * File: BinaryExpression.cpp
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 28, March 2018
  */
 
 #include <stdlib.h>
 
-#include "hcbinaryexpr.hh"
+#include "BinaryExpression.hh"
 #include "Expression.hh"
 #include "Operator.hh"
 

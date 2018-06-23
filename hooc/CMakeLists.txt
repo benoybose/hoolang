@@ -29,7 +29,7 @@ SET(hooc_header_files include/Node.hh
         include/Expression.hh
         include/LiteralExpression.hh
         include/Logger.hh
-        include/hcbinaryexpr.hh)
+        include/BinaryExpression.hh)
 
 SET(hooc_source_files src/Node.cpp
         src/Operator.cpp
@@ -40,7 +40,7 @@ SET(hooc_source_files src/Node.cpp
         include/ParserDriver.hh
         src/ParserDriver.cpp
         src/Logger.cpp
-        src/hcbinaryexpr.cpp)
+        src/BinaryExpression.cpp)
 SET(hooc_link_libraries libPocoFoundation)
 
 ADD_EXECUTABLE(hooc ${hooc_header_files} ${hooc_source_files} src/hcmain.cpp)
