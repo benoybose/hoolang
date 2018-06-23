@@ -17,7 +17,7 @@
  */
 
 /**
- * File: hcprog.h
+ * File: Module.hh
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
@@ -25,26 +25,35 @@
 #ifndef HCPROG_H
 #define HCPROG_H
 
-#include "hcnode.h"
-#include "hcstmtlist.h"
-#include "hcbuffer.h"
+#include "StatementList.hh"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <string>
+#include <memory>
 
-    struct hc_node_prog {
-        enum HC_TYPE_NODE node_type;
-        char* source_file;
-        struct hc_node_stmt_list* stmt_list;
+
+namespace hooc {
+    class Module {
+    private:
+        std::string _fileName;
+        std::string _moduleName;
+        std::string _nameSpace;
+        ast::StatementList _statementList;
+
+    public:
+        Module(std::string fileName, std::string nameSpace = "");
+
+    public:
+        void Add(ast::Statement statement);
+
+    private:
+        std::string NormalizeName();
+        bool IsNamespaceValid(std::string nameSpace);
     };
-    
-    struct hc_node_prog* hc_node_prog_create(const char* source_file);
-    void hc_node_prog_serialize(struct hc_node_prog* prog, struct hc_buffer* buffer);
 
-#ifdef __cplusplus
+    namespace ast {
+        typedef std::shared_ptr<hooc::Module> Module;
+    }
 }
-#endif
 
 #endif /* HCPROG_H */
 

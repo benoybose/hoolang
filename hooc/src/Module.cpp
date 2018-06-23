@@ -17,48 +17,43 @@
  */
 
 /**
- * File: hcprog.h
+ * File: Module.cpp
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#include <stdlib.h>
-#include <string.h>
-#include <memory.h>
+#include "Module.hh"
 
-#include "hcnode.h"
-#include "hcprog.h"
-#include "hcstmt.h"
-#include "hcstmtlist.h"
-#include "hcexprstmt.h"
-#include "hcbuffer.h"
+#include <string>
+#include <Poco/RegularExpression.h>
+#include <exception>
 
-struct hc_node_prog* hc_node_prog_create(const char* source_file) {
-    struct hc_node_prog* prog = (struct hc_node_prog*)
-    malloc(sizeof(struct hc_node_prog));
-    prog->node_type = HC_NODE_PROG;
-    size_t file_name_length = strlen(source_file) + 1;
-    prog->source_file = malloc(sizeof(char) * file_name_length);
-    memset(prog->source_file, 0, file_name_length);
-    strcpy(prog->source_file, source_file);
-    prog->stmt_list = 0;
-    return prog;
-}
-
-void hc_node_prog_serialize(struct hc_node_prog* prog, 
-        struct hc_buffer* buffer) {
-    hc_buffer_printf(buffer, "<prog file-path=\"%s\">", prog->source_file);
-    if(0 != prog->stmt_list) {
-        for(size_t index = 0; index < prog->stmt_list->stmts_count; index++) {
-            struct hc_node_stmt* stmt = prog->stmt_list->stmts[index];
-            switch(stmt->stmt_type) {
-                case HC_STMT_EXPR: {
-                    struct hc_node_expr_stmt* expr_stmt = (struct hc_node_expr_stmt*) stmt;
-                    hc_node_expr_stmt_serialize(expr_stmt, buffer);
-                    break;
-                }
-            }
+namespace hooc {
+    Module::Module(std::string fileName, std::string nameSpace):
+            _fileName(fileName) {
+        if ((nameSpace.empty()) || (!IsNamespaceValid(nameSpace))) {
+            _nameSpace = "global";
+        } else {
+            _nameSpace = nameSpace;
         }
     }
-    hc_buffer_printf(buffer, "</prog>");
+
+    void Module::Add(hooc::ast::Statement statement) {
+        this->_statementList->Add(statement);
+    }
+
+    std::string Module::NormalizeName() {
+        const Poco::RegularExpression regExp("[a-zA-Z_][a-zA-Z0-9_]*");
+        std::string moduleName;
+        if(0 == regExp.extract(this->_fileName, moduleName)) {
+            throw std::invalid_argument("File name is not acceptable.");
+        } else {
+            this->_moduleName = moduleName;
+        }
+    }
+
+    bool Module::IsNamespaceValid(std::string nameSpace) {
+        const Poco::RegularExpression regExp("^([a-zA-Z_][a-zA-Z0-9_]*)([\\.]([a-zA-Z_][a-zA-Z0-9_]*))*$");
+        return regExp.match(nameSpace);
+    }
 }

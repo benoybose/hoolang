@@ -15,6 +15,7 @@
 #include "Statement.hh"
 #include "ExpressionStatement.hh"
 #include "StatementList.hh"
+#include "Module.hh"
 
 #include <istream>
 
@@ -28,6 +29,7 @@ namespace hooc {
         yyFlexLexer* _scanner = nullptr;
         std::istream* _fileInputStream = nullptr;
         Parser* _parser = nullptr;
+        ast::Module _module;
 
     public:
         explicit ParserDriver(std::string file);
@@ -45,7 +47,7 @@ namespace hooc {
         ast::Expression BinaryExpression(ast::Expression& lvalue,
                                                ast::Operator& opr, ast::Expression& rvalue);
         ast::Statement ExpressionStatement(ast::Expression expression);
-        ast::StatementList StatementList(ast::Statement statement);
+        void Add(ast::Statement statement);
     };
 }
 

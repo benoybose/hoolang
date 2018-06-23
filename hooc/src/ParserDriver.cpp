@@ -24,13 +24,14 @@ namespace hooc {
             _fileInputStream = new std::ifstream(file, std::ios_base::in);
             this->_scanner = new yyFlexLexer(*_fileInputStream, std::cout);
         }
-
+        this->_module = ast::Module(new hooc::Module(file));
         this->_parser = new Parser(*this);
     }
 
     ParserDriver::ParserDriver(std::istream *stream, std::string file) {
         this->_file = file;
         this->_scanner = new yyFlexLexer(*stream, std::cout);
+        this->_module = ast::Module(new hooc::Module(file));
         this->_parser = new Parser(*this);
     }
 
@@ -92,9 +93,8 @@ namespace hooc {
         return statement;
     }
 
-    ast::StatementList ParserDriver::StatementList(hooc::ast::Statement statement) {
-        ast::StatementList statementList(new hooc::StatementList(statement));
-        return statementList;
+    void ParserDriver::Add(hooc::ast::Statement statement) {
+        this->_module->Add(statement);
     }
 
     std::string* ParserDriver::getFile() {
