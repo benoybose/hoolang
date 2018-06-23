@@ -35,24 +35,21 @@
 namespace hooc {
     enum LiteralType {
         InvalidLiteral,
-        Integer,
-        Long,
-        Character,
-        String,
-        Boolean,
-        Double
+        IntegerLiteral,
+        CharacterLiteral,
+        StringLiteral,
+        BooleanLiteral,
+        DoubleLiteral
     };
 
-    class LiteralExpression: Expression {
+    class LiteralExpression: public Expression {
     private:
         LiteralType _literalType = LiteralType::InvalidLiteral;
-        int32_t _integerValue = 0;
         int64_t _longValue = 0;
         char _characterValue;
         std::string _stringValue;
         bool _booleanValue;
         long double _doubleValue;
-
 
     public:
         LiteralExpression();
@@ -61,8 +58,7 @@ namespace hooc {
 
     public:
         LiteralType GetListeralType();
-        inline int32_t GetInteger() { return _integerValue; }
-        inline int64_t GetLong() { return _longValue; };
+        inline int32_t GetInteger() { return _longValue; }
         inline char GetCharacter() { return _characterValue; }
         inline std::string GetString() { return _stringValue; }
         inline bool GetBoolean() { return _booleanValue; }

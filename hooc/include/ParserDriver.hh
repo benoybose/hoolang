@@ -9,6 +9,9 @@
 #include "Parser.hh"
 #include "FlexScanner.hh"
 #include "Operator.hh"
+#include "Expression.hh"
+#include "LiteralExpression.hh"
+
 #include <istream>
 
 
@@ -32,8 +35,9 @@ namespace hooc {
         int Scan(hooc::Parser::semantic_type* lval);
         std::string* getFile();
 
-    private:
-        Operator CreateOperator(Token inputToken);
+    public:
+        Operator CreateOperator(char op);
+        Expression CreateLiteralExpression(hooc::LiteralType literalType, std::string input);
 
     };
 }

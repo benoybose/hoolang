@@ -1,6 +1,10 @@
 #include "Parser.hh"
 #include "ParserDriver.hh"
 #include "FlexScanner.hh"
+#include "Logger.hh"
+
+#include "LiteralExpression.hh"
+
 #include <fstream>
 #include <string>
 
@@ -46,19 +50,27 @@ namespace hooc {
     int ParserDriver::Scan(hooc::Parser::semantic_type *lval) {
         Token inputToken =  (Token) this->_scanner->yylex();
         switch(inputToken) {
-            case Token::TOKEN_OPR_ADD:
-            case Token::TOKEN_OPR_DIV:
-            case Token::TOKEN_OPR_MUL:
-            case Token::TOKEN_OPR_SUB:
-            case Token::TOKEN_OPR_MOD:
-                lval->build(this->CreateOperator(inputToken));
-                break;
-
-            case Token::TOKEN_LITERAL_INT:
-                lval->build(LiteralExpression(LiteralType::Integer, this->_scanner->YYText()));
+            case hooc::Token::TOKEN_LITERAL_INT:
+                lval->build(std::string(this->_scanner->YYText()));
                 break;
         }
+        lval->build(std::string(this->_scanner->YYText()));
         return inputToken;
+    }
+
+    Operator ParserDriver::CreateOperator(char op) {
+        switch(op) {
+            case '+': return Operator(hooc::OperatorType::AddOperator);
+            case '-': return Operator(hooc::OperatorType::SubtractOperator);
+            case '*': return Operator(hooc::OperatorType::ModulationOperator);
+            case '/': return Operator(hooc::OperatorType::DivisionOperator);
+            case '%': return Operator(hooc::OperatorType::ModulationOperator);
+        }
+    }
+
+    Expression ParserDriver::CreateLiteralExpression(hooc::LiteralType literalType, std::string input) {
+        LiteralExpression expression = LiteralExpression(literalType, input.c_str());
+        return expression;
     }
 
     std::string* ParserDriver::getFile() {
@@ -66,18 +78,7 @@ namespace hooc {
     }
 
     void Parser::error(const std::string &msg) {
-
-    }
-
-    Operator ParserDriver::CreateOperator(hooc::Token inputToken) {
-        switch (inputToken) {
-            case Token::TOKEN_OPR_ADD: return Operator(OperatorType::Add);
-            case Token::TOKEN_OPR_SUB: return Operator(OperatorType::Subtract);
-            case Token::TOKEN_OPR_MUL: return Operator(OperatorType::Multiplication);
-            case Token::TOKEN_OPR_DIV: return Operator(OperatorType::Division);
-            case Token::TOKEN_OPR_MOD: return Operator(OperatorType::Modulation);
-            default: return Operator();
-        }
+        hooc::Logger::Error(msg);
     }
 }
 

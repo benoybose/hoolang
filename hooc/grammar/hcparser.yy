@@ -13,13 +13,15 @@
 
 %code {
     #include "ParserDriver.hh"
+    #include "Logger.hh"
     #undef yylex
     #define yylex driver.Scan
 }
 
 %code requires {
     #include "Operator.hh"
-    #include "LiteralExpression.hh"
+    #include "Expression.hh"
+    #include <string>
     namespace hooc {
         class ParserDriver;
     }
@@ -31,9 +33,11 @@
 %token<hooc::Operator> TOKEN_OPR_MUL
 %token<hooc::Operator> TOKEN_OPR_DIV
 %token<hooc::Operator> TOKEN_OPR_MOD
-%token<hooc::LiteralExpression> TOKEN_LITERAL_INT
+%token<std::string> TOKEN_LITERAL_INT
 
 %type<hooc::Operator> operator
+%type<hooc::Expression> literal_expr
+%type<hooc::Expression> unary_expression
 
 %%
     prog: /* empty */
@@ -55,32 +59,35 @@
         ;
 
     expr:
-        binary_expr
-        |
-        base_expr
+        binary_expression
         ;
 
-    binary_expr:
-        base_expr operator expr
-        ;
+    binary_expression:
+        unary_expression operator unary_expression {
+            hooc::Logger::Info($1.getNodeTypeName());
+            hooc::Logger::Info($2.getNodeTypeName());
+            hooc::Logger::Info($3.getNodeTypeName());
+        }|
+        binary_expression operator unary_expression;
 
-    base_expr:    
-        literal_expr
+    unary_expression:
+        literal_expr { $$ = $1; }
         ;
 
     literal_expr:
-        TOKEN_LITERAL_INT
-        ;
+        TOKEN_LITERAL_INT { hooc::Logger::Info($1);
+            $$ = driver.CreateLiteralExpression(hooc::LiteralType::IntegerLiteral, $1);
+        };
 
     operator:   
-        TOKEN_OPR_ADD
+        TOKEN_OPR_ADD { $$ = driver.CreateOperator('+'); }
         | 
-        TOKEN_OPR_SUB
+        TOKEN_OPR_SUB { $$ = driver.CreateOperator('-'); }
         |   
-        TOKEN_OPR_MUL
+        TOKEN_OPR_MUL { $$ = driver.CreateOperator('*'); }
         | 
-        TOKEN_OPR_DIV
+        TOKEN_OPR_DIV { $$ = driver.CreateOperator('/'); }
         | 
-        TOKEN_OPR_MOD 
+        TOKEN_OPR_MOD { $$ = driver.CreateOperator('%'); }
         ;
 %%

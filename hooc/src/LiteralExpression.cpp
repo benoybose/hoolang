@@ -39,24 +39,22 @@ namespace hooc
         this->_literalType = literalType;
 
         switch(literalType) {
-            case LiteralType ::Integer: this->_integerValue = atol(text); break;
-            case LiteralType ::Long: this->_longValue = atoll(text); break;
-            case LiteralType ::Character: this->_characterValue = text[0]; break;
-            case LiteralType ::String: this->_stringValue = std::string(text); break;
-            case LiteralType ::Boolean:
+            case LiteralType ::IntegerLiteral: this->_longValue = std::stoll(text); break;
+            case LiteralType ::CharacterLiteral: this->_characterValue = text[0]; break;
+            case LiteralType ::StringLiteral: this->_stringValue = std::string(text); break;
+            case LiteralType ::BooleanLiteral:
                 if (std::string(text) == "true")
                     this->_booleanValue = true;
                 else if(std::string(text) == "false")
                     this->_booleanValue = false;
                 break;
-            case LiteralType ::Double: this->_doubleValue = std::stold(text); break;
+            case LiteralType ::DoubleLiteral: this->_doubleValue = std::stold(text); break;
         }
     }
 
     LiteralExpression::LiteralExpression(const hooc::LiteralExpression &literalExpression):
             Expression(ExpressionType::LiteralExpr) {
         this->_literalType = literalExpression._literalType;
-        this->_integerValue = literalExpression._integerValue;
         this->_longValue = literalExpression._longValue;
         this->_characterValue = literalExpression._characterValue;
         this->_stringValue = literalExpression._stringValue;

@@ -28,12 +28,12 @@
 
 namespace hooc {
     Operator::Operator():
-            Node(NodeType::HC_NODE_OPERATOR) {
-        this->_operatorType = OperatorType ::InvalidExpression;
+            Node(NodeType::OperatorNode) {
+        this->_operatorType = OperatorType ::InvalidOperator;
     }
 
     Operator::Operator(hooc::OperatorType operatorType):
-            Node(NodeType::HC_NODE_OPERATOR)
+            Node(NodeType::OperatorNode)
     {
         this->_operatorType = operatorType;
     }

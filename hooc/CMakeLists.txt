@@ -13,6 +13,7 @@ ADD_CUSTOM_COMMAND(
                 --outfile=${PROJECT_SOURCE_DIR}/src/FlexScanner.cpp
                 ${PROJECT_SOURCE_DIR}/grammar/hclexer.ll
         DEPENDS ${PROJECT_SOURCE_DIR}/src/Parser.cpp
+        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/hclexer.ll
         COMMENT "Invoking flex to generate lexer files")
 
 ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp ${PROJECT_SOURCE_DIR}/include/Parser.hh
@@ -20,22 +21,26 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp ${PROJECT_SOURCE_
         ARGS    --output=${PROJECT_SOURCE_DIR}/src/Parser.cpp
                 --defines=${PROJECT_SOURCE_DIR}/include/Parser.hh
                 ${PROJECT_SOURCE_DIR}/grammar/hcparser.yy
+        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/hcparser.yy
         COMMENT "Invoking bison to generate grammar files")
 
 SET(hooc_header_files include/Node.hh
         include/Operator.hh
         include/Expression.hh
         include/LiteralExpression.hh
-        include/Logger.hh)
+        include/Logger.hh
+        include/hcbinaryexpr.hh)
 
-SET(hooc_source_files src/Operator.cpp
+SET(hooc_source_files src/Node.cpp
+        src/Operator.cpp
         src/Expression.cpp
         src/LiteralExpression.cpp
         src/Parser.cpp
         src/FlexScanner.cpp
         include/ParserDriver.hh
         src/ParserDriver.cpp
-        src/Logger.cpp)
+        src/Logger.cpp
+        src/hcbinaryexpr.cpp)
 SET(hooc_link_libraries libPocoFoundation)
 
 ADD_EXECUTABLE(hooc ${hooc_header_files} ${hooc_source_files} src/hcmain.cpp)

@@ -24,20 +24,33 @@
 
 #include <stdlib.h>
 
-#include "hcbinaryexpr.h"
+#include "hcbinaryexpr.hh"
+#include "Expression.hh"
+#include "Operator.hh"
 
-struct hc_node_binary_expr* hc_node_binary_expr_create(
-            struct hc_node_expr* lvalue,
-            struct hc_node_operator* opr,
-            struct hc_node_expr* rvalue) {
-    struct hc_node_binary_expr* binary_expr = (struct hc_node_binary_expr*)
-        malloc(sizeof(struct hc_node_binary_expr));
-    
-    binary_expr->node_type = HC_NODE_BINARY_EXPRESSION;
-    binary_expr->expr_type = HC_EXPR_BINARY;
-    
-    binary_expr->lvalue = lvalue;
-    binary_expr->opr = opr;
-    binary_expr->rvalue = rvalue;
-    return binary_expr;
+namespace hooc {
+    const Expression& invalidExpression = Expression(ExpressionType::InvalidExpr);
+    const Operator& invalidOperator = Operator(OperatorType::InvalidOperator);
+    BinaryExpression::BinaryExpression():
+        Expression(hooc::ExpressionType::InvalidExpr),
+        _lvalue(invalidExpression),
+        _operator(invalidOperator),
+        _rvalue(invalidExpression){
+    }
+
+    BinaryExpression::BinaryExpression(hooc::Expression &lvalue,
+                                       hooc::Operator &opr,
+                                       hooc::Expression &rvalue):
+        Expression(hooc::ExpressionType::BinaryExpr),
+        _lvalue(lvalue),
+        _operator(opr),
+        _rvalue(rvalue) {
+    }
+
+    BinaryExpression::BinaryExpression(const hooc::BinaryExpression &binaryExpression):
+        Expression(hooc::ExpressionType::BinaryExpr),
+        _lvalue(binaryExpression._lvalue),
+        _operator(binaryExpression._operator),
+        _rvalue(binaryExpression._rvalue){
+    }
 }

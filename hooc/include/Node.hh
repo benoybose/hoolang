@@ -25,16 +25,16 @@
 #ifndef HCNODE_H
 #define HCNODE_H
 
+#include <string>
+
 namespace hooc {
     enum NodeType {
-        HC_NODE_LITERAL,
-        HC_NODE_OPERATOR,
-        HC_NODE_EXPRESSION,
-        HC_NODE_BASE_EXPRESSION,
-        HC_NODE_BINARY_EXPRESSION,
-        HC_NODE_STMT,
-        HC_NODE_STMT_LIST,
-        HC_NODE_PROG
+        InvalidNode,
+        OperatorNode,
+        ExpressionNode,
+        StatementNode,
+        StatementListNode,
+        ProgramNode
     };
 
     class Node {
@@ -42,18 +42,13 @@ namespace hooc {
         NodeType _nodeType;
 
     protected:
-        Node(NodeType nodeType) {
-            this->_nodeType = nodeType;
-        }
-
-        Node(const Node& node) {
-            this->_nodeType = node._nodeType;
-        }
+        Node();
+        Node(NodeType nodeType);
+        Node(const Node& node);
 
     public:
-        NodeType getNodeType() {
-            return _nodeType;
-        }
+        NodeType getNodeType();
+        std::string getNodeTypeName();
     };
 };
 

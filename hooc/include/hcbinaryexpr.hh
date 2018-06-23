@@ -25,30 +25,23 @@
 #ifndef HCBINARYEXP_H
 #define HCBINARYEXP_H
 
-#include "hcnode.h"
-#include "hcexpr.h"
-#include "hcoperator.h"
+#include "Expression.hh"
+#include "Operator.hh"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-    
-    struct hc_node_binary_expr {
-        enum HC_TYPE_NODE node_type;
-        enum HC_TYPE_EXPR expr_type;
-        struct hc_node_expr* lvalue;
-        struct hc_node_operator* opr;
-        struct hc_node_expr* rvalue;
+namespace hooc {
+    class BinaryExpression: public Expression {
+    private:
+        const Expression& _lvalue;
+        const Operator& _operator;
+        const Expression& _rvalue;
+
+    public:
+        BinaryExpression();
+        BinaryExpression(Expression& lvalue, Operator& opr, Expression& rvalue);
+        BinaryExpression(const BinaryExpression& binaryExpression);
+
     };
-    
-    struct hc_node_binary_expr* hc_node_binary_expr_create(
-            struct hc_node_expr* lvalue,
-            struct hc_node_operator* opr,
-            struct hc_node_expr* rvalue);
-
-#ifdef __cplusplus
 }
-#endif
 
 #endif /* HCBINARYEXPR_H */
 
