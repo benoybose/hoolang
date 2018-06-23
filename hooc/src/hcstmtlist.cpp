@@ -22,31 +22,14 @@
  * Date: 31, March 2018
  */
 
-#include <stdlib.h>
-#include <stdint.h>
+#include "hcstmtlist.hh"
 
-#include "hcnode.h"
-#include "hcstmt.h"
-#include "hcstmtlist.h"
+namespace hooc {
+    StatementList::StatementList(hooc::ast::Statement statement) {
+        this->_statements.push_back(statement);
+    }
 
-struct hc_node_stmt_list* hc_node_stmt_list_create() {
-	struct hc_node_stmt_list* list = (struct hc_node_stmt_list*)
-			malloc(sizeof(struct hc_node_stmt_list));
-	list->node_type = HC_NODE_STMT_LIST;
-	list->stmts_count = 0;
-	list->stmts = 0;
-	return list;
-}
-
-size_t hc_node_stlt_list_add(struct hc_node_stmt_list* list,
-		struct hc_node_stmt* stmt) {
-	list->stmts_count ++;
-	size_t unit_size = sizeof(struct hc_node_stmt*) * list->stmts_count;
-	if(1 == list->stmts_count) {
-		list->stmts = (struct hc_node_stmt**) malloc(unit_size);
-	} else {
-		list->stmts = (struct hc_node_stmt**) malloc(unit_size);
-	}
-	list->stmts[list->stmts_count - 1] = stmt;
-	return list->stmts_count;
+    void StatementList::Add(hooc::ast::Statement statement) {
+        this->_statements.push_back(statement);
+    }
 }

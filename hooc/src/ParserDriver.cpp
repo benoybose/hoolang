@@ -9,6 +9,7 @@
 #include "BinaryExpression.hh"
 #include "Statement.hh"
 #include "ExpressionStatement.hh"
+#include "hcstmtlist.hh"
 
 #include <fstream>
 #include <string>
@@ -89,6 +90,11 @@ namespace hooc {
     ast::Statement ParserDriver::ExpressionStatement(hooc::ast::Expression expression) {
         ast::Statement statement(new hooc::ExpressionStatement(expression));
         return statement;
+    }
+
+    ast::StatementList ParserDriver::StatementList(hooc::ast::Statement statement) {
+        ast::StatementList statementList(new hooc::StatementList(statement));
+        return statementList;
     }
 
     std::string* ParserDriver::getFile() {

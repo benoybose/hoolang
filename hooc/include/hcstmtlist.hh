@@ -22,24 +22,29 @@
  * Date: 31, March 2018
  */
 
-#include <stdlib.h>
-
-#include "hcnode.h"
-#include "hcstmt.h"
-
 #ifndef INCLUDE_NODES_HCSTMTLIST_H_
 #define INCLUDE_NODES_HCSTMTLIST_H_
 
-struct hc_node_stmt_list {
-	enum HC_TYPE_NODE node_type;
-	size_t stmts_count;
-	struct hc_node_stmt** stmts;
+#include "Statement.hh"
 
-};
+#include <list>
+#include <memory>
 
-struct hc_node_stmt_list* hc_node_stmt_list_create();
-size_t hc_node_stlt_list_add(struct hc_node_stmt_list* list,
-		struct hc_node_stmt* stmt);
+namespace hooc {
+    class StatementList {
+    private:
+        std::list<ast::Statement> _statements;
 
+    public:
+        StatementList(ast::Statement statement);
+
+    public:
+        void Add(ast::Statement statement);
+    };
+
+    namespace ast {
+        typedef std::shared_ptr<hooc::StatementList> StatementList;
+    }
+}
 
 #endif /* INCLUDE_NODES_HCSTMTLIST_H_ */

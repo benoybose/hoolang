@@ -22,6 +22,7 @@
     #include "Operator.hh"
     #include "Expression.hh"
     #include "Statement.hh"
+    #include "hcstmtlist.hh"
     #include <string>
     namespace hooc {
         class ParserDriver;
@@ -43,6 +44,7 @@
 %type<hooc::ast::Expression> expr
 %type<hooc::ast::Statement> base_stmt
 %type<hooc::ast::Statement> stmt
+%type<hooc::ast::StatementList> stmt_list
 
 %%
     prog: /* empty */
@@ -51,10 +53,12 @@
         ;
 
     stmt_list:
-        stmt
+        stmt { $$ = driver.StatementList($1); };
         |
-        stmt_list stmt
-        ;
+        stmt_list stmt {
+            $1->Add($2);
+            $$ = $1;
+        };
 
     stmt:
         base_stmt { $$ = $1; }

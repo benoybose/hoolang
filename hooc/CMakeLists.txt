@@ -31,7 +31,8 @@ SET(hooc_header_files include/Node.hh
         include/Logger.hh
         include/BinaryExpression.hh
         include/Statement.hh
-        include/ExpressionStatement.hh)
+        include/ExpressionStatement.hh
+        include/hcstmtlist.hh)
 
 SET(hooc_source_files src/Node.cpp
         src/Operator.cpp
@@ -44,7 +45,8 @@ SET(hooc_source_files src/Node.cpp
         src/Logger.cpp
         src/BinaryExpression.cpp
         src/Statement.cpp
-        src/ExpressionStatement.cpp)
+        src/ExpressionStatement.cpp
+        src/hcstmtlist.cpp)
 SET(hooc_link_libraries libPocoFoundation)
 
 ADD_EXECUTABLE(hooc ${hooc_header_files} ${hooc_source_files} src/hcmain.cpp)

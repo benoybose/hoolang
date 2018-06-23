@@ -14,6 +14,7 @@
 #include "BinaryExpression.hh"
 #include "Statement.hh"
 #include "ExpressionStatement.hh"
+#include "hcstmtlist.hh"
 
 #include <istream>
 
@@ -44,6 +45,7 @@ namespace hooc {
         ast::Expression BinaryExpression(ast::Expression& lvalue,
                                                ast::Operator& opr, ast::Expression& rvalue);
         ast::Statement ExpressionStatement(ast::Expression expression);
+        ast::StatementList StatementList(ast::Statement statement);
     };
 }
 
