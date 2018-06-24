@@ -57,7 +57,7 @@ TARGET_LINK_LIBRARIES(hooc ${hooc_link_libraries})
 ADD_EXECUTABLE(hooctest ${hooc_header_files} ${hooc_source_files}
         tests/hooctest.cpp
         tests/ArithmeticStmtTest.cpp
-        tests/ArithmeticStmtTest.hh tests/ModuleNameTest.cpp tests/ModuleNameTest.hh)
+        tests/ArithmeticStmtTest.hh tests/ModuleNameTest.cpp tests/ModuleNameTest.hh tests/TestHelper.cpp tests/TestHelper.hh)
 TARGET_LINK_LIBRARIES(hooctest ${hooc_link_libraries} libcppunit)
 
 
