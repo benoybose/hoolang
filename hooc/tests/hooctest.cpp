@@ -1,4 +1,5 @@
 #include "ArithmeticStmtTest.hh"
+#include "ModuleNameTest.hh"
 #include "Logger.hh"
 
 #include <iostream>
@@ -10,6 +11,7 @@ int main(int argc, char** argv) {
     hooc::Logger::Info("Testing");
     TextUi::TestRunner runner;
     runner.addTest(ArithmeticStmtTest::suite());
+    runner.addTest(ModuleNameTest::suite());
     runner.run("", false, true, false);
 }
 

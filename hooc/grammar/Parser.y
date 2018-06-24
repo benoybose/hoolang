@@ -30,11 +30,11 @@
 }
 
 %token TOKEN_PUC_SEMICOLON
-%token<hooc::Operator> TOKEN_OPR_ADD
-%token<hooc::Operator> TOKEN_OPR_SUB
-%token<hooc::Operator> TOKEN_OPR_MUL
-%token<hooc::Operator> TOKEN_OPR_DIV
-%token<hooc::Operator> TOKEN_OPR_MOD
+%token TOKEN_OPR_ADD
+%token TOKEN_OPR_SUB
+%token TOKEN_OPR_MUL
+%token TOKEN_OPR_DIV
+%token TOKEN_OPR_MOD
 %token<std::string> TOKEN_LITERAL_INT
 
 %type<hooc::ast::Operator> operator

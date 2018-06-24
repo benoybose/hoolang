@@ -43,9 +43,7 @@ namespace hooc {
         NodeType _nodeType;
 
     protected:
-        Node();
         Node(NodeType nodeType);
-        Node(const Node& node);
 
     public:
         NodeType GetNodeType();

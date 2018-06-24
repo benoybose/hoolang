@@ -7,17 +7,17 @@
 #include <string>
 
 namespace hooc {
-    Node::Node() {
-        this->_nodeType = hooc::NodeType ::InvalidNode;
-    }
+//    Node::Node() {
+//        this->_nodeType = hooc::NodeType ::InvalidNode;
+//    }
 
     Node::Node(hooc::NodeType nodeType) {
         this->_nodeType = nodeType;
     }
 
-    Node::Node(const hooc::Node &node) {
-        this->_nodeType = node._nodeType;
-    }
+//    Node::Node(const hooc::Node &node) {
+//        this->_nodeType = node._nodeType;
+//    }
 
     NodeType Node::GetNodeType() {
         return this->GetNodeType();

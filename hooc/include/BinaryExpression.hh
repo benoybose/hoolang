@@ -36,10 +36,7 @@ namespace hooc {
         ast::Expression _rvalue;
 
     public:
-        BinaryExpression();
         BinaryExpression(ast::Expression lvalue, ast::Operator opr, ast::Expression rvalue);
-        BinaryExpression(const BinaryExpression& binaryExpression);
-
     };
 }
 

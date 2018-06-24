@@ -23,32 +23,47 @@
  */
 
 #include "Module.hh"
+#include "StatementList.hh"
 
 #include <string>
 #include <Poco/RegularExpression.h>
+#include <Poco/Path.h>
 #include <exception>
 
 namespace hooc {
+    const std::string NAMESPACE_GLOBAL = "global";
+
     Module::Module(std::string fileName, std::string nameSpace):
             _fileName(fileName) {
         if ((nameSpace.empty()) || (!IsNamespaceValid(nameSpace))) {
-            _nameSpace = "global";
+            _nameSpace = NAMESPACE_GLOBAL;
         } else {
             _nameSpace = nameSpace;
         }
+        this->_statementList = ast::StatementList(new hooc::StatementList());
+        this->_moduleName = this->NormalizeName();
     }
 
     void Module::Add(hooc::ast::Statement statement) {
         this->_statementList->Add(statement);
     }
 
+    const std::string& Module::GetModuleName() const {
+        return this->_moduleName;
+    }
+
+    const std::string& Module::GetNameSpaace() const {
+        return this->_nameSpace;
+    }
+
     std::string Module::NormalizeName() {
         const Poco::RegularExpression regExp("[a-zA-Z_][a-zA-Z0-9_]*");
         std::string moduleName;
-        if(0 == regExp.extract(this->_fileName, moduleName)) {
-            throw std::invalid_argument("File name is not acceptable.");
+        Poco::Path filePath(this->_fileName);
+        if(0 == regExp.extract(filePath.getBaseName(), moduleName)) {
+            return "";
         } else {
-            this->_moduleName = moduleName;
+            return moduleName;
         }
     }
 

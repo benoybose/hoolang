@@ -29,10 +29,6 @@
 #include "Operator.hh"
 
 namespace hooc {
-    BinaryExpression::BinaryExpression():
-        Expression(hooc::ExpressionType::InvalidExpr){
-    }
-
     BinaryExpression::BinaryExpression(ast::Expression lvalue,
                                        ast::Operator opr,
                                        ast::Expression rvalue):
@@ -40,12 +36,5 @@ namespace hooc {
         _lvalue(lvalue),
         _operator(opr),
         _rvalue(rvalue) {
-    }
-
-    BinaryExpression::BinaryExpression(const hooc::BinaryExpression &binaryExpression):
-        Expression(hooc::ExpressionType::BinaryExpr),
-        _lvalue(binaryExpression._lvalue),
-        _operator(binaryExpression._operator),
-        _rvalue(binaryExpression._rvalue){
     }
 }

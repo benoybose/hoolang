@@ -36,7 +36,7 @@ namespace hooc {
         std::list<ast::Statement> _statements;
 
     public:
-        StatementList(ast::Statement statement);
+        StatementList();
 
     public:
         void Add(ast::Statement statement);

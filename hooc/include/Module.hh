@@ -32,6 +32,7 @@
 
 
 namespace hooc {
+    extern const std::string NAMESPACE_GLOBAL;
     class Module {
     private:
         std::string _fileName;
@@ -44,6 +45,8 @@ namespace hooc {
 
     public:
         void Add(ast::Statement statement);
+        const std::string& GetModuleName() const;
+        const std::string& GetNameSpaace() const;
 
     private:
         std::string NormalizeName();

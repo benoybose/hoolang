@@ -1,12 +1,8 @@
 #include "Statement.hh"
 
 namespace hooc {
-    Statement::Statement():
-            Node(NodeType::StatementNode),
-            _statementType(StatementType::ExpressionStmt) {
-    }
-
     Statement::Statement(hooc::StatementType statementType):
+            Node(NodeType::StatementNode),
             _statementType(statementType) {
     }
 

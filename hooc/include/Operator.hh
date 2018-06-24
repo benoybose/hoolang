@@ -43,9 +43,7 @@ namespace hooc {
     private:
         OperatorType _operatorType;
     public:
-        Operator();
         Operator(OperatorType operatorType);
-        Operator(const Operator& opr);
 
     public:
         OperatorType getOperatorType();

@@ -30,10 +30,6 @@
 
 namespace hooc
 {
-    LiteralExpression::LiteralExpression() : Expression(ExpressionType::LiteralExpr) {
-        this->_literalType = LiteralType ::InvalidLiteral;
-    }
-
     LiteralExpression::LiteralExpression(hooc::LiteralType literalType, const char* text):
             Expression(ExpressionType::LiteralExpr) {
         this->_literalType = literalType;
@@ -50,16 +46,6 @@ namespace hooc
                 break;
             case LiteralType ::DoubleLiteral: this->_doubleValue = std::stold(text); break;
         }
-    }
-
-    LiteralExpression::LiteralExpression(const hooc::LiteralExpression &literalExpression):
-            Expression(ExpressionType::LiteralExpr) {
-        this->_literalType = literalExpression._literalType;
-        this->_longValue = literalExpression._longValue;
-        this->_characterValue = literalExpression._characterValue;
-        this->_stringValue = literalExpression._stringValue;
-        this->_booleanValue = literalExpression._booleanValue;
-        this->_doubleValue = literalExpression._doubleValue;
     }
 
     LiteralType LiteralExpression::GetListeralType() {

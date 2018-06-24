@@ -28,10 +28,6 @@
 #include "ExpressionStatement.hh"
 
 namespace hooc {
-    ExpressionStatement::ExpressionStatement():
-            Statement(StatementType::InvalidStmt) {
-    }
-
     ExpressionStatement::ExpressionStatement(hooc::ast::Expression expression):
             Statement(StatementType::ExpressionStmt),
             _expression(expression) {

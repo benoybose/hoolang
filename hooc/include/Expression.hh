@@ -42,9 +42,7 @@ namespace hooc {
         ExpressionType _expressionType;
 
     public:
-        Expression();
         explicit Expression(ExpressionType expressionType);
-        Expression(const Expression& expression);
 
     public:
         ExpressionType GetExpressionType();

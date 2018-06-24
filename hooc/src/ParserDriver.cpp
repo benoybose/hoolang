@@ -21,31 +21,34 @@ namespace hooc {
         if(file.empty()) {
             this->_scanner = new yyFlexLexer(std::cin, std::cout);
         } else {
-            _fileInputStream = new std::ifstream(file, std::ios_base::in);
-            this->_scanner = new yyFlexLexer(*_fileInputStream, std::cout);
+            std::ifstream stream;
+            stream.open(file, std::ios_base::in);
+            if(stream.is_open()) {
+                this->_scanner = new yyFlexLexer(stream, std::cout);
+            } else {
+                // todo: Error handling
+            }
         }
         this->_module = ast::Module(new hooc::Module(file));
         this->_parser = new Parser(*this);
     }
 
-    ParserDriver::ParserDriver(std::istream *stream, std::string file) {
+    ParserDriver::ParserDriver(std::istream& stream, std::string file) {
         this->_file = file;
-        this->_scanner = new yyFlexLexer(*stream, std::cout);
+        this->_scanner = new yyFlexLexer(stream, std::cout);
         this->_module = ast::Module(new hooc::Module(file));
         this->_parser = new Parser(*this);
     }
 
     ParserDriver::~ParserDriver() {
-        if(nullptr != this->_fileInputStream) {
-            delete this->_fileInputStream;
-        }
-
         if(nullptr != this->_scanner) {
             delete this->_scanner;
+            this->_scanner = nullptr;
         }
 
         if(nullptr != this->_parser) {
             delete this->_parser;
+            this->_parser = nullptr;
         }
     }
 
@@ -95,6 +98,10 @@ namespace hooc {
 
     void ParserDriver::Add(hooc::ast::Statement statement) {
         this->_module->Add(statement);
+    }
+
+    const Module& ParserDriver::GetModule() {
+        return *this->_module.get();
     }
 
     std::string* ParserDriver::getFile() {

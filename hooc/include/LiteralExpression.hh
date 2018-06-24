@@ -52,9 +52,7 @@ namespace hooc {
         long double _doubleValue;
 
     public:
-        LiteralExpression();
         LiteralExpression(LiteralType literaltype, const char* value);
-        LiteralExpression(const LiteralExpression& literalExpression);
 
     public:
         LiteralType GetListeralType();

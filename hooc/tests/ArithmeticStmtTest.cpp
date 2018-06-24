@@ -8,7 +8,7 @@
 using namespace CppUnit;
 void ArithmeticStmtTest::SimpleTest() {
     std::stringstream stream("12 + 34 - 56;");
-    hooc::ParserDriver driver(&stream, "test");
+    hooc::ParserDriver driver(stream, "test");
     CPPUNIT_ASSERT(0 == driver.Parse());
 }
 

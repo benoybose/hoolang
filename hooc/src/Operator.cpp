@@ -27,19 +27,10 @@
 #include <stdlib.h>
 
 namespace hooc {
-    Operator::Operator():
-            Node(NodeType::OperatorNode) {
-        this->_operatorType = OperatorType ::InvalidOperator;
-    }
-
     Operator::Operator(hooc::OperatorType operatorType):
             Node(NodeType::OperatorNode)
     {
         this->_operatorType = operatorType;
-    }
-
-    Operator::Operator(const hooc::Operator &opr): Node(*(this)) {
-        this->_operatorType = opr._operatorType;
     }
 
     OperatorType Operator::getOperatorType() {

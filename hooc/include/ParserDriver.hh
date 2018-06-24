@@ -27,13 +27,12 @@ namespace hooc {
     private:
         std::string _file = "";
         yyFlexLexer* _scanner = nullptr;
-        std::istream* _fileInputStream = nullptr;
         Parser* _parser = nullptr;
         ast::Module _module;
 
     public:
         explicit ParserDriver(std::string file);
-        ParserDriver(std::istream* stream, std::string file);
+        ParserDriver(std::istream& stream, std::string file);
         virtual ~ParserDriver();
 
     public:
@@ -48,6 +47,7 @@ namespace hooc {
                                                ast::Operator& opr, ast::Expression& rvalue);
         ast::Statement ExpressionStatement(ast::Expression expression);
         void Add(ast::Statement statement);
+        const Module& GetModule();
     };
 }
 

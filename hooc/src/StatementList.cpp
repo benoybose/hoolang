@@ -25,8 +25,7 @@
 #include "StatementList.hh"
 
 namespace hooc {
-    StatementList::StatementList(hooc::ast::Statement statement) {
-        this->_statements.push_back(statement);
+    StatementList::StatementList() {
     }
 
     void StatementList::Add(hooc::ast::Statement statement) {

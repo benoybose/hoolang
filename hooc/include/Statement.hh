@@ -41,7 +41,6 @@ namespace hooc {
         StatementType _statementType;
 
     public:
-        Statement();
         Statement(StatementType statementType);
 
     public:
