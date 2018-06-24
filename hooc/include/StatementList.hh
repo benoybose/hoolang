@@ -40,6 +40,7 @@ namespace hooc {
 
     public:
         void Add(ast::Statement statement);
+        const std::list<ast::Statement> &GetStatements() const;
     };
 
     namespace ast {

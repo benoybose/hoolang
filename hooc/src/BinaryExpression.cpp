@@ -32,9 +32,21 @@ namespace hooc {
     BinaryExpression::BinaryExpression(ast::Expression lvalue,
                                        ast::Operator opr,
                                        ast::Expression rvalue):
-        Expression(hooc::ExpressionType::BinaryExpr),
+        Expression(EXPRESSION_BINARY),
         _lvalue(lvalue),
         _operator(opr),
         _rvalue(rvalue) {
+    }
+
+    Expression *BinaryExpression::GetRightExpression() const {
+        return this->_rvalue.get();
+    }
+
+    Expression *BinaryExpression::GetLeftExpression() const {
+        return this->_lvalue.get();
+    }
+
+    Operator *BinaryExpression::GetOperator() const {
+        return this->_operator.get();
     }
 }

@@ -29,7 +29,11 @@
 
 namespace hooc {
     ExpressionStatement::ExpressionStatement(hooc::ast::Expression expression):
-            Statement(StatementType::ExpressionStmt),
+            Statement(STMT_EXPRESSION),
             _expression(expression) {
+    }
+
+    Expression *ExpressionStatement::GetExpression() {
+         return this->_expression.get();
     }
 }

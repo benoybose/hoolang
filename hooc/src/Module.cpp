@@ -71,4 +71,8 @@ namespace hooc {
         const Poco::RegularExpression regExp("^([a-zA-Z_][a-zA-Z0-9_]*)([\\.]([a-zA-Z_][a-zA-Z0-9_]*))*$");
         return regExp.match(nameSpace);
     }
+
+    const std::list<hooc::ast::Statement>& Module::GetStatements() const {
+        return this->_statementList->GetStatements();
+    }
 }

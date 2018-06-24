@@ -31,7 +31,7 @@
 namespace hooc
 {
     LiteralExpression::LiteralExpression(hooc::LiteralType literalType, const char* text):
-            Expression(ExpressionType::LiteralExpr) {
+            Expression(EXPRESSION_LITERAL) {
         this->_literalType = literalType;
 
         switch(literalType) {

@@ -32,8 +32,8 @@
 
 namespace hooc {
     enum StatementType {
-        InvalidStmt,
-        ExpressionStmt
+        STMT_INVALID,
+        STMT_EXPRESSION
     };
 
     class Statement: public Node {
@@ -45,7 +45,6 @@ namespace hooc {
 
     public:
         StatementType GetStatementType();
-        std::string GetStatementTypeName();
     };
 
     namespace ast {

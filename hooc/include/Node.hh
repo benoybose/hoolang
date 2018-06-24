@@ -30,12 +30,12 @@
 
 namespace hooc {
     enum NodeType {
-        InvalidNode,
-        OperatorNode,
-        ExpressionNode,
-        StatementNode,
-        StatementListNode,
-        ProgramNode
+        NODE_INVALID,
+        NODE_OPERATOR,
+        NODE_EXPRESSION,
+        NODE_STATEMENT,
+        NODE_STATEMENTLIST,
+        NODE_PROGRAM
     };
 
     class Node {

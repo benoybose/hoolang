@@ -31,9 +31,9 @@
 
 namespace hooc {
     enum ExpressionType {
-        InvalidExpr,
-        LiteralExpr,
-        BinaryExpr
+        EXPRESSION_INVALID,
+        EXPRESSION_LITERAL,
+        EXPRESSION_BINARY
     };
 
     class Expression: public Node {
@@ -46,7 +46,6 @@ namespace hooc {
 
     public:
         ExpressionType GetExpressionType();
-        std::string GetExpressionTypeName();
     };
 
     namespace ast {

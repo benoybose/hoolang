@@ -35,6 +35,7 @@ namespace hooc {
 
     public:
         explicit ExpressionStatement(ast::Expression expression);
+        Expression* GetExpression();
     };
 }
 

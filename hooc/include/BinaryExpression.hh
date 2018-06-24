@@ -37,6 +37,11 @@ namespace hooc {
 
     public:
         BinaryExpression(ast::Expression lvalue, ast::Operator opr, ast::Expression rvalue);
+
+    public:
+        Expression* GetLeftExpression() const;
+        Operator* GetOperator() const;
+        Expression* GetRightExpression() const;
     };
 }
 

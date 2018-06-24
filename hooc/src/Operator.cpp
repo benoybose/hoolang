@@ -28,7 +28,7 @@
 
 namespace hooc {
     Operator::Operator(hooc::OperatorType operatorType):
-            Node(NodeType::OperatorNode)
+            Node(NODE_OPERATOR)
     {
         this->_operatorType = operatorType;
     }

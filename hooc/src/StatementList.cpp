@@ -31,4 +31,8 @@ namespace hooc {
     void StatementList::Add(hooc::ast::Statement statement) {
         this->_statements.push_back(statement);
     }
+
+    const std::list<ast::Statement> &StatementList::GetStatements() const {
+        return _statements;
+    }
 }

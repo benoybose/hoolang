@@ -70,11 +70,12 @@ namespace hooc {
 
     ast::Operator ParserDriver::Operator(char op) {
         switch(op) {
-            case '+': return ast::Operator(new hooc::Operator(hooc::OperatorType::AddOperator));
-            case '-': return ast::Operator(new hooc::Operator(hooc::OperatorType::SubtractOperator));
-            case '*': return ast::Operator(new hooc::Operator(hooc::OperatorType::MultiplicationOperator));
-            case '/': return ast::Operator(new hooc::Operator(hooc::OperatorType::DivisionOperator));
-            case '%': return ast::Operator(new hooc::Operator(hooc::OperatorType::ModulationOperator));
+            case '+': return ast::Operator(new hooc::Operator(OPERATOR_ADD));
+            case '-': return ast::Operator(new hooc::Operator(OPERATOR_SUB));
+            case '*': return ast::Operator(new hooc::Operator(OPERATOR_MUL));
+            case '/': return ast::Operator(new hooc::Operator(OPERATOR_DIV));
+            case '%': return ast::Operator(new hooc::Operator(OPERATOR_MOD));
+            default: return ast::Operator(new hooc::Operator(OPERATOR_INVALID));
         }
     }
 

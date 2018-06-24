@@ -15,22 +15,18 @@ namespace hooc {
         this->_nodeType = nodeType;
     }
 
-//    Node::Node(const hooc::Node &node) {
-//        this->_nodeType = node._nodeType;
-//    }
-
     NodeType Node::GetNodeType() {
         return this->GetNodeType();
     }
 
     std::string Node::GetNodeTypeName() {
         switch(this->_nodeType) {
-            case hooc::NodeType ::InvalidNode: return "Invalid Node";
-            case hooc::NodeType ::ExpressionNode: return "Expression Node";
-            case hooc::NodeType ::OperatorNode: return "Operator Node";
-            case hooc::NodeType ::ProgramNode: return "Program Node";
-            case hooc::NodeType ::StatementListNode: return "Statement List Node";
-            case hooc::NodeType ::StatementNode: return "Statement Node";
+            case hooc::NodeType ::NODE_INVALID: return "Invalid Node";
+            case hooc::NodeType ::NODE_EXPRESSION: return "Expression Node";
+            case hooc::NodeType ::NODE_OPERATOR: return "Operator Node";
+            case hooc::NodeType ::NODE_PROGRAM: return "Program Node";
+            case hooc::NodeType ::NODE_STATEMENTLIST: return "Statement List Node";
+            case hooc::NodeType ::NODE_STATEMENT: return "Statement Node";
             default: return "Unknown Node";
         }
     }

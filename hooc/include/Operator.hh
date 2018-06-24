@@ -31,12 +31,12 @@
 
 namespace hooc {
     enum OperatorType {
-        InvalidOperator,
-        AddOperator,
-        SubtractOperator,
-        DivisionOperator,
-        MultiplicationOperator,
-        ModulationOperator
+        OPERATOR_INVALID,
+        OPERATOR_ADD,
+        OPERATOR_SUB,
+        OPERATOR_DIV,
+        OPERATOR_MUL,
+        OPERATOR_MOD
     };
 
     class Operator: public Node {

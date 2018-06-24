@@ -29,6 +29,7 @@
 
 #include <string>
 #include <memory>
+#include <list>
 
 
 namespace hooc {
@@ -47,6 +48,7 @@ namespace hooc {
         void Add(ast::Statement statement);
         const std::string& GetModuleName() const;
         const std::string& GetNameSpaace() const;
+        const std::list<hooc::ast::Statement>& GetStatements() const;
 
     private:
         std::string NormalizeName();
