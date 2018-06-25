@@ -6,19 +6,23 @@
 #define HOOC_TESTHELPER_HH
 
 #include "Expression.hh"
+#include "LiteralExpression.hh"
 #include "Operator.hh"
+
+#include <tuple>
 
 using namespace hooc;
 
 class TestHelper {
 public:
-    static void VerifyBinaryExpression(
+    static std::tuple<Expression&, Operator&, Expression&> VerifyBinaryExpression(
             Expression* input_expression,
             ExpressionType left_expression_type,
             ExpressionType right_expression_type,
-            OperatorType operator_type,
-            Expression* left_expression,
-            Expression* right_expression);
+            OperatorType operator_type);
+
+    static void VerifyLieralExpression(Expression* input_expression,
+                                       hooc::LiteralType literalType);
 };
 
 

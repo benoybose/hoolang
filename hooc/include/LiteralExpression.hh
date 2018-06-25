@@ -34,33 +34,39 @@
 
 namespace hooc {
     enum LiteralType {
-        InvalidLiteral,
-        IntegerLiteral,
-        CharacterLiteral,
-        StringLiteral,
-        BooleanLiteral,
-        DoubleLiteral
+        LITERAL_INVALID,
+        LITERAL_INTEGER,
+        LITERAL_CHARACTER,
+        LITERAL_STRING,
+        LITERAL_BOOLEAN,
+        LITERAL_DOUBLE
     };
+
+    typedef int64_t Integer;
+    typedef char Character;
+    typedef std::string String;
+    typedef bool Boolean;
+    typedef long double Double;
 
     class LiteralExpression: public Expression {
     private:
-        LiteralType _literalType = LiteralType::InvalidLiteral;
-        int64_t _longValue = 0;
-        char _characterValue;
-        std::string _stringValue;
-        bool _booleanValue;
-        long double _doubleValue;
+        LiteralType _literalType = LITERAL_INVALID;
+        Integer _longValue = 0;
+        Character _characterValue;
+        String _stringValue;
+        Boolean _booleanValue;
+        Double _doubleValue;
 
     public:
         LiteralExpression(LiteralType literaltype, const char* value);
 
     public:
         LiteralType GetListeralType();
-        inline int32_t GetInteger() { return _longValue; }
-        inline char GetCharacter() { return _characterValue; }
-        inline std::string GetString() { return _stringValue; }
-        inline bool GetBoolean() { return _booleanValue; }
-        inline long double GetDouble() { return _doubleValue; }
+        inline Integer GetInteger() const { return _longValue; }
+        inline Character GetCharacter() const { return _characterValue; }
+        inline String GetString() const { return _stringValue; }
+        inline Boolean GetBoolean() const { return _booleanValue; }
+        inline Double GetDouble() const { return _doubleValue; }
     };
 };
 

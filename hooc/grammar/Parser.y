@@ -83,7 +83,7 @@
 
     literal_expr:
         TOKEN_LITERAL_INT { hooc::Logger::Info($1);
-            $$ = driver.LiteralExpression(hooc::LiteralType::IntegerLiteral, $1);
+            $$ = driver.LiteralExpression(hooc::LITERAL_INTEGER, $1);
         };
 
     operator:   

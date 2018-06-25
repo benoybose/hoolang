@@ -11,7 +11,7 @@
 
 class ArithmeticStmtTest: public CppUnit::TestFixture {
 public:
-    void SimpleTest();
+    void Test001_12plus34();
     static CppUnit::Test* suite();
 };
 

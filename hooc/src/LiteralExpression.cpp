@@ -35,16 +35,16 @@ namespace hooc
         this->_literalType = literalType;
 
         switch(literalType) {
-            case LiteralType ::IntegerLiteral: this->_longValue = std::stoll(text); break;
-            case LiteralType ::CharacterLiteral: this->_characterValue = text[0]; break;
-            case LiteralType ::StringLiteral: this->_stringValue = std::string(text); break;
-            case LiteralType ::BooleanLiteral:
+            case LiteralType ::LITERAL_INTEGER: this->_longValue = std::stoll(text); break;
+            case LiteralType ::LITERAL_CHARACTER: this->_characterValue = text[0]; break;
+            case LiteralType ::LITERAL_STRING: this->_stringValue = std::string(text); break;
+            case LiteralType ::LITERAL_BOOLEAN:
                 if (std::string(text) == "true")
                     this->_booleanValue = true;
                 else if(std::string(text) == "false")
                     this->_booleanValue = false;
                 break;
-            case LiteralType ::DoubleLiteral: this->_doubleValue = std::stold(text); break;
+            case LiteralType ::LITERAL_DOUBLE: this->_doubleValue = std::stold(text); break;
         }
     }
 
