@@ -26,7 +26,7 @@
 
 int main(int argc, char** argv) {
     std::istringstream inputStream("10 + 20 - 30;");
-    hooc::ParserDriver driver(&inputStream, "test");
+    hooc::ParserDriver driver(inputStream, "test");
     if(0 == driver.Parse()){
         std::cout << "Parsed successfully.";
     }
