@@ -8,7 +8,6 @@
 using namespace CppUnit;
 
 int main(int argc, char** argv) {
-    hooc::Logger::Info("Testing");
     TextUi::TestRunner runner;
     runner.addTest(ArithmeticStmtTest::suite());
     runner.addTest(ModuleNameTest::suite());

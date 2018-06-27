@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 3.10)
-project(hooc CXX)
+SET(CMAKE_LEGACY_CYGWIN_WIN32 0)
+SET (COMPILE_FLAGS "-m64")
+SET (LINK_FLAGS "-m64")
 
+PROJECT(hooc CXX)
 SET(CMAKE_CXX_STANDARD 11)
-include_directories(
+
+INCLUDE_DIRECTORIES(
         ${PROJECT_SOURCE_DIR}/include
+        ${PROJECT_SOURCE_DIR}/../hoo/include
         ${PROJECT_SOURCE_DIR}/src)
 
 ADD_CUSTOM_COMMAND(
@@ -58,7 +63,7 @@ ADD_EXECUTABLE(hooctest ${hooc_header_files} ${hooc_source_files}
         tests/hooctest.cpp
         tests/ArithmeticStmtTest.cpp
         tests/ArithmeticStmtTest.hh tests/ModuleNameTest.cpp tests/ModuleNameTest.hh tests/TestHelper.cpp tests/TestHelper.hh)
-TARGET_LINK_LIBRARIES(hooctest ${hooc_link_libraries} libcppunit)
+TARGET_LINK_LIBRARIES(hooctest ${hooc_link_libraries} libcppunit hoo)
 
 
 

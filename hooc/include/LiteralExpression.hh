@@ -26,6 +26,7 @@
 #define _LITERALTYPEEXPR_H_
 
 #include "Expression.hh"
+#include "HooTypes.hh"
 
 #include <cstdint>
 #include <cstdbool>
@@ -42,11 +43,11 @@ namespace hooc {
         LITERAL_DOUBLE
     };
 
-    typedef int64_t Integer;
-    typedef char Character;
-    typedef std::string String;
-    typedef bool Boolean;
-    typedef long double Double;
+    typedef ::hoo::Integer Integer;
+    typedef ::hoo::Character Character;
+    typedef ::hoo::String String;
+    typedef ::hoo::Boolean Boolean;
+    typedef ::hoo::Double Double;
 
     class LiteralExpression: public Expression {
     private:
