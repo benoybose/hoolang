@@ -28,27 +28,69 @@
 
 #include <LiteralExpression.hh>
 
+using namespace hoo;
+
 namespace hooc
 {
-    LiteralExpression::LiteralExpression(hooc::LiteralType literalType, const char* text):
+    LiteralExpression::LiteralExpression(hooc::LiteralType literalType,
+                                         const char* text):
             Expression(EXPRESSION_LITERAL) {
         this->_literalType = literalType;
-
         switch(literalType) {
-            case LiteralType ::LITERAL_INTEGER: this->_longValue = std::stoll(text); break;
-            case LiteralType ::LITERAL_CHARACTER: this->_characterValue = text[0]; break;
-            case LiteralType ::LITERAL_STRING: this->_stringValue = std::string(text); break;
-            case LiteralType ::LITERAL_BOOLEAN:
-                if (std::string(text) == "true")
-                    this->_booleanValue = true;
-                else if(std::string(text) == "false")
-                    this->_booleanValue = false;
+            case LiteralType ::LITERAL_INTEGER: {
+                this->_value = ValuePtr(new Value(Value::MakeInteger(std::atoll(text))));
                 break;
-            case LiteralType ::LITERAL_DOUBLE: this->_doubleValue = std::stold(text); break;
+            }
+            case LiteralType ::LITERAL_CHARACTER: {
+                this->_value = ValuePtr(new Value(Value::MakeCharacter(text[0], 0, 0, 0)));
+                break;
+            }
+            case LiteralType ::LITERAL_STRING: {
+                this->_value = ValuePtr(new Value(Value::MakeString(std::string(text))));
+                break;
+            }
+            case LiteralType ::LITERAL_BOOLEAN: {
+                if (std::string(text) == "true") {
+                    this->_value = ValuePtr(new Value(Value::MakeBoolean(true)));
+                }
+                else if (std::string(text) == "false") {
+                    this->_value = ValuePtr(new Value(Value::MakeBoolean(false)));
+                }
+                break;
+            }
+            case LiteralType ::LITERAL_DOUBLE: {
+                this->_value = ValuePtr(new Value(Value::MakeDouble(std::stold(text))));
+                break;
+            }
         }
     }
 
     LiteralType LiteralExpression::GetListeralType() {
         return this->_literalType;
+    }
+
+    Integer LiteralExpression::GetInteger() const {
+        return this->_value->GetInteger();
+    }
+
+    Character LiteralExpression::GetCharacter() const {
+        return this->_value->GetCharacter();
+    }
+
+    String LiteralExpression::GetString() const {
+        auto value = (String) (this->_value.get()->GetObject());
+        return value;
+    }
+
+    Boolean LiteralExpression::GetBoolean() const {
+        return this->_value->GetBoolean();
+    }
+
+    Double LiteralExpression::GetDouble() const {
+        return this->_value->GetDouble();
+    }
+
+    Byte LiteralExpression::GetByte() const {
+        return this->_value->GetByte();
     }
 }

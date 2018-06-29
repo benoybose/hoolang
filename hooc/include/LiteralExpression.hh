@@ -27,11 +27,11 @@
 
 #include "Expression.hh"
 #include "HooTypes.hh"
+#include "Value.hh"
 
 #include <cstdint>
 #include <cstdbool>
 #include <string>
-
 
 namespace hooc {
     enum LiteralType {
@@ -40,7 +40,8 @@ namespace hooc {
         LITERAL_CHARACTER,
         LITERAL_STRING,
         LITERAL_BOOLEAN,
-        LITERAL_DOUBLE
+        LITERAL_DOUBLE,
+        LITERAL_BYTE
     };
 
     typedef ::hoo::Integer Integer;
@@ -48,26 +49,29 @@ namespace hooc {
     typedef ::hoo::String String;
     typedef ::hoo::Boolean Boolean;
     typedef ::hoo::Double Double;
+    typedef ::hoo::Byte Byte;
 
-    class LiteralExpression: public Expression {
+    class LiteralExpression : public Expression {
     private:
-        LiteralType _literalType = LITERAL_INVALID;
-        Integer _longValue = 0;
-        Character _characterValue;
-        String _stringValue;
-        Boolean _booleanValue;
-        Double _doubleValue;
-
+        LiteralType _literalType;
+        hoo::ValuePtr _value;
     public:
-        LiteralExpression(LiteralType literaltype, const char* value);
+        LiteralExpression(LiteralType literaltype, const char *value);
 
     public:
         LiteralType GetListeralType();
-        inline Integer GetInteger() const { return _longValue; }
-        inline Character GetCharacter() const { return _characterValue; }
-        inline String GetString() const { return _stringValue; }
-        inline Boolean GetBoolean() const { return _booleanValue; }
-        inline Double GetDouble() const { return _doubleValue; }
+
+        Integer GetInteger() const;
+
+        Character GetCharacter() const;
+
+        String GetString() const;
+
+        Boolean GetBoolean() const;
+
+        Double GetDouble() const;
+
+        Byte GetByte() const;
     };
 };
 
