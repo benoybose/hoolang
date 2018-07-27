@@ -13,23 +13,23 @@ namespace hoo {
     namespace jit {
         class Module;
 
+
         class Method {
             friend class Module;
 
         private:
-            Module *_module;
+            Module* _module;
             std::string _name;
+
         private:
-            Method(Module *_module, const std::string &_name);
+            Method(const std::string &methodName, Module* module);
 
         public:
-            Module *GetModule() const;
-
+            Module* GetModule() const;
             const std::string &GetName() const;
         };
 
-        typedef std::shared_ptr<Method> MethodPtr;
-        typedef std::list<MethodPtr> MethodPtrList;
+        typedef std::list<Method*> MethodList;
     }
 }
 

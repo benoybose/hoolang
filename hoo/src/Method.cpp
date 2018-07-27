@@ -2,13 +2,12 @@
 
 namespace hoo {
     namespace jit {
-        Method::Method(Module *_module, const std::string &_name) :
+        Method::Method(const std::string &methodName, Module* module) :
                 _module(_module),
-                _name(_name) {
-
+                _name(methodName) {
         }
 
-        Module *Method::GetModule() const {
+        Module* Method::GetModule() const {
             return this->_module;
         }
 
