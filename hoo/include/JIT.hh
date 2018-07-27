@@ -14,10 +14,6 @@
 
 namespace hoo {
     namespace jit {
-        class JIT;
-
-        typedef std::shared_ptr<JIT> JITPtr;
-
         class JIT {
         private:
             ModuleMap _modules;
@@ -29,6 +25,8 @@ namespace hoo {
             Module &CreateModule(ModuleType module_type, std::string moduleName);
 
             Module &GetModule(std::string moduleName) const;
+
+            std::list<std::string> GetModuleNames() const;
         };
     }
 }
