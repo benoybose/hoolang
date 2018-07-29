@@ -5,8 +5,13 @@ SET (LINK_FLAGS "-m64")
 
 PROJECT(hooc CXX)
 SET(CMAKE_CXX_STANDARD 11)
+INCLUDE(../cmake/Findcppunit.cmake)
+INCLUDE(../cmake/FindPoco.cmake)
+find_package(Poco)
 
 INCLUDE_DIRECTORIES(
+        ${CPPUNIT_INCLUDE_DIR}
+        ${Poco_Foundation_INCLUDE_DIR}
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/../hoo/include
         ${PROJECT_SOURCE_DIR}/src)
@@ -54,7 +59,7 @@ SET(hooc_source_files src/Node.cpp
         src/ExpressionStatement.cpp
         src/StatementList.cpp
         src/Module.cpp)
-SET(hooc_link_libraries libPocoFoundation hoo)
+SET(hooc_link_libraries hoo ${Poco_Foundation_LIBRARY})
 
 ADD_EXECUTABLE(hooc ${hooc_header_files} ${hooc_source_files} src/hcmain.cpp)
 TARGET_LINK_LIBRARIES(hooc ${hooc_link_libraries})
@@ -63,7 +68,7 @@ ADD_EXECUTABLE(hooctest ${hooc_header_files} ${hooc_source_files}
         tests/hooctest.cpp
         tests/ArithmeticStmtTest.cpp
         tests/ArithmeticStmtTest.hh tests/ModuleNameTest.cpp tests/ModuleNameTest.hh tests/TestHelper.cpp tests/TestHelper.hh)
-TARGET_LINK_LIBRARIES(hooctest ${hooc_link_libraries} libcppunit)
+TARGET_LINK_LIBRARIES(hooctest ${hooc_link_libraries} ${CPPUNIT_LIBRARY})
 
 
 

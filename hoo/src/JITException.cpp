@@ -8,6 +8,8 @@ namespace hoo {
             this->_errorCode = errorCode;
         }
 
+        JITException::~JITException() {}
+
         std::string JITException::GetMessage() {
             switch(this->_errorCode) {
                 case HOO_ERROR_DUPLICATE_MODULE_NAME: return std::string("Duplicate module.");

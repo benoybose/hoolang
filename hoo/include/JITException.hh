@@ -14,6 +14,7 @@ namespace hoo {
     class JITException: public std::exception {
     public:
         JITException(int errorCode);
+        virtual ~JITException() throw();
 
     public:
         std::string GetMessage();

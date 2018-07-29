@@ -6,23 +6,43 @@ SET (LINK_FLAGS "-m64")
 PROJECT(hoo CXX)
 
 SET(HOO_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
+INCLUDE(../cmake/Findcppunit.cmake)
 
-INCLUDE_DIRECTORIES(
-        ${HOO_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${HOO_INCLUDE_DIRS} ${CPPUNIT_INCLUDE_DIR})
 SET(HOO_HEADER_FILES
-        ${PROJECT_SOURCE_DIR}/include/hootypes.hh
-        ${PROJECT_SOURCE_DIR}/include/JIT.hh include/Module.hh include/Value.hh include/CharacterClass.hh include/Method.hh include/TypeSpec.hh)
-SET(HOO_SOURCE_FILES
-        ${PROJECT_SOURCE_DIR}/src/JIT.cpp src/Module.cpp src/Value.cpp include/Object.hh src/Object.cpp src/StringClass.cpp include/StringClass.hh src/CharacterClass.cpp src/Method.cpp src/TypeSpec.cpp include/JITException.hh src/JITException.cpp)
+        include/HooTypes.hh
+        include/JIT.hh
+        include/Module.hh
+        include/Value.hh
+        include/Object.hh
+        include/StringClass.hh
+        include/CharacterClass.hh
+        include/Method.hh
+        include/TypeSpec.hh
+        include/JITException.hh)
 
-ADD_LIBRARY(hoo STATIC
-        ${HOO_HEADER_FILES}
-        ${HOO_SOURCE_FILES})
+SET(HOO_SOURCE_FILES
+        src/JIT.cpp
+        src/Module.cpp
+        src/Value.cpp
+        src/Object.cpp
+        src/StringClass.cpp
+        src/CharacterClass.cpp
+        src/Method.cpp
+        src/TypeSpec.cpp
+        src/JITException.cpp)
+
+ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
+SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)
 
 SET(HOO_TEST_SOURCE_FILES tests/TypeTest.cpp
-        tests/TypeTest.hh tests/HooTest.cpp tests/ValueTest.cpp tests/ValueTest.hh tests/JITTest.hh tests/JITTest.cpp)
+        tests/TypeTest.hh
+        tests/HooTest.cpp
+        tests/ValueTest.cpp
+        tests/ValueTest.hh
+        tests/JITTest.hh
+        tests/JITTest.cpp)
 
-ADD_EXECUTABLE(hootest
-        ${HOO_TEST_SOURCE_FILES})
-
-TARGET_LINK_LIBRARIES(hootest libcppunit hoo)
+ADD_EXECUTABLE(hootest ${HOO_TEST_SOURCE_FILES})
+SET_PROPERTY(TARGET hootest PROPERTY CXX_STANDARD 11)
+TARGET_LINK_LIBRARIES(hootest ${CPPUNIT_LIBRARY} hoo)
