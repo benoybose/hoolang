@@ -40,8 +40,8 @@ SET(HOO_TEST_SOURCE_FILES tests/TypeTest.cpp
         tests/HooTest.cpp
         tests/ValueTest.cpp
         tests/ValueTest.hh
-        tests/JITTest.hh
-        tests/JITTest.cpp)
+        tests/JITBasicTest.hh
+        tests/JITBasicTest.cpp)
 
 ADD_EXECUTABLE(hootest ${HOO_TEST_SOURCE_FILES})
 SET_PROPERTY(TARGET hootest PROPERTY CXX_STANDARD 11)

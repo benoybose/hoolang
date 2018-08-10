@@ -2,7 +2,7 @@
 #include "ValueTest.hh"
 
 #include <cppunit/ui/text/TestRunner.h>
-#include "JITTest.hh"
+#include "JITBasicTest.hh"
 
 using namespace CppUnit;
 

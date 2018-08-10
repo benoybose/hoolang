@@ -15,7 +15,9 @@ using namespace CppUnit;
 
 class JITBasicTest: public TestFixture {
 public:
-    void Test001_TestAddModule();
+    void Test001_CreateModule();
+    void Test002_CreateModule();
+    void Test003_CreateModule();
 
 public:
     static TestSuite* suite();
