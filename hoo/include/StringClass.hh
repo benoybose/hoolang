@@ -12,17 +12,19 @@
 namespace hoo {
     extern const std::string TYPENAME_STRING;
 
-    class StringClass: public Object {
+    class StringClass : public Object {
     private:
         std::string _value;
 
     public:
         StringClass();
-        explicit StringClass(const std::string& text);
-        explicit StringClass(const char* text);
+
+        explicit StringClass(const std::string &text);
+
+        explicit StringClass(const char *text);
 
     public:
-        const std::string& GetValue() const;
+        const std::string &GetValue() const;
     };
 }
 

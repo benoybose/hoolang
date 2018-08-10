@@ -30,9 +30,9 @@ namespace hoo {
     }
 
     Value::Value(char byte0,
-                      unsigned char byte1,
-                      unsigned char byte2,
-                      unsigned char byte3) {
+                 unsigned char byte1,
+                 unsigned char byte2,
+                 unsigned char byte3) {
         ValueHolderPtr ptr(new CharacterValueHolder(byte0, byte1, byte2, byte3));
         this->_value_holder = ptr;
     }
@@ -134,9 +134,9 @@ namespace hoo {
     }
 
     Value Value::MakeCharacter(char byte0,
-                                         unsigned char byte1,
-                                         unsigned char byte2,
-                                         unsigned char byte3) {
+                               unsigned char byte1,
+                               unsigned char byte2,
+                               unsigned char byte3) {
         return hoo::Value(byte0, byte1, byte2, byte3);
     }
 

@@ -18,18 +18,19 @@ namespace hoo {
             friend class Module;
 
         private:
-            Module* _module;
+            Module *_module;
             std::string _name;
 
         private:
-            Method(const std::string &methodName, Module* module);
+            Method(const std::string &methodName, Module *module);
 
         public:
-            Module* GetModule() const;
+            Module *GetModule() const;
+
             const std::string &GetName() const;
         };
 
-        typedef std::list<Method*> MethodList;
+        typedef std::list<Method *> MethodList;
     }
 }
 

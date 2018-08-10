@@ -20,6 +20,7 @@ namespace hoo {
 
         public:
             JIT();
+            virtual ~JIT();
 
         public:
             Module &CreateModule(ModuleType module_type, std::string moduleName);

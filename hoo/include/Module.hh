@@ -25,22 +25,23 @@ namespace hoo {
         private:
             ModuleType _moduleType;
             std::string _name;
-            JIT* _jit;
+            JIT *_jit;
             MethodList _methods;
 
         private:
-            Module(ModuleType module_type, std::string name, JIT* jit);
+            Module(ModuleType module_type, std::string name, JIT *jit);
 
         public:
             ModuleType GetModuleType() const;
 
             const std::string &GetName() const;
 
-            JIT* GetJIT() const;
-            Method &CreateMethod(const std::string& name);
+            JIT *GetJIT() const;
+
+            Method &CreateMethod(const std::string &name);
         };
 
-        typedef std::map<std::string, Module*> ModuleMap;
+        typedef std::map<std::string, Module *> ModuleMap;
     }
 }
 

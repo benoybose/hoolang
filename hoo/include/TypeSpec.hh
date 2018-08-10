@@ -19,8 +19,10 @@ namespace hoo {
             TypeSpec(const std::string &_typeName, size_t _size, bool _is_value);
 
         public:
-            const std::string& GetTypeName() const;
+            const std::string &GetTypeName() const;
+
             std::size_t GetSize();
+
             bool IsValueType();
         };
 

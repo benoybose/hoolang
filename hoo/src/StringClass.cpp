@@ -9,13 +9,13 @@
 namespace hoo {
     const std::string TYPENAME_STRING = "hoo.string";
 
-    StringClass::StringClass(): Object(TYPENAME_STRING), _value("") {}
+    StringClass::StringClass() : Object(TYPENAME_STRING), _value("") {}
 
-    StringClass::StringClass(const std::string &text):
+    StringClass::StringClass(const std::string &text) :
             Object(TYPENAME_STRING),
             _value(text) {}
 
-    StringClass::StringClass(const char *text):
+    StringClass::StringClass(const char *text) :
             Object(TYPENAME_STRING),
             _value(std::string(text)) {
     }

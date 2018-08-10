@@ -11,19 +11,22 @@
 namespace hoo {
     namespace jit {
         extern const int HOO_ERROR_DUPLICATE_MODULE_NAME;
-    class JITException: public std::exception {
-    public:
-        JITException(int errorCode);
-        virtual ~JITException() throw();
 
-    public:
-        std::string GetMessage();
-        int GetErrorCode();
+        class JITException : public std::exception {
+        public:
+            JITException(int errorCode);
 
-    private:
-        int _errorCode;
-        std::string _message;
-    };
+            virtual ~JITException() throw();
+
+        public:
+            std::string GetMessage();
+
+            int GetErrorCode();
+
+        private:
+            int _errorCode;
+            std::string _message;
+        };
     }
 }
 

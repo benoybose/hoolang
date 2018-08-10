@@ -14,8 +14,8 @@
 
 namespace hoo {
     typedef int64_t Integer;
-    typedef CharacterClass* Character;
-    typedef StringClass* String;
+    typedef CharacterClass *Character;
+    typedef StringClass *String;
     typedef bool Boolean;
     typedef long double Double;
     typedef uint8_t Byte;

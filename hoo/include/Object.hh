@@ -14,10 +14,10 @@ namespace hoo {
         std::string _type_name;
 
     public:
-        explicit Object(const std::string& type_name);
+        explicit Object(const std::string &type_name);
 
     public:
-        const std::string& GetTypeName() const;
+        const std::string &GetTypeName() const;
     };
 
     typedef std::shared_ptr<Object> ObjectPtr;

@@ -32,6 +32,7 @@ namespace hoo {
             bool _is_object;
         public:
             explicit ValueHolder(ValueType value_type) : _type(value_type), _is_object(false) {}
+
             ValueHolder(ObjectPtr object) : _type(VALUE_OBJECT), _is_object(true) {}
 
         public:
@@ -67,7 +68,7 @@ namespace hoo {
 
         public:
             inline std::string GetValue() {
-                auto object = (StringClass*) (ObjectValueHolder::GetValue().get());
+                auto object = (StringClass *) (ObjectValueHolder::GetValue().get());
                 return object->GetValue();
             }
         };
@@ -77,12 +78,12 @@ namespace hoo {
             CharacterValueHolder(unsigned char byte0,
                                  unsigned char byte1 = 0,
                                  unsigned char byte2 = 0,
-                                 unsigned char byte3 = 0):
+                                 unsigned char byte3 = 0) :
                     ObjectValueHolder(ObjectPtr(new CharacterClass(byte0, byte1, byte2, byte3))) {}
 
         public:
             inline Character GetValue() const {
-                auto object = (CharacterClass*) (ObjectValueHolder::GetValue().get());
+                auto object = (CharacterClass *) (ObjectValueHolder::GetValue().get());
                 return object;
             }
         };
@@ -107,11 +108,12 @@ namespace hoo {
             inline Double GetValue() const { return _value; }
         };
 
-        class ByteValueHolder: public ValueHolder {
+        class ByteValueHolder : public ValueHolder {
         private:
             Byte _value;
         public:
-            explicit ByteValueHolder(Byte value): ValueHolder(VALUE_BYTE), _value(value) {}
+            explicit ByteValueHolder(Byte value) : ValueHolder(VALUE_BYTE), _value(value) {}
+
         public:
             inline Byte GetValue() const { return _value; }
         };
@@ -120,6 +122,7 @@ namespace hoo {
 
     public:
         Value(const Value &value);
+
         Value &operator=(const Value &value);
 
     private:
@@ -127,13 +130,19 @@ namespace hoo {
 
     public:
         static Value MakeInteger(Integer value);
+
         static Value MakeCharacter(char byte0, unsigned char byte1,
                                    unsigned char byte2, unsigned char byte3);
+
         static Value MakeString(std::string string);
+
         static Value MakeBoolean(bool value);
+
         static Value MakeDouble(Double value);
+
         static Value MakeByte(Byte value);
-        static Value MakeObject(Object* object);
+
+        static Value MakeObject(Object *object);
 
     private:
         explicit Value(Integer integer);
@@ -145,17 +154,18 @@ namespace hoo {
         explicit Value(Double real);
 
         explicit Value(char byte0,
-                unsigned char byte1 = 0,
-                unsigned char byte2 = 0,
-                unsigned char byte3 = 0);
+                       unsigned char byte1 = 0,
+                       unsigned char byte2 = 0,
+                       unsigned char byte3 = 0);
 
         explicit Value(Byte byte);
 
-        explicit Value(Object* object);
+        explicit Value(Object *object);
 
     public:
         ValueType GetType() const;
-        const std::string& GetTypeName() const;
+
+        const std::string &GetTypeName() const;
 
         Integer GetInteger() const;
 
@@ -169,7 +179,7 @@ namespace hoo {
 
         Byte GetByte() const;
 
-        Object* GetObject() const;
+        Object *GetObject() const;
     };
 
     typedef std::shared_ptr<Value> ValuePtr;

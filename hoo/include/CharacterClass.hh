@@ -9,7 +9,7 @@
 
 namespace hoo {
     extern const std::string TYPENAME_CHARACTER; // = "hoo.character"
-    class CharacterClass: public Object {
+    class CharacterClass : public Object {
     private:
         unsigned char _size;
         unsigned char _bytes[4];
@@ -21,9 +21,13 @@ namespace hoo {
 
     public:
         unsigned char GetSize() const;
+
         unsigned char GetByte0() const;
+
         unsigned char GetByte1() const;
+
         unsigned char GetByte2() const;
+
         unsigned char GetByte3() const;
     };
 }
