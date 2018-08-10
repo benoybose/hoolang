@@ -6,6 +6,7 @@
 #define PROJECT_METHOD_HH
 
 #include "MethodParam.hh"
+#include "StackScope.hh"
 
 #include <string>
 #include <memory>
@@ -19,13 +20,12 @@ namespace hoo {
 
         class Module;
 
-        class Method {
+        class Method : public StackScope {
             friend class Module;
 
         private:
             Module *_module;
             std::string _name;
-            std::list<MethodParam *> _params;
             std::string _returnType;
 
         private:
@@ -40,13 +40,11 @@ namespace hoo {
 
             const std::string &GetReturnType() const;
 
-            MethodParam& AddParameter(const std::string &typeName,
-                                std::string paramName);
+            MethodParam &AddParameter(const std::string &typeName,
+                                      std::string paramName);
 
-            const std::list<MethodParam *> &GetParameters() const;
+            const std::list<StackItem *> GetParameters() const;
 
-        private:
-            bool HasParam(const std::string &paramName);
         };
 
         typedef std::list<Method *> MethodList;

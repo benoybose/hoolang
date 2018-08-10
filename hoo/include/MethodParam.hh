@@ -7,27 +7,17 @@
 
 #include <string>
 
+#include "StackItem.hh"
+
 namespace hoo {
     namespace jit {
         class Method;
 
-        class MethodParam {
+        class MethodParam: public StackItem {
             friend class Method;
 
-        private:
-            MethodParam(const std::string &type, const std::string &name, size_t ordinal);
-
-        public:
-            const std::string &GetName() const;
-
-            const std::string &GetType() const;
-
-            size_t GetOrdinal() const;
-
-        private:
-            std::string _name;
-            std::string _type;
-            size_t _ordinal;
+        protected:
+            MethodParam(const std::string &type, const std::string &name);
         };
     }
 }

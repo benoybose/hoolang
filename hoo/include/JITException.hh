@@ -11,7 +11,7 @@
 namespace hoo {
     namespace jit {
         extern const int HOO_ERROR_DUPLICATE_MODULE_NAME;
-        extern const int HOO_ERROR_DUPLICATE_PARAM_NAME;
+        extern const int HOO_ERROR_DUPLICATE_ITEM_NAME;
 
         class JITException : public std::exception {
         public:

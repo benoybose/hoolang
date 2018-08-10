@@ -1,13 +1,17 @@
 #include "Method.hh"
 #include "JITException.hh"
+#include "StackScope.hh"
+
+#include <algorithm>
 
 namespace hoo {
     namespace jit {
         const std::string TYPENAME_VOID = "hoo.void";
 
         Method::Method(const std::string &methodName, Module *module) :
-                _module(module),
+                StackScope(nullptr),
                 _name(methodName),
+                _module(module),
                 _returnType(TYPENAME_VOID) {
         }
 
@@ -27,30 +31,21 @@ namespace hoo {
             return this->_returnType;
         }
 
-        MethodParam& Method::AddParameter(const std::string &typeName,
-                                          std::string paramName) {
-            if (this->HasParam(paramName)) {
-                throw JITException(HOO_ERROR_DUPLICATE_PARAM_NAME);
+        MethodParam &Method::AddParameter(const std::string &typeName, std::string paramName) {
+            if (this->HasItem(paramName)) {
+                throw JITException(HOO_ERROR_DUPLICATE_ITEM_NAME);
             }
 
-            auto param = new MethodParam(typeName, paramName,
-                    this->_params.size());
-            this->_params.push_back(param);
+            auto param = new MethodParam(typeName, paramName);
+            this->AddItem(param);
             return *(param);
         }
 
-        bool Method::HasParam(const std::string &paramName) {
-            for (auto iterator = this->_params.begin();
-                 iterator != this->_params.end(); ++iterator) {
-                if (0 == (*iterator)->_name.compare(paramName)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        const std::list<MethodParam *> &Method::GetParameters() const {
-            return this->_params;
+        const std::list<StackItem *> Method::GetParameters() const {
+            auto items = this->GetItems();
+            std::list<StackItem *> params;
+            std::copy_if(items.begin(), items.end(), std::back_inserter(params), [](StackItem *item) { return true; });
+            return params;
         }
     }
 }
