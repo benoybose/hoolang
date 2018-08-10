@@ -19,7 +19,7 @@ SET(HOO_HEADER_FILES
         include/CharacterClass.hh
         include/Method.hh
         include/TypeSpec.hh
-        include/JITException.hh)
+        include/JITException.hh include/MethodParam.hh)
 
 SET(HOO_SOURCE_FILES
         src/JIT.cpp
@@ -30,7 +30,7 @@ SET(HOO_SOURCE_FILES
         src/CharacterClass.cpp
         src/Method.cpp
         src/TypeSpec.cpp
-        src/JITException.cpp)
+        src/JITException.cpp src/MethodParam.cpp)
 
 ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
 SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)
@@ -41,7 +41,7 @@ SET(HOO_TEST_SOURCE_FILES tests/TypeTest.cpp
         tests/ValueTest.cpp
         tests/ValueTest.hh
         tests/JITBasicTest.hh
-        tests/JITBasicTest.cpp)
+        tests/JITBasicTest.cpp tests/MethodBasicTest.cpp tests/MethodBasicTest.hh)
 
 ADD_EXECUTABLE(hootest ${HOO_TEST_SOURCE_FILES})
 SET_PROPERTY(TARGET hootest PROPERTY CXX_STANDARD 11)

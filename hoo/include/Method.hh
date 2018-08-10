@@ -5,14 +5,19 @@
 #ifndef PROJECT_METHOD_HH
 #define PROJECT_METHOD_HH
 
+#include "MethodParam.hh"
+
 #include <string>
 #include <memory>
 #include <list>
+#include <tuple>
 
 namespace hoo {
     namespace jit {
-        class Module;
 
+        extern const std::string TYPENAME_VOID;
+
+        class Module;
 
         class Method {
             friend class Module;
@@ -20,6 +25,8 @@ namespace hoo {
         private:
             Module *_module;
             std::string _name;
+            std::list<MethodParam *> _params;
+            std::string _returnType;
 
         private:
             Method(const std::string &methodName, Module *module);
@@ -28,6 +35,18 @@ namespace hoo {
             Module *GetModule() const;
 
             const std::string &GetName() const;
+
+            void SetReturnType(const std::string &returnType);
+
+            const std::string &GetReturnType() const;
+
+            MethodParam& AddParameter(const std::string &typeName,
+                                std::string paramName);
+
+            const std::list<MethodParam *> &GetParameters() const;
+
+        private:
+            bool HasParam(const std::string &paramName);
         };
 
         typedef std::list<Method *> MethodList;

@@ -40,6 +40,7 @@ namespace hoo {
                 catch (...) {
                 }
             }
+            this->_modules.clear();
         }
     }
 }

@@ -32,6 +32,9 @@ namespace hoo {
             Module(ModuleType module_type, std::string name, JIT *jit);
 
         public:
+            virtual ~Module();
+
+        public:
             ModuleType GetModuleType() const;
 
             const std::string &GetName() const;

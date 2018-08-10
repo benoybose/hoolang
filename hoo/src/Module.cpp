@@ -25,5 +25,16 @@ namespace hoo {
             this->_methods.push_back(method);
             return *(method);
         }
+
+        Module::~Module() {
+            for(auto iterator = this->_methods.begin();
+                    iterator != this->_methods.end(); ++iterator) {
+                Method* method = *iterator;
+                if(nullptr != method) {
+                    delete method;
+                }
+            }
+            this->_methods.clear();
+        }
     }
 }
