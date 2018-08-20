@@ -5,6 +5,19 @@ SET (LINK_FLAGS "-m64")
 
 PROJECT(hoo CXX)
 
+IF(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Windows)
+    MESSAGE("Platform is Windows")
+    SET(${HOO_PLATFORM_WINDOWS} "Windows")
+    CONFIGURE_FILE(hooconfig.hh.in ${PROJECT_SOURCE_DIR}/include/hooconfig.hh @ONLY)
+ENDIF()
+
+IF(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Linux)
+    MESSAGE("Platform is linux")
+    SET(${HOO_PLATFORM_LINUX} "Linux")
+    CONFIGURE_FILE(hooconfig.hh.in ${PROJECT_SOURCE_DIR}/include/hooconfig.hh @ONLY)
+ENDIF()
+
+
 SET(HOO_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
 INCLUDE(../cmake/Findcppunit.cmake)
 
