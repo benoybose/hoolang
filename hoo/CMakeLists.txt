@@ -32,7 +32,12 @@ SET(HOO_HEADER_FILES
         include/CharacterClass.hh
         include/Method.hh
         include/TypeSpec.hh
-        include/JITException.hh include/MethodParam.hh include/StackItem.hh include/StackScope.hh)
+        include/JITException.hh
+        include/MethodParam.hh
+        include/StackItem.hh
+        include/StackScope.hh
+        include/ICodeGeneratable.hh
+        include/CodeBuffer.hh)
 
 SET(HOO_SOURCE_FILES
         src/JIT.cpp
@@ -43,7 +48,11 @@ SET(HOO_SOURCE_FILES
         src/CharacterClass.cpp
         src/Method.cpp
         src/TypeSpec.cpp
-        src/JITException.cpp src/MethodParam.cpp src/StackItem.cpp src/StackScope.cpp)
+        src/JITException.cpp
+        src/MethodParam.cpp
+        src/StackItem.cpp
+        src/StackScope.cpp
+        src/ICodeGeneratable.cpp)
 
 ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
 SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)

@@ -18,6 +18,7 @@ public:
 public:
     void Test001_CreateMethod();
     void Test002_CreateMethod();
+    void Test003_CreateMethod();
 };
 
 

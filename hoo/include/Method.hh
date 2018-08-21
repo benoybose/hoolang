@@ -7,11 +7,13 @@
 
 #include "MethodParam.hh"
 #include "StackScope.hh"
+#include "ICodeGeneratable.hh"
 
 #include <string>
 #include <memory>
 #include <list>
 #include <tuple>
+#include <vector>
 
 namespace hoo {
     namespace jit {
@@ -20,7 +22,7 @@ namespace hoo {
 
         class Module;
 
-        class Method : public StackScope {
+        class Method : public StackScope, public ICodeGeneratable {
             friend class Module;
 
         private:
@@ -44,6 +46,8 @@ namespace hoo {
                                       std::string paramName);
 
             const std::list<StackItem *> GetParameters() const;
+
+            std::vector<unsigned char> Generate() override;
 
         };
 

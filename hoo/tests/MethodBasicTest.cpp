@@ -10,8 +10,8 @@
 using namespace hoo;
 using namespace hoo::jit;
 
-TestSuite* MethodBasicTest::suite() {
-    TestSuite* testSuite = new TestSuite();
+TestSuite *MethodBasicTest::suite() {
+    TestSuite *testSuite = new TestSuite();
     testSuite->addTest(new TestCaller<MethodBasicTest>("Test001_CreateMethod",
                                                        &MethodBasicTest::Test001_CreateMethod));
     testSuite->addTest(new TestCaller<MethodBasicTest>("Test002_CreateMethod",
@@ -64,5 +64,12 @@ void MethodBasicTest::Test002_CreateMethod() {
     CPPUNIT_ASSERT(0 == paramy->GetName().compare(y.GetName()));
     CPPUNIT_ASSERT(0 == paramy->GetType().compare(y.GetType()));
     CPPUNIT_ASSERT(paramy->GetOrdinal() == y.GetOrdinal());
+}
+
+void MethodBasicTest::Test003_CreateMethod() {
+    JIT jit;
+    Module module = jit.CreateModule(MODULE_INSTANCE, "Default");
+    Method &testMethod = module.CreateMethod("test");
+    auto code = testMethod.Generate();
 }
 

@@ -2,5 +2,6 @@
 #define HOOCONFIG_HH
 
 #define HOO_${HOO_PLATFORM}${HOO_ARCH}
+#define HOO_X${HOO_ARCH}
 
 #endif
