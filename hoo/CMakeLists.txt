@@ -5,17 +5,16 @@ SET (LINK_FLAGS "-m64")
 
 PROJECT(hoo CXX)
 
-IF(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Windows)
-    MESSAGE("Platform is Windows")
-    SET(${HOO_PLATFORM_WINDOWS} "Windows")
-    CONFIGURE_FILE(hooconfig.hh.in ${PROJECT_SOURCE_DIR}/include/hooconfig.hh @ONLY)
+MATH(EXPR HOO_ARCH "${CMAKE_SIZEOF_VOID_P} * 8")
+IF(${CMAKE_HOST_SYSTEM_NAME} STREQUAL CYGWIN)
+    SET(HOO_PLATFORM WIN)
 ENDIF()
 
 IF(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Linux)
-    MESSAGE("Platform is linux")
-    SET(${HOO_PLATFORM_LINUX} "Linux")
-    CONFIGURE_FILE(hooconfig.hh.in ${PROJECT_SOURCE_DIR}/include/hooconfig.hh @ONLY)
+    SET(HOO_PLATFORM LINUX)
 ENDIF()
+
+CONFIGURE_FILE(HooConfig.hh.in ${PROJECT_SOURCE_DIR}/include/HooConfig.hh)
 
 
 SET(HOO_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
@@ -23,6 +22,7 @@ INCLUDE(../cmake/Findcppunit.cmake)
 
 INCLUDE_DIRECTORIES(${HOO_INCLUDE_DIRS} ${CPPUNIT_INCLUDE_DIR})
 SET(HOO_HEADER_FILES
+        include/HooConfig.hh
         include/HooTypes.hh
         include/JIT.hh
         include/Module.hh

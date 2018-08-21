@@ -1,7 +1,0 @@
-#ifndef HOOCONFIG_HH
-#define HOOCONFIG_HH
-
-#cmakedefine HOO_WIN @HOO_PLATFORM_WINDOWS@
-#cmakedefine HOO_LIN @HOO_PLATFORM_LINUX@
-
-#endif

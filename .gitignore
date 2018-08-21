@@ -20,5 +20,6 @@ hooc/src/location.hh
 hooc/src/position.hh
 hooc/src/stack.hh
 hooc/src/Parser.cpp
+hoo/include/HooConfig.hh
 
 
