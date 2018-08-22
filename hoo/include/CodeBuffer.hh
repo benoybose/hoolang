@@ -21,6 +21,14 @@ namespace hoo {
 
             bool Lock();
 
+            size_t GetSize() const;
+
+            size_t GetPageCount() const;
+
+            size_t GetPosition() const;
+
+            bool IsLocked() const;
+
 
         private:
             uint8_t *_buffer;
@@ -31,11 +39,6 @@ namespace hoo {
 
         private:
             void Allocate(size_t size);
-
-        public:
-            bool IsLocked() const;
-
-        private:
 
             void Free();
 

@@ -7,6 +7,8 @@
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestCaller.h>
 
+#include <vector>
+
 using namespace hoo;
 using namespace hoo::jit;
 
@@ -16,6 +18,8 @@ TestSuite *MethodBasicTest::suite() {
                                                        &MethodBasicTest::Test001_CreateMethod));
     testSuite->addTest(new TestCaller<MethodBasicTest>("Test002_CreateMethod",
                                                        &MethodBasicTest::Test002_CreateMethod));
+    testSuite->addTest(new TestCaller<MethodBasicTest>("Test003_CreateMethod",
+                                                       &MethodBasicTest::Test003_CreateMethod));
     return testSuite;
 }
 
@@ -71,5 +75,10 @@ void MethodBasicTest::Test003_CreateMethod() {
     Module module = jit.CreateModule(MODULE_INSTANCE, "Default");
     Method &testMethod = module.CreateMethod("test");
     auto code = testMethod.Generate();
+    auto code_expected = std::vector<uint8_t> { 0x55, 0x48, 0x89, 0xe5, 0x5d, 0xc3 };
+    CPPUNIT_ASSERT(code.size() == code_expected.size());
+    for(size_t index = 0; index < code.size(); index++) {
+        CPPUNIT_ASSERT(code[index] == code_expected[index]);
+    }
 }
 

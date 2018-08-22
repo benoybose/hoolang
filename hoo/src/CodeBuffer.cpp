@@ -130,5 +130,17 @@ namespace hoo {
             mprotect(this->_buffer, this->_size, PROT_READ | PROT_EXEC);
 #endif
         }
+
+        size_t CodeBuffer::GetSize() const {
+            return _size;
+        }
+
+        size_t CodeBuffer::GetPageCount() const {
+            return _page_count;
+        }
+
+        size_t CodeBuffer::GetPosition() const {
+            return _position;
+        }
     }
 }
