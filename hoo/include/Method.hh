@@ -14,6 +14,7 @@
 #include <list>
 #include <tuple>
 #include <vector>
+#include <cstdint>
 
 namespace hoo {
     namespace jit {
@@ -47,7 +48,7 @@ namespace hoo {
 
             const std::list<StackItem *> GetParameters() const;
 
-            std::vector<unsigned char> Generate() override;
+            std::vector<uint8_t > Generate() override;
 
         };
 

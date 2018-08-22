@@ -49,7 +49,7 @@ namespace hoo {
             return params;
         }
 
-        std::vector<unsigned char> Method::Generate() {
+        std::vector<uint8_t> Method::Generate() {
             auto code = std::vector<unsigned char>();
 #ifndef HOO_X64
             return code;
