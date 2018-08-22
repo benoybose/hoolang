@@ -52,7 +52,7 @@ SET(HOO_SOURCE_FILES
         src/MethodParam.cpp
         src/StackItem.cpp
         src/StackScope.cpp
-        src/ICodeGeneratable.cpp)
+        src/ICodeGeneratable.cpp src/CodeBuffer.cpp)
 
 ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
 SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)
