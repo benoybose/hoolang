@@ -25,7 +25,7 @@ namespace hoo {
 
         CodeBuffer::~CodeBuffer() {
             if (nullptr != this->_buffer) {
-                delete this->_buffer;
+                this->Free();
                 this->_size = 0;
                 this->_position = -1;
                 this->_page_count = 0;
@@ -36,7 +36,7 @@ namespace hoo {
             auto page_size = this->GetPageSize();
             this->_page_count = size / page_size;
 
-            if (0 > size % page_size) {
+            if (0 < (size % page_size)) {
                 this->_page_count++;
             }
 
@@ -56,6 +56,9 @@ namespace hoo {
                          -1, 0)
             );
 #endif
+            if(nullptr != this->_buffer) {
+                std::memset(this->_buffer, 0, this->_size);
+            }
         }
 
         size_t CodeBuffer::GetPageSize() {
@@ -74,7 +77,15 @@ namespace hoo {
             const size_t modified_size = existing_size + code.size();
             const auto data = code.data();
 
-            if(modified_size > this->_size) {
+            if((0 == this->_size) &&
+               (nullptr == this->_buffer) &&
+               (-1 == this->_position) &&
+               (0 == this->_page_count)) {
+                this->Allocate(code.size());
+                std::memcpy(this->_buffer, data, code.size());
+            } else if(modified_size < this->_size) {
+                std::memcpy(&this->_buffer[this->_position + 1], data, code.size());
+            } else {
                 uint8_t *buffer = new uint8_t[modified_size] { 0 };
                 if((0 < existing_size) || (0 != this->_buffer)) {
                     std::memcpy(buffer, this->_buffer, existing_size);
@@ -89,9 +100,6 @@ namespace hoo {
                 this->Allocate(modified_size);
                 std::memcpy(this->_buffer, buffer, modified_size);
                 delete buffer;
-
-            } else {
-                std::memcpy(&this->_buffer[this->_position + 1], data, code.size());
             }
 
             this->_position = modified_size - 1;
@@ -139,7 +147,7 @@ namespace hoo {
             return _page_count;
         }
 
-        size_t CodeBuffer::GetPosition() const {
+        long CodeBuffer::GetPosition() const {
             return _position;
         }
     }

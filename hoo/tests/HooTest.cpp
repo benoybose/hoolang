@@ -2,6 +2,7 @@
 #include "ValueTest.hh"
 #include "JITBasicTest.hh"
 #include "MethodBasicTest.hh"
+#include "CodeBufferTest.hh"
 
 #include <cppunit/ui/text/TestRunner.h>
 
@@ -14,6 +15,7 @@ int main() {
     runner.addTest(ValueTest::suite());
     runner.addTest(JITBasicTest::suite());
     runner.addTest(MethodBasicTest::suite());
+    runner.addTest(CodeBufferTest::suite());
     runner.run("", false, true, false);
     return 0;
 }

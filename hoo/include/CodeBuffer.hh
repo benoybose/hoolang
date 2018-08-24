@@ -25,7 +25,7 @@ namespace hoo {
 
             size_t GetPageCount() const;
 
-            size_t GetPosition() const;
+            long GetPosition() const;
 
             bool IsLocked() const;
 
@@ -34,7 +34,7 @@ namespace hoo {
             uint8_t *_buffer;
             size_t _size;
             size_t _page_count;
-            size_t _position;
+            long int _position;
             bool _locked;
 
         private:
