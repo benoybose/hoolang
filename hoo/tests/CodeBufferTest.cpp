@@ -95,10 +95,24 @@ void CodeBufferTest::Test001_CodeBufferTest() {
     }
 }
 
+void CodeBufferTest::Test002_CodeBufferTest() {
+    CodeBuffer buffer;
+    std::vector<uint8_t> sample_data;
+    const auto page_size = this->GetPageSize();
+    for(auto index = 0; index < page_size; index++) {
+        sample_data.push_back((uint8_t)(rand() % 255));
+    }
+    buffer.Write(sample_data);
+}
+
+
+
 TestSuite *CodeBufferTest::suite() {
     TestSuite *testSuite = new TestSuite();
     testSuite->addTest(new TestCaller<CodeBufferTest>("Test001_CodeBufferTest",
                                                       &CodeBufferTest::Test001_CodeBufferTest));
+    testSuite->addTest(new TestCaller<CodeBufferTest>("Test002_CodeBufferTest",
+                                                      & CodeBufferTest::Test002_CodeBufferTest));
     return testSuite;
 }
 

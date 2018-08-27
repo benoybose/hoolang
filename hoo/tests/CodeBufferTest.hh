@@ -14,6 +14,7 @@ using namespace CppUnit;
 class CodeBufferTest: public TestFixture {
 public:
     void Test001_CodeBufferTest();
+    void Test002_CodeBufferTest();
     size_t GetPageSize();
 
 

@@ -10,12 +10,39 @@ namespace hoo {
     namespace jit {
         class CodeBuffer {
         public:
+            class CodeLocation {
+            private:
+                long _start;
+                size_t _count;
+                uint8_t *_address;
+
+            public:
+                CodeLocation();
+
+                CodeLocation(long start, size_t count, uint8_t *address);
+
+                CodeLocation(const CodeLocation &code_location);
+
+            public:
+                CodeLocation &operator=(const CodeLocation &code_location);
+
+            public:
+                const long GetStart() const;
+
+                const long GetCount() const;
+
+                const uint8_t *GetAddress() const;
+
+
+            };
+
+        public:
             CodeBuffer();
 
             virtual ~CodeBuffer();
 
         public:
-            size_t Write(std::vector<uint8_t> code);
+            CodeLocation Write(std::vector<uint8_t> code);
 
             const uint8_t *GetBuffer() const;
 

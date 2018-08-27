@@ -11,8 +11,10 @@
 #endif
 
 #ifdef HOO_LINUX64
+
 #include <sys/mman.h>
 #include <unistd.h>
+
 #endif
 
 namespace hoo {
@@ -56,7 +58,7 @@ namespace hoo {
                          -1, 0)
             );
 #endif
-            if(nullptr != this->_buffer) {
+            if (nullptr != this->_buffer) {
                 std::memset(this->_buffer, 0, this->_size);
             }
         }
@@ -72,28 +74,30 @@ namespace hoo {
 #endif
         }
 
-        size_t CodeBuffer::Write(std::vector<uint8_t> code) {
-            const size_t existing_size = this->_position + 1;
+        CodeBuffer::CodeLocation CodeBuffer::Write(std::vector<uint8_t> code) {
+            const auto starting_position = this->_position + 1;
+            const size_t existing_size = starting_position;
             const size_t modified_size = existing_size + code.size();
             const auto data = code.data();
 
-            if((0 == this->_size) &&
-               (nullptr == this->_buffer) &&
-               (-1 == this->_position) &&
-               (0 == this->_page_count)) {
+
+            if ((0 == this->_size) &&
+                (nullptr == this->_buffer) &&
+                (-1 == this->_position) &&
+                (0 == this->_page_count)) {
                 this->Allocate(code.size());
                 std::memcpy(this->_buffer, data, code.size());
-            } else if(modified_size < this->_size) {
+            } else if (modified_size < this->_size) {
                 std::memcpy(&this->_buffer[this->_position + 1], data, code.size());
             } else {
-                uint8_t *buffer = new uint8_t[modified_size] { 0 };
-                if((0 < existing_size) || (0 != this->_buffer)) {
+                uint8_t *buffer = new uint8_t[modified_size]{0};
+                if ((0 < existing_size) || (0 != this->_buffer)) {
                     std::memcpy(buffer, this->_buffer, existing_size);
                 }
 
                 std::memcpy(&buffer[this->_position + 1], data, code.size());
 
-                if(0 != this->_buffer) {
+                if (0 != this->_buffer) {
                     this->Free();
                 }
 
@@ -102,12 +106,13 @@ namespace hoo {
                 delete buffer;
             }
 
+            CodeLocation location(starting_position, code.size(), this->_buffer + starting_position);
             this->_position = modified_size - 1;
-            return this->_position;
+            return location;
         }
 
         void CodeBuffer::Free() {
-            if(nullptr != this->_buffer) {
+            if (nullptr != this->_buffer) {
 #ifdef HOO_WIN64
                 VirtualFree(this->_buffer, this->_size, MEM_RELEASE);
 #endif
@@ -149,6 +154,39 @@ namespace hoo {
 
         long CodeBuffer::GetPosition() const {
             return _position;
+        }
+
+        CodeBuffer::CodeLocation::CodeLocation() :
+                _start(-1), _count(0), _address(nullptr) {
+
+        }
+
+        CodeBuffer::CodeLocation::CodeLocation(long start, size_t count, uint8_t *address) :
+                _start(start), _count(count), _address(address) {
+        }
+
+        CodeBuffer::CodeLocation::CodeLocation(const CodeBuffer::CodeLocation &code_location) :
+                _start(code_location._start), _count(code_location._count), _address(code_location._address) {
+
+        }
+
+        CodeBuffer::CodeLocation &CodeBuffer::CodeLocation::operator=(const CodeBuffer::CodeLocation &code_location) {
+            _start = code_location._start;
+            _count = code_location._count;
+            _address = code_location._address;
+            return *(this);
+        }
+
+        const long CodeBuffer::CodeLocation::GetStart() const {
+            return _start;
+        }
+
+        const long CodeBuffer::CodeLocation::GetCount() const {
+            return _count;
+        }
+
+        const uint8_t *CodeBuffer::CodeLocation::GetAddress() const {
+            return this->_address;
         }
     }
 }
