@@ -1,5 +1,4 @@
 #include "TypeTest.hh"
-#include "ValueTest.hh"
 #include "JITBasicTest.hh"
 #include "MethodBasicTest.hh"
 #include "CodeBufferTest.hh"
@@ -12,7 +11,6 @@ using namespace CppUnit;
 int main() {
     TextUi::TestRunner runner;
     runner.addTest(TypeTest::suite());
-    runner.addTest(ValueTest::suite());
     runner.addTest(JITBasicTest::suite());
     runner.addTest(MethodBasicTest::suite());
     runner.addTest(CodeBufferTest::suite());

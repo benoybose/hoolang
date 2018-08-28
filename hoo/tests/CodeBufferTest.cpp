@@ -5,6 +5,7 @@
 #include <cppunit/TestCaller.h>
 #include <vector>
 #include <cstdlib>
+#include <unistd.h>
 
 #ifdef HOO_WIN64
 #include <windows.h>
@@ -12,7 +13,6 @@
 
 #ifdef HOO_LINUX64
 #include <sys/mman.h>
-#include <unistd.h>
 #endif
 
 using namespace hoo::jit;
@@ -33,16 +33,16 @@ void CodeBufferTest::Test001_CodeBufferTest() {
         sample_data.push_back((uint8_t) (rand() % 255));
     }
 
-
-    buffer.Write(sample_data);
+    auto location = buffer.Write(sample_data);
     auto data1 = buffer.GetBuffer();
-
+    CPPUNIT_ASSERT(0 == location.GetStart());
+    CPPUNIT_ASSERT(sample_data.size() == location.GetCount());
+    CPPUNIT_ASSERT(&data1[location.GetStart()] == location.GetAddress());
     CPPUNIT_ASSERT(nullptr != data1);
     CPPUNIT_ASSERT(1 == buffer.GetPageCount());
     CPPUNIT_ASSERT(page_size == buffer.GetSize());
     CPPUNIT_ASSERT((sample_data_size - 1) == buffer.GetPosition());
     CPPUNIT_ASSERT(false == buffer.IsLocked());
-
 
     for(auto index = 0; index < sample_data_size; index++) {
         CPPUNIT_ASSERT(data1[index] == sample_data[index]);
