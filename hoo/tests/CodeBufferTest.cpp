@@ -1,10 +1,10 @@
-#include "CodeBufferTest.hh"
+#define BOOST_TEST_MODULE Code Buffer Test
 #include "HooConfig.hh"
+#include "CodeBuffer.hh"
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestCaller.h>
+#include <boost/test/included/unit_test.hpp>
 #include <vector>
-#include <cstdlib>
+#include <stdlib.h>
 #include <unistd.h>
 
 #ifdef HOO_WIN64
@@ -16,17 +16,18 @@
 #endif
 
 using namespace hoo::jit;
-using namespace CppUnit;
 
-void CodeBufferTest::Test001_CodeBufferTest() {
+size_t CodeBufferTest_GetPageSize();
+
+BOOST_AUTO_TEST_CASE(Test001_CodeBufferTest) {
     CodeBuffer buffer;
-    CPPUNIT_ASSERT(nullptr == buffer.GetBuffer());
-    CPPUNIT_ASSERT(0 == buffer.GetSize());
-    CPPUNIT_ASSERT(0 == buffer.GetPageCount());
-    CPPUNIT_ASSERT(-1 == buffer.GetPosition());
-    CPPUNIT_ASSERT(false == buffer.IsLocked());
+    BOOST_CHECK(nullptr == buffer.GetBuffer());
+    BOOST_CHECK(0 == buffer.GetSize());
+    BOOST_CHECK(0 == buffer.GetPageCount());
+    BOOST_CHECK(-1 == buffer.GetPosition());
+    BOOST_CHECK(false == buffer.IsLocked());
 
-    const auto page_size = this->GetPageSize();
+    const auto page_size = CodeBufferTest_GetPageSize();
     const auto sample_data_size = page_size / 2;
     auto sample_data = std::vector<uint8_t >();
     for(auto index = 0; index < sample_data_size; index++) {
@@ -35,17 +36,17 @@ void CodeBufferTest::Test001_CodeBufferTest() {
 
     auto location = buffer.Write(sample_data);
     auto data1 = buffer.GetBuffer();
-    CPPUNIT_ASSERT(0 == location.GetStart());
-    CPPUNIT_ASSERT(sample_data.size() == location.GetCount());
-    CPPUNIT_ASSERT(&data1[location.GetStart()] == location.GetAddress());
-    CPPUNIT_ASSERT(nullptr != data1);
-    CPPUNIT_ASSERT(1 == buffer.GetPageCount());
-    CPPUNIT_ASSERT(page_size == buffer.GetSize());
-    CPPUNIT_ASSERT((sample_data_size - 1) == buffer.GetPosition());
-    CPPUNIT_ASSERT(false == buffer.IsLocked());
+    BOOST_CHECK(0 == location.GetStart());
+    BOOST_CHECK(sample_data.size() == location.GetCount());
+    BOOST_CHECK(&data1[location.GetStart()] == location.GetAddress());
+    BOOST_CHECK(nullptr != data1);
+    BOOST_CHECK(1 == buffer.GetPageCount());
+    BOOST_CHECK(page_size == buffer.GetSize());
+    BOOST_CHECK((sample_data_size - 1) == buffer.GetPosition());
+    BOOST_CHECK(false == buffer.IsLocked());
 
     for(auto index = 0; index < sample_data_size; index++) {
-        CPPUNIT_ASSERT(data1[index] == sample_data[index]);
+        BOOST_CHECK(data1[index] == sample_data[index]);
     }
 
     const auto more_data_size = page_size / 4;
@@ -56,17 +57,17 @@ void CodeBufferTest::Test001_CodeBufferTest() {
 
     buffer.Write(more_data);
     auto data2 = buffer.GetBuffer();
-    CPPUNIT_ASSERT(data1 == data2);
-    CPPUNIT_ASSERT(1 == buffer.GetPageCount());
-    CPPUNIT_ASSERT(page_size == buffer.GetSize());
-    CPPUNIT_ASSERT((sample_data_size + more_data_size - 1) == buffer.GetPosition());
-    CPPUNIT_ASSERT(false == buffer.IsLocked());
+    BOOST_CHECK(data1 == data2);
+    BOOST_CHECK(1 == buffer.GetPageCount());
+    BOOST_CHECK(page_size == buffer.GetSize());
+    BOOST_CHECK((sample_data_size + more_data_size - 1) == buffer.GetPosition());
+    BOOST_CHECK(false == buffer.IsLocked());
 
     for(auto index = 0; index < (sample_data_size + more_data_size); index++) {
         if(index < sample_data_size) {
-            CPPUNIT_ASSERT(data1[index] == sample_data[index]);
+            BOOST_CHECK(data1[index] == sample_data[index]);
         } else {
-            CPPUNIT_ASSERT(data1[index] == more_data[index - sample_data_size]);
+            BOOST_CHECK(data1[index] == more_data[index - sample_data_size]);
         }
     }
 
@@ -78,27 +79,27 @@ void CodeBufferTest::Test001_CodeBufferTest() {
 
     buffer.Write(extra_data);
     auto data3 = buffer.GetBuffer();
-    CPPUNIT_ASSERT(data2 != data3);
-    CPPUNIT_ASSERT(3 == buffer.GetPageCount());
-    CPPUNIT_ASSERT((3 * page_size) == buffer.GetSize());
-    CPPUNIT_ASSERT((sample_data_size + more_data_size + extra_data_size - 1) == buffer.GetPosition());
-    CPPUNIT_ASSERT(false == buffer.IsLocked());
+    BOOST_CHECK(data2 != data3);
+    BOOST_CHECK(3 == buffer.GetPageCount());
+    BOOST_CHECK((3 * page_size) == buffer.GetSize());
+    BOOST_CHECK((sample_data_size + more_data_size + extra_data_size - 1) == buffer.GetPosition());
+    BOOST_CHECK(false == buffer.IsLocked());
 
     std::vector<uint8_t> all_data;
     all_data.insert(all_data.end(), sample_data.begin(), sample_data.end());
     all_data.insert(all_data.end(), more_data.begin(), more_data.end());
     all_data.insert(all_data.end(), extra_data.begin(), extra_data.end());
 
-    CPPUNIT_ASSERT((sample_data_size + more_data_size + extra_data_size) == all_data.size());
+    BOOST_CHECK((sample_data_size + more_data_size + extra_data_size) == all_data.size());
     for(auto index = 0; index < all_data.size(); index++) {
-        CPPUNIT_ASSERT(data3[index] == all_data[index]);
+        BOOST_CHECK(data3[index] == all_data[index]);
     }
 }
 
-void CodeBufferTest::Test002_CodeBufferTest() {
+BOOST_AUTO_TEST_CASE(Test002_CodeBufferTest) {
     CodeBuffer buffer;
     std::vector<uint8_t> sample_data;
-    const auto page_size = this->GetPageSize();
+    const auto page_size = CodeBufferTest_GetPageSize();
     for(auto index = 0; index < page_size; index++) {
         sample_data.push_back((uint8_t)(rand() % 255));
     }
@@ -106,17 +107,7 @@ void CodeBufferTest::Test002_CodeBufferTest() {
 }
 
 
-
-TestSuite *CodeBufferTest::suite() {
-    TestSuite *testSuite = new TestSuite();
-    testSuite->addTest(new TestCaller<CodeBufferTest>("Test001_CodeBufferTest",
-                                                      &CodeBufferTest::Test001_CodeBufferTest));
-    testSuite->addTest(new TestCaller<CodeBufferTest>("Test002_CodeBufferTest",
-                                                      & CodeBufferTest::Test002_CodeBufferTest));
-    return testSuite;
-}
-
-size_t CodeBufferTest::GetPageSize() {
+size_t CodeBufferTest_GetPageSize() {
 #ifdef HOO_WIN64
     SYSTEM_INFO info;
             GetSystemInfo(&info);
