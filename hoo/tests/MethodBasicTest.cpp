@@ -1,40 +1,28 @@
-#include "MethodBasicTest.hh"
+#define BOOST_TEST_MODULE Method Basic Test
+
 #include "JIT.hh"
 #include "Module.hh"
 #include "Method.hh"
 #include "Value.hh"
 
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestCaller.h>
-
+#include <boost/test/included/unit_test.hpp>
 #include <vector>
 
 using namespace hoo;
 using namespace hoo::jit;
 
-TestSuite *MethodBasicTest::suite() {
-    TestSuite *testSuite = new TestSuite();
-    testSuite->addTest(new TestCaller<MethodBasicTest>("Test001_CreateMethod",
-                                                       &MethodBasicTest::Test001_CreateMethod));
-    testSuite->addTest(new TestCaller<MethodBasicTest>("Test002_CreateMethod",
-                                                       &MethodBasicTest::Test002_CreateMethod));
-    testSuite->addTest(new TestCaller<MethodBasicTest>("Test003_CreateMethod",
-                                                       &MethodBasicTest::Test003_CreateMethod));
-    return testSuite;
-}
-
-void MethodBasicTest::Test001_CreateMethod() {
+BOOST_AUTO_TEST_CASE(Test001_CreateMethod) {
     JIT jit;
     Module module = jit.CreateModule(MODULE_INSTANCE, "default");
     Method method = module.CreateMethod("main");
-    CPPUNIT_ASSERT(0 == TYPENAME_VOID.compare(method.GetReturnType()));
-    CPPUNIT_ASSERT(0 == method.GetName().compare("main"));
-    CPPUNIT_ASSERT(method.GetModule() == &module);
+    BOOST_CHECK(0 == TYPENAME_VOID.compare(method.GetReturnType()));
+    BOOST_CHECK(0 == method.GetName().compare("main"));
+    BOOST_CHECK(method.GetModule() == &module);
     auto params = method.GetParameters();
-    CPPUNIT_ASSERT(params.begin() == params.end());
+    BOOST_CHECK(params.begin() == params.end());
 }
 
-void MethodBasicTest::Test002_CreateMethod() {
+BOOST_AUTO_TEST_CASE(Test002_CreateMethod) {
     JIT jit;
     Module module = jit.CreateModule(MODULE_INSTANCE, "default");
     Method method = module.CreateMethod("add");
@@ -42,43 +30,43 @@ void MethodBasicTest::Test002_CreateMethod() {
     MethodParam y = method.AddParameter(TYPENAME_INTEGER, "y");
     method.SetReturnType(TYPENAME_INTEGER);
 
-    CPPUNIT_ASSERT(0 == x.GetName().compare("x"));
-    CPPUNIT_ASSERT(0 == x.GetType().compare(TYPENAME_INTEGER));
-    CPPUNIT_ASSERT(0 == x.GetOrdinal());
+    BOOST_CHECK(0 == x.GetName().compare("x"));
+    BOOST_CHECK(0 == x.GetType().compare(TYPENAME_INTEGER));
+    BOOST_CHECK(0 == x.GetOrdinal());
 
-    CPPUNIT_ASSERT(0 == y.GetName().compare("y"));
-    CPPUNIT_ASSERT(0 == y.GetType().compare(TYPENAME_INTEGER));
-    CPPUNIT_ASSERT(1 == y.GetOrdinal());
+    BOOST_CHECK(0 == y.GetName().compare("y"));
+    BOOST_CHECK(0 == y.GetType().compare(TYPENAME_INTEGER));
+    BOOST_CHECK(1 == y.GetOrdinal());
 
     auto params = method.GetParameters();
-    CPPUNIT_ASSERT(2 == params.size());
+    BOOST_CHECK(2 == params.size());
 
     auto iterator = params.begin();
-    CPPUNIT_ASSERT(iterator != params.end());
+    BOOST_CHECK(iterator != params.end());
 
     auto paramx = *(iterator);
-    CPPUNIT_ASSERT(nullptr != paramx);
+    BOOST_CHECK(nullptr != paramx);
     auto paramy = *(++iterator);
-    CPPUNIT_ASSERT(nullptr != paramy);
+    BOOST_CHECK(nullptr != paramy);
 
-    CPPUNIT_ASSERT(0 == paramx->GetName().compare(x.GetName()));
-    CPPUNIT_ASSERT(0 == paramx->GetType().compare(x.GetType()));
-    CPPUNIT_ASSERT(paramx->GetOrdinal() == x.GetOrdinal());
+    BOOST_CHECK(0 == paramx->GetName().compare(x.GetName()));
+    BOOST_CHECK(0 == paramx->GetType().compare(x.GetType()));
+    BOOST_CHECK(paramx->GetOrdinal() == x.GetOrdinal());
 
-    CPPUNIT_ASSERT(0 == paramy->GetName().compare(y.GetName()));
-    CPPUNIT_ASSERT(0 == paramy->GetType().compare(y.GetType()));
-    CPPUNIT_ASSERT(paramy->GetOrdinal() == y.GetOrdinal());
+    BOOST_CHECK(0 == paramy->GetName().compare(y.GetName()));
+    BOOST_CHECK(0 == paramy->GetType().compare(y.GetType()));
+    BOOST_CHECK(paramy->GetOrdinal() == y.GetOrdinal());
 }
 
-void MethodBasicTest::Test003_CreateMethod() {
+BOOST_AUTO_TEST_CASE(Test003_CreateMethod) {
     JIT jit;
     Module module = jit.CreateModule(MODULE_INSTANCE, "Default");
     Method &testMethod = module.CreateMethod("test");
     auto code = testMethod.Generate();
     auto code_expected = std::vector<uint8_t> { 0x55, 0x48, 0x89, 0xe5, 0x5d, 0xc3 };
-    CPPUNIT_ASSERT(code.size() == code_expected.size());
+    BOOST_CHECK(code.size() == code_expected.size());
     for(size_t index = 0; index < code.size(); index++) {
-        CPPUNIT_ASSERT(code[index] == code_expected[index]);
+        BOOST_CHECK(code[index] == code_expected[index]);
     }
 }
 

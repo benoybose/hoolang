@@ -1,8 +1,10 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
-SET(CMAKE_LEGACY_CYGWIN_WIN32 0)
+SET(CMAKE_LEGACY_CYGWIN_WIN32 ON)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
+
 SET (COMPILE_FLAGS "-m64")
 SET (LINK_FLAGS "-m64")
+
 ENABLE_TESTING()
 
 PROJECT(hoo CXX)
@@ -15,7 +17,8 @@ ENDIF()
 IF(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Linux)
     SET(HOO_PLATFORM LINUX)
 ENDIF()
-## SET(Boost_USE_STATIC_LIBS ON)
+
+SET(Boost_USE_STATIC_LIBS ON)
 FIND_PACKAGE(Boost 1.66)
 MESSAGE("Boost Include Directories: ${Boost_INCLUDE_DIRS}")
 
@@ -60,11 +63,11 @@ SET(HOO_SOURCE_FILES
 ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
 SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)
 
-SET(HOO_TEST_SOURCE_FILES tests/TypeTest.cpp
-        tests/TypeTest.hh
+SET(HOO_TEST_SOURCE_FILES
         tests/HooTest.cpp
-        tests/JITBasicTest.hh
-        tests/JITBasicTest.cpp tests/MethodBasicTest.cpp tests/MethodBasicTest.hh tests/CodeBufferTest.cpp tests/CodeBufferTest.hh)
+        tests/MethodBasicTest.cpp
+        tests/CodeBufferTest.cpp
+        tests/CodeBufferTest.hh)
 
 ADD_EXECUTABLE(hootest ${HOO_TEST_SOURCE_FILES})
 SET_PROPERTY(TARGET hootest PROPERTY CXX_STANDARD 11)
@@ -72,5 +75,14 @@ TARGET_LINK_LIBRARIES(hootest ${CPPUNIT_LIBRARY} ${Boost_LLIBRARIES} hoo)
 
 ADD_EXECUTABLE(hootest_value tests/ValueTest.cpp)
 TARGET_LINK_LIBRARIES(hootest_value hoo)
+
+ADD_EXECUTABLE(hootest_type tests/TypeTest.cpp)
+TARGET_LINK_LIBRARIES(hootest_type hoo)
+
+ADD_EXECUTABLE(hootest_jitbasic tests/JITBasicTest.cpp)
+TARGET_LINK_LIBRARIES(hootest_jitbasic hoo)
+
+ADD_EXECUTABLE(hootest_methodbasictest tests/MethodBasicTest.cpp)
+TARGET_LINK_LIBRARIES(hootest_methodbasictest hoo)
 
 ADD_TEST(NAME test_value COMMAND hootest_value)
