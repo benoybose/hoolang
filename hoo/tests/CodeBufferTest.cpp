@@ -18,6 +18,8 @@
 using namespace hoo::jit;
 
 size_t CodeBufferTest_GetPageSize();
+std::vector<uint8_t> CodeBufferTest_GenerateRandomData(size_t size);
+void CodeBufferTest_VerifyData(size_t size, const uint8_t *buffer, std::vector<uint8_t> data);
 
 BOOST_AUTO_TEST_CASE(Test001_CodeBufferTest) {
     CodeBuffer buffer;
@@ -29,81 +31,102 @@ BOOST_AUTO_TEST_CASE(Test001_CodeBufferTest) {
 
     const auto page_size = CodeBufferTest_GetPageSize();
     const auto sample_data_size = page_size / 2;
-    auto sample_data = std::vector<uint8_t >();
-    for(auto index = 0; index < sample_data_size; index++) {
-        sample_data.push_back((uint8_t) (rand() % 255));
-    }
+    auto sample_data = CodeBufferTest_GenerateRandomData(sample_data_size);
 
     auto location = buffer.Write(sample_data);
     auto data1 = buffer.GetBuffer();
     BOOST_CHECK(0 == location.GetStart());
     BOOST_CHECK(sample_data.size() == location.GetCount());
     BOOST_CHECK(&data1[location.GetStart()] == location.GetAddress());
+
     BOOST_CHECK(nullptr != data1);
     BOOST_CHECK(1 == buffer.GetPageCount());
     BOOST_CHECK(page_size == buffer.GetSize());
     BOOST_CHECK((sample_data_size - 1) == buffer.GetPosition());
     BOOST_CHECK(false == buffer.IsLocked());
-
-    for(auto index = 0; index < sample_data_size; index++) {
-        BOOST_CHECK(data1[index] == sample_data[index]);
-    }
+    CodeBufferTest_VerifyData(sample_data_size, data1, sample_data);
 
     const auto more_data_size = page_size / 4;
-    auto more_data = std::vector<uint8_t>();
-    for(auto index = 0; index < more_data_size; index++) {
-        more_data.push_back((uint8_t)(rand() % 255));
-    }
+    auto more_data = CodeBufferTest_GenerateRandomData(more_data_size);
 
-    buffer.Write(more_data);
+    location = buffer.Write(more_data);
     auto data2 = buffer.GetBuffer();
+    BOOST_CHECK(sample_data_size == location.GetStart());
+    BOOST_CHECK(more_data_size == location.GetCount());
+    BOOST_CHECK(&data2[location.GetStart()] == location.GetAddress());
+
     BOOST_CHECK(data1 == data2);
     BOOST_CHECK(1 == buffer.GetPageCount());
     BOOST_CHECK(page_size == buffer.GetSize());
     BOOST_CHECK((sample_data_size + more_data_size - 1) == buffer.GetPosition());
     BOOST_CHECK(false == buffer.IsLocked());
 
-    for(auto index = 0; index < (sample_data_size + more_data_size); index++) {
-        if(index < sample_data_size) {
-            BOOST_CHECK(data1[index] == sample_data[index]);
-        } else {
-            BOOST_CHECK(data1[index] == more_data[index - sample_data_size]);
-        }
-    }
+    std::vector<uint8_t> all_data;
+    all_data.insert(all_data.end(), sample_data.begin(), sample_data.end());
+    all_data.insert(all_data.end(), more_data.begin(), more_data.end());
+    CodeBufferTest_VerifyData(sample_data_size + more_data_size, data1, all_data);
 
     const auto extra_data_size = page_size + (page_size / 2);
-    auto extra_data = std::vector<uint8_t>();
-    for(auto index = 0; index < extra_data_size; index++) {
-        extra_data.push_back((uint8_t)(rand() % 255));
-    }
+    auto extra_data = CodeBufferTest_GenerateRandomData(extra_data_size);
 
-    buffer.Write(extra_data);
+    location = buffer.Write(extra_data);
     auto data3 = buffer.GetBuffer();
+    BOOST_CHECK(all_data.size() == location.GetStart());
+    BOOST_CHECK(extra_data_size == location.GetCount());
+    BOOST_CHECK(&data3[location.GetStart()] == location.GetAddress());
+
     BOOST_CHECK(data2 != data3);
     BOOST_CHECK(3 == buffer.GetPageCount());
     BOOST_CHECK((3 * page_size) == buffer.GetSize());
     BOOST_CHECK((sample_data_size + more_data_size + extra_data_size - 1) == buffer.GetPosition());
     BOOST_CHECK(false == buffer.IsLocked());
 
-    std::vector<uint8_t> all_data;
-    all_data.insert(all_data.end(), sample_data.begin(), sample_data.end());
-    all_data.insert(all_data.end(), more_data.begin(), more_data.end());
     all_data.insert(all_data.end(), extra_data.begin(), extra_data.end());
+    CodeBufferTest_VerifyData(sample_data_size + more_data_size + extra_data_size,
+                              data3, all_data);
 
-    BOOST_CHECK((sample_data_size + more_data_size + extra_data_size) == all_data.size());
-    for(auto index = 0; index < all_data.size(); index++) {
-        BOOST_CHECK(data3[index] == all_data[index]);
-    }
 }
 
 BOOST_AUTO_TEST_CASE(Test002_CodeBufferTest) {
     CodeBuffer buffer;
-    std::vector<uint8_t> sample_data;
     const auto page_size = CodeBufferTest_GetPageSize();
-    for(auto index = 0; index < page_size; index++) {
-        sample_data.push_back((uint8_t)(rand() % 255));
+    auto sample_data = CodeBufferTest_GenerateRandomData(page_size);
+    auto location = buffer.Write(sample_data);
+    auto data1 = buffer.GetBuffer();
+
+    BOOST_CHECK(0 == location.GetStart());
+    BOOST_CHECK(page_size == location.GetCount());
+    BOOST_CHECK(&data1[location.GetStart()] == location.GetAddress());
+
+    BOOST_CHECK(1 == buffer.GetPageCount());
+    BOOST_CHECK(page_size == buffer.GetSize());
+    CodeBufferTest_VerifyData(page_size, data1, sample_data);
+
+    auto more_data = CodeBufferTest_GenerateRandomData(page_size);
+    location = buffer.Write(more_data);
+    auto data2 = buffer.GetBuffer();
+
+    BOOST_CHECK(page_size == location.GetStart());
+    BOOST_CHECK(page_size == location.GetCount());
+    BOOST_CHECK(&data2[page_size] == location.GetAddress());
+
+    BOOST_CHECK(data1 != data2);
+    BOOST_CHECK(2 == buffer.GetPageCount());
+    BOOST_CHECK((2 * page_size) == buffer.GetSize());
+}
+
+void CodeBufferTest_VerifyData(size_t size, const uint8_t *buffer, std::vector<uint8_t> data) {
+    for(auto index = 0; index < size; index++) {
+        BOOST_CHECK(data[index] == buffer[index]);
     }
-    buffer.Write(sample_data);
+}
+
+std::vector<uint8_t> CodeBufferTest_GenerateRandomData(size_t size) {
+    std::vector<uint8_t> data;
+    for(auto index = 0; index < size; index++) {
+        data.push_back((uint8_t)(rand() % 255));
+    }
+    return data;
 }
 
 

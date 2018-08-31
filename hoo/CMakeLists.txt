@@ -62,13 +62,13 @@ SET(HOO_SOURCE_FILES
 ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
 SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)
 
-ADD_EXECUTABLE(hootest_value tests/ValueTest.cpp)
-TARGET_LINK_LIBRARIES(hootest_value hoo)
-SET_PROPERTY(TARGET hootest_value PROPERTY CXX_STANDARD 11)
-
 ADD_EXECUTABLE(hootest_type tests/TypeTest.cpp)
 TARGET_LINK_LIBRARIES(hootest_type hoo)
 SET_PROPERTY(TARGET hootest_type PROPERTY CXX_STANDARD 11)
+
+ADD_EXECUTABLE(hootest_value tests/ValueTest.cpp)
+TARGET_LINK_LIBRARIES(hootest_value hoo)
+SET_PROPERTY(TARGET hootest_value PROPERTY CXX_STANDARD 11)
 
 ADD_EXECUTABLE(hootest_jitbasic tests/JITBasicTest.cpp)
 TARGET_LINK_LIBRARIES(hootest_jitbasic hoo)
@@ -82,8 +82,8 @@ ADD_EXECUTABLE(hootest_codebuffer tests/CodeBufferTest.cpp)
 TARGET_LINK_LIBRARIES(hootest_codebuffer hoo)
 SET_PROPERTY(TARGET hootest_codebuffer PROPERTY CXX_STANDARD 11)
 
-ADD_TEST(NAME test_value COMMAND hootest_value)
 ADD_TEST(NAME test_type COMMAND hootest_type)
+ADD_TEST(NAME test_value COMMAND hootest_value)
 ADD_TEST(NAME test_jitbasic COMMAND hootest_jitbasic)
 ADD_TEST(NAME test_methodbasic COMMAND hootest_methodbasic)
 ADD_TEST(NAME test_codebuffer COMMAND hootest_codebuffer)
