@@ -18,6 +18,8 @@ IF(${CMAKE_HOST_SYSTEM_NAME} STREQUAL Linux)
     SET(HOO_PLATFORM LINUX)
 ENDIF()
 
+#MESSAGE("Processor ${CMAKE_HOST_SYSTEM_PROCESSOR}")
+
 SET(Boost_USE_STATIC_LIBS ON)
 FIND_PACKAGE(Boost)
 MESSAGE("Boost Include Directories: ${Boost_INCLUDE_DIRS}")
@@ -42,7 +44,9 @@ SET(HOO_HEADER_FILES
         include/StackItem.hh
         include/StackScope.hh
         include/ICodeGeneratable.hh
-        include/CodeBuffer.hh)
+        include/CodeBuffer.hh
+        include/ICodeEngine.hh
+        include/CodeEngineFactory.hh include/IntelCodeEngine64Bit.hh)
 
 SET(HOO_SOURCE_FILES
         src/JIT.cpp
@@ -57,7 +61,9 @@ SET(HOO_SOURCE_FILES
         src/MethodParam.cpp
         src/StackItem.cpp
         src/StackScope.cpp
-        src/ICodeGeneratable.cpp src/CodeBuffer.cpp)
+        src/ICodeGeneratable.cpp
+        src/CodeBuffer.cpp
+        src/CodeEngineFactory.cpp)
 
 ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
 SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)
