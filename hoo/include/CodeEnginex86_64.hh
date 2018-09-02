@@ -1,8 +1,16 @@
-//
-// Created by COMP on 31-08-2018.
-//
+#ifndef CODEENGINEX86_64_HH
+#define CODEENGINEX86_64_HH
 
-#ifndef INTELCODEENGINE64BIT_HH
-#define INTELCODEENGINE64BIT_HH
+#include "ICodeEngine.hh"
 
-#endif //PROJECT_INTELCODEENGINE64BIT_HH
+namespace hoo {
+    namespace jit {
+        namespace code {
+            class CodeEnginex86_64: public ICodeEngine {
+
+            };
+        }
+    }
+}
+
+#endif //CODEENGINEX86_64_HH

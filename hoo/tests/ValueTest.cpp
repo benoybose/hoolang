@@ -29,13 +29,13 @@ BOOST_AUTO_TEST_CASE(double_value_test) {
 }
 
 BOOST_AUTO_TEST_CASE(object_value_test) {
-    StringClass *text = new StringClass("Hello, World");
+    String *text = new String("Hello, World");
     Value stringValue = Value::MakeObject(text);
     BOOST_CHECK(VALUE_OBJECT == stringValue.GetType());
     auto object = stringValue.GetObject();
     BOOST_CHECK((nullptr != object));
     BOOST_CHECK(0 == object->GetTypeName().compare(TYPENAME_STRING));
-    StringClass *stringClass = static_cast<StringClass *>(object);
+    String *stringClass = static_cast<String *>(object);
     BOOST_CHECK(nullptr != stringClass);
     BOOST_CHECK(0 == stringClass->GetValue().compare("Hello, World"));
     BOOST_CHECK(stringValue.GetTypeName() == TYPENAME_STRING);

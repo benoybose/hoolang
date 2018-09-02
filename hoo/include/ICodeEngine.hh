@@ -15,10 +15,10 @@ namespace hoo {
         namespace code {
             class ICodeEngine {
             public:
-                virtual std::string GetId();
-                virtual std::vector<uint8_t> EmitFunctionHeader(size_t param_count);
-                virtual std::vector<uint8_t> EmitFunctionFooter(ValuePtr value);
-                virtual std::vector<uint8_t> EmitFunctionFooter();
+                virtual std::string GetId() = 0;
+                virtual std::vector<uint8_t> EmitFunctionHeader(size_t param_count) = 0;
+                virtual std::vector<uint8_t> EmitFunctionFooter(ValuePtr value) = 0;
+                virtual std::vector<uint8_t> EmitFunctionFooter() = 0;
             };
         }
     }

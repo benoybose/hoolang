@@ -35,8 +35,8 @@ SET(HOO_HEADER_FILES
         include/Module.hh
         include/Value.hh
         include/Object.hh
-        include/StringClass.hh
-        include/CharacterClass.hh
+        include/String.hh
+        include/Character.hh
         include/Method.hh
         include/TypeSpec.hh
         include/JITException.hh
@@ -46,15 +46,15 @@ SET(HOO_HEADER_FILES
         include/ICodeGeneratable.hh
         include/CodeBuffer.hh
         include/ICodeEngine.hh
-        include/CodeEngineFactory.hh include/IntelCodeEngine64Bit.hh)
+        include/CodeEngineFactory.hh include/CodeEnginex86_64.hh)
 
 SET(HOO_SOURCE_FILES
         src/JIT.cpp
         src/Module.cpp
         src/Value.cpp
         src/Object.cpp
-        src/StringClass.cpp
-        src/CharacterClass.cpp
+        src/String.cpp
+        src/Character.cpp
         src/Method.cpp
         src/TypeSpec.cpp
         src/JITException.cpp
