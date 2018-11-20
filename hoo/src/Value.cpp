@@ -11,7 +11,7 @@ namespace hoo {
     const std::string TYPENAME_BYTE = "hoo.byte";
 
     ValueType hoo::Value::GetType() const {
-        const int type = this->which();
+        const int type = this->_value.which();
         switch (type) {
             case 0:
                 return VALUE_BYTE;
@@ -31,41 +31,41 @@ namespace hoo {
     }
 
     Integer hoo::Value::GetInteger() const {
-        return boost::get<Integer>(*this);
+        return boost::get<Integer>(this->_value);
     }
 
     Character hoo::Value::GetCharacter() const {
-        auto value = boost::get<Character>(*this);
+        auto value = boost::get<Character>(this->_value);
         return value;
     }
 
     String hoo::Value::GetString() const {
-        auto value = boost::get<String>(*this);
+        auto value = boost::get<String>(this->_value);
         return value;
     }
 
     Boolean hoo::Value::GetBoolean() const {
-        auto value = boost::get<Boolean>(*this);
+        auto value = boost::get<Boolean>(this->_value);
         return value;
     }
 
     Double Value::GetDouble() const {
-        auto value = boost::get<Double>(*this);
+        auto value = boost::get<Double>(this->_value);
         return value;
     }
 
     Byte Value::GetByte() const {
-        auto value = boost::get<Byte>(*this);
+        auto value = boost::get<Byte>(this->_value);
         return value;
     }
 
     Object *Value::GetObject() const {
-        auto value = boost::get<Object*>(*this);
+        auto value = boost::get<Object*>(this->_value);
         return value;
     }
 
     const std::string &hoo::Value::GetTypeName() const {
-        const int type = this->which();
+        const int type = this->_value.which();
         switch (type) {
             case 0:
                 return TYPENAME_BYTE;
@@ -91,12 +91,60 @@ namespace hoo {
         }
     }
 
-    Value::Value(const Value &value) {
-        this->operator=(value);
+    Value::Value(const Value &value):
+            _value(this->_value) {
     }
 
     Value &Value::operator=(const Value &value) {
-        this->operator=(value);
-        return *this;
+        this->_value = value._value;
+    }
+
+    Value::Value(Byte value): _value(value) {
+    }
+
+    Value::Value(Boolean value): _value(value) {
+    }
+
+    Value::Value(Integer integer): _value(integer) {
+    }
+
+    Value::Value(Character value): _value(value) {
+    }
+
+    Value::Value(String value): _value(value) {
+    }
+
+    Value::Value(Double value): _value(value) {
+    }
+
+    Value::Value(Object *value): _value(value) {
+    }
+
+    Value Value::MakeByte(Byte value) {
+        return Value((Byte) value);
+    }
+
+    Value Value::MakeBoolean(Boolean value) {
+        return Value((Boolean) value);
+    }
+
+    Value Value::MakeInteger(Integer value) {
+        return Value((Integer) value);
+    }
+
+    Value Value::MakeCharacter(Character value) {
+        return Value((Character) value);
+    }
+
+    Value Value::MakeString(String value) {
+        return Value((String) value);
+    }
+
+    Value Value::MakeDouble(Double value) {
+        return Value((Double) value);
+    }
+
+    Value Value::MakeObject(Object *value) {
+        return Value(value);
     }
 }

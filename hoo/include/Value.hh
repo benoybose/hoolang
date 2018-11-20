@@ -4,6 +4,7 @@
 #include "HooTypes.hh"
 #include "Object.hh"
 #include "String.hh"
+#include "Character.hh"
 
 #include <boost/variant.hpp>
 #include <memory>
@@ -15,20 +16,62 @@ namespace hoo {
     extern const std::string TYPENAME_BYTE; // = "hoo.byte";
 
     typedef enum {
-        VALUE_OBJECT,
-        VALUE_INTEGER,
+        VALUE_BYTE,
         VALUE_BOOLEAN,
+        VALUE_INTEGER,
+        VALUE_OBJECT,
         VALUE_DOUBLE,
-        VALUE_BYTE
+        VALUE_CHARACTER,
+        VALUE_STRING
     } ValueType;
 
-    class Value : public boost::variant<Byte, Boolean, Integer, Character, String, Double, Object *> {
+    class Value {
+    private:
+        typedef boost::variant<Byte,
+                Boolean,
+                Integer,
+                Character,
+                String,
+                Double,
+                Object *> ValueVariant;
+
+    private:
+        ValueVariant _value;
 
     public:
-        Value(const Value& value);
+        Value(const Value &value);
+
+        Value(Byte value);
+
+        Value(Boolean value);
+
+        Value(Integer integer);
+
+        Value(Character value);
+
+        Value(String value);
+
+        Value(Double value);
+
+        Value(Object *value);
 
     public:
-        Value& operator = (const Value& value);
+        static Value MakeByte(Byte value);
+
+        static Value MakeBoolean(Boolean value);
+
+        static Value MakeInteger(Integer value);
+
+        static Value MakeCharacter(Character value);
+
+        static Value MakeString(String value);
+
+        static Value MakeDouble(Double value);
+
+        static Value MakeObject(Object *value);
+
+    public:
+        Value &operator=(const Value &value);
 
     public:
         ValueType GetType() const;
