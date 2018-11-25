@@ -62,7 +62,10 @@ namespace hoo {
 
         static Value MakeInteger(Integer value);
 
-        static Value MakeCharacter(Character value);
+        static Value MakeCharacter(uint8_t byte0 = 0x0,
+                uint8_t byte1 = 0x0,
+                uint8_t byte2 = 0x0,
+                uint8_t byte3 = 0x0);
 
         static Value MakeString(String value);
 

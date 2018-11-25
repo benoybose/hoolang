@@ -20,9 +20,9 @@ namespace hoo {
             case 2:
                 return VALUE_INTEGER;
             case 3:
-                return VALUE_OBJECT;
+                return VALUE_CHARACTER;
             case 4:
-                return VALUE_OBJECT;
+                return VALUE_STRING;
             case 5:
                 return VALUE_DOUBLE;
             case 6:
@@ -132,8 +132,9 @@ namespace hoo {
         return Value((Integer) value);
     }
 
-    Value Value::MakeCharacter(Character value) {
-        return Value((Character) value);
+    Value Value::MakeCharacter(uint8_t byte0, uint8_t byte1, uint8_t byte2, uint8_t byte3) {
+        Character value = Character::MakeCharacter(byte0, byte1, byte2, byte3);
+        return Value(value);
     }
 
     Value Value::MakeString(String value) {
