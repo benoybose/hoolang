@@ -25,7 +25,7 @@ MESSAGE("Boost Include Directories: ${Boost_INCLUDE_DIRS}")
 CONFIGURE_FILE(HooConfig.hh.in ${PROJECT_SOURCE_DIR}/include/HooConfig.hh)
 SET(HOO_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include)
 
-INCLUDE_DIRECTORIES(${HOO_INCLUDE_DIRS} ${CPPUNIT_INCLUDE_DIR}, ${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${HOO_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 SET(HOO_HEADER_FILES
         include/HooConfig.hh
         include/HooTypes.hh
