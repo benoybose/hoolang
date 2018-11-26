@@ -3,12 +3,12 @@ pipelines:
   default:
     - step:
         script:
-          - sudo apt install cmake
-          - sudo apt install bison
-          - sudo apt install flex
-          - sudo apt install libboost-dev
-          - sudo apt install libboost-regex-dev
-          - sudo apt install libboost-filesystem-dev
+          - apt install -y cmake
+          - apt install -y bison
+          - apt install -y flex
+          - apt install -y libboost-dev
+          - apt install -y libboost-regex-dev
+          - apt install -y libboost-filesystem-dev
           - cmake -G "Unix Makefiles"
           - make all
           - ctest
