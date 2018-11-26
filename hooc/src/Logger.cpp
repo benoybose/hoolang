@@ -29,8 +29,8 @@
 #include <sstream>
 #include <mutex>
 
-#include <Poco/DateTime.h>
-#include <Poco/DateTimeFormatter.h>
+#include <boost/format.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 
 std::ofstream* hooc::Logger::_stream = nullptr;
@@ -54,8 +54,8 @@ namespace hooc {
     void Logger::Log(LogLevel logLevel, std::string message) {
         std::lock_guard<std::mutex> guard(hooc::Logger::_write_lock);
         std::ostringstream text;
-        std::string currentTime = Poco::DateTimeFormatter::format(Poco::DateTime(), "%Y-%m-%d %h:%M:%S");
-        text    << "[" << currentTime << "] ["
+        auto local_time = boost::posix_time::second_clock::local_time();
+        text    << "[" << local_time << "] ["
                 << hooc::Logger::GetLogLevelName(logLevel)
                 << "] " << message << std::endl;
         text.flush();

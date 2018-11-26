@@ -60,7 +60,7 @@ SET(hooc_source_files src/Node.cpp
         src/Module.cpp)
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
-SET(hooc_link_libraries hooc ${Poco_Foundation_LIBRARY} hoo)
+SET(hooc_link_libraries hooc ${Poco_Foundation_LIBRARY} hoo boost_regex boost_filesystem boost_system)
 
 ADD_EXECUTABLE(hc src/hcmain.cpp)
 TARGET_LINK_LIBRARIES(hc ${hooc_link_libraries})

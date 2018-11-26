@@ -26,9 +26,9 @@
 #include "StatementList.hh"
 
 #include <string>
-#include <Poco/RegularExpression.h>
-#include <Poco/Path.h>
 #include <exception>
+#include <boost/regex.hpp>
+#include <boost/filesystem.hpp>
 
 namespace hooc {
     const std::string NAMESPACE_GLOBAL = "global";
@@ -57,19 +57,30 @@ namespace hooc {
     }
 
     std::string Module::NormalizeName() {
-        const Poco::RegularExpression regExp("[a-zA-Z_][a-zA-Z0-9_]*");
-        std::string moduleName;
-        Poco::Path filePath(this->_fileName);
-        if(0 == regExp.extract(filePath.getBaseName(), moduleName)) {
-            return "";
+        const boost::filesystem::path path(this->_fileName);
+        const boost::regex regex("[a-zA-Z_][a-zA-Z0-9_]*");
+        const std::string file_name = path.filename().stem().string();
+
+        boost::match_results<std::string::const_iterator> what;
+        std::string::const_iterator start = file_name.begin();
+        std::string::const_iterator end = file_name.end();
+
+        if(boost::regex_search(start, end, what, regex, boost::match_default)) {
+            std::string match;
+            match.assign(what[0].first, what[0].second);
+            return match;
         } else {
-            return moduleName;
+            return "";
         }
     }
 
     bool Module::IsNamespaceValid(std::string nameSpace) {
-        const Poco::RegularExpression regExp("^([a-zA-Z_][a-zA-Z0-9_]*)([\\.]([a-zA-Z_][a-zA-Z0-9_]*))*$");
-        return regExp.match(nameSpace);
+        const boost::regex regex("^([a-zA-Z_][a-zA-Z0-9_]*)([\\.]([a-zA-Z_][a-zA-Z0-9_]*))*$");
+        if(boost::regex_match(nameSpace, regex)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     const std::list<hooc::ast::Statement>& Module::GetStatements() const {
