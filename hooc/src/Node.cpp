@@ -7,16 +7,12 @@
 #include <string>
 
 namespace hooc {
-//    Node::Node() {
-//        this->_nodeType = hooc::NodeType ::InvalidNode;
-//    }
-
     Node::Node(hooc::NodeType nodeType) {
         this->_nodeType = nodeType;
     }
 
     NodeType Node::GetNodeType() {
-        return this->GetNodeType();
+        return this->_nodeType;
     }
 
     std::string Node::GetNodeTypeName() {

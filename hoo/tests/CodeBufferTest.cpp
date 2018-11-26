@@ -1,4 +1,5 @@
 #define BOOST_TEST_MODULE Code Buffer Test
+
 #include "HooConfig.hh"
 #include "CodeBuffer.hh"
 

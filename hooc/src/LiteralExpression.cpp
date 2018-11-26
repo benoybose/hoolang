@@ -42,7 +42,7 @@ namespace hooc
                 break;
             }
             case LiteralType ::LITERAL_CHARACTER: {
-                this->_value = ValuePtr(new Value(Value::MakeCharacter(text[0], 0, 0, 0)));
+                this->_value = ValuePtr(new Value(Value::MakeCharacter(0, 0, 0, 0)));
                 break;
             }
             case LiteralType ::LITERAL_STRING: {
@@ -78,7 +78,7 @@ namespace hooc
     }
 
     String LiteralExpression::GetString() const {
-        auto value = (String) (this->_value.get()->GetObject());
+        auto value = this->_value->GetString();
         return value;
     }
 

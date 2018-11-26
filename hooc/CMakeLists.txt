@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.6)
 SET(CMAKE_LEGACY_CYGWIN_WIN32 0)
 SET (COMPILE_FLAGS "-m64")
 SET (LINK_FLAGS "-m64")
@@ -8,6 +8,8 @@ SET(CMAKE_CXX_STANDARD 11)
 INCLUDE(../cmake/Findcppunit.cmake)
 INCLUDE(../cmake/FindPoco.cmake)
 find_package(Poco)
+
+ENABLE_TESTING()
 
 INCLUDE_DIRECTORIES(
         ${CPPUNIT_INCLUDE_DIR}
@@ -66,9 +68,17 @@ TARGET_LINK_LIBRARIES(hooc ${hooc_link_libraries})
 
 ADD_EXECUTABLE(hooctest ${hooc_header_files} ${hooc_source_files}
         tests/hooctest.cpp
-        tests/ArithmeticStmtTest.cpp
-        tests/ArithmeticStmtTest.hh tests/ModuleNameTest.cpp tests/ModuleNameTest.hh tests/TestHelper.cpp tests/TestHelper.hh)
+        tests/ModuleNameTest.cpp
+        tests/ModuleNameTest.hh
+        tests/TestHelper.cpp
+        tests/TestHelper.hh)
 TARGET_LINK_LIBRARIES(hooctest ${hooc_link_libraries} ${CPPUNIT_LIBRARY})
 
 
 
+ADD_EXECUTABLE(hooctest_arithmetictest
+        ${hooc_header_files}
+        ${hooc_source_files}
+        tests/ArithmeticStmtTest.cpp)
+TARGET_LINK_LIBRARIES(hooctest_arithmetictest ${hooc_link_libraries})
+ADD_TEST(NAME test_arithmeticstmt COMMAND hooctest_arithmetictest)

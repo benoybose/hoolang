@@ -1,4 +1,5 @@
 #define BOOST_TEST_MODULE Type Test
+
 #include "HooTypes.hh"
 #include "String.hh"
 #include "Character.hh"

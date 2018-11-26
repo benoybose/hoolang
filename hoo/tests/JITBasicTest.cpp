@@ -1,4 +1,5 @@
 #define BOOST_TEST_MODULE JIT Basic Test
+
 #include "JIT.hh"
 #include "JITException.hh"
 

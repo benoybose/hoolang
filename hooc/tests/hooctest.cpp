@@ -9,7 +9,6 @@ using namespace CppUnit;
 
 int main(int argc, char** argv) {
     TextUi::TestRunner runner;
-    runner.addTest(ArithmeticStmtTest::suite());
     runner.addTest(ModuleNameTest::suite());
     runner.run("", false, true, false);
 }

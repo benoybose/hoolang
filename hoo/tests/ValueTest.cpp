@@ -1,4 +1,5 @@
 #define BOOST_TEST_MODULE Value Test
+
 #include <boost/test/included/unit_test.hpp>
 #include "Value.hh"
 using namespace hoo;
