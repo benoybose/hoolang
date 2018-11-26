@@ -2,7 +2,13 @@ image: gcc:6.1
 pipelines:
   default:
     - step:
-        script:            
-          - ./configure
-          - make
-          - make test
+        script:
+          - sudo apt install cmake
+          - sudo apt install bison
+          - sudo apt install flex
+          - sudo apt install libboost-dev
+          - sudo apt install libboost-regex-dev
+          - sudo apt install libboost-filesystem-dev
+          - cmake -G "Unix Makefiles"
+          - make all
+          - ctest
