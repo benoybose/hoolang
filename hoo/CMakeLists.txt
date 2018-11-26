@@ -5,8 +5,6 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 SET (COMPILE_FLAGS "-m64")
 SET (LINK_FLAGS "-m64")
 
-ENABLE_TESTING()
-
 PROJECT(hoo CXX)
 
 MATH(EXPR HOO_ARCH "${CMAKE_SIZEOF_VOID_P} * 8")
@@ -88,8 +86,3 @@ ADD_EXECUTABLE(hootest_codebuffer tests/CodeBufferTest.cpp)
 TARGET_LINK_LIBRARIES(hootest_codebuffer hoo)
 SET_PROPERTY(TARGET hootest_codebuffer PROPERTY CXX_STANDARD 11)
 
-ADD_TEST(NAME test_type COMMAND hootest_type)
-ADD_TEST(NAME test_value COMMAND hootest_value)
-ADD_TEST(NAME test_jitbasic COMMAND hootest_jitbasic)
-ADD_TEST(NAME test_methodbasic COMMAND hootest_methodbasic)
-ADD_TEST(NAME test_codebuffer COMMAND hootest_codebuffer)

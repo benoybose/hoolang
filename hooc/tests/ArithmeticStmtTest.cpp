@@ -1,11 +1,9 @@
 #define BOOST_TEST_MODULE Arithmetic Statement Test
 
-#include "ArithmeticStmtTest.hh"
 #include "ParserDriver.hh"
 #include "StatementList.hh"
 #include "ExpressionStatement.hh"
 #include "LiteralExpression.hh"
-#include "TestHelper.hh"
 
 #include <boost/test/included/unit_test.hpp>
 

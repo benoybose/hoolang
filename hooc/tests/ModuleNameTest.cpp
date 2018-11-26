@@ -1,48 +1,29 @@
-//
-// Created by COMP on 23-06-2018.
-//
+#define BOOST_TEST_MODULE Module Name Test
 
-#include "ModuleNameTest.hh"
 #include "ParserDriver.hh"
-
 #include <iostream>
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestCaller.h>
+#include <boost/test/included/unit_test.hpp>
 
-
-using namespace CppUnit;
-
-void ModuleNameTest::TestValidName() {
+BOOST_AUTO_TEST_CASE(Test001_ModuleNameTest_TestValidName) {
     hooc::ParserDriver driver(std::cin, "Console.hoo");
     const std::string& moduleName = driver.GetModule().GetModuleName();
     const std::string& nameSpace = driver.GetModule().GetNameSpaace();
-    CPPUNIT_ASSERT(0 == moduleName.compare("Console"));
-    CPPUNIT_ASSERT(0 == nameSpace.compare(hooc::NAMESPACE_GLOBAL));
+    BOOST_CHECK(0 == moduleName.compare("Console"));
+    BOOST_CHECK(0 == nameSpace.compare(hooc::NAMESPACE_GLOBAL));
 }
 
-void ModuleNameTest::TestPartiallyValidName() {
+BOOST_AUTO_TEST_CASE(Test002_ModuleNameTest_ParitiallyValidName) {
     hooc::ParserDriver driver(std::cin, "0001Console001.hoo");
     const std::string& moduleName = driver.GetModule().GetModuleName();
     const std::string& nameSpace = driver.GetModule().GetNameSpaace();
-    CPPUNIT_ASSERT(0 == moduleName.compare("Console001"));
-    CPPUNIT_ASSERT(0 == nameSpace.compare(hooc::NAMESPACE_GLOBAL));
+    BOOST_CHECK(0 == moduleName.compare("Console001"));
+    BOOST_CHECK(0 == nameSpace.compare(hooc::NAMESPACE_GLOBAL));
 }
 
-void ModuleNameTest::TestInvalidName() {
+BOOST_AUTO_TEST_CASE(Test003_ModuleNameTest_InvalidName) {
     hooc::ParserDriver driver(std::cin, "0001.hoo");
     const std::string& moduleName = driver.GetModule().GetModuleName();
     const std::string& nameSpace = driver.GetModule().GetNameSpaace();
-    CPPUNIT_ASSERT(true == moduleName.empty());
-    CPPUNIT_ASSERT(0 == nameSpace.compare(hooc::NAMESPACE_GLOBAL));
-}
-
-CppUnit::Test* ModuleNameTest::suite() {
-    TestSuite* theSuite = new TestSuite();
-    theSuite->addTest(new TestCaller<ModuleNameTest>("Valid module name",
-                                                     &ModuleNameTest::TestValidName));
-    theSuite->addTest(new TestCaller<ModuleNameTest>("Partially valid module name",
-                                                     &ModuleNameTest::TestPartiallyValidName));
-    theSuite->addTest(new TestCaller<ModuleNameTest>("Invalid module name",
-                                                     &ModuleNameTest::TestInvalidName));
-    return theSuite;
+    BOOST_CHECK(true == moduleName.empty());
+    BOOST_CHECK(0 == nameSpace.compare(hooc::NAMESPACE_GLOBAL));
 }
