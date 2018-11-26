@@ -1,8 +1,10 @@
-image: gcc:6.1
+image: ubuntu
 pipelines:
   default:
     - step:
         script:
+          - apt install -y build-essential
+          - apt install -y g++
           - apt install -y cmake
           - apt install -y bison
           - apt install -y flex
