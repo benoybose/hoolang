@@ -1,8 +1,6 @@
 nbproject/
-*hclexer.h
-*hcparser.h
-*hclexer.c
-*hcparser.c
+.vscode/
+build/
 hc
 hc.exe
 hoo.exe
@@ -12,14 +10,6 @@ hoo.exe
 .vs
 .idea
 *cmake-build-*
-hooc/include/FlexScanner.hh
-hooc/include/Parser.hh
-hooc/include/Parser.hpp
-hooc/src/FlexScanner.cpp
-hooc/src/location.hh
-hooc/src/position.hh
-hooc/src/stack.hh
-hooc/src/Parser.cpp
 hoo/include/HooConfig.hh
 
 

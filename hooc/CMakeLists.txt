@@ -8,25 +8,7 @@ SET(CMAKE_CXX_STANDARD 11)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/../hoo/include
-        ${PROJECT_SOURCE_DIR}/src)
-
-ADD_CUSTOM_COMMAND(
-        OUTPUT ${PROJECT_SOURCE_DIR}/src/FlexScanner.cpp ${PROJECT_SOURCE_DIR}/include/FlexScanner.hh
-        COMMAND flex
-        ARGS    --header-file=${PROJECT_SOURCE_DIR}/include/FlexScanner.hh
-                --outfile=${PROJECT_SOURCE_DIR}/src/FlexScanner.cpp
-                ${PROJECT_SOURCE_DIR}/grammar/Lexer.l
-        DEPENDS ${PROJECT_SOURCE_DIR}/src/Parser.cpp
-        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/Lexer.l
-        COMMENT "Invoking flex to generate lexer files")
-
-ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/src/Parser.cpp ${PROJECT_SOURCE_DIR}/include/Parser.hh
-        COMMAND bison
-        ARGS    --output=${PROJECT_SOURCE_DIR}/src/Parser.cpp
-                --defines=${PROJECT_SOURCE_DIR}/include/Parser.hh
-                ${PROJECT_SOURCE_DIR}/grammar/Parser.y
-        MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/Parser.y
-        COMMENT "Invoking bison to generate grammar files")
+        ${Boost_INCLUDE_DIRS})
 
 SET(hooc_header_files include/Node.hh
         include/Operator.hh
@@ -43,10 +25,6 @@ SET(hooc_source_files src/Node.cpp
         src/Operator.cpp
         src/Expression.cpp
         src/LiteralExpression.cpp
-        src/Parser.cpp
-        src/FlexScanner.cpp
-        include/ParserDriver.hh
-        src/ParserDriver.cpp
         src/Logger.cpp
         src/BinaryExpression.cpp
         src/Statement.cpp
@@ -56,9 +34,6 @@ SET(hooc_source_files src/Node.cpp
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
 SET(hooc_link_libraries hooc hoo boost_regex boost_filesystem boost_system)
-
-ADD_EXECUTABLE(hc src/hcmain.cpp)
-TARGET_LINK_LIBRARIES(hc ${hooc_link_libraries})
 
 ADD_EXECUTABLE(hooctest_arithmetictest tests/ArithmeticStmtTest.cpp)
 TARGET_LINK_LIBRARIES(hooctest_arithmetictest ${hooc_link_libraries})

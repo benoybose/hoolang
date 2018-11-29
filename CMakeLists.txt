@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.6)
 SET (CMAKE_LEGACY_CYGWIN_WIN32 0)
 SET (CMAKE_VERBOSE_MAKEFILE OFF)
 
+SET(Boost_USE_STATIC_LIBS ON)
+FIND_PACKAGE(Boost)
+MESSAGE("Boost Include Directories: ${Boost_INCLUDE_DIRS}")
+
 add_subdirectory(./hoo)
 add_subdirectory(./hooc)
 
