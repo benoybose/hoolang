@@ -152,7 +152,7 @@ namespace hoo {
             return _page_count;
         }
 
-        long CodeBuffer::GetPosition() const {
+        size_t CodeBuffer::GetPosition() const {
             return _position;
         }
 
@@ -161,7 +161,7 @@ namespace hoo {
 
         }
 
-        CodeBuffer::CodeLocation::CodeLocation(long start, size_t count, uint8_t *address) :
+        CodeBuffer::CodeLocation::CodeLocation(size_t start, size_t count, uint8_t *address) :
                 _start(start), _count(count), _address(address) {
         }
 
@@ -177,11 +177,11 @@ namespace hoo {
             return *(this);
         }
 
-        const long CodeBuffer::CodeLocation::GetStart() const {
+        const size_t CodeBuffer::CodeLocation::GetStart() const {
             return _start;
         }
 
-        const long CodeBuffer::CodeLocation::GetCount() const {
+        const size_t CodeBuffer::CodeLocation::GetCount() const {
             return _count;
         }
 

@@ -12,14 +12,14 @@ namespace hoo {
         public:
             class CodeLocation {
             private:
-                long _start;
+                size_t _start;
                 size_t _count;
                 uint8_t *_address;
 
             public:
                 CodeLocation();
 
-                CodeLocation(long start, size_t count, uint8_t *address);
+                CodeLocation(size_t start, size_t count, uint8_t *address);
 
                 CodeLocation(const CodeLocation &code_location);
 
@@ -27,9 +27,9 @@ namespace hoo {
                 CodeLocation &operator=(const CodeLocation &code_location);
 
             public:
-                const long GetStart() const;
+                const size_t GetStart() const;
 
-                const long GetCount() const;
+                const size_t GetCount() const;
 
                 const uint8_t *GetAddress() const;
 
@@ -52,7 +52,7 @@ namespace hoo {
 
             size_t GetPageCount() const;
 
-            long GetPosition() const;
+            size_t GetPosition() const;
 
             bool IsLocked() const;
 
@@ -61,7 +61,7 @@ namespace hoo {
             uint8_t *_buffer;
             size_t _size;
             size_t _page_count;
-            long int _position;
+            size_t _position;
             bool _locked;
 
         private:

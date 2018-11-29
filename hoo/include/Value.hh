@@ -10,6 +10,7 @@
 #include <memory>
 
 namespace hoo {
+    extern const std::string TYPENAME_INVALID; // = "";
     extern const std::string TYPENAME_INTEGER; // = "hoo.integer";
     extern const std::string TYPENAME_BOOLEAN; // = "hoo.boolean";
     extern const std::string TYPENAME_DOUBLE; // = "hoo.double";

@@ -5,6 +5,7 @@
 #include <boost/variant.hpp>
 
 namespace hoo {
+    const std::string TYPENAME_INVALID = "";
     const std::string TYPENAME_INTEGER = "hoo.integer";
     const std::string TYPENAME_BOOLEAN = "hoo.boolean";
     const std::string TYPENAME_DOUBLE = "hoo.double";
@@ -90,7 +91,7 @@ namespace hoo {
                     return this->_typename;
                 }
             }
-			default: return "";
+			default: return TYPENAME_INVALID;
         }
     }
 

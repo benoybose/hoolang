@@ -18,6 +18,9 @@ namespace hoo {
 
                 case HOO_ERROR_DUPLICATE_ITEM_NAME:
                     return std::string("Duplicate stack item.");
+
+                default:
+                    return std::string("");
             }
         }
 

@@ -13,6 +13,7 @@ namespace hoo {
 
             Module *module = new Module(module_type, moduleName, this);
             _modules[moduleName] = module;
+            return *module;
         }
 
         Module &JIT::GetModule(std::string moduleName) const {
