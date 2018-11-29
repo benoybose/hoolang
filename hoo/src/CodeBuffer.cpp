@@ -137,10 +137,10 @@ namespace hoo {
         bool CodeBuffer::Lock() {
 #ifdef HOO_WIN64
             DWORD old = 0;
-            VirtualProtect(this->_buffer, this->_size, PAGE_EXECUTE_READ, &old);
+            return VirtualProtect(this->_buffer, this->_size, PAGE_EXECUTE_READ, &old);
 #endif
 #ifdef HOO_LINUX64
-            mprotect(this->_buffer, this->_size, PROT_READ | PROT_EXEC);
+			return (0 == mprotect(this->_buffer, this->_size, PROT_READ | PROT_EXEC));
 #endif
         }
 

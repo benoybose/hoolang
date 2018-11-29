@@ -16,6 +16,7 @@ namespace hoo {
     extern const std::string TYPENAME_BYTE; // = "hoo.byte";
 
     typedef enum {
+		VALUE_INVALID,
         VALUE_BYTE,
         VALUE_BOOLEAN,
         VALUE_INTEGER,

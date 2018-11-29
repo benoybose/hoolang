@@ -27,6 +27,8 @@ namespace hoo {
                 return VALUE_DOUBLE;
             case 6:
                 return VALUE_OBJECT;
+			default:
+				return VALUE_INVALID;
         }
     }
 
@@ -88,6 +90,7 @@ namespace hoo {
                     return this->_typename;
                 }
             }
+			default: return "";
         }
     }
 
@@ -97,6 +100,7 @@ namespace hoo {
 
     Value &Value::operator=(const Value &value) {
         this->_value = value._value;
+		return *(this);
     }
 
     Value::Value(Byte value): _value(value) {

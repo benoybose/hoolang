@@ -6,7 +6,7 @@
 #include <boost/test/included/unit_test.hpp>
 #include <vector>
 #include <stdlib.h>
-#include <unistd.h>
+
 
 #ifdef HOO_WIN64
 #include <windows.h>
@@ -14,6 +14,7 @@
 
 #ifdef HOO_LINUX64
 #include <sys/mman.h>
+#include <unistd.h>
 #endif
 
 using namespace hoo::jit;
