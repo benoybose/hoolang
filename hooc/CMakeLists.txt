@@ -10,7 +10,12 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/../hoo/include
         ${Boost_INCLUDE_DIRS})
 
-SET(hooc_header_files include/Node.hh
+SET(hooc_header_files
+        include/TokenDescriptor.hh
+        include/Token.hh
+        include/LexerError.hh
+        include/Lexer.hh
+        include/Node.hh
         include/Operator.hh
         include/Expression.hh
         include/LiteralExpression.hh
@@ -21,7 +26,12 @@ SET(hooc_header_files include/Node.hh
         include/StatementList.hh
         include/Module.hh)
 
-SET(hooc_source_files src/Node.cpp
+SET(hooc_source_files
+        src/TokenDescriptor.cpp
+        src/Token.cpp
+        src/LexerError.cpp
+        src/Lexer.cpp
+        src/Node.cpp
         src/Operator.cpp
         src/Expression.cpp
         src/LiteralExpression.cpp
@@ -41,3 +51,6 @@ TARGET_LINK_LIBRARIES(hooctest_arithmetictest ${hooc_link_libraries})
 
 ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
 TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})
+
+ADD_EXECUTABLE(hooctest_lexertest tests/LexerTest.cpp)
+TARGET_LINK_LIBRARIES(hooctest_lexertest ${hooc_link_libraries})
