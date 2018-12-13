@@ -42,11 +42,14 @@ namespace hooc {
         Lexer(std::istringstream &stream);
 
     public:
-        void Add(int token_id, std::string pattern);
+        bool Add(int token_id, std::string pattern);
         bool Tokenize(LexerError &error, Token &token);
 
     public:
         const std::list<hooc::TokenDescriptor>& GetDescriptors() const;
+
+    private:
+        hooc::TokenDescriptor& FindMatch(std::string& text);
 
     };
 }

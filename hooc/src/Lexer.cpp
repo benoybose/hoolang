@@ -30,28 +30,10 @@ namespace hooc {
     }
 
     bool Lexer::Tokenize(LexerError &error, Token &token) {
-        bool found_match = false;
-        char character = 0;
-
         while(!this->_stream.eof()) {
-            if(!this->_text.empty()) {
-                const std::string& text = this->_text;
-                TokenDescriptor matched_token_descriptor;
-
-                std::for_each(this->_descriptors.begin(), this->_descriptors.end(), [text,&matched_token_descriptor, &found_match](const TokenDescriptor& desc) {
-                    if(boost::regex_match(text.begin(), text.end(), desc.GetPattern())) {
-                        if((-1 == matched_token_descriptor.GetTokenId()) ||
-                            (matched_token_descriptor.GetTokenId() > desc.GetTokenId())) {
-                            found_match = true;
-                            matched_token_descriptor = desc;
-                        }
-                    }
-                });
-            }
-
             char character = 0;
             this->_stream.get(character);
-            if(0 != character) {
+            if(0 == character) {
                 // todo: handle null character
             } else {
                 this->_text += character;
@@ -61,13 +43,33 @@ namespace hooc {
         return false;
     }
 
-    void Lexer::Add(int token_id, std::string pattern) {
+    bool Lexer::Add(int token_id, std::string pattern) {
         TokenDescriptor descriptor(token_id, boost::regex(pattern));
+        auto match = std::find_if(this->_descriptors.begin(), this->_descriptors.end(), [token_id, pattern](TokenDescriptor& desc)  {
+            return (token_id == desc.GetTokenId()) || (desc.GetPattern().str() == pattern);
+        });
+
+        if(match != this->_descriptors.end()) {
+            return false;
+        }
+
         this->_descriptors.push_back(descriptor);
     }
 
     const std::list<hooc::TokenDescriptor> &Lexer::GetDescriptors() const {
         return this->_descriptors;
+    }
+
+    hooc::TokenDescriptor &Lexer::FindMatch(std::string &text) {
+        for(auto iterator = this->_descriptors.begin();
+            iterator != this->_descriptors.end();
+            ++iterator) {
+
+            auto descriptor = *(iterator);
+            if(boost::regex_match(text.begin(), text.end(), descriptor.GetPattern())) {
+
+            }
+        }
     }
 }
 
