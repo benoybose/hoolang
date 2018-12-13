@@ -11,5 +11,20 @@ hoo.exe
 .idea
 *cmake-build-*
 hoo/include/HooConfig.hh
+hooc/grammar/.antlr
+dist/
+hooc/grammar/Hoo.g4
+hooc/grammar/Hoo.interp
+hooc/grammar/Hoo.tokens
+hooc/grammar/HooBaseListener.cpp
+hooc/grammar/HooBaseListener.h
+hooc/grammar/HooLexer.cpp
+hooc/grammar/HooLexer.h
+hooc/grammar/HooLexer.interp
+hooc/grammar/HooLexer.tokens
+hooc/grammar/HooListener.cpp
+hooc/grammar/HooListener.h
+hooc/grammar/HooParser.cpp
+hooc/grammar/HooParser.h
 
 

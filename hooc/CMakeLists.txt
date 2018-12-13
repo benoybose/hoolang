@@ -7,14 +7,24 @@ PROJECT(hooc CXX)
 SET(CMAKE_CXX_STANDARD 11)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include
-        ${PROJECT_SOURCE_DIR}/../hoo/include
+		${CMAKE_HOME_DIRECTORY}/libs/antlr4-cpp-runtime/runtime/src
+        ${CMAKE_HOME_DIRECTORY}/hoo/include
+        ${PROJECT_SOURCE_DIR}/grammar/
         ${Boost_INCLUDE_DIRS})
 
+ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
+        ${PROJECT_SOURCE_DIR}/grammar/HooParser.cpp
+        ${PROJECT_SOURCE_DIR}/grammar/HooLexer.h
+        ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
+        COMMAND ${Java_JAVA_EXECUTABLE}
+        ARGS    -jar ${CMAKE_HOME_DIRECTORY}/tools/antlr4/antlr-4.7.1-complete.jar
+                ${PROJECT_SOURCE_DIR}/grammar/Hoo.g4
+                -o ${PROJECT_SOURCE_DIR}/grammar/
+        COMMENT "Invoking ANTLR4")
+
 SET(hooc_header_files
-        include/TokenDescriptor.hh
-        include/Token.hh
-        include/LexerError.hh
-        include/Lexer.hh
+        ${PROJECT_SOURCE_DIR}/grammar/HooLexer.h
+        ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
         include/Node.hh
         include/Operator.hh
         include/Expression.hh
@@ -27,10 +37,8 @@ SET(hooc_header_files
         include/Module.hh)
 
 SET(hooc_source_files
-        src/TokenDescriptor.cpp
-        src/Token.cpp
-        src/LexerError.cpp
-        src/Lexer.cpp
+        ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
+        ${PROJECT_SOURCE_DIR}/grammar/HooParser.cpp
         src/Node.cpp
         src/Operator.cpp
         src/Expression.cpp
@@ -41,6 +49,7 @@ SET(hooc_source_files
         src/ExpressionStatement.cpp
         src/StatementList.cpp
         src/Module.cpp)
+
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
 SET(hooc_link_libraries hooc hoo boost_regex boost_filesystem boost_system)
