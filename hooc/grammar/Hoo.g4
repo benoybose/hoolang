@@ -34,7 +34,7 @@ options {
 
 primaryExpression
     :   Identifier
-    |   Constant
+    |   constantExpression
     |   StringLiteral+
     |   '(' expression ')'
     ;
@@ -138,7 +138,6 @@ conditionalExpression
 assignmentExpression
     :   conditionalExpression
     |   unaryExpression assignmentOperator assignmentExpression
-    |   DigitSequence // for
     ;
 
 assignmentOperator
@@ -151,39 +150,18 @@ expression
     ;
 
 constantExpression
-    :   conditionalExpression
+    :   Constant
     ;
 
-declaration
-    :   declarationSpecifiers initDeclaratorList ';'
-	| 	declarationSpecifiers ';'
-    ;
-
-declarationSpecifiers
-    :   declarationSpecifier+
-    ;
-
-declarationSpecifier
-    :   typeSpecifier
-    ;
-
-initDeclaratorList
-    :   initDeclarator
-    |   initDeclaratorList ',' initDeclarator
-    ;
-
-initDeclarator
-    :   declarator
-    |   declarator '=' initializer
-    ;
-
-typeSpecifier
-    :   typeName
-    ;
-
-specifierQualifierList
-    :   typeSpecifier specifierQualifierList?
-    ;
+//initDeclaratorList
+//    :   initDeclarator
+//    |   initDeclaratorList ',' initDeclarator
+//    ;
+//
+//initDeclarator
+//    :   declarator
+//    |   declarator '=' initializer
+//    ;
 
 enumSpecifier
     :   'enum' Identifier '{' enumeratorList '}'
@@ -204,31 +182,31 @@ enumerationConstant
     :   Identifier
     ;
 
-declarator
-    :   directDeclarator
-    ;
-
-directDeclarator
-    :   Identifier
-    |   '(' declarator ')'
-    |   directDeclarator '(' parameterTypeList ')'
-    |   directDeclarator '(' identifierList? ')'
-    |   Identifier ':' DigitSequence  // bit field
-    ;
-
-parameterTypeList
-    :   parameterList
-    |   parameterList ',' '...'
-    ;
-
-parameterList
-    :   parameterDeclaration
-    |   parameterList ',' parameterDeclaration
-    ;
-
-parameterDeclaration
-    :   declarationSpecifiers declarator
-    ;
+//declarator
+//    :   directDeclarator
+//    ;
+//
+//directDeclarator
+//    :   Identifier
+//    |   '(' declarator ')'
+//    |   directDeclarator '(' parameterTypeList ')'
+//    |   directDeclarator '(' identifierList? ')'
+//    |   Identifier ':' DigitSequence  // bit field
+//    ;
+//
+//parameterTypeList
+//    :   parameterList
+//    |   parameterList ',' '...'
+//    ;
+//
+//parameterList
+//    :   parameterDeclaration
+//    |   parameterList ',' parameterDeclaration
+//    ;
+//
+//parameterDeclaration
+//    :   typeName Identifier
+//    ;
 
 identifierList
     :   Identifier
@@ -274,8 +252,7 @@ statement
     ;
 
 labeledStatement
-    :   Identifier ':' statement
-    |   'case' constantExpression ':' statement
+    :   'case' constantExpression ':' statement
     |   'default' ':' statement
     ;
 
@@ -290,7 +267,7 @@ blockItemList
 
 blockItem
     :   statement
-    |   declaration
+//    |   declaration
     ;
 
 expressionStatement
@@ -305,18 +282,18 @@ selectionStatement
 iterationStatement
     :   While '(' expression ')' statement
     |   Do statement While '(' expression ')' ';'
-    |   For '(' forCondition ')' statement
+//    |   For '(' forCondition ')' statement
     ;
 
-forCondition
-	:   forDeclaration ';' forExpression? ';' forExpression?
-	|   expression? ';' forExpression? ';' forExpression?
-	;
-
-forDeclaration
-    :   declarationSpecifiers initDeclaratorList
-	| 	declarationSpecifiers
-    ;
+//forCondition
+//	:   forDeclaration ';' forExpression? ';' forExpression?
+//	|   expression? ';' forExpression? ';' forExpression?
+//	;
+//
+//forDeclaration
+//    :   declarationSpecifiers initDeclaratorList
+//	| 	declarationSpecifiers
+//    ;
 
 forExpression
     :   assignmentExpression
@@ -330,29 +307,29 @@ jumpStatement
     |   'goto' unaryExpression ';' // GCC extension
     ;
 
-compilationUnit
-    :   translationUnit? EOF
-    ;
-
-translationUnit
-    :   externalDeclaration
-    |   translationUnit externalDeclaration
-    ;
-
-externalDeclaration
-    :   functionDefinition
-    |   declaration
-    |   ';' // stray ;
-    ;
-
-functionDefinition
-    :   declarationSpecifiers? declarator declarationList? compoundStatement
-    ;
-
-declarationList
-    :   declaration
-    |   declarationList declaration
-    ;
+//compilationUnit
+//    :   translationUnit? EOF
+//    ;
+//
+//translationUnit
+//    :   externalDeclaration
+//    |   translationUnit externalDeclaration
+//    ;
+//
+//externalDeclaration
+//    :   functionDefinition
+//    |   declaration
+//    |   ';' // stray ;
+//    ;
+//
+//functionDefinition
+//    :   declarationSpecifiers? declarator declarationList? compoundStatement
+//    ;
+//
+//declarationList
+//    :   declaration
+//    |   declarationList declaration
+//    ;
 
 Break : 'break';
 Case : 'case';
@@ -464,7 +441,6 @@ HexQuad
 Constant
     :   IntegerConstant
     |   FloatingConstant
-    //|   EnumerationConstant
     |   CharacterConstant
     ;
 
