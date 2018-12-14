@@ -47,8 +47,6 @@ postfixExpression
     |   postfixExpression '->' Identifier
     |   postfixExpression '++'
     |   postfixExpression '--'
-    |   '(' typeName ')' '{' initializerList '}'
-    |   '(' typeName ')' '{' initializerList ',' '}'
     ;
 
 argumentExpressionList
@@ -153,93 +151,8 @@ constantExpression
     :   Constant
     ;
 
-//initDeclaratorList
-//    :   initDeclarator
-//    |   initDeclaratorList ',' initDeclarator
-//    ;
-//
-//initDeclarator
-//    :   declarator
-//    |   declarator '=' initializer
-//    ;
-
-enumSpecifier
-    :   'enum' Identifier '{' enumeratorList '}'
-    |   'enum' Identifier '{' enumeratorList ',' '}'
-    ;
-
-enumeratorList
-    :   enumerator
-    |   enumeratorList ',' enumerator
-    ;
-
-enumerator
-    :   enumerationConstant
-    |   enumerationConstant '=' constantExpression
-    ;
-
-enumerationConstant
-    :   Identifier
-    ;
-
-//declarator
-//    :   directDeclarator
-//    ;
-//
-//directDeclarator
-//    :   Identifier
-//    |   '(' declarator ')'
-//    |   directDeclarator '(' parameterTypeList ')'
-//    |   directDeclarator '(' identifierList? ')'
-//    |   Identifier ':' DigitSequence  // bit field
-//    ;
-//
-//parameterTypeList
-//    :   parameterList
-//    |   parameterList ',' '...'
-//    ;
-//
-//parameterList
-//    :   parameterDeclaration
-//    |   parameterList ',' parameterDeclaration
-//    ;
-//
-//parameterDeclaration
-//    :   typeName Identifier
-//    ;
-
-identifierList
-    :   Identifier
-    |   identifierList ',' Identifier
-    ;
-
 typeName
     :   Identifier
-    ;
-
-initializer
-    :   assignmentExpression
-    |   '{' initializerList '}'
-    |   '{' initializerList ',' '}'
-    ;
-
-initializerList
-    :   designation? initializer
-    |   initializerList ',' designation? initializer
-    ;
-
-designation
-    :   designatorList '='
-    ;
-
-designatorList
-    :   designator
-    |   designatorList designator
-    ;
-
-designator
-    :   '[' constantExpression ']'
-    |   '.' Identifier
     ;
 
 statement
@@ -280,128 +193,15 @@ selectionStatement
     ;
 
 iterationStatement
-    :   While '(' expression ')' statement
-    |   Do statement While '(' expression ')' ';'
-//    |   For '(' forCondition ')' statement
-    ;
-
-//forCondition
-//	:   forDeclaration ';' forExpression? ';' forExpression?
-//	|   expression? ';' forExpression? ';' forExpression?
-//	;
-//
-//forDeclaration
-//    :   declarationSpecifiers initDeclaratorList
-//	| 	declarationSpecifiers
-//    ;
-
-forExpression
-    :   assignmentExpression
-    |   forExpression ',' assignmentExpression
+    :   'while' '(' expression ')' statement
+    |   'do' statement 'while' '(' expression ')' ';'
     ;
 
 jumpStatement
     :   'continue' ';'
     |   'break' ';'
     |   'return' expression? ';'
-    |   'goto' unaryExpression ';' // GCC extension
     ;
-
-//compilationUnit
-//    :   translationUnit? EOF
-//    ;
-//
-//translationUnit
-//    :   externalDeclaration
-//    |   translationUnit externalDeclaration
-//    ;
-//
-//externalDeclaration
-//    :   functionDefinition
-//    |   declaration
-//    |   ';' // stray ;
-//    ;
-//
-//functionDefinition
-//    :   declarationSpecifiers? declarator declarationList? compoundStatement
-//    ;
-//
-//declarationList
-//    :   declaration
-//    |   declarationList declaration
-//    ;
-
-Break : 'break';
-Case : 'case';
-Const : 'const';
-Continue : 'continue';
-Default : 'default';
-Do : 'do';
-Else : 'else';
-Enum : 'enum';
-For : 'for';
-If : 'if';
-Return : 'return';
-Short : 'short';
-Signed : 'signed';
-Sizeof : 'sizeof';
-Static : 'static';
-Switch : 'switch';
-While : 'while';
-
-
-LeftParen : '(';
-RightParen : ')';
-LeftBracket : '[';
-RightBracket : ']';
-LeftBrace : '{';
-RightBrace : '}';
-
-Less : '<';
-LessEqual : '<=';
-Greater : '>';
-GreaterEqual : '>=';
-LeftShift : '<<';
-RightShift : '>>';
-
-Plus : '+';
-PlusPlus : '++';
-Minus : '-';
-MinusMinus : '--';
-Star : '*';
-Div : '/';
-Mod : '%';
-
-And : '&';
-Or : '|';
-AndAnd : '&&';
-OrOr : '||';
-Caret : '^';
-Not : '!';
-Tilde : '~';
-
-Question : '?';
-Colon : ':';
-Semi : ';';
-Comma : ',';
-
-Assign : '=';
-// '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='
-StarAssign : '*=';
-DivAssign : '/=';
-ModAssign : '%=';
-PlusAssign : '+=';
-MinusAssign : '-=';
-LeftShiftAssign : '<<=';
-RightShiftAssign : '>>=';
-AndAssign : '&=';
-XorAssign : '^=';
-OrAssign : '|=';
-
-Equal : '==';
-NotEqual : '!=';
-Dot : '.';
-Ellipsis : '...';
 
 Identifier
     :   IdentifierNondigit
@@ -414,7 +214,6 @@ fragment
 IdentifierNondigit
     :   Nondigit
     |   UniversalCharacterName
-    //|   // other implementation-defined characters...
     ;
 
 fragment
