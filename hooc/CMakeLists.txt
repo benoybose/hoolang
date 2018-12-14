@@ -61,5 +61,3 @@ TARGET_LINK_LIBRARIES(hooctest_arithmetictest ${hooc_link_libraries})
 ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
 TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})
 
-ADD_EXECUTABLE(hooctest_lexertest tests/LexerTest.cpp)
-TARGET_LINK_LIBRARIES(hooctest_lexertest ${hooc_link_libraries})
