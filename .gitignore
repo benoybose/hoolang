@@ -13,7 +13,6 @@ hoo.exe
 hoo/include/HooConfig.hh
 hooc/grammar/.antlr
 dist/
-hooc/grammar/Hoo.g4
 hooc/grammar/Hoo.interp
 hooc/grammar/Hoo.tokens
 hooc/grammar/HooBaseListener.cpp
