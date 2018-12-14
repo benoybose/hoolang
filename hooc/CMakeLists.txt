@@ -51,6 +51,10 @@ SET(hooc_source_files
         src/Module.cpp)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
+SET_TARGET_PROPERTIES(hooc PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
+		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
+		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
 
 SET(hooc_link_libraries hooc hoo boost_regex boost_filesystem boost_system)
 

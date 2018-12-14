@@ -8,6 +8,8 @@ SET(Boost_USE_STATIC_LIBS ON)
 FIND_PACKAGE(Boost)
 MESSAGE("Boost Include Directories: ${Boost_INCLUDE_DIRS}")
 
+SET(HOO_DIST "${CMAKE_HOME_DIRECTORY}/dist")
+
 add_subdirectory(${CMAKE_HOME_DIRECTORY}/libs/antlr4-cpp-runtime)
 add_subdirectory(./hoo)
 add_subdirectory(./hooc)
