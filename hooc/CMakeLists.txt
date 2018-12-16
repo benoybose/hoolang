@@ -6,6 +6,8 @@ SET (LINK_FLAGS "-m64")
 PROJECT(hooc CXX)
 SET(CMAKE_CXX_STANDARD 11)
 
+LINK_DIRECTORIES(${HOO_DIST})
+
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include
 		${CMAKE_HOME_DIRECTORY}/libs/antlr4-cpp-runtime/runtime/src
         ${CMAKE_HOME_DIRECTORY}/hoo/include
@@ -35,7 +37,13 @@ SET(hooc_header_files
         include/Statement.hh
         include/ExpressionStatement.hh
         include/StatementList.hh
-        include/Module.hh)
+        include/Module.hh
+		grammar/HooLexer.h
+		grammar/HooParser.h
+		grammar/HooListener.h
+		grammar/HooBaseListener.h
+        include/Listener.hh
+		include/ParserDriver.hh)
 
 SET(hooc_source_files
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
@@ -49,7 +57,13 @@ SET(hooc_source_files
         src/Statement.cpp
         src/ExpressionStatement.cpp
         src/StatementList.cpp
-        src/Module.cpp)
+        src/Module.cpp
+		grammar/HooLexer.cpp
+		grammar/HooParser.cpp
+		grammar/HooListener.cpp
+		grammar/HooBaseListener.cpp
+		src/Listener.cpp
+		src/ParserDriver.cpp)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET_TARGET_PROPERTIES(hooc PROPERTIES
@@ -59,9 +73,8 @@ SET_TARGET_PROPERTIES(hooc PROPERTIES
 
 SET(hooc_link_libraries hooc hoo boost_regex boost_filesystem boost_system)
 
-ADD_EXECUTABLE(hooctest_arithmetictest tests/ArithmeticStmtTest.cpp)
-TARGET_LINK_LIBRARIES(hooctest_arithmetictest ${hooc_link_libraries})
-
+ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
+TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime)
 
 ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
 TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})

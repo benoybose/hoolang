@@ -16,48 +16,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "ParserDriver.hh"
+#include "Listener.hh"
+#include "antlr4-runtime.h"
+#include "HooLexer.h"
+#include "HooParser.h"
 
-grammar Hoo;
-import Terminals;
+using namespace hooc;
+using namespace antlr4;
+using namespace antlr4::tree;
 
-options {
-    language=Cpp;
+namespace hooc
+{
+    ParserDriver::ParserDriver(const std::string &source_code): _source_code(source_code) {
+        auto stream = new ANTLRInputStream("name");
+        auto lexer = new HooLexer(stream);
+        auto tokens = new CommonTokenStream(lexer);
+        auto parser = new HooParser(tokens);
+        auto tree = parser->primaryExpression();
+        auto walker = new ParseTreeWalker();
+        auto listener = new Listener();
+        walker->walk(listener, tree);
+    }
 }
-
-primaryExpression
-    :   Identifier
-    |   Constant
-    |   StringLiteral+
-    |   '(' expression ')'
-    ;
-
-binaryExpression
-    :   primaryExpression binaryOperator primaryExpression
-    |   binaryExpression binaryOperator primaryExpression
-    |   binaryExpression binaryOperator binaryExpression
-    |   '(' binaryExpression ')'
-    ;
-
-expression
-    :   primaryExpression
-    |   binaryExpression
-    ;
-
-binaryOperator
-    :   arithmeticOperator
-    |   relationalOperator
-    |   assignmentOperator
-    ;
-
-arithmeticOperator
-    : ('+' | '-' | '*' | '/' | '%' )
-    ;
-
-relationalOperator
-    : ( '==' | '!=' | '>' | '<' | '>=' | '<=' | '&&' | '||')
-    ;
-
-assignmentOperator
-    : ( '=' | '+=' | '-=' | '/=' | '*=' )
-    ;
-

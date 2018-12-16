@@ -16,48 +16,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#ifndef PARSERDRIVER_HH
+#define PARSERDRIVER_HH
 
-grammar Hoo;
-import Terminals;
+#include <string>
 
-options {
-    language=Cpp;
+namespace hooc {
+    class ParserDriver {
+    private:
+        std::string _source_code;
+    public:
+        ParserDriver(const std::string& source_code);
+    };
 }
 
-primaryExpression
-    :   Identifier
-    |   Constant
-    |   StringLiteral+
-    |   '(' expression ')'
-    ;
 
-binaryExpression
-    :   primaryExpression binaryOperator primaryExpression
-    |   binaryExpression binaryOperator primaryExpression
-    |   binaryExpression binaryOperator binaryExpression
-    |   '(' binaryExpression ')'
-    ;
-
-expression
-    :   primaryExpression
-    |   binaryExpression
-    ;
-
-binaryOperator
-    :   arithmeticOperator
-    |   relationalOperator
-    |   assignmentOperator
-    ;
-
-arithmeticOperator
-    : ('+' | '-' | '*' | '/' | '%' )
-    ;
-
-relationalOperator
-    : ( '==' | '!=' | '>' | '<' | '>=' | '<=' | '&&' | '||')
-    ;
-
-assignmentOperator
-    : ( '=' | '+=' | '-=' | '/=' | '*=' )
-    ;
-
+#endif //PROJECT_PARSERDRIVER_HH
