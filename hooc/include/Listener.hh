@@ -20,10 +20,19 @@
 #define LISTENER_HH
 
 #include "HooBaseListener.h"
+#include "Module.hh"
 
 namespace hooc
 {
     class Listener: public HooBaseListener {
+    private:
+        Module* _module;
+
+    public:
+        Listener(Module* module);
+
+    public:
+        const Module* GetModule();
     };
 }
 

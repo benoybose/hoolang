@@ -22,6 +22,13 @@
 
 namespace hooc
 {
+    Listener::Listener(Module* _module) : _module(_module) {
+
+    }
+
+    const Module *Listener::GetModule() {
+        return this->_module;
+    }
 }
 
 

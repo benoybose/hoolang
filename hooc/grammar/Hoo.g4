@@ -154,7 +154,7 @@ namespaceDeclaraion
     ;
 
 useSpecifier
-    :   'use' typeSepecifier ('as' Identifier) ';'
+    :   'use' Identifier ( '.' Identifier)* ('as' Identifier) ';'
     ;
 
 module

@@ -16,6 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <ParserDriver.hh>
+
 #include "ParserDriver.hh"
 #include "Listener.hh"
 #include "antlr4-runtime.h"
@@ -29,13 +31,54 @@ using namespace antlr4::tree;
 namespace hooc
 {
     ParserDriver::ParserDriver(const std::string &source_code): _source_code(source_code) {
-        auto stream = new ANTLRInputStream("name");
-        auto lexer = new HooLexer(stream);
-        auto tokens = new CommonTokenStream(lexer);
-        auto parser = new HooParser(tokens);
-        auto tree = parser->primaryExpression();
-        auto walker = new ParseTreeWalker();
-        auto listener = new Listener();
-        walker->walk(listener, tree);
+    }
+
+    bool ParserDriver::Compile(Module* module) {
+            ANTLRInputStream* stream = nullptr;
+            HooLexer* lexer = nullptr;
+            CommonTokenStream* tokens = nullptr;
+            HooParser* parser = nullptr;
+            ParseTree* tree = nullptr;
+            ParseTreeWalker* walker = nullptr;
+            Listener* listener = nullptr;
+             auto error = false;
+
+            try {
+                    stream = new ANTLRInputStream("name");
+                    lexer = new HooLexer(stream);
+                    tokens = new CommonTokenStream(lexer);
+                    parser = new HooParser(tokens);
+                    tree = parser->module();
+                    walker = new ParseTreeWalker();
+                    listener = new Listener(module);
+                    walker->walk(listener, tree);
+            } catch(const ParseCancellationException& ex) {
+                    // todo: handle error
+            }
+
+            if(nullptr != stream) {
+                    delete stream;
+            }
+
+            if(nullptr != lexer) {
+                    delete lexer;
+            }
+
+
+            if(nullptr != tokens) {
+                    delete tokens;
+            }
+
+            if(nullptr != parser) {
+                    delete parser;
+            }
+
+            if(nullptr != walker) {
+                    delete walker;
+            }
+
+            if(nullptr != listener) {
+                    delete listener;
+            }
     }
 }

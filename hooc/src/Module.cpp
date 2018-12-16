@@ -33,57 +33,24 @@
 namespace hooc {
     const std::string NAMESPACE_GLOBAL = "global";
 
-    Module::Module(std::string fileName, std::string nameSpace):
-            _fileName(fileName) {
-        if ((nameSpace.empty()) || (!IsNamespaceValid(nameSpace))) {
-            _nameSpace = NAMESPACE_GLOBAL;
-        } else {
-            _nameSpace = nameSpace;
-        }
-        this->_statementList = ast::StatementList(new hooc::StatementList());
-        this->_moduleName = this->NormalizeName();
+    UseSpecification::UseSpecification(const Namespace &_namespace, const std::string &name) : _namespace(
+            _namespace), _name(name) {
+
     }
 
-    void Module::Add(hooc::ast::Statement statement) {
-        this->_statementList->Add(statement);
+    const Namespace &UseSpecification::GetNamespace() const {
+        return _namespace;
     }
 
-    const std::string& Module::GetModuleName() const {
-        return this->_moduleName;
+    const std::string &UseSpecification::GetName() const {
+        return _name;
     }
 
-    const std::string& Module::GetNameSpaace() const {
-        return this->_nameSpace;
+    void UseSpecification::SetNamespace(const Namespace &_namespace) {
+        UseSpecification::_namespace = _namespace;
     }
 
-    std::string Module::NormalizeName() {
-        const boost::filesystem::path path(this->_fileName);
-        const boost::regex regex("[a-zA-Z_][a-zA-Z0-9_]*");
-        const std::string file_name = path.filename().stem().string();
-
-        boost::match_results<std::string::const_iterator> what;
-        std::string::const_iterator start = file_name.begin();
-        std::string::const_iterator end = file_name.end();
-
-        if(boost::regex_search(start, end, what, regex, boost::match_default)) {
-            std::string match;
-            match.assign(what[0].first, what[0].second);
-            return match;
-        } else {
-            return "";
-        }
-    }
-
-    bool Module::IsNamespaceValid(std::string nameSpace) {
-        const boost::regex regex("^([a-zA-Z_][a-zA-Z0-9_]*)([\\.]([a-zA-Z_][a-zA-Z0-9_]*))*$");
-        if(boost::regex_match(nameSpace, regex)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    const std::list<hooc::ast::Statement>& Module::GetStatements() const {
-        return this->_statementList->GetStatements();
+    void UseSpecification::SetName(const std::string &_name) {
+        UseSpecification::_name = _name;
     }
 }

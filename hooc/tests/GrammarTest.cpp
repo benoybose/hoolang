@@ -1,18 +1,12 @@
 #define BOOST_TEST_MODULE Arithmetic Statement Test
 
-#include "StatementList.hh"
-#include "ExpressionStatement.hh"
-#include "LiteralExpression.hh"
-#include "HooLexer.h"
-#include "HooParser.h"
-#include "Listener.hh"
+#include "ParserDriver.hh"
+#include "antlr4-runtime.h"
 
 #include <boost/test/included/unit_test.hpp>
 
 using namespace std;
 using namespace hooc;
-using namespace antlr4;
-using namespace antlr4::tree;
 
 BOOST_AUTO_TEST_CASE(GrammarTest) {
     const std::string source = "namespace test;\n"
@@ -30,4 +24,8 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
                                "\t\treturn a + b;\n"
                                "\t}\n"
                                "}";
+    ParserDriver driver(source);
+    auto module = new Module();
+    driver.Compile(module);
+
 }

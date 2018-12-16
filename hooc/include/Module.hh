@@ -34,30 +34,31 @@
 
 namespace hooc {
     extern const std::string NAMESPACE_GLOBAL;
-    class Module {
+
+    typedef std::list<std::string> Namespace;
+
+    class UseSpecification
+    {
     private:
-        std::string _fileName;
-        std::string _moduleName;
-        std::string _nameSpace;
-        ast::StatementList _statementList;
+        Namespace _namespace;
+        std::string _name;
 
     public:
-        Module(std::string fileName, std::string nameSpace = "");
+        UseSpecification(const Namespace &_namespace, const std::string &name);
 
-    public:
-        void Add(ast::Statement statement);
-        const std::string& GetModuleName() const;
-        const std::string& GetNameSpaace() const;
-        const std::list<hooc::ast::Statement>& GetStatements() const;
+        const Namespace &GetNamespace() const;
 
-    private:
-        std::string NormalizeName();
-        bool IsNamespaceValid(std::string nameSpace);
+        const std::string &GetName() const;
+
+        void SetNamespace(const Namespace &_namespace);
+
+        void SetName(const std::string &_name);
     };
 
-    namespace ast {
-        typedef std::shared_ptr<hooc::Module> Module;
-    }
+    class Module {
+    private:
+        std::list<std::string> _namespace;
+    };
 }
 
 #endif /* HCPROG_H */
