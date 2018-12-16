@@ -19,7 +19,7 @@
 #ifndef PARSERDRIVER_HH
 #define PARSERDRIVER_HH
 
-#include "Module.hh"
+#include "Unit.hh"
 
 #include <string>
 
@@ -31,7 +31,7 @@ namespace hooc {
         ParserDriver(const std::string& source_code);
 
     public:
-        bool Compile(Module* module);
+        bool Compile(Unit* unit);
     };
 }
 

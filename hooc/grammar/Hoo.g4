@@ -65,7 +65,7 @@ typeSepecifier
     ;
 
 declaration
-    :   Identifier (':' typeSepecifier (initializer)?)?
+    :   Identifier (':' typeSepecifier)? initializer?
     ;
 
 paramList
@@ -157,10 +157,13 @@ useSpecifier
     :   'use' Identifier ( '.' Identifier)* ('as' Identifier) ';'
     ;
 
-module
+unit
     :
         namespaceDeclaraion?
         useSpecifier*
         classDefinition
         EOF
+    ;
+
+Pound: '#'
     ;

@@ -9,7 +9,7 @@ using namespace std;
 using namespace hooc;
 
 BOOST_AUTO_TEST_CASE(GrammarTest) {
-    const std::string source = "namespace test;\n"
+    const std::string source = "#### namespace ### test;\n"
                                "\n"
                                "class Application\n"
                                "{\n"
@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
                                "\t}\n"
                                "}";
     ParserDriver driver(source);
-    auto module = new Module();
+    auto module = new Unit();
     driver.Compile(module);
 
 }

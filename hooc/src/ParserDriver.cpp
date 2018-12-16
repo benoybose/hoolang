@@ -30,30 +30,61 @@ using namespace antlr4::tree;
 
 namespace hooc
 {
+    class ErrorLister: public BaseErrorListener
+    {
+        void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
+                         const std::string &msg, std::exception_ptr e) override {
+
+        }
+
+        void reportAmbiguity(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex, bool exact,
+                             const antlrcpp::BitSet &ambigAlts, atn::ATNConfigSet *configs) override {
+
+        }
+
+        void reportAttemptingFullContext(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex,
+                                         const antlrcpp::BitSet &conflictingAlts, atn::ATNConfigSet *configs) override {
+
+        }
+
+        void reportContextSensitivity(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex,
+                                      size_t prediction, atn::ATNConfigSet *configs) override {
+
+        }
+
+    };
+
     ParserDriver::ParserDriver(const std::string &source_code): _source_code(source_code) {
     }
 
-    bool ParserDriver::Compile(Module* module) {
+    bool ParserDriver::Compile(Unit* unit) {
             ANTLRInputStream* stream = nullptr;
             HooLexer* lexer = nullptr;
             CommonTokenStream* tokens = nullptr;
             HooParser* parser = nullptr;
-            ParseTree* tree = nullptr;
-            ParseTreeWalker* walker = nullptr;
-            Listener* listener = nullptr;
-             auto error = false;
+            HooParser::UnitContext* tree = nullptr;
+            auto error = false;
 
             try {
-                    stream = new ANTLRInputStream("name");
+                    stream = new ANTLRInputStream(this->_source_code);
                     lexer = new HooLexer(stream);
                     tokens = new CommonTokenStream(lexer);
                     parser = new HooParser(tokens);
-                    tree = parser->module();
-                    walker = new ParseTreeWalker();
-                    listener = new Listener(module);
-                    walker->walk(listener, tree);
+                    parser->addErrorListener(new ErrorLister());
+                    auto errorHandler = std::shared_ptr<ANTLRErrorStrategy>(new DefaultErrorStrategy());
+                    parser->setErrorHandler( errorHandler );
+                    tree = parser->unit();
+
+                    if(nullptr == tree) {
+                        error = true;
+                    }
+
+                    if(nullptr != tree->exception) {
+                        error = true;
+                    }
+
             } catch(const ParseCancellationException& ex) {
-                    // todo: handle error
+                    error = true;
             }
 
             if(nullptr != stream) {
@@ -73,12 +104,6 @@ namespace hooc
                     delete parser;
             }
 
-            if(nullptr != walker) {
-                    delete walker;
-            }
-
-            if(nullptr != listener) {
-                    delete listener;
-            }
+            return (!error);
     }
 }

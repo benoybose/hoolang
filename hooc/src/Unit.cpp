@@ -17,49 +17,40 @@
  */
 
 /**
- * File: Module.hh
+ * File: Module.cpp
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 25, March 2018
  */
 
-#ifndef HCPROG_H
-#define HCPROG_H
-
+#include "Unit.hh"
 #include "StatementList.hh"
 
 #include <string>
-#include <memory>
-#include <list>
-
+#include <exception>
+#include <boost/regex.hpp>
+#include <boost/filesystem.hpp>
 
 namespace hooc {
-    extern const std::string NAMESPACE_GLOBAL;
+    const std::string NAMESPACE_GLOBAL = "global";
 
-    typedef std::list<std::string> Namespace;
+    UseSpecification::UseSpecification(const Namespace &_namespace, const std::string &name) : _namespace(
+            _namespace), _name(name) {
 
-    class UseSpecification
-    {
-    private:
-        Namespace _namespace;
-        std::string _name;
+    }
 
-    public:
-        UseSpecification(const Namespace &_namespace, const std::string &name);
+    const Namespace &UseSpecification::GetNamespace() const {
+        return _namespace;
+    }
 
-        const Namespace &GetNamespace() const;
+    const std::string &UseSpecification::GetName() const {
+        return _name;
+    }
 
-        const std::string &GetName() const;
+    void UseSpecification::SetNamespace(const Namespace &_namespace) {
+        UseSpecification::_namespace = _namespace;
+    }
 
-        void SetNamespace(const Namespace &_namespace);
-
-        void SetName(const std::string &_name);
-    };
-
-    class Module {
-    private:
-        std::list<std::string> _namespace;
-    };
+    void UseSpecification::SetName(const std::string &_name) {
+        UseSpecification::_name = _name;
+    }
 }
-
-#endif /* HCPROG_H */
-

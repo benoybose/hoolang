@@ -20,19 +20,133 @@
 #define LISTENER_HH
 
 #include "HooBaseListener.h"
-#include "Module.hh"
+#include "Unit.hh"
 
 namespace hooc
 {
     class Listener: public HooBaseListener {
     private:
-        Module* _module;
+        Unit* _module;
 
     public:
-        Listener(Module* module);
+        Listener(Unit* module);
 
     public:
-        const Module* GetModule();
+        void enterPrimaryExpression(HooParser::PrimaryExpressionContext *context) override;
+
+        void exitPrimaryExpression(HooParser::PrimaryExpressionContext *context) override;
+
+        void enterExpression(HooParser::ExpressionContext *context) override;
+
+        void exitExpression(HooParser::ExpressionContext *context) override;
+
+        void enterBinaryOperator(HooParser::BinaryOperatorContext *context) override;
+
+        void exitBinaryOperator(HooParser::BinaryOperatorContext *context) override;
+
+        void enterArithmeticOperator(HooParser::ArithmeticOperatorContext *context) override;
+
+        void exitArithmeticOperator(HooParser::ArithmeticOperatorContext *context) override;
+
+        void enterRelationalOperator(HooParser::RelationalOperatorContext *context) override;
+
+        void exitRelationalOperator(HooParser::RelationalOperatorContext *context) override;
+
+        void enterAssignmentOperator(HooParser::AssignmentOperatorContext *context) override;
+
+        void exitAssignmentOperator(HooParser::AssignmentOperatorContext *context) override;
+
+        void enterTypeSepecifier(HooParser::TypeSepecifierContext *context) override;
+
+        void exitTypeSepecifier(HooParser::TypeSepecifierContext *context) override;
+
+        void enterDeclaration(HooParser::DeclarationContext *context) override;
+
+        void exitDeclaration(HooParser::DeclarationContext *context) override;
+
+        void enterParamList(HooParser::ParamListContext *context) override;
+
+        void exitParamList(HooParser::ParamListContext *context) override;
+
+        void enterInitializer(HooParser::InitializerContext *context) override;
+
+        void exitInitializer(HooParser::InitializerContext *context) override;
+
+        void enterInvokeExpression(HooParser::InvokeExpressionContext *context) override;
+
+        void exitInvokeExpression(HooParser::InvokeExpressionContext *context) override;
+
+        void enterExpressionList(HooParser::ExpressionListContext *context) override;
+
+        void exitExpressionList(HooParser::ExpressionListContext *context) override;
+
+        void enterFunctionDefintion(HooParser::FunctionDefintionContext *context) override;
+
+        void exitFunctionDefintion(HooParser::FunctionDefintionContext *context) override;
+
+        void enterStatement(HooParser::StatementContext *context) override;
+
+        void exitStatement(HooParser::StatementContext *context) override;
+
+        void enterInvokeStatement(HooParser::InvokeStatementContext *context) override;
+
+        void exitInvokeStatement(HooParser::InvokeStatementContext *context) override;
+
+        void enterVariableDeclaraionStatement(HooParser::VariableDeclaraionStatementContext *context) override;
+
+        void exitVariableDeclaraionStatement(HooParser::VariableDeclaraionStatementContext *context) override;
+
+        void enterAssignmentStatement(HooParser::AssignmentStatementContext *context) override;
+
+        void exitAssignmentStatement(HooParser::AssignmentStatementContext *context) override;
+
+        void enterCompoundStatement(HooParser::CompoundStatementContext *context) override;
+
+        void exitCompoundStatement(HooParser::CompoundStatementContext *context) override;
+
+        void enterReturnStatement(HooParser::ReturnStatementContext *context) override;
+
+        void exitReturnStatement(HooParser::ReturnStatementContext *context) override;
+
+        void enterClassDefinition(HooParser::ClassDefinitionContext *context) override;
+
+        void exitClassDefinition(HooParser::ClassDefinitionContext *context) override;
+
+        void enterClassBody(HooParser::ClassBodyContext *context) override;
+
+        void exitClassBody(HooParser::ClassBodyContext *context) override;
+
+        void enterClassBodyItem(HooParser::ClassBodyItemContext *context) override;
+
+        void exitClassBodyItem(HooParser::ClassBodyItemContext *context) override;
+
+        void enterMethod(HooParser::MethodContext *context) override;
+
+        void exitMethod(HooParser::MethodContext *context) override;
+
+        void enterField(HooParser::FieldContext *context) override;
+
+        void exitField(HooParser::FieldContext *context) override;
+
+        void enterNamespaceDeclaraion(HooParser::NamespaceDeclaraionContext *context) override;
+
+        void exitNamespaceDeclaraion(HooParser::NamespaceDeclaraionContext *context) override;
+
+        void enterUseSpecifier(HooParser::UseSpecifierContext *context) override;
+
+        void exitUseSpecifier(HooParser::UseSpecifierContext *context) override;
+
+        void enterUnit(HooParser::UnitContext *context) override;
+
+        void exitUnit(HooParser::UnitContext *context) override;
+
+        void enterEveryRule(antlr4::ParserRuleContext *context) override;
+
+        void exitEveryRule(antlr4::ParserRuleContext *context) override;
+
+        void visitTerminal(antlr4::tree::TerminalNode *node) override;
+
+        void visitErrorNode(antlr4::tree::ErrorNode *node) override;
     };
 }
 
