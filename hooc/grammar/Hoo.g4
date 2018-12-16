@@ -18,6 +18,7 @@
 
 
 grammar Hoo;
+
 import Terminals;
 
 options {
@@ -28,19 +29,15 @@ primaryExpression
     :   Identifier
     |   Constant
     |   StringLiteral+
-    |   '(' expression ')'
-    ;
-
-binaryExpression
-    :   primaryExpression binaryOperator primaryExpression
-    |   binaryExpression binaryOperator primaryExpression
-    |   binaryExpression binaryOperator binaryExpression
-    |   '(' binaryExpression ')'
+    |   primaryExpression '.' Identifier
+    |   primaryExpression '[' Constant? ']'
     ;
 
 expression
     :   primaryExpression
-    |   binaryExpression
+    |   invokeExpression
+    |   expression binaryOperator expression
+    |   '(' expression ')'
     ;
 
 binaryOperator
@@ -61,3 +58,109 @@ assignmentOperator
     : ( '=' | '+=' | '-=' | '/=' | '*=' )
     ;
 
+typeSepecifier
+    :   Identifier
+    |   typeSepecifier '.' Identifier
+    |   typeSepecifier '[' (Constant)? ']'
+    ;
+
+declaration
+    :   Identifier (':' typeSepecifier (initializer)?)?
+    ;
+
+paramList
+    :   declaration
+    |   paramList ( ',' declaration )+
+    ;
+
+initializer
+    :   '=' expression
+    ;
+
+invokeExpression
+    : primaryExpression '(' expressionList? ')'
+    ;
+
+expressionList
+    :
+    expression ( ',' expression )*
+    ;
+
+
+functionDefintion
+    :   'func' ( ':' typeSepecifier )? '(' paramList? ')' Identifier statement
+    ;
+
+statement
+    :   ';'
+    |   compoundStatement
+    |   returnStatement
+    |   assignmentStatement
+    |   variableDeclaraionStatement
+    |   invokeStatement
+    ;
+
+invokeStatement
+    : invokeExpression ';'
+    ;
+
+variableDeclaraionStatement
+    :   'var' declaration ';'
+    ;
+
+assignmentStatement
+    : primaryExpression '=' expression
+    ;
+
+compoundStatement
+    : '{' statement* '}'
+    ;
+
+returnStatement
+    :   'return' expression
+    ;
+
+classDefinition
+    : 'class' Identifier ( '(' typeSepecifier+ ')' )? classBody
+    ;
+
+classBody
+    :
+        '{'
+            classBodyItem*
+        '}'
+    ;
+
+classBodyItem
+    : method
+    | field
+    ;
+
+method
+    : AccessSpecifier? functionDefintion
+    ;
+
+field
+    : AccessSpecifier? declaration
+    ;
+
+AccessSpecifier
+    : 'private' | 'public' | 'protected'
+    ;
+
+
+namespaceDeclaraion
+    :   'namespace' Identifier ( '.' Identifier)* ';'
+    ;
+
+useSpecifier
+    :   'use' typeSepecifier ('as' Identifier) ';'
+    ;
+
+module
+    :
+        namespaceDeclaraion?
+        useSpecifier*
+        classDefinition
+        EOF
+    ;
