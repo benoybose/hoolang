@@ -19,6 +19,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.h
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
 		MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/Hoo.g4
+		DEPENDS ${PROJECT_SOURCE_DIR}/grammar/Terminals.g4
         COMMAND ${Java_JAVA_EXECUTABLE}
         ARGS    -jar ${CMAKE_HOME_DIRECTORY}/tools/antlr4/antlr-4.7.1-complete.jar
                 ${PROJECT_SOURCE_DIR}/grammar/Hoo.g4
@@ -78,4 +79,3 @@ TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime)
 
 ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
 TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})
-

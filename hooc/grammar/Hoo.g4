@@ -44,6 +44,7 @@ binaryOperator
     :   arithmeticOperator
     |   relationalOperator
     |   assignmentOperator
+    |   bitwiseOperator
     ;
 
 arithmeticOperator
@@ -56,6 +57,10 @@ relationalOperator
 
 assignmentOperator
     : ( '=' | '+=' | '-=' | '/=' | '*=' )
+    ;
+
+bitwiseOperator
+    : ('|' | '&' | '^' | '~' | '<<' | '>>')
     ;
 
 typeSepecifier
@@ -165,5 +170,5 @@ unit
         EOF
     ;
 
-Pound: '#'
+ExtraSymbolCharacters: ( '#' | '@' | '$' | '`' | '?' )
     ;
