@@ -24,8 +24,7 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
                                "\t\treturn a + b;\n"
                                "\t}\n"
                                "}";
-    ParserDriver driver(source);
+    ParserDriver driver(source, "test.hoo");
     auto module = new Unit();
     driver.Compile(module);
-
 }

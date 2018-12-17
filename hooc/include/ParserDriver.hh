@@ -24,11 +24,29 @@
 #include <string>
 
 namespace hooc {
+    class SyntaxError
+    {
+    private:
+        size_t _lineno;
+        size_t _columnno;
+        const std::string& _message;
+
+    public:
+        SyntaxError(size_t lineno, size_t columnno, const std::string &message);
+
+    public:
+        int GetLineNumber() const;
+        int GetColumnnNumber() const;
+        const std::string &GetMessage() const;
+    };
+
     class ParserDriver {
     private:
         std::string _source_code;
+        std::string _file_path;
     public:
-        ParserDriver(const std::string& source_code);
+        ParserDriver(const std::string &source_code,
+                const std::string &file_path);
 
     public:
         bool Compile(Unit* unit);

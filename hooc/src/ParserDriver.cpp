@@ -30,11 +30,34 @@ using namespace antlr4::tree;
 
 namespace hooc
 {
+    SyntaxError::SyntaxError(size_t lineno, size_t columnno, const std::string &message):
+        _lineno(lineno),
+        _columnno(_columnno),
+        _message(message) {
+    }
+
+    int SyntaxError::GetLineNumber() const {
+        return this->_lineno;
+    }
+
+    int SyntaxError::GetColumnnNumber() const {
+        return this->_columnno;
+    }
+
+    const std::string &SyntaxError::GetMessage() const {
+        return this->_message;
+    }
+
     class ErrorLister: public BaseErrorListener
     {
+    private:
+        std::list<SyntaxError> _errors;
+
+    public:
         void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
                          const std::string &msg, std::exception_ptr e) override {
-
+            SyntaxError error(line, charPositionInLine, msg);
+            this->_errors.push_back(error);
         }
 
         void reportAmbiguity(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex, bool exact,
@@ -52,9 +75,14 @@ namespace hooc
 
         }
 
+        const std::list<SyntaxError> GetSyntaxErrors() const
+        {
+            return this->_errors;
+        }
     };
 
-    ParserDriver::ParserDriver(const std::string &source_code): _source_code(source_code) {
+    ParserDriver::ParserDriver(const std::string &source_code, const std::string &file_path) :
+        _source_code(source_code) {
     }
 
     bool ParserDriver::Compile(Unit* unit) {
@@ -64,13 +92,14 @@ namespace hooc
             HooParser* parser = nullptr;
             HooParser::UnitContext* tree = nullptr;
             auto error = false;
+            auto errorListener = new ErrorLister();
 
             try {
                     stream = new ANTLRInputStream(this->_source_code);
                     lexer = new HooLexer(stream);
                     tokens = new CommonTokenStream(lexer);
                     parser = new HooParser(tokens);
-                    parser->addErrorListener(new ErrorLister());
+                    parser->addErrorListener(errorListener);
                     auto errorHandler = std::shared_ptr<ANTLRErrorStrategy>(new DefaultErrorStrategy());
                     parser->setErrorHandler( errorHandler );
                     tree = parser->unit();
@@ -80,6 +109,10 @@ namespace hooc
                     }
 
                     if(nullptr != tree->exception) {
+                        error = true;
+                    }
+
+                    if(0 < errorListener->GetSyntaxErrors().size()) {
                         error = true;
                     }
 
