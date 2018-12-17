@@ -6,7 +6,7 @@ SET (LINK_FLAGS "-m64")
 PROJECT(hooc CXX)
 SET(CMAKE_CXX_STANDARD 11)
 
-LINK_DIRECTORIES(${HOO_DIST})
+LINK_DIRECTORIES(${HOO_DIST} ${Boost_LIBRARY_DIRS})
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include
 		${CMAKE_HOME_DIRECTORY}/libs/antlr4-cpp-runtime/runtime/src
@@ -71,7 +71,7 @@ SET_TARGET_PROPERTIES(hooc PROPERTIES
 		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
 		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
 
-SET(hooc_link_libraries hooc hoo boost_regex boost_filesystem boost_system)
+SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
 TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime)
