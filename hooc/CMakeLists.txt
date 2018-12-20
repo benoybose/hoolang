@@ -76,6 +76,10 @@ SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
 TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime)
+SET_TARGET_PROPERTIES(grammar_test PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
+		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
+		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
 
 ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
 TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})

@@ -29,7 +29,7 @@ namespace hooc {
     private:
         size_t _lineno;
         size_t _columnno;
-        const std::string& _message;
+        std::string _message;
 
     public:
         SyntaxError(size_t lineno, size_t columnno, const std::string &message);

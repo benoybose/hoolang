@@ -16,24 +16,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <ParserDriver.hh>
-
 #include "ParserDriver.hh"
 #include "Listener.hh"
 #include "antlr4-runtime.h"
 #include "HooLexer.h"
 #include "HooParser.h"
+#include "Logger.hh"
+
+#include <exception>
+#include <boost/log/trivial.hpp>
 
 using namespace hooc;
 using namespace antlr4;
 using namespace antlr4::tree;
 
-namespace hooc
-{
-    SyntaxError::SyntaxError(size_t lineno, size_t columnno, const std::string &message):
-        _lineno(lineno),
-        _columnno(_columnno),
-        _message(message) {
+namespace hooc {
+    SyntaxError::SyntaxError(size_t lineno, size_t columnno, const std::string &message) :
+            _lineno(lineno),
+            _columnno(columnno),
+            _message(message) {
     }
 
     int SyntaxError::GetLineNumber() const {
@@ -48,8 +49,7 @@ namespace hooc
         return this->_message;
     }
 
-    class ErrorLister: public BaseErrorListener
-    {
+    class ErrorLister : public BaseErrorListener {
     private:
         std::list<SyntaxError> _errors;
 
@@ -60,83 +60,81 @@ namespace hooc
             this->_errors.push_back(error);
         }
 
-        void reportAmbiguity(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex, bool exact,
-                             const antlrcpp::BitSet &ambigAlts, atn::ATNConfigSet *configs) override {
-
-        }
-
-        void reportAttemptingFullContext(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex,
-                                         const antlrcpp::BitSet &conflictingAlts, atn::ATNConfigSet *configs) override {
-
-        }
-
-        void reportContextSensitivity(Parser *recognizer, const dfa::DFA &dfa, size_t startIndex, size_t stopIndex,
-                                      size_t prediction, atn::ATNConfigSet *configs) override {
-
-        }
-
-        const std::list<SyntaxError> GetSyntaxErrors() const
-        {
+        const std::list<SyntaxError> &GetSyntaxErrors() const {
             return this->_errors;
         }
     };
 
     ParserDriver::ParserDriver(const std::string &source_code, const std::string &file_path) :
-        _source_code(source_code) {
+            _source_code(source_code) {
     }
 
-    bool ParserDriver::Compile(Unit* unit) {
-            ANTLRInputStream* stream = nullptr;
-            HooLexer* lexer = nullptr;
-            CommonTokenStream* tokens = nullptr;
-            HooParser* parser = nullptr;
-            HooParser::UnitContext* tree = nullptr;
-            auto error = false;
-            auto errorListener = new ErrorLister();
+    bool ParserDriver::Compile(Unit *unit) {
+        ANTLRInputStream *stream = nullptr;
+        HooLexer *lexer = nullptr;
+        CommonTokenStream *tokens = nullptr;
+        HooParser *parser = nullptr;
+        HooParser::UnitContext *tree = nullptr;
+        auto error = false;
+        auto errorListener = new ErrorLister();
 
-            try {
-                    stream = new ANTLRInputStream(this->_source_code);
-                    lexer = new HooLexer(stream);
-                    tokens = new CommonTokenStream(lexer);
-                    parser = new HooParser(tokens);
-                    parser->addErrorListener(errorListener);
-                    auto errorHandler = std::shared_ptr<ANTLRErrorStrategy>(new DefaultErrorStrategy());
-                    parser->setErrorHandler( errorHandler );
-                    tree = parser->unit();
+        try {
+            stream = new ANTLRInputStream(this->_source_code);
+            lexer = new HooLexer(stream);
+            tokens = new CommonTokenStream(lexer);
+            parser = new HooParser(tokens);
+            parser->addErrorListener(errorListener);
+            auto errorHandler = std::shared_ptr<ANTLRErrorStrategy>(new DefaultErrorStrategy());
+            parser->setErrorHandler(errorHandler);
+            tree = parser->unit();
 
-                    if(nullptr == tree) {
-                        error = true;
-                    }
-
-                    if(nullptr != tree->exception) {
-                        error = true;
-                    }
-
-                    if(0 < errorListener->GetSyntaxErrors().size()) {
-                        error = true;
-                    }
-
-            } catch(const ParseCancellationException& ex) {
-                    error = true;
+            if (nullptr == tree) {
+                throw std::runtime_error("Parsing failed because of unknown error");
             }
 
-            if(nullptr != stream) {
-                    delete stream;
+            if (0 < errorListener->GetSyntaxErrors().size()) {
+                auto errors = errorListener->GetSyntaxErrors();
+                std::ostringstream message;
+                for (auto iterator = errors.begin(); iterator != errors.end(); ++iterator) {
+                    auto error = *(iterator);
+                    message << "Error on line number " << error.GetLineNumber()
+                            << " at column " << error.GetColumnnNumber()
+                            << ". " << error.GetMessage()
+                            << std::endl;
+                }
+                throw std::runtime_error(message.str());
             }
 
-            if(nullptr != lexer) {
-                    delete lexer;
+            if (nullptr != tree->exception) {
+                throw std::current_exception();
             }
+        } catch (const std::exception &ex) {
+
+            Logger::Error(ex.what());
+            error = true;
+        }
+
+        if (nullptr != stream) {
+            delete stream;
+        }
+
+        if (nullptr != lexer) {
+            delete lexer;
+        }
 
 
-            if(nullptr != tokens) {
-                    delete tokens;
-            }
+        if (nullptr != tokens) {
+            delete tokens;
+        }
 
-            if(nullptr != parser) {
-                    delete parser;
-            }
+        if (nullptr != parser) {
+            delete parser;
+        }
 
-            return (!error);
+        if (nullptr != errorListener) {
+            delete errorListener;
+        }
+
+        return (!error);
     }
 }
