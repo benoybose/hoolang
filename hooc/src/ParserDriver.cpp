@@ -22,45 +22,30 @@
 #include "HooLexer.h"
 #include "HooParser.h"
 #include "Logger.hh"
+#include "CompilationError.hh"
 
 #include <exception>
 #include <boost/log/trivial.hpp>
+#include <ParserDriver.hh>
+
 
 using namespace hooc;
 using namespace antlr4;
 using namespace antlr4::tree;
 
 namespace hooc {
-    SyntaxError::SyntaxError(size_t lineno, size_t columnno, const std::string &message) :
-            _lineno(lineno),
-            _columnno(columnno),
-            _message(message) {
-    }
-
-    int SyntaxError::GetLineNumber() const {
-        return this->_lineno;
-    }
-
-    int SyntaxError::GetColumnnNumber() const {
-        return this->_columnno;
-    }
-
-    const std::string &SyntaxError::GetMessage() const {
-        return this->_message;
-    }
-
     class ErrorLister : public BaseErrorListener {
     private:
-        std::list<SyntaxError> _errors;
+        std::list<CompilationError> _errors;
 
     public:
         void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
                          const std::string &msg, std::exception_ptr e) override {
-            SyntaxError error(line, charPositionInLine, msg);
+            CompilationError error(line, charPositionInLine, msg);
             this->_errors.push_back(error);
         }
 
-        const std::list<SyntaxError> &GetSyntaxErrors() const {
+        const std::list<CompilationError> &GetSyntaxErrors() const {
             return this->_errors;
         }
     };
@@ -69,14 +54,14 @@ namespace hooc {
             _source_code(source_code) {
     }
 
-    bool ParserDriver::Compile(Unit *unit) {
+    Unit* ParserDriver::Compile(CompilationErrorList& errors) {
         ANTLRInputStream *stream = nullptr;
         HooLexer *lexer = nullptr;
         CommonTokenStream *tokens = nullptr;
         HooParser *parser = nullptr;
-        HooParser::UnitContext *tree = nullptr;
-        auto error = false;
+        HooParser::UnitContext *unitText = nullptr;
         auto errorListener = new ErrorLister();
+        Unit* unit = nullptr;
 
         try {
             stream = new ANTLRInputStream(this->_source_code);
@@ -86,9 +71,9 @@ namespace hooc {
             parser->addErrorListener(errorListener);
             auto errorHandler = std::shared_ptr<ANTLRErrorStrategy>(new DefaultErrorStrategy());
             parser->setErrorHandler(errorHandler);
-            tree = parser->unit();
+            unitText = parser->unit();
 
-            if (nullptr == tree) {
+            if (nullptr == unitText) {
                 throw std::runtime_error("Parsing failed because of unknown error");
             }
 
@@ -101,17 +86,26 @@ namespace hooc {
                             << " at column " << error.GetColumnnNumber()
                             << ". " << error.GetMessage()
                             << std::endl;
+
+                    errors.push_back(error);
                 }
                 throw std::runtime_error(message.str());
             }
 
-            if (nullptr != tree->exception) {
+            if (nullptr != unitText->exception) {
                 throw std::current_exception();
             }
-        } catch (const std::exception &ex) {
 
+            unit = new Unit();
+            Compile(unitText, unit, errors);
+
+        } catch (const std::exception &ex) {
             Logger::Error(ex.what());
-            error = true;
+            if(nullptr != unit) {
+                delete unit;
+            }
+            CompilationError error(-1, -1, ex.what());
+            errors.push_back(error);
         }
 
         if (nullptr != stream) {
@@ -121,7 +115,6 @@ namespace hooc {
         if (nullptr != lexer) {
             delete lexer;
         }
-
 
         if (nullptr != tokens) {
             delete tokens;
@@ -134,7 +127,13 @@ namespace hooc {
         if (nullptr != errorListener) {
             delete errorListener;
         }
+        return unit;
+    }
 
-        return (!error);
+    bool ParserDriver::Compile(HooParser::UnitContext *context,
+            Unit *unit,
+            CompilationErrorList& errors) {
+        bool success = true;
+        return success;
     }
 }

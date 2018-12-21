@@ -44,6 +44,7 @@ SET(hooc_header_files
 		grammar/HooListener.h
 		grammar/HooBaseListener.h
         include/Listener.hh
+		include/CompilationError.hh
 		include/ParserDriver.hh)
 
 SET(hooc_source_files
@@ -64,6 +65,7 @@ SET(hooc_source_files
 		grammar/HooListener.cpp
 		grammar/HooBaseListener.cpp
 		src/Listener.cpp
+		src/CompilationError.cpp
 		src/ParserDriver.cpp)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})

@@ -20,26 +20,14 @@
 #define PARSERDRIVER_HH
 
 #include "Unit.hh"
+#include "HooParser.h"
+#include "CompilationError.hh"
 
 #include <string>
+#include <list>
 
 namespace hooc {
-    class SyntaxError
-    {
-    private:
-        size_t _lineno;
-        size_t _columnno;
-        std::string _message;
-
-    public:
-        SyntaxError(size_t lineno, size_t columnno, const std::string &message);
-
-    public:
-        int GetLineNumber() const;
-        int GetColumnnNumber() const;
-        const std::string &GetMessage() const;
-    };
-
+    typedef std::list<CompilationError> CompilationErrorList;
     class ParserDriver {
     private:
         std::string _source_code;
@@ -49,7 +37,10 @@ namespace hooc {
                 const std::string &file_path);
 
     public:
-        bool Compile(Unit* unit);
+        Unit* Compile(CompilationErrorList& errors);
+
+    private:
+        bool Compile(HooParser::UnitContext *context, Unit *unit, CompilationErrorList& errors);
     };
 }
 
