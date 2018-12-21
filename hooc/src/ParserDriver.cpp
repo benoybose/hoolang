@@ -23,11 +23,10 @@
 #include "HooParser.h"
 #include "Logger.hh"
 #include "CompilationError.hh"
+#include "ParseContext.hh"
 
 #include <exception>
 #include <boost/log/trivial.hpp>
-#include <ParserDriver.hh>
-
 
 using namespace hooc;
 using namespace antlr4;
@@ -54,36 +53,25 @@ namespace hooc {
             _source_code(source_code) {
     }
 
-    Unit* ParserDriver::Compile(CompilationErrorList& errors) {
-        ANTLRInputStream *stream = nullptr;
-        HooLexer *lexer = nullptr;
-        CommonTokenStream *tokens = nullptr;
-        HooParser *parser = nullptr;
-        HooParser::UnitContext *unitText = nullptr;
-        auto errorListener = new ErrorLister();
-        Unit* unit = nullptr;
+    Unit *ParserDriver::Compile(CompilationErrorList &errors) {
+        Unit *unit = nullptr;
+        ParseContext parseContext(this->_source_code);
+        ErrorLister errorListener;
+        parseContext.AddErrorListener(&errorListener);
 
         try {
-            stream = new ANTLRInputStream(this->_source_code);
-            lexer = new HooLexer(stream);
-            tokens = new CommonTokenStream(lexer);
-            parser = new HooParser(tokens);
-            parser->addErrorListener(errorListener);
-            auto errorHandler = std::shared_ptr<ANTLRErrorStrategy>(new DefaultErrorStrategy());
-            parser->setErrorHandler(errorHandler);
-            unitText = parser->unit();
-
-            if (nullptr == unitText) {
-                throw std::runtime_error("Parsing failed because of unknown error");
+            auto unitContext = parseContext.GetUnitContext();
+            if (nullptr == unitContext) {
+                throw std::runtime_error("Parsing failed because of unknown error.");
             }
 
-            if (0 < errorListener->GetSyntaxErrors().size()) {
-                auto errors = errorListener->GetSyntaxErrors();
+            if (0 < errorListener.GetSyntaxErrors().size()) {
+                auto errors = errorListener.GetSyntaxErrors();
                 std::ostringstream message;
                 for (auto iterator = errors.begin(); iterator != errors.end(); ++iterator) {
                     auto error = *(iterator);
                     message << "Error on line number " << error.GetLineNumber()
-                            << " at column " << error.GetColumnnNumber()
+                            << " at column " << error.GetCharacterPosition()
                             << ". " << error.GetMessage()
                             << std::endl;
 
@@ -92,47 +80,27 @@ namespace hooc {
                 throw std::runtime_error(message.str());
             }
 
-            if (nullptr != unitText->exception) {
+            if (nullptr != unitContext->exception) {
                 throw std::current_exception();
             }
 
             unit = new Unit();
-            Compile(unitText, unit, errors);
+            Compile(unitContext, unit, errors);
 
         } catch (const std::exception &ex) {
             Logger::Error(ex.what());
-            if(nullptr != unit) {
+            if (nullptr != unit) {
                 delete unit;
             }
             CompilationError error(-1, -1, ex.what());
             errors.push_back(error);
         }
-
-        if (nullptr != stream) {
-            delete stream;
-        }
-
-        if (nullptr != lexer) {
-            delete lexer;
-        }
-
-        if (nullptr != tokens) {
-            delete tokens;
-        }
-
-        if (nullptr != parser) {
-            delete parser;
-        }
-
-        if (nullptr != errorListener) {
-            delete errorListener;
-        }
         return unit;
     }
 
-    bool ParserDriver::Compile(HooParser::UnitContext *context,
-            Unit *unit,
-            CompilationErrorList& errors) {
+    bool ParserDriver::Compile(UnitContext context,
+                               Unit *unit,
+                               CompilationErrorList &errors) {
         bool success = true;
         return success;
     }

@@ -45,7 +45,8 @@ SET(hooc_header_files
 		grammar/HooBaseListener.h
         include/Listener.hh
 		include/CompilationError.hh
-		include/ParserDriver.hh)
+		include/ParserDriver.hh
+		include/ParseContext.hh)
 
 SET(hooc_source_files
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
@@ -66,7 +67,8 @@ SET(hooc_source_files
 		grammar/HooBaseListener.cpp
 		src/Listener.cpp
 		src/CompilationError.cpp
-		src/ParserDriver.cpp)
+		src/ParserDriver.cpp
+		src/ParseContext.cpp)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET_TARGET_PROPERTIES(hooc PROPERTIES

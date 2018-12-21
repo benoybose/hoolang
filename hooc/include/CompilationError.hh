@@ -21,7 +21,7 @@ namespace hooc {
 
     public:
         int GetLineNumber() const;
-        int GetColumnnNumber() const;
+        int GetCharacterPosition() const;
         const std::string &GetMessage() const;
     };
 }

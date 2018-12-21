@@ -22,27 +22,29 @@
 #include "Unit.hh"
 #include "HooParser.h"
 #include "CompilationError.hh"
+#include "ParseContext.hh"
 
 #include <string>
 #include <list>
 
 namespace hooc {
     typedef std::list<CompilationError> CompilationErrorList;
+
     class ParserDriver {
     private:
         std::string _source_code;
         std::string _file_path;
     public:
         ParserDriver(const std::string &source_code,
-                const std::string &file_path);
+                     const std::string &file_path);
 
     public:
-        Unit* Compile(CompilationErrorList& errors);
+        Unit *Compile(CompilationErrorList &errors);
 
     private:
-        bool Compile(HooParser::UnitContext *context, Unit *unit, CompilationErrorList& errors);
+        bool Compile(UnitContext context,
+                     Unit *unit, CompilationErrorList &errors);
     };
 }
-
 
 #endif //PROJECT_PARSERDRIVER_HH

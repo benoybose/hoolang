@@ -15,7 +15,7 @@ namespace hooc {
         return this->_line_number;
     }
 
-    int CompilationError::GetColumnnNumber() const {
+    int CompilationError::GetCharacterPosition() const {
         return this->_character_position;
     }
 
