@@ -33,31 +33,9 @@
 
 
 namespace hooc {
-    extern const std::string NAMESPACE_GLOBAL;
-
-    typedef std::list<std::string> Namespace;
-
-    class UseSpecification
-    {
-    private:
-        Namespace _namespace;
-        std::string _name;
-
-    public:
-        UseSpecification(const Namespace &_namespace, const std::string &name);
-
-        const Namespace &GetNamespace() const;
-
-        const std::string &GetName() const;
-
-        void SetNamespace(const Namespace &_namespace);
-
-        void SetName(const std::string &_name);
-    };
-
     class Unit {
     private:
-        std::list<std::string> _namespace;
+        std::string _name;
     };
 }
 

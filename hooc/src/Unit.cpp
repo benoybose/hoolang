@@ -29,28 +29,9 @@
 #include <exception>
 #include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
+#include <Unit.hh>
+
 
 namespace hooc {
-    const std::string NAMESPACE_GLOBAL = "global";
 
-    UseSpecification::UseSpecification(const Namespace &_namespace, const std::string &name) : _namespace(
-            _namespace), _name(name) {
-
-    }
-
-    const Namespace &UseSpecification::GetNamespace() const {
-        return _namespace;
-    }
-
-    const std::string &UseSpecification::GetName() const {
-        return _name;
-    }
-
-    void UseSpecification::SetNamespace(const Namespace &_namespace) {
-        UseSpecification::_namespace = _namespace;
-    }
-
-    void UseSpecification::SetName(const std::string &_name) {
-        UseSpecification::_name = _name;
-    }
 }
