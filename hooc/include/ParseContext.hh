@@ -23,7 +23,7 @@ namespace hooc {
         antlr4::CommonTokenStream *tokens = nullptr;
         HooParser *parser = nullptr;
         UnitContext unitContext;
-        Unit *unit = nullptr;
+        CompilationUnit *unit = nullptr;
 
     public:
         ParseContext(std::string source_code);

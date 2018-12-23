@@ -16,15 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * File: Module.cpp
- * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
- */
-
 #include "Unit.hh"
-#include "StatementList.hh"
-
 #include <string>
 #include <exception>
 #include <boost/regex.hpp>
@@ -33,5 +25,15 @@
 
 
 namespace hooc {
+    CompilationUnit::CompilationUnit() {
 
+    }
+
+    const std::string& CompilationUnit::GetName() const {
+        return this->_name;
+    }
+
+    void CompilationUnit::SetName(std::string name) {
+        this->_name = name;
+    }
 }

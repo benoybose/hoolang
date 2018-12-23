@@ -39,6 +39,10 @@ namespace hooc {
     }
 
     UnitContext hooc::ParseContext::GetUnitContext() {
-        this->unitContext;
+        if(nullptr == this->unitContext.get())
+        {
+            this->unitContext = UnitContext(this->parser->unit());
+        }
+        return this->unitContext;
     }
 }

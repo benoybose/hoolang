@@ -5,8 +5,11 @@ SET (CMAKE_VERBOSE_MAKEFILE OFF)
 FIND_PACKAGE(Java REQUIRED)
 MESSAGE("Java Executable: ${Java_JAVA_EXECUTABLE}")
 SET(Boost_USE_STATIC_LIBS ON)
-FIND_PACKAGE(Boost)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS system filesystem regex)
+
 MESSAGE("Boost Include Directories: ${Boost_INCLUDE_DIRS}")
+MESSAGE("Boost Library Directories: ${Boost_LIBRARY_DIRS}")
+MESSAGE("Boost Library files: ${Boost_LIBRARIES}")
 
 SET(HOO_DIST "${CMAKE_HOME_DIRECTORY}/dist")
 

@@ -26,10 +26,10 @@ namespace hooc
 {
     class Listener: public HooBaseListener {
     private:
-        Unit* _module;
+        CompilationUnit* _module;
 
     public:
-        Listener(Unit* module);
+        Listener();
 
     public:
         void enterPrimaryExpression(HooParser::PrimaryExpressionContext *context) override;

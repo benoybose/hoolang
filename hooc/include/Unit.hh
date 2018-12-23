@@ -16,16 +16,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * File: Module.hh
- * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
- */
-
 #ifndef HCPROG_H
 #define HCPROG_H
 
-#include "StatementList.hh"
+// #include "StatementList.hh"
 
 #include <string>
 #include <memory>
@@ -33,9 +27,17 @@
 
 
 namespace hooc {
-    class Unit {
+    class CompilationUnit {
+    public:
+        CompilationUnit();
+
     private:
         std::string _name;
+
+    public:
+        const std::string& GetName() const;
+        void SetName(std::string name);
+
     };
 }
 

@@ -53,8 +53,8 @@ namespace hooc {
             _source_code(source_code) {
     }
 
-    Unit *ParserDriver::Compile(CompilationErrorList &errors) {
-        Unit *unit = nullptr;
+    CompilationUnit *ParserDriver::Compile(CompilationErrorList &errors) {
+        CompilationUnit *unit = nullptr;
         ParseContext parseContext(this->_source_code);
         ErrorLister errorListener;
         parseContext.AddErrorListener(&errorListener);
@@ -84,7 +84,7 @@ namespace hooc {
                 throw std::current_exception();
             }
 
-            unit = new Unit();
+            unit = new CompilationUnit();
             Compile(unitContext, unit, errors);
 
         } catch (const std::exception &ex) {
@@ -99,9 +99,14 @@ namespace hooc {
     }
 
     bool ParserDriver::Compile(UnitContext context,
-                               Unit *unit,
+                               CompilationUnit *unit,
                                CompilationErrorList &errors) {
         bool success = true;
+        auto classDefinition = context->classDefinition();
+        if(nullptr == classDefinition) {
+
+        }
+
         return success;
     }
 }

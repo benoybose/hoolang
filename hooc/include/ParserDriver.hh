@@ -39,11 +39,11 @@ namespace hooc {
                      const std::string &file_path);
 
     public:
-        Unit *Compile(CompilationErrorList &errors);
+        CompilationUnit *Compile(CompilationErrorList &errors);
 
     private:
         bool Compile(UnitContext context,
-                     Unit *unit, CompilationErrorList &errors);
+                     CompilationUnit *unit, CompilationErrorList &errors);
     };
 }
 

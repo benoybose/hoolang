@@ -22,7 +22,7 @@
 
 namespace hooc
 {
-    Listener::Listener(Unit* _module) : _module(_module) {
+    Listener::Listener() {
 
     }
 
