@@ -20,7 +20,7 @@
 #define LISTENER_HH
 
 #include "HooBaseListener.h"
-#include "Unit.hh"
+#include "CompilationUnit.hh"
 
 namespace hooc
 {

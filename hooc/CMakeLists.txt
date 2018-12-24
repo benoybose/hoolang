@@ -38,7 +38,7 @@ SET(hooc_header_files
         include/Statement.hh
         include/ExpressionStatement.hh
         include/StatementList.hh
-        include/Unit.hh
+        include/CompilationUnit.hh
 		grammar/HooLexer.h
 		grammar/HooParser.h
 		grammar/HooListener.h
@@ -61,7 +61,7 @@ SET(hooc_source_files
         src/Statement.cpp
         src/ExpressionStatement.cpp
         src/StatementList.cpp
-        src/Unit.cpp
+        src/CompilationUnit.cpp
 		grammar/HooLexer.cpp
 		grammar/HooParser.cpp
 		grammar/HooListener.cpp

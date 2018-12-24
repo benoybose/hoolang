@@ -8,7 +8,7 @@
 #include "antlr4-runtime.h"
 #include "HooParser.h"
 #include "HooLexer.h"
-#include "Unit.hh"
+#include "CompilationUnit.hh"
 
 #include <string>
 #include <memory>

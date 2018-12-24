@@ -16,13 +16,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Unit.hh"
+#include "CompilationUnit.hh"
 
 #include <string>
 #include <exception>
 #include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
-#include <Unit.hh>
+#include <CompilationUnit.hh>
 
 
 namespace hooc {
