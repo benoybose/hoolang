@@ -26,6 +26,7 @@
 #include "ParseContext.hh"
 
 #include <exception>
+#include <memory>
 #include <boost/log/trivial.hpp>
 #include <boost/filesystem.hpp>
 
@@ -56,11 +57,11 @@ namespace hooc {
                 boost::filesystem::current_path());
     }
 
-    CompilationUnit *ParserDriver::Compile(CompilationErrorList &errors) {
-        CompilationUnit *unit = nullptr;
+    CompilationUnitRef ParserDriver::Compile(CompilationErrorList &errors) {
         ParseContext parseContext(this->_source_code);
         ErrorLister errorListener;
         parseContext.AddErrorListener(&errorListener);
+        CompilationUnitRef compilationUnit;
 
         try {
             auto unitContext = parseContext.GetUnitContext();
@@ -87,31 +88,32 @@ namespace hooc {
                 throw std::current_exception();
             }
 
-            unit = new CompilationUnit(
+            compilationUnit = CompilationUnitRef (new CompilationUnit(
                     boost::filesystem::current_path(),
-                    this->_file_path);
-            Compile(unitContext, unit, errors);
+                    this->_file_path));
+
+            Compile(unitContext, compilationUnit,
+                    errors);
 
         } catch (const std::exception &ex) {
             Logger::Error(ex.what());
-            if (nullptr != unit) {
-                delete unit;
-            }
             CompilationError error(-1, -1, ex.what());
             errors.push_back(error);
         }
-        return unit;
+
+        return compilationUnit;
     }
 
     bool ParserDriver::Compile(UnitContext context,
-                               CompilationUnit *unit,
+                               CompilationUnitRef compilationUnit,
                                CompilationErrorList &errors) {
         bool success = true;
         auto classDefinition = context->classDefinition();
         if(nullptr == classDefinition) {
-
+            // todo: Handle error
         }
-
+        std::string className = classDefinition->Identifier()->getText();
+        compilationUnit->SetClass(ClassRef(new Class(className)));
         return success;
     }
 }

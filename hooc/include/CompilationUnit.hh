@@ -19,6 +19,8 @@
 #ifndef HOOC_COMPILATION_UNIT_H
 #define HOOC_COMPILATION_UNIT_H
 
+#include "Class.hh"
+
 #include <string>
 #include <memory>
 #include <list>
@@ -27,19 +29,25 @@
 
 namespace hooc {
     class CompilationUnit {
+
     public:
-        CompilationUnit(boost::filesystem::path compilation_root, boost::filesystem::path module_path);
+        CompilationUnit(boost::filesystem::path compilation_root,
+                boost::filesystem::path module_path);
         CompilationUnit();
 
     private:
         boost::filesystem::path _compilation_root;
         boost::filesystem::path _module_path;
+        ClassRef _class;
 
     public:
         const boost::filesystem::path& GetCompilationRoot() const;
         const boost::filesystem::path& GetModulePath() const;
-
+        void SetClass(ClassRef aClass);
+        const ClassRef GetClass() const;
     };
+
+    typedef std::shared_ptr<CompilationUnit> CompilationUnitRef;
 }
 
 #endif

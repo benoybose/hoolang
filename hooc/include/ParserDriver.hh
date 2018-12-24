@@ -27,6 +27,7 @@
 #include <string>
 #include <list>
 #include <boost/filesystem.hpp>
+#include <memory>
 
 namespace hooc {
     typedef std::list<CompilationError> CompilationErrorList;
@@ -40,11 +41,12 @@ namespace hooc {
                      const std::string &file_path);
 
     public:
-        CompilationUnit *Compile(CompilationErrorList &errors);
+        CompilationUnitRef Compile(CompilationErrorList &errors);
 
     private:
         bool Compile(UnitContext context,
-                     CompilationUnit *unit, CompilationErrorList &errors);
+                     CompilationUnitRef compilationUnit,
+                     CompilationErrorList &errors);
         std::string TransformFilePathToUnitName(std::string file_path);
     };
 }

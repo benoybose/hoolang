@@ -30,20 +30,28 @@ namespace hooc {
             boost::filesystem::path module_path):
             _compilation_root(compilation_root),
             _module_path(module_path) {
-
     }
 
     CompilationUnit::CompilationUnit():
         _compilation_root(""),
         _module_path("") {
-
     }
 
-    const boost::filesystem::path &CompilationUnit::GetCompilationRoot() const {
+    const boost::filesystem::path
+        &CompilationUnit::GetCompilationRoot() const {
         return this->_compilation_root;
     }
 
-    const boost::filesystem::path &CompilationUnit::GetModulePath() const {
+    const boost::filesystem::path
+        &CompilationUnit::GetModulePath() const {
         return this->_module_path;
+    }
+
+    void CompilationUnit::SetClass(ClassRef aClass) {
+        this->_class = aClass;
+    }
+
+    const ClassRef CompilationUnit::GetClass() const {
+        return this->_class;
     }
 }

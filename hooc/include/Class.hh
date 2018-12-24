@@ -6,6 +6,7 @@
 #define HOOC_CLASS_HH
 
 #include <string>
+#include <memory>
 
 namespace hooc {
     class Class {
@@ -19,6 +20,8 @@ namespace hooc {
     public:
         const std::string& GetName() const;
     };
+
+    typedef std::shared_ptr<Class> ClassRef;
 }
 
 
