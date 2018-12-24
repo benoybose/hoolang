@@ -17,6 +17,7 @@
  */
 
 #include "Unit.hh"
+
 #include <string>
 #include <exception>
 #include <boost/regex.hpp>
@@ -25,15 +26,24 @@
 
 
 namespace hooc {
-    CompilationUnit::CompilationUnit() {
+    CompilationUnit::CompilationUnit(boost::filesystem::path compilation_root,
+            boost::filesystem::path module_path):
+            _compilation_root(compilation_root),
+            _module_path(module_path) {
 
     }
 
-    const std::string& CompilationUnit::GetName() const {
-        return this->_name;
+    CompilationUnit::CompilationUnit():
+        _compilation_root(""),
+        _module_path("") {
+
     }
 
-    void CompilationUnit::SetName(std::string name) {
-        this->_name = name;
+    const boost::filesystem::path &CompilationUnit::GetCompilationRoot() const {
+        return this->_compilation_root;
+    }
+
+    const boost::filesystem::path &CompilationUnit::GetModulePath() const {
+        return this->_module_path;
     }
 }

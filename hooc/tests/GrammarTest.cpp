@@ -4,11 +4,15 @@
 #include "antlr4-runtime.h"
 
 #include <boost/test/included/unit_test.hpp>
+#include <boost/filesystem.hpp>
 
 using namespace std;
 using namespace hooc;
 
 BOOST_AUTO_TEST_CASE(GrammarTest) {
+    auto source_path = boost::filesystem::absolute("test.hoo")
+            .string();
+
     const std::string source = "namespace test;\n"
                                "\n"
                                "class Application\n"
@@ -24,7 +28,7 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
                                "\t\treturn a + b;\n"
                                "\t}\n"
                                "}";
-    ParserDriver driver(source, "test.hoo");
+    ParserDriver driver(source, source_path);
     CompilationErrorList errors;
     auto unit = driver.Compile(errors);
 }

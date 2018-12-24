@@ -26,6 +26,7 @@
 
 #include <string>
 #include <list>
+#include <boost/filesystem.hpp>
 
 namespace hooc {
     typedef std::list<CompilationError> CompilationErrorList;
@@ -33,7 +34,7 @@ namespace hooc {
     class ParserDriver {
     private:
         std::string _source_code;
-        std::string _file_path;
+        boost::filesystem::path _file_path;
     public:
         ParserDriver(const std::string &source_code,
                      const std::string &file_path);
@@ -44,6 +45,7 @@ namespace hooc {
     private:
         bool Compile(UnitContext context,
                      CompilationUnit *unit, CompilationErrorList &errors);
+        std::string TransformFilePathToUnitName(std::string file_path);
     };
 }
 

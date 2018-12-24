@@ -27,6 +27,7 @@
 
 #include <exception>
 #include <boost/log/trivial.hpp>
+#include <boost/filesystem.hpp>
 
 using namespace hooc;
 using namespace antlr4;
@@ -51,6 +52,8 @@ namespace hooc {
 
     ParserDriver::ParserDriver(const std::string &source_code, const std::string &file_path) :
             _source_code(source_code) {
+        this->_file_path = boost::filesystem::relative(file_path,
+                boost::filesystem::current_path());
     }
 
     CompilationUnit *ParserDriver::Compile(CompilationErrorList &errors) {
@@ -84,7 +87,9 @@ namespace hooc {
                 throw std::current_exception();
             }
 
-            unit = new CompilationUnit();
+            unit = new CompilationUnit(
+                    boost::filesystem::current_path(),
+                    this->_file_path);
             Compile(unitContext, unit, errors);
 
         } catch (const std::exception &ex) {

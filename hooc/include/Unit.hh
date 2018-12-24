@@ -16,30 +16,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HCPROG_H
-#define HCPROG_H
-
-// #include "StatementList.hh"
+#ifndef HOOC_COMPILATION_UNIT_H
+#define HOOC_COMPILATION_UNIT_H
 
 #include <string>
 #include <memory>
 #include <list>
+#include <boost/filesystem.hpp>
 
 
 namespace hooc {
     class CompilationUnit {
     public:
+        CompilationUnit(boost::filesystem::path compilation_root, boost::filesystem::path module_path);
         CompilationUnit();
 
     private:
-        std::string _name;
+        boost::filesystem::path _compilation_root;
+        boost::filesystem::path _module_path;
 
     public:
-        const std::string& GetName() const;
-        void SetName(std::string name);
+        const boost::filesystem::path& GetCompilationRoot() const;
+        const boost::filesystem::path& GetModulePath() const;
 
     };
 }
 
-#endif /* HCPROG_H */
+#endif
 
