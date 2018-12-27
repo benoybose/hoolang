@@ -7,6 +7,7 @@ PROJECT(hooc CXX)
 SET(CMAKE_CXX_STANDARD 11)
 
 LINK_DIRECTORIES(${HOO_DIST} ${Boost_LIBRARY_DIRS})
+ADD_DEFINITIONS(-DANTLR4CPP_STATIC)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include
 		${CMAKE_HOME_DIRECTORY}/libs/antlr4-cpp-runtime/runtime/src
@@ -81,7 +82,7 @@ SET_TARGET_PROPERTIES(hooc PROPERTIES
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
-TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime)
+TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime${static_lib_suffix})
 SET_TARGET_PROPERTIES(grammar_test PROPERTIES
 		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
 		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
