@@ -47,7 +47,8 @@ namespace hooc {
         bool Compile(UnitContext context,
                      CompilationUnitRef compilationUnit,
                      CompilationErrorList &errors);
-        std::string TransformFilePathToUnitName(std::string file_path);
+        bool Compile(ClassRef classRef, HooParser::ClassBodyContext* classBody,
+                CompilationErrorList& errors);
     };
 }
 

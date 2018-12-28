@@ -29,6 +29,8 @@
 #include <memory>
 #include <boost/log/trivial.hpp>
 #include <boost/filesystem.hpp>
+#include <ParserDriver.hh>
+
 
 using namespace hooc;
 using namespace antlr4;
@@ -113,7 +115,29 @@ namespace hooc {
             // todo: Handle error
         }
         std::string className = classDefinition->Identifier()->getText();
-        compilationUnit->SetClass(ClassRef(new Class(className)));
+
+        ClassRef classRef(new Class(className));
+        compilationUnit->SetClass(classRef);
+
+        success = this->Compile(classRef, classDefinition->classBody(), errors);
         return success;
+    }
+
+    bool ParserDriver::Compile(ClassRef classRef,
+            HooParser::ClassBodyContext* classBody,
+            CompilationErrorList& errors) {
+        auto items = classBody->classBodyItem();
+        for(auto iterator = items.begin(); iterator != items.end(); ++iterator) {
+            auto item = *(iterator);
+            if(nullptr != item->method()) {
+                auto method = item->method();
+            }
+
+            if(nullptr != item->field()) {
+                auto field = item->field();
+            }
+        }
+
+        return false;
     }
 }
