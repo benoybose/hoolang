@@ -9,7 +9,7 @@ SET(CMAKE_CXX_STANDARD 11)
 LINK_DIRECTORIES(${HOO_DIST} ${Boost_LIBRARY_DIRS})
 ADD_DEFINITIONS(-DANTLR4CPP_STATIC)
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src
 		${CMAKE_HOME_DIRECTORY}/libs/antlr4-cpp-runtime/runtime/src
         ${CMAKE_HOME_DIRECTORY}/hoo/include
         ${PROJECT_SOURCE_DIR}/grammar/
@@ -49,7 +49,8 @@ SET(hooc_header_files
 		src/CompilationError.hh
 		src/ParserDriver.hh
 		src/ParseContext.hh
-		src/Class.hh src/AccessSpecifier.hh)
+		src/Class.hh src/AccessSpecifier.hh
+		src/visitors/TypeSpecifierVisitor.hh)
 
 SET(hooc_source_files
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
@@ -71,22 +72,12 @@ SET(hooc_source_files
 		src/CompilationError.cpp
 		src/ParserDriver.cpp
 		src/ParseContext.cpp
-		src/Class.cpp src/visitors/TypeSpecifierVisitor.cpp src/visitors/TypeSpecifierVisitor.hh)
+		src/Class.cpp
+		src/visitors/TypeSpecifierVisitor.cpp src/ast/TypeSpecification.cpp src/ast/TypeSpecification.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
-#SET_TARGET_PROPERTIES(hooc PROPERTIES
-#		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
-#		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
-#		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
-
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
 TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime${static_lib_suffix})
-#SET_TARGET_PROPERTIES(grammar_test PROPERTIES
-#		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
-#		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
-#		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
-#
-#ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
-#TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})
+

@@ -16,18 +16,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef TYPESPECIFIERVISITOR_HH
-#define TYPESPECIFIERVISITOR_HH
+#ifndef TYPESPECIFICATION_HH
+#define TYPESPECIFICATION_HH
 
-#include "HooBaseVisitor.h"
+#include "HooTypes.hh"
+
+#include <string>
+#include <list>
 
 namespace hooc {
-    namespace visitors {
-        class TypeSpecifierVisitor: public HooBaseVisitor {
+    namespace ast {
+        class TypeSpecification {
         public:
-            antlrcpp::Any visitTypeSepecifier(HooParser::TypeSepecifierContext *ctx) override;
+            TypeSpecification();
+            TypeSpecification(std::string root);
+
+        public:
+            const std::list<std::string> &GetTypePath() const;
+
+            bool IsArray() const;
+
+            const hoo::Integer GetArraySize() const;
+
+        public:
+            void AddPath(std::string path);
+            void AddPath(const std::list<std::string>& path);
+            void SetAsArray(bool is_array = true);
+            void SetArraySize(hoo::Integer array_size);
+
+        private:
+            std::list<std::string> _type_path;
+            bool _is_array;
+            hoo::Integer _array_size;
         };
     }
 }
 
-#endif //TYPESPECIFIERVISITOR_HH
+
+#endif //PROJECT_TYPESPECIFICATION_HH

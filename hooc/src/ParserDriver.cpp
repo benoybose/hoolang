@@ -26,40 +26,21 @@
 #include "AccessSpecifier.hh"
 #include "HooBaseVisitor.h"
 
+#include <ast/TypeSpecification.hh>
+#include <visitors/TypeSpecifierVisitor.hh>
+
 #include <exception>
 #include <memory>
 #include <boost/log/trivial.hpp>
 #include <boost/filesystem.hpp>
-#include "ParserDriver.hh"
-
 
 using namespace hooc;
+using namespace hooc::visitors;
+using namespace hooc::ast;
 using namespace antlr4;
 using namespace antlr4::tree;
 
 namespace hooc {
-    class TypeSpecifierVisitor: public HooBaseVisitor {
-    public:
-        antlrcpp::Any visitTypeSepecifier(HooParser::TypeSepecifierContext *ctx) override {
-            std::string identifier = "";
-            std::string constants = "";
-
-            if(nullptr != ctx->Identifier()) {
-                identifier = ctx->Identifier()->getText();
-            }
-
-            if(nullptr != ctx->Constant()) {
-                constants = ctx->Constant()->getText();
-            }
-
-            return HooBaseVisitor::visitTypeSepecifier(ctx);
-        }
-
-
-
-
-    };
-
     class ErrorLister : public BaseErrorListener {
     private:
         std::list<CompilationError> _errors;
@@ -160,11 +141,11 @@ namespace hooc {
                     auto typeSpec = functionDefinition->typeSepecifier();
                     if(nullptr != typeSpec) {
                         TypeSpecifierVisitor typeSpecifierVisitor;
-                        typeSpec->accept(&typeSpecifierVisitor);
+                        auto typeSpecification = typeSpec->accept(&typeSpecifierVisitor)
+                                .as<TypeSpecification>();
+                        typeSpecification.GetTypePath();
                     }
                 }
-
-
             }
 
             if(nullptr != item->field()) {
