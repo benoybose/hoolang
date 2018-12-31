@@ -23,6 +23,7 @@
 #include "HooParser.h"
 #include "CompilationError.hh"
 #include "ParseContext.hh"
+#include "AccessSpecifier.hh"
 
 #include <string>
 #include <list>
@@ -47,8 +48,12 @@ namespace hooc {
         bool Compile(UnitContext context,
                      CompilationUnitRef compilationUnit,
                      CompilationErrorList &errors);
-        bool Compile(ClassRef classRef, HooParser::ClassBodyContext* classBody,
-                CompilationErrorList& errors);
+
+        bool Compile(ClassRef classRef, HooParser::ClassBodyContext *classBody,
+                     CompilationErrorList &errors);
+
+        AccessSpecifierType GetAccessSpecifier(HooParser::MethodContext *method,
+                                               CompilationErrorList errors);
     };
 }
 

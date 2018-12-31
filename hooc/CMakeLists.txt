@@ -25,6 +25,8 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
         ARGS    -jar ${CMAKE_HOME_DIRECTORY}/tools/antlr4/antlr-4.7.1-complete.jar
                 ${PROJECT_SOURCE_DIR}/grammar/Hoo.g4
                 -o ${PROJECT_SOURCE_DIR}/grammar/
+				-no-listener
+				-visitor
         COMMENT "Invoking ANTLR4")
 
 SET(hooc_header_files
@@ -42,13 +44,12 @@ SET(hooc_header_files
         include/CompilationUnit.hh
 		grammar/HooLexer.h
 		grammar/HooParser.h
-		grammar/HooListener.h
-		grammar/HooBaseListener.h
-        include/Listener.hh
+		grammar/HooBaseVisitor.h
+		grammar/HooVisitor.h
 		include/CompilationError.hh
 		include/ParserDriver.hh
 		include/ParseContext.hh
-		include/Class.hh)
+		include/Class.hh include/AccessSpecifier.hh)
 
 SET(hooc_source_files
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
@@ -65,28 +66,27 @@ SET(hooc_source_files
         src/CompilationUnit.cpp
 		grammar/HooLexer.cpp
 		grammar/HooParser.cpp
-		grammar/HooListener.cpp
-		grammar/HooBaseListener.cpp
-		src/Listener.cpp
+		grammar/HooBaseVisitor.cpp
+		grammar/HooVisitor.cpp
 		src/CompilationError.cpp
 		src/ParserDriver.cpp
 		src/ParseContext.cpp
-		src/Class.cpp)
+		src/Class.cpp src/visitors/TypeSpecifierVisitor.cpp src/visitors/TypeSpecifierVisitor.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
-SET_TARGET_PROPERTIES(hooc PROPERTIES
-		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
-		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
-		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
+#SET_TARGET_PROPERTIES(hooc PROPERTIES
+#		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
+#		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
+#		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
 
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
 TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime${static_lib_suffix})
-SET_TARGET_PROPERTIES(grammar_test PROPERTIES
-		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
-		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
-		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
-
-ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
-TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})
+#SET_TARGET_PROPERTIES(grammar_test PROPERTIES
+#		ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
+#		LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
+#		RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
+#
+#ADD_EXECUTABLE(hooctest_modulenametest tests/ModuleNameTest.cpp)
+#TARGET_LINK_LIBRARIES(hooctest_modulenametest ${hooc_link_libraries})

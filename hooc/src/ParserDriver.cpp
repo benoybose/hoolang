@@ -17,13 +17,14 @@
  */
 
 #include "ParserDriver.hh"
-#include "Listener.hh"
 #include "antlr4-runtime.h"
 #include "HooLexer.h"
 #include "HooParser.h"
 #include "Logger.hh"
 #include "CompilationError.hh"
 #include "ParseContext.hh"
+#include "AccessSpecifier.hh"
+#include "HooBaseVisitor.h"
 
 #include <exception>
 #include <memory>
@@ -37,6 +38,28 @@ using namespace antlr4;
 using namespace antlr4::tree;
 
 namespace hooc {
+    class TypeSpecifierVisitor: public HooBaseVisitor {
+    public:
+        antlrcpp::Any visitTypeSepecifier(HooParser::TypeSepecifierContext *ctx) override {
+            std::string identifier = "";
+            std::string constants = "";
+
+            if(nullptr != ctx->Identifier()) {
+                identifier = ctx->Identifier()->getText();
+            }
+
+            if(nullptr != ctx->Constant()) {
+                constants = ctx->Constant()->getText();
+            }
+
+            return HooBaseVisitor::visitTypeSepecifier(ctx);
+        }
+
+
+
+
+    };
+
     class ErrorLister : public BaseErrorListener {
     private:
         std::list<CompilationError> _errors;
@@ -131,6 +154,17 @@ namespace hooc {
             auto item = *(iterator);
             if(nullptr != item->method()) {
                 auto method = item->method();
+                auto accessSpecifier = this->GetAccessSpecifier(method, errors);
+                auto functionDefinition = method->functionDefintion();
+                if(nullptr != functionDefinition) {
+                    auto typeSpec = functionDefinition->typeSepecifier();
+                    if(nullptr != typeSpec) {
+                        TypeSpecifierVisitor typeSpecifierVisitor;
+                        typeSpec->accept(&typeSpecifierVisitor);
+                    }
+                }
+
+
             }
 
             if(nullptr != item->field()) {
@@ -139,5 +173,27 @@ namespace hooc {
         }
 
         return false;
+    }
+
+    AccessSpecifierType ParserDriver::GetAccessSpecifier(HooParser::MethodContext *method,
+            CompilationErrorList errors) {
+        AccessSpecifierType accessSpecifierType = hooc::ACCESS_PUBLIC;
+        if(nullptr != method->AccessSpecifier()) {
+            auto symbol = method->AccessSpecifier()->getSymbol();
+            const std::string accessSpecifierName = symbol->getText();
+            if(0 == accessSpecifierName.compare("private")) {
+                accessSpecifierType = ACCESS_PRIVATE;
+            } else if(0 == accessSpecifierName.compare("protected")) {
+                accessSpecifierType = ACCESS_PROTECTED;
+            } else if(0 == accessSpecifierName.compare("public")) {
+                accessSpecifierType = ACCESS_PUBLIC;
+            } else {
+                accessSpecifierType = ACCESS_INVALID;
+                CompilationError error(symbol->getLine(), symbol->getCharPositionInLine(),
+                        "Invalid access specifier.");
+                errors.push_back(error);
+            }
+        }
+        return accessSpecifierType;
     }
 }

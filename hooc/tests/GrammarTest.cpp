@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
                                "\n"
                                "class Application\n"
                                "{\n"
-                               "\tfunc (args:string[]) main\n"
+                               "\tfunc:int (args:string[]) main\n"
                                "\t{\n"
                                "\t\tvar result = add(10, 45);\n"
                                "\t\tconsole.print(result);\n"

@@ -64,28 +64,28 @@ SET(HOO_SOURCE_FILES
 ADD_LIBRARY(hoo STATIC ${HOO_HEADER_FILES} ${HOO_SOURCE_FILES})
 SET_PROPERTY(TARGET hoo PROPERTY CXX_STANDARD 11)
 
-SET_TARGET_PROPERTIES(hoo PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
-        LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
-        RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
-
-ADD_EXECUTABLE(hootest_type tests/TypeTest.cpp)
-TARGET_LINK_LIBRARIES(hootest_type hoo)
-SET_PROPERTY(TARGET hootest_type PROPERTY CXX_STANDARD 11)
-
-ADD_EXECUTABLE(hootest_value tests/ValueTest.cpp)
-TARGET_LINK_LIBRARIES(hootest_value hoo)
-SET_PROPERTY(TARGET hootest_value PROPERTY CXX_STANDARD 11)
-
-ADD_EXECUTABLE(hootest_jitbasic tests/JITBasicTest.cpp)
-TARGET_LINK_LIBRARIES(hootest_jitbasic hoo)
-SET_PROPERTY(TARGET hootest_jitbasic PROPERTY CXX_STANDARD 11)
-
-ADD_EXECUTABLE(hootest_methodbasic tests/MethodBasicTest.cpp)
-TARGET_LINK_LIBRARIES(hootest_methodbasic hoo)
-SET_PROPERTY(TARGET hootest_methodbasic PROPERTY CXX_STANDARD 11)
-
-ADD_EXECUTABLE(hootest_codebuffer tests/CodeBufferTest.cpp)
-TARGET_LINK_LIBRARIES(hootest_codebuffer hoo)
-SET_PROPERTY(TARGET hootest_codebuffer PROPERTY CXX_STANDARD 11)
+#SET_TARGET_PROPERTIES(hoo PROPERTIES
+#        ARCHIVE_OUTPUT_DIRECTORY ${HOO_DIST}
+#        LIBRARY_OUTPUT_DIRECTORY ${HOO_DIST}
+#        RUNTIME_OUTPUT_DIRECTORY ${HOO_DIST})
+#
+#ADD_EXECUTABLE(hootest_type tests/TypeTest.cpp)
+#TARGET_LINK_LIBRARIES(hootest_type hoo)
+#SET_PROPERTY(TARGET hootest_type PROPERTY CXX_STANDARD 11)
+#
+#ADD_EXECUTABLE(hootest_value tests/ValueTest.cpp)
+#TARGET_LINK_LIBRARIES(hootest_value hoo)
+#SET_PROPERTY(TARGET hootest_value PROPERTY CXX_STANDARD 11)
+#
+#ADD_EXECUTABLE(hootest_jitbasic tests/JITBasicTest.cpp)
+#TARGET_LINK_LIBRARIES(hootest_jitbasic hoo)
+#SET_PROPERTY(TARGET hootest_jitbasic PROPERTY CXX_STANDARD 11)
+#
+#ADD_EXECUTABLE(hootest_methodbasic tests/MethodBasicTest.cpp)
+#TARGET_LINK_LIBRARIES(hootest_methodbasic hoo)
+#SET_PROPERTY(TARGET hootest_methodbasic PROPERTY CXX_STANDARD 11)
+#
+#ADD_EXECUTABLE(hootest_codebuffer tests/CodeBufferTest.cpp)
+#TARGET_LINK_LIBRARIES(hootest_codebuffer hoo)
+#SET_PROPERTY(TARGET hootest_codebuffer PROPERTY CXX_STANDARD 11)
 

@@ -25,5 +25,9 @@ hooc/grammar/HooListener.cpp
 hooc/grammar/HooListener.h
 hooc/grammar/HooParser.cpp
 hooc/grammar/HooParser.h
+hooc/grammar/HooBaseVisitor.cpp
+hooc/grammar/HooBaseVisitor.h
+hooc/grammar/HooVisitor.cpp
+hooc/grammar/HooVisitor.h
 
 
