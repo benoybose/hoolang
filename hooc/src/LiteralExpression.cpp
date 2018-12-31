@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <memory.h>
 
-#include <LiteralExpression.hh>
+#include "LiteralExpression.hh"
 
 using namespace hoo;
 

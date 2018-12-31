@@ -32,24 +32,24 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
 SET(hooc_header_files
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.h
         ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
-        include/Node.hh
-        include/Operator.hh
-        include/Expression.hh
-        include/LiteralExpression.hh
-        include/Logger.hh
-        include/BinaryExpression.hh
-        include/Statement.hh
-        include/ExpressionStatement.hh
-        include/StatementList.hh
-        include/CompilationUnit.hh
+		src/Node.hh
+		src/Operator.hh
+		src/Expression.hh
+		src/LiteralExpression.hh
+		src/Logger.hh
+		src/BinaryExpression.hh
+		src/Statement.hh
+		src/ExpressionStatement.hh
+		src/StatementList.hh
+		src/CompilationUnit.hh
 		grammar/HooLexer.h
 		grammar/HooParser.h
 		grammar/HooBaseVisitor.h
 		grammar/HooVisitor.h
-		include/CompilationError.hh
-		include/ParserDriver.hh
-		include/ParseContext.hh
-		include/Class.hh include/AccessSpecifier.hh)
+		src/CompilationError.hh
+		src/ParserDriver.hh
+		src/ParseContext.hh
+		src/Class.hh src/AccessSpecifier.hh)
 
 SET(hooc_source_files
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp

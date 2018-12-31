@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE Arithmetic Statement Test
 
-#include "ParserDriver.hh"
+#include "../src/ParserDriver.hh"
 #include "antlr4-runtime.h"
 
 #include <boost/test/included/unit_test.hpp>

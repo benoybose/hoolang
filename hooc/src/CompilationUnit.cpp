@@ -22,7 +22,7 @@
 #include <exception>
 #include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
-#include <CompilationUnit.hh>
+#include "CompilationUnit.hh"
 
 
 namespace hooc {
