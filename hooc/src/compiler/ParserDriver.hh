@@ -16,39 +16,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOC_COMPILATION_UNIT_H
-#define HOOC_COMPILATION_UNIT_H
+#ifndef PARSERDRIVER_HH
+#define PARSERDRIVER_HH
 
-#include "Class.hh"
+#include "compiler/CompilationUnit.hh"
+#include "HooParser.h"
+#include "compiler/CompilationContext.hh"
+#include "compiler/CompilationUnit.hh"
+#include "AccessSpecifier.hh"
 
 #include <string>
-#include <memory>
 #include <list>
 #include <boost/filesystem.hpp>
-
+#include <memory>
 
 namespace hooc {
-    class CompilationUnit {
+    namespace compiler {
+        typedef std::list<CompilationError> CompilationErrorList;
 
-    public:
-        CompilationUnit(boost::filesystem::path compilation_root,
-                boost::filesystem::path module_path);
-        CompilationUnit();
+        class ParserDriver {
+        private:
+            std::string _source_code;
+            boost::filesystem::path _file_path;
 
-    private:
-        boost::filesystem::path _compilation_root;
-        boost::filesystem::path _module_path;
-        ClassRef _class;
+        public:
+            ParserDriver(const std::string &source_code,
+                         const std::string &file_path);
 
-    public:
-        const boost::filesystem::path& GetCompilationRoot() const;
-        const boost::filesystem::path& GetModulePath() const;
-        void SetClass(ClassRef aClass);
-        const ClassRef GetClass() const;
-    };
-
-    typedef std::shared_ptr<CompilationUnit> CompilationUnitRef;
+        public:
+            CompilationUnit *Compile();
+        };
+    }
 }
 
-#endif
-
+#endif //PROJECT_PARSERDRIVER_HH

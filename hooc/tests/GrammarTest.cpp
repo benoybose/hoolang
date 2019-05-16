@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE Arithmetic Statement Test
 
-#include "../src/ParserDriver.hh"
+#include "compiler/ParserDriver.hh"
 #include "antlr4-runtime.h"
 
 #include <boost/test/included/unit_test.hpp>
@@ -8,6 +8,7 @@
 
 using namespace std;
 using namespace hooc;
+using namespace hooc::compiler;
 
 BOOST_AUTO_TEST_CASE(GrammarTest) {
     auto source_path = boost::filesystem::absolute("test.hoo")
@@ -29,6 +30,5 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
                                "\t}\n"
                                "}";
     ParserDriver driver(source, source_path);
-    CompilationErrorList errors;
-    auto unit = driver.Compile(errors);
+    auto unit = driver.Compile();
 }

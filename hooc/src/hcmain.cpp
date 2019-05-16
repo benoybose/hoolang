@@ -22,7 +22,7 @@
  * Date: 25, March 2018
  */
 #include <sstream>
-#include "ParserDriver.hh"
+#include "compiler/ParserDriver.hh"
 
 int main(int argc, char** argv) {
     std::istringstream inputStream("10 + 20 - 30;");

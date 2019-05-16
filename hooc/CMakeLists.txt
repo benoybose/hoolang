@@ -41,14 +41,14 @@ SET(hooc_header_files
 		src/Statement.hh
 		src/ExpressionStatement.hh
 		src/StatementList.hh
-		src/CompilationUnit.hh
+		src/compiler/CompilationUnit.hh
 		grammar/HooLexer.h
 		grammar/HooParser.h
 		grammar/HooBaseVisitor.h
 		grammar/HooVisitor.h
-		src/CompilationError.hh
-		src/ParserDriver.hh
-		src/ParseContext.hh
+        src/compiler/CompilationError.hh
+        src/compiler/ParserDriver.hh
+		src/compiler/CompilationContext.hh
 		src/Class.hh src/AccessSpecifier.hh
 		src/visitors/TypeSpecifierVisitor.hh)
 
@@ -64,14 +64,14 @@ SET(hooc_source_files
         src/Statement.cpp
         src/ExpressionStatement.cpp
         src/StatementList.cpp
-        src/CompilationUnit.cpp
+		src/compiler/CompilationUnit.cpp
 		grammar/HooLexer.cpp
 		grammar/HooParser.cpp
 		grammar/HooBaseVisitor.cpp
 		grammar/HooVisitor.cpp
-		src/CompilationError.cpp
-		src/ParserDriver.cpp
-		src/ParseContext.cpp
+        src/compiler/CompilationError.cpp
+        src/compiler/ParserDriver.cpp
+		src/compiler/CompilationContext.cpp
 		src/Class.cpp
 		src/visitors/TypeSpecifierVisitor.cpp src/ast/TypeSpecification.cpp src/ast/TypeSpecification.hh)
 

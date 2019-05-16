@@ -16,42 +16,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "CompilationUnit.hh"
+#ifndef HOOC_COMPILATION_UNIT_H
+#define HOOC_COMPILATION_UNIT_H
+
+#include "Class.hh"
 
 #include <string>
-#include <exception>
-#include <boost/regex.hpp>
+#include <memory>
+#include <list>
 #include <boost/filesystem.hpp>
-#include "CompilationUnit.hh"
-
+#include "CompilationError.hh"
 
 namespace hooc {
-    CompilationUnit::CompilationUnit(boost::filesystem::path compilation_root,
-            boost::filesystem::path module_path):
-            _compilation_root(compilation_root),
-            _module_path(module_path) {
-    }
+    namespace compiler {
+        class CompilationUnit {
 
-    CompilationUnit::CompilationUnit():
-        _compilation_root(""),
-        _module_path("") {
-    }
+        public:
+            CompilationUnit(boost::filesystem::path compilation_root,
+                            boost::filesystem::path module_path);
+            CompilationUnit();
 
-    const boost::filesystem::path
-        &CompilationUnit::GetCompilationRoot() const {
-        return this->_compilation_root;
-    }
+        private:
+            boost::filesystem::path _compilation_root;
+            boost::filesystem::path _module_path;
+            ClassRef _class;
+            std::list<CompilationError> _errors;
 
-    const boost::filesystem::path
-        &CompilationUnit::GetModulePath() const {
-        return this->_module_path;
-    }
-
-    void CompilationUnit::SetClass(ClassRef aClass) {
-        this->_class = aClass;
-    }
-
-    const ClassRef CompilationUnit::GetClass() const {
-        return this->_class;
+        public:
+            const boost::filesystem::path& GetCompilationRoot() const;
+            const boost::filesystem::path& GetModulePath() const;
+            void SetClass(ClassRef aClass);
+            const ClassRef GetClass() const;
+            bool Success();
+            const std::list<CompilationError>& GetErrors() const;
+        };
     }
 }
+
+#endif
+
