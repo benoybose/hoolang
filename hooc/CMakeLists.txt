@@ -73,7 +73,7 @@ SET(hooc_source_files
         src/compiler/ParserDriver.cpp
 		src/compiler/CompilationContext.cpp
 		src/Class.cpp
-		src/visitors/TypeSpecifierVisitor.cpp src/ast/TypeSpecification.cpp src/ast/TypeSpecification.hh)
+		src/visitors/TypeSpecifierVisitor.cpp src/ast/TypeSpecification.cpp src/ast/TypeSpecification.hh src/ast/RootStatement.cpp src/ast/RootStatement.hh src/visitors/UnitVisitor.cpp src/visitors/UnitVisitor.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})

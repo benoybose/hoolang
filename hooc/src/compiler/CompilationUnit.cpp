@@ -48,12 +48,8 @@ namespace hooc {
             return this->_module_path;
         }
 
-        void CompilationUnit::SetClass(ClassRef aClass) {
-            this->_class = aClass;
-        }
-
-        const ClassRef CompilationUnit::GetClass() const {
-            return this->_class;
+        const ast::RootStatement &CompilationUnit::GetRoot() {
+            return *(this->_statement);
         }
 
         bool CompilationUnit::Success() {

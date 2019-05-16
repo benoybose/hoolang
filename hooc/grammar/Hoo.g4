@@ -162,11 +162,16 @@ useSpecifier
     :   'use' Identifier ( '.' Identifier)* ('as' Identifier) ';'
     ;
 
+rootStatement:
+    classDefinition |
+    statement
+    ;
+
 unit
     :
         namespaceDeclaraion?
         useSpecifier*
-        classDefinition
+        rootStatement
         EOF
     ;
 

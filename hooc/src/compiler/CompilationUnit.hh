@@ -19,13 +19,14 @@
 #ifndef HOOC_COMPILATION_UNIT_H
 #define HOOC_COMPILATION_UNIT_H
 
-#include "Class.hh"
+#include "CompilationError.hh"
+#include "ast/RootStatement.hh"
 
 #include <string>
 #include <memory>
 #include <list>
 #include <boost/filesystem.hpp>
-#include "CompilationError.hh"
+
 
 namespace hooc {
     namespace compiler {
@@ -39,14 +40,13 @@ namespace hooc {
         private:
             boost::filesystem::path _compilation_root;
             boost::filesystem::path _module_path;
-            ClassRef _class;
+            ast::RootStatement* _statement;
             std::list<CompilationError> _errors;
 
         public:
             const boost::filesystem::path& GetCompilationRoot() const;
             const boost::filesystem::path& GetModulePath() const;
-            void SetClass(ClassRef aClass);
-            const ClassRef GetClass() const;
+            const ast::RootStatement& GetRoot();
             bool Success();
             const std::list<CompilationError>& GetErrors() const;
         };

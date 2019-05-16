@@ -26,8 +26,7 @@
 #include "AccessSpecifier.hh"
 #include "HooBaseVisitor.h"
 
-#include <ast/TypeSpecification.hh>
-#include <visitors/TypeSpecifierVisitor.hh>
+#include "visitors/UnitVisitor.hh"
 
 #include <list>
 #include <exception>
@@ -36,7 +35,6 @@
 #include <boost/filesystem.hpp>
 
 using namespace hooc;
-using namespace hooc::visitors;
 using namespace hooc::ast;
 using namespace antlr4;
 using namespace antlr4::tree;
@@ -96,6 +94,9 @@ namespace hooc {
                 if (nullptr != unitContext->exception) {
                     throw std::current_exception();
                 }
+
+                UnitVisitor visitor;
+                visitor.visit(unitContext);
 
             } catch (const std::exception &ex) {
                 Logger::Error(ex.what());
