@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
     auto source_path = boost::filesystem::absolute("test.hoo")
             .string();
 
-    const std::string source = "namespace test;\n"
+    const std::string source = "namespace test.grammar;\n"
                                "\n"
                                "class Application\n"
                                "{\n"

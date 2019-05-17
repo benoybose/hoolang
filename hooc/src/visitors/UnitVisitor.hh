@@ -17,6 +17,20 @@ public:
     antlrcpp::Any visitUseSpecifier(HooParser::UseSpecifierContext *ctx) override;
 
     antlrcpp::Any visitRootStatement(HooParser::RootStatementContext *ctx) override;
+
+    antlrcpp::Any visitParamList(HooParser::ParamListContext *ctx) override;
+
+    antlrcpp::Any visitFunctionDefintion(HooParser::FunctionDefintionContext *ctx) override;
+
+    antlrcpp::Any visitClassDefinition(HooParser::ClassDefinitionContext *ctx) override;
+
+    antlrcpp::Any visitClassBody(HooParser::ClassBodyContext *ctx) override;
+
+    antlrcpp::Any visitClassBodyItem(HooParser::ClassBodyItemContext *ctx) override;
+
+    antlrcpp::Any visitMethod(HooParser::MethodContext *ctx) override;
+
+    antlrcpp::Any visitField(HooParser::FieldContext *ctx) override;
 };
 
 
