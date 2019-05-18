@@ -26,28 +26,38 @@
 
 namespace hooc {
     namespace ast {
+        typedef enum {
+            TYPESPEC_SIMPLE,
+            TYPESPEC_NESTED,
+            TYPESPEC_ARRAY
+        } TYPESPEC_TYPE;
         class TypeSpecification {
-        public:
-            TypeSpecification();
-            TypeSpecification(std::string root);
-
-        public:
-            const std::list<std::string> &GetTypePath() const;
-
-            bool IsArray() const;
-
-            const hoo::Integer GetArraySize() const;
-
-        public:
-            void AddPath(std::string path);
-            void AddPath(const std::list<std::string>& path);
-            void SetAsArray(bool is_array = true);
-            void SetArraySize(hoo::Integer array_size);
-
-        private:
-            std::list<std::string> _type_path;
+        protected:
+            TYPESPEC_TYPE _type;
+            TypeSpecification* _parent;
+            std::string _name;
             bool _is_array;
-            hoo::Integer _array_size;
+        public:
+            explicit TypeSpecification(std::string &name);
+            explicit TypeSpecification(const std::string &name);
+        public:
+            const std::string &GetName() const;
+            const TYPESPEC_TYPE GetType() const;
+        };
+
+        class NestedTypeSpecification : public TypeSpecification {
+        public:
+            NestedTypeSpecification(TypeSpecification *typeSpecification,
+                    std::string& name);
+            NestedTypeSpecification(TypeSpecification *typeSpecification,
+                    const std::string& name);
+        public:
+            const TypeSpecification *GetParent() const;
+        };
+
+        class ArrayTypeSpecification: public NestedTypeSpecification {
+        public:
+            ArrayTypeSpecification(TypeSpecification* parent);
         };
     }
 }

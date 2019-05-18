@@ -12,7 +12,7 @@ class UnitVisitor: public HooBaseVisitor  {
 public:
     antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
 
-    antlrcpp::Any visitNamespaceDeclaraion(HooParser::NamespaceDeclaraionContext *ctx) override;
+    antlrcpp::Any visitNamespaceDeclaration(HooParser::NamespaceDeclarationContext *ctx) override;
 
     antlrcpp::Any visitUseSpecifier(HooParser::UseSpecifierContext *ctx) override;
 
@@ -20,7 +20,7 @@ public:
 
     antlrcpp::Any visitParamList(HooParser::ParamListContext *ctx) override;
 
-    antlrcpp::Any visitFunctionDefintion(HooParser::FunctionDefintionContext *ctx) override;
+    antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
 
     antlrcpp::Any visitClassDefinition(HooParser::ClassDefinitionContext *ctx) override;
 
@@ -31,6 +31,10 @@ public:
     antlrcpp::Any visitMethod(HooParser::MethodContext *ctx) override;
 
     antlrcpp::Any visitField(HooParser::FieldContext *ctx) override;
+
+    antlrcpp::Any visitDeclaration(HooParser::DeclarationContext *ctx) override;
+
+    antlrcpp::Any visitTypeSpecifier(HooParser::TypeSpecifierContext *ctx) override;
 };
 
 

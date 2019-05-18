@@ -63,19 +63,10 @@ bitwiseOperator
     : ('|' | '&' | '^' | '~' | '<<' | '>>')
     ;
 
-typeSepecifier
+typeSpecifier
     :   Identifier
-    |   typeSepecifier '.' Identifier
-    |   typeSepecifier '[' (Constant)? ']'
-    ;
-
-declaration
-    :   Identifier (':' typeSepecifier)? initializer?
-    ;
-
-paramList
-    :   declaration
-    |   paramList ( ',' declaration )+
+    |   typeSpecifier '.' Identifier
+    |   typeSpecifier '[' ']'
     ;
 
 initializer
@@ -89,11 +80,6 @@ invokeExpression
 expressionList
     :
     expression ( ',' expression )*
-    ;
-
-
-functionDefintion
-    :   'func' ( ':' typeSepecifier )? '(' paramList? ')' Identifier statement
     ;
 
 statement
@@ -126,7 +112,7 @@ returnStatement
     ;
 
 classDefinition
-    : 'class' Identifier ( '(' typeSepecifier+ ')' )? classBody
+    : 'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
     ;
 
 classBody
@@ -141,8 +127,21 @@ classBodyItem
     | field
     ;
 
+functionDefinition
+    :   'func' ( ':' returnType=typeSpecifier )? '(' paramList? ')' name=Identifier statement
+    ;
+
+declaration
+    :   Identifier (':' typeSpecifier)? initializer?
+    ;
+
+paramList
+    :   declaration
+    |   paramList ( ',' declaration )+
+    ;
+
 method
-    : AccessSpecifier? functionDefintion
+    : AccessSpecifier? functionDefinition
     ;
 
 field
@@ -153,8 +152,7 @@ AccessSpecifier
     : 'private' | 'public' | 'protected'
     ;
 
-
-namespaceDeclaraion
+namespaceDeclaration
     :   'namespace' Identifier ( '.' Identifier)* ';'
     ;
 
@@ -169,7 +167,7 @@ rootStatement:
 
 unit
     :
-        namespaceDeclaraion?
+        namespaceDeclaration?
         useSpecifier*
         rootStatement
         EOF

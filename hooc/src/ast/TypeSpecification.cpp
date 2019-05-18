@@ -24,48 +24,42 @@
 
 namespace hooc {
     namespace ast {
-
-        TypeSpecification::TypeSpecification() {
+        TypeSpecification::TypeSpecification(std::string &name) :
+                _name(name),
+                _is_array(false),
+                _parent(nullptr) {
         }
 
-        TypeSpecification::TypeSpecification(std::string root) {
-            this->_type_path.push_back(root);
+        TypeSpecification::TypeSpecification(const std::string &name) :
+                _name(name),
+                _is_array(false),
+                _parent(nullptr){
         }
 
-        const std::list<std::string> &TypeSpecification::GetTypePath() const {
-            return this->_type_path;
+        const TYPESPEC_TYPE TypeSpecification::GetType() const {
+            return this->_type;
         }
 
-        bool TypeSpecification::IsArray() const {
-            return _is_array;
+        const std::string &TypeSpecification::GetName() const {
+            return _name;
         }
 
-        const hoo::Integer TypeSpecification::GetArraySize() const {
-            return this->_array_size;
+        NestedTypeSpecification::NestedTypeSpecification(TypeSpecification *typeSpecification,
+                                                         std::string &name) :
+                TypeSpecification(name) {
         }
 
-        void TypeSpecification::AddPath(std::string path) {
-            this->_type_path.push_back(path);
+        NestedTypeSpecification::NestedTypeSpecification(TypeSpecification *typeSpecification,
+                                                         const std::string &name) :
+                TypeSpecification(name) {
         }
 
-        void TypeSpecification::AddPath(const std::list<std::string> &path) {
-            for(auto iterator = path.begin(); iterator != path.end(); ++iterator) {
-                this->_type_path.push_back(*iterator);
-            }
+        const TypeSpecification *NestedTypeSpecification::GetParent() const {
+            return this->_parent;
         }
 
-        void TypeSpecification::SetAsArray(bool is_array) {
-            if(!is_array) {
-                this->_array_size = 0;
-            }
-            this->_is_array = is_array;
-        }
-
-        void TypeSpecification::SetArraySize(hoo::Integer array_size) {
-            if(0 < array_size) {
-                this->_is_array = true;
-            }
-            this->_array_size = array_size;
+        ArrayTypeSpecification::ArrayTypeSpecification(TypeSpecification *parent):
+                NestedTypeSpecification(parent, ""){
         }
     }
 }

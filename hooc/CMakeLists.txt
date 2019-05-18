@@ -50,7 +50,9 @@ SET(hooc_header_files
         src/compiler/ParserDriver.hh
 		src/compiler/CompilationContext.hh
 		src/Class.hh src/AccessSpecifier.hh
-		src/visitors/TypeSpecifierVisitor.hh)
+		src/ast/TypeSpecification.hh
+		src/ast/RootStatement.hh
+		src/visitors/UnitVisitor.hh)
 
 SET(hooc_source_files
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
@@ -73,7 +75,9 @@ SET(hooc_source_files
         src/compiler/ParserDriver.cpp
 		src/compiler/CompilationContext.cpp
 		src/Class.cpp
-		src/visitors/TypeSpecifierVisitor.cpp src/ast/TypeSpecification.cpp src/ast/TypeSpecification.hh src/ast/RootStatement.cpp src/ast/RootStatement.hh src/visitors/UnitVisitor.cpp src/visitors/UnitVisitor.hh)
+		src/ast/TypeSpecification.cpp
+		src/ast/RootStatement.cpp
+		src/visitors/UnitVisitor.cpp)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
