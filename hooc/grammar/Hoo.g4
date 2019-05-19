@@ -132,12 +132,12 @@ functionDefinition
     ;
 
 declaration
-    :   Identifier (':' typeSpecifier)? initializer?
+    :   name=Identifier (':' declared_type=typeSpecifier)? init=initializer?
     ;
 
 paramList
-    :   declaration
-    |   paramList ( ',' declaration )+
+    :   declaration #singleItemParamList
+    |   paramList ( ',' decl=declaration )+ #multipleItemParamList
     ;
 
 method

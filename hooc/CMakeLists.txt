@@ -77,7 +77,7 @@ SET(hooc_source_files
 		src/Class.cpp
 		src/ast/TypeSpecification.cpp
 		src/ast/RootStatement.cpp
-		src/visitors/UnitVisitor.cpp)
+		src/visitors/UnitVisitor.cpp src/ast/FunctionDefinition.cpp src/ast/FunctionDefinition.hh src/ast/Declaration.cpp src/ast/Declaration.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
