@@ -11,6 +11,7 @@ SET(Boost_USE_STATIC_RUNTIME ON)
 
 FIND_PACKAGE(Boost REQUIRED COMPONENTS regex filesystem)
 
+MESSAGE("Boot Root: ${BOOST_ROOT}")
 MESSAGE("Static library suffix: ${CMAKE_STATIC_LIBRARY_SUFFIX}")
 MESSAGE("Boost Include Directories: ${Boost_INCLUDE_DIRS}")
 MESSAGE("Boost Library Directories: ${Boost_LIBRARY_DIRS}")

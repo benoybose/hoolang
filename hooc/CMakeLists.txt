@@ -19,6 +19,10 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
         ${PROJECT_SOURCE_DIR}/grammar/HooParser.cpp
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.h
         ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
+		${PROJECT_SOURCE_DIR}/grammar/HooBaseVisitor.h
+		${PROJECT_SOURCE_DIR}/grammar/HooBaseVisitor.cpp
+		${PROJECT_SOURCE_DIR}/grammar/HooVisitor.h
+		${PROJECT_SOURCE_DIR}/grammar/HooVisitor.cpp
 		MAIN_DEPENDENCY ${PROJECT_SOURCE_DIR}/grammar/Hoo.g4
 		DEPENDS ${PROJECT_SOURCE_DIR}/grammar/Terminals.g4
         COMMAND ${Java_JAVA_EXECUTABLE}
@@ -30,8 +34,10 @@ ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
         COMMENT "Invoking ANTLR4")
 
 SET(hooc_header_files
-        ${PROJECT_SOURCE_DIR}/grammar/HooLexer.h
-        ${PROJECT_SOURCE_DIR}/grammar/HooParser.h
+		grammar/HooLexer.h
+		grammar/HooParser.h
+		grammar/HooBaseVisitor.h
+		grammar/HooVisitor.h
 		src/Node.hh
 		src/Operator.hh
 		src/Expression.hh
@@ -42,10 +48,6 @@ SET(hooc_header_files
 		src/ExpressionStatement.hh
 		src/StatementList.hh
 		src/compiler/CompilationUnit.hh
-		grammar/HooLexer.h
-		grammar/HooParser.h
-		grammar/HooBaseVisitor.h
-		grammar/HooVisitor.h
         src/compiler/CompilationError.hh
         src/compiler/ParserDriver.hh
 		src/compiler/CompilationContext.hh
@@ -55,8 +57,10 @@ SET(hooc_header_files
 		src/visitors/UnitVisitor.hh)
 
 SET(hooc_source_files
-        ${PROJECT_SOURCE_DIR}/grammar/HooLexer.cpp
-        ${PROJECT_SOURCE_DIR}/grammar/HooParser.cpp
+        grammar/HooLexer.cpp
+        grammar/HooParser.cpp
+		grammar/HooBaseVisitor.cpp
+		grammar/HooVisitor.cpp
         src/Node.cpp
         src/Operator.cpp
         src/Expression.cpp
@@ -67,21 +71,21 @@ SET(hooc_source_files
         src/ExpressionStatement.cpp
         src/StatementList.cpp
 		src/compiler/CompilationUnit.cpp
-		grammar/HooLexer.cpp
-		grammar/HooParser.cpp
-		grammar/HooBaseVisitor.cpp
-		grammar/HooVisitor.cpp
         src/compiler/CompilationError.cpp
         src/compiler/ParserDriver.cpp
 		src/compiler/CompilationContext.cpp
 		src/Class.cpp
 		src/ast/TypeSpecification.cpp
 		src/ast/RootStatement.cpp
-		src/visitors/UnitVisitor.cpp src/ast/FunctionDefinition.cpp src/ast/FunctionDefinition.hh src/ast/Declaration.cpp src/ast/Declaration.hh)
+		src/visitors/UnitVisitor.cpp
+		src/ast/FunctionDefinition.cpp
+		src/ast/FunctionDefinition.hh
+		src/ast/Declaration.cpp src/ast/Declaration.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
+ADD_DEPENDENCIES(grammar_test antlr4_static)
 TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime${static_lib_suffix})
 
