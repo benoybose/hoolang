@@ -1,16 +1,8 @@
-image: ubuntu
+image: benoybose/hooc-dev
 pipelines:
   default:
     - step:
         script:
-          - apt install -y build-essential
-          - apt install -y g++
-          - apt install -y cmake
-          - apt install -y bison
-          - apt install -y flex
-          - apt install -y libboost-dev
-          - apt install -y libboost-regex-dev
-          - apt install -y libboost-filesystem-dev
           - cmake -G "Unix Makefiles"
           - make all
           - ctest
