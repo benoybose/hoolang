@@ -17,23 +17,37 @@
  */
 
 /**
- * File: ExpressionStatement.cpp
+ * File: BinaryExpression.cpp
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 30, March 2018
+ * Date: 28, March 2018
  */
 
 #include <stdlib.h>
 
+#include "BinaryExpression.hh"
 #include "ast/Expression.hh"
-#include "ExpressionStatement.hh"
+#include "Operator.hh"
 
 namespace hooc {
-//    ExpressionStatement::ExpressionStatement(hooc::ast::Expression expression):
-//            Statement(STMT_EXPRESSION),
-//            _expression(expression) {
-//    }
-//
-//    Expression *ExpressionStatement::GetExpression() {
-//         return this->_expression.get();
-//    }
+    namespace ast {
+        BinaryExpression::BinaryExpression(Expression *lvalue,
+                Operator *opr,
+                Expression *rvalue):
+                Expression(EXPRESSION_BINARY),
+                _lvalue(lvalue), _operator(opr),
+                _rvalue(rvalue) {
+        }
+
+        const Expression *BinaryExpression::GetLeftExpression() const {
+            return this->_lvalue;
+        }
+
+        const Operator *BinaryExpression::GetOperator() const {
+            return this->_operator;
+        }
+
+        const Expression *BinaryExpression::GetRightExpression() const {
+            return this->_rvalue;
+        }
+    }
 }

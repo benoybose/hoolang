@@ -37,6 +37,23 @@ public:
     antlrcpp::Any visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) override;
 
     antlrcpp::Any visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx) override;
+
+    antlrcpp::Any visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) override;
+
+    antlrcpp::Any visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) override;
+
+    antlrcpp::Any visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) override;
+
+    antlrcpp::Any visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) override;
+
+    antlrcpp::Any visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) override;
+
+    antlrcpp::Any visitConstantInteger(HooParser::ConstantIntegerContext *ctx) override;
+
+    antlrcpp::Any visitConstantFloating(HooParser::ConstantFloatingContext *ctx) override;
+
+    antlrcpp::Any visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) override;
+
 };
 
 

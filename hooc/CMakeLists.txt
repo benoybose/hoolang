@@ -39,11 +39,11 @@ SET(hooc_header_files
 		grammar/HooBaseVisitor.h
 		grammar/HooVisitor.h
 		src/Node.hh
-		src/Operator.hh
-		src/Expression.hh
-		src/LiteralExpression.hh
+		src/ast/Operator.hh
+		src/ast/Expression.hh
+        src/ast/LiteralExpression.hh
 		src/Logger.hh
-		src/BinaryExpression.hh
+        src/ast/BinaryExpression.hh
 		src/Statement.hh
 		src/ExpressionStatement.hh
 		src/StatementList.hh
@@ -62,11 +62,11 @@ SET(hooc_source_files
 		grammar/HooBaseVisitor.cpp
 		grammar/HooVisitor.cpp
         src/Node.cpp
-        src/Operator.cpp
-        src/Expression.cpp
-        src/LiteralExpression.cpp
+		src/ast/Operator.cpp
+		src/ast/Expression.cpp
+        src/ast/LiteralExpression.cpp
         src/Logger.cpp
-        src/BinaryExpression.cpp
+        src/ast/BinaryExpression.cpp
         src/Statement.cpp
         src/ExpressionStatement.cpp
         src/StatementList.cpp
@@ -80,7 +80,7 @@ SET(hooc_source_files
 		src/visitors/UnitVisitor.cpp
 		src/ast/FunctionDefinition.cpp
 		src/ast/FunctionDefinition.hh
-		src/ast/Declaration.cpp src/ast/Declaration.hh)
+		src/ast/Declaration.cpp src/ast/Declaration.hh src/ast/ReferenceExpression.cpp src/ast/ReferenceExpression.hh src/ast/ArrayAccessExpression.cpp src/ast/ArrayAccessExpression.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})

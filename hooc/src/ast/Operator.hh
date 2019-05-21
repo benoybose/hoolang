@@ -17,33 +17,39 @@
  */
 
 /**
- * File: BinaryExpression.hh
+ * File: hcoperator.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 28, March 2018
+ * Date: 27, March 2018
  */
 
-#ifndef HCBINARYEXP_H
-#define HCBINARYEXP_H
+#include "Node.hh"
 
-#include "Expression.hh"
-#include "Operator.hh"
+#ifndef HCOPERATOR_H
+#define HCOPERATOR_H
+
+#include <memory>
 
 namespace hooc {
-    class BinaryExpression: public Expression {
-    private:
-        ast::Expression _lvalue;
-        ast::Operator _operator;
-        ast::Expression _rvalue;
+    namespace ast {
+        enum OperatorType {
+            OPERATOR_ADD,
+            OPERATOR_SUB,
+            OPERATOR_DIV,
+            OPERATOR_MUL,
+            OPERATOR_MOD
+        };
 
-    public:
-        BinaryExpression(ast::Expression lvalue, ast::Operator opr, ast::Expression rvalue);
+        class Operator {
+        private:
+            OperatorType _operatorType;
+        public:
+            Operator(OperatorType operatorType);
 
-    public:
-        Expression* GetLeftExpression() const;
-        Operator* GetOperator() const;
-        Expression* GetRightExpression() const;
-    };
-}
+        public:
+            const OperatorType GetOperatorType() const;
+        };
+    }
+};
 
-#endif /* HCBINARYEXPR_H */
+#endif /* HCOPERATOR_H */
 

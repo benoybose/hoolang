@@ -17,23 +17,39 @@
  */
 
 /**
- * File: hcoperator.c
+ * File: hcexpr.h
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 27, March 2018
+ * Date: 29, March 2018
  */
 
-#include "Operator.hh"
+#ifndef HCEXPR_H
+#define HCEXPR_H
 
-#include <stdlib.h>
+#include <memory>
+#include <string>
 
 namespace hooc {
-    Operator::Operator(hooc::OperatorType operatorType):
-            Node(NODE_OPERATOR)
-    {
-        this->_operatorType = operatorType;
-    }
+    namespace ast {
+        enum ExpressionType {
+            EXPRESSION_LITERAL,
+            EXPRESSION_BINARY,
+            EXPRESSION_REFERENCE,
+            EXPRESSION_ARRAY
+        };
 
-    OperatorType Operator::getOperatorType() {
-        return this->_operatorType;
+        class Expression {
+
+        private:
+            ExpressionType _expressionType;
+
+        public:
+            explicit Expression(ExpressionType expressionType);
+
+        public:
+            const ExpressionType GetExpressionType() const;
+        };
     }
 }
+
+#endif /* HCEXPR_H */
+

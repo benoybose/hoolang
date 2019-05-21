@@ -2,10 +2,15 @@
 // Created by benoy on 5/16/2019.
 //
 
+#include "HooLexer.h"
 #include "UnitVisitor.hh"
 #include "ast/TypeSpecification.hh"
 #include "ast/Declaration.hh"
 #include "ast/FunctionDefinition.hh"
+#include "ast/ReferenceExpression.hh"
+#include "ast/LiteralExpression.hh"
+#include "ast/BinaryExpression.hh"
+#include "ast/ArrayAccessExpression.hh"
 
 #include <list>
 #include <string>
@@ -127,5 +132,54 @@ Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext 
     std::list<Declaration*> param_list;
     param_list.push_back(declaration);
     return Any(param_list);
+}
+
+Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
+    auto name = ctx->Identifier()->getText();
+    auto expression = new ReferenceExpression(name);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) {
+    auto parent = this->visit(ctx->parent).as<ReferenceExpression*>();
+    auto name = ctx->name->getText();
+    auto expression = new ReferenceExpression(parent, name);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) {
+    auto expression = this->visit(ctx->constant());
+    return Any(expression);
+}
+
+Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) {
+    auto text = ctx->StringLiteral()->getText();
+    auto expression = new LiteralExpression(LITERAL_STRING, text);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) {
+    auto container = this->visit(ctx->container).as<Expression*>();
+    auto accessIndex = this->visit(ctx->accessIndex).as<Expression*>();
+    auto expression = new ArrayAccessExpression(container, accessIndex);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitConstantInteger(HooParser::ConstantIntegerContext *ctx) {
+    auto value = ctx->getText();
+    auto expression = new LiteralExpression(LITERAL_INTEGER, value);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitConstantFloating(HooParser::ConstantFloatingContext *ctx) {
+    auto value = ctx->getText();
+    auto expression = new LiteralExpression(LITERAL_DOUBLE, value);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) {
+    auto value = ctx->getText();
+    auto expression = new LiteralExpression(LITERAL_CHARACTER, value);
+    return Any(expression);
 }
 

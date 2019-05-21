@@ -26,16 +26,16 @@
 #define HCEXPRSTMT_H
 
 #include "Statement.hh"
-#include "Expression.hh"
+#include "ast/Expression.hh"
 
 namespace hooc {
     class ExpressionStatement: public Statement {
-    private:
-        ast::Expression _expression;
-
-    public:
-        explicit ExpressionStatement(ast::Expression expression);
-        Expression* GetExpression();
+//    private:
+//        ast::Expression _expression;
+//
+//    public:
+//        explicit ExpressionStatement(ast::Expression expression);
+//        Expression* GetExpression();
     };
 }
 

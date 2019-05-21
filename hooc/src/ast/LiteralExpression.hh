@@ -16,12 +16,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * File: hcliteralexpr.h
- * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 25, March 2018
- */
-
 #ifndef _LITERALTYPEEXPR_H_
 #define _LITERALTYPEEXPR_H_
 
@@ -34,45 +28,30 @@
 #include <string>
 
 namespace hooc {
-    enum LiteralType {
-        LITERAL_INVALID,
-        LITERAL_INTEGER,
-        LITERAL_CHARACTER,
-        LITERAL_STRING,
-        LITERAL_BOOLEAN,
-        LITERAL_DOUBLE,
-        LITERAL_BYTE
-    };
+    namespace ast {
+        enum LiteralType {
+            LITERAL_INTEGER,
+            LITERAL_CHARACTER,
+            LITERAL_STRING,
+            LITERAL_BOOLEAN,
+            LITERAL_DOUBLE,
+            LITERAL_BYTE
+        };
 
-    typedef ::hoo::Integer Integer;
-    typedef ::hoo::Character Character;
-    typedef ::hoo::String String;
-    typedef ::hoo::Boolean Boolean;
-    typedef ::hoo::Double Double;
-    typedef ::hoo::Byte Byte;
+        class LiteralExpression : public Expression {
+        private:
+            LiteralType _literalType;
+            std::string _value;
 
-    class LiteralExpression : public Expression {
-    private:
-        LiteralType _literalType;
-        hoo::ValuePtr _value;
-    public:
-        LiteralExpression(LiteralType literaltype, const char *value);
+        public:
+            LiteralExpression(LiteralType literaltype, std::string& value);
+            LiteralExpression(LiteralType literaltype, const std::string& value);
 
-    public:
-        LiteralType GetListeralType();
-
-        Integer GetInteger() const;
-
-        Character GetCharacter() const;
-
-        String GetString() const;
-
-        Boolean GetBoolean() const;
-
-        Double GetDouble() const;
-
-        Byte GetByte() const;
-    };
+        public:
+            const LiteralType GetListeralType() const;
+            const std::string GetValue() const;
+        };
+    }
 };
 
 #endif

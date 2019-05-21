@@ -62,13 +62,6 @@ HexQuad
     :   HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
     ;
 
-Constant
-    :   IntegerConstant
-    |   FloatingConstant
-    |   CharacterConstant
-    ;
-
-fragment
 IntegerConstant
     :   DecimalConstant IntegerSuffix?
     |   OctalConstant IntegerSuffix?
@@ -139,7 +132,6 @@ LongLongSuffix
     :   'll' | 'LL'
     ;
 
-fragment
 FloatingConstant
     :   DecimalFloatingConstant
     |   HexadecimalFloatingConstant
@@ -200,7 +192,6 @@ FloatingSuffix
     :   'f' | 'l' | 'F' | 'L'
     ;
 
-fragment
 CharacterConstant
     :   '\'' CCharSequence '\''
     |   'L\'' CCharSequence '\''

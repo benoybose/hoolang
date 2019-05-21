@@ -17,36 +17,35 @@
  */
 
 /**
- * File: BinaryExpression.cpp
+ * File: BinaryExpression.hh
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 28, March 2018
  */
 
-#include <stdlib.h>
+#ifndef HCBINARYEXP_H
+#define HCBINARYEXP_H
 
-#include "BinaryExpression.hh"
-#include "Expression.hh"
+#include "ast/Expression.hh"
 #include "Operator.hh"
 
 namespace hooc {
-    BinaryExpression::BinaryExpression(ast::Expression lvalue,
-                                       ast::Operator opr,
-                                       ast::Expression rvalue):
-        Expression(EXPRESSION_BINARY),
-        _lvalue(lvalue),
-        _operator(opr),
-        _rvalue(rvalue) {
-    }
+    namespace ast {
+        class BinaryExpression: public Expression {
+        private:
+            Expression* _lvalue;
+            Operator* _operator;
+            Expression* _rvalue;
 
-    Expression *BinaryExpression::GetRightExpression() const {
-        return this->_rvalue.get();
-    }
+        public:
+            BinaryExpression(Expression* lvalue, Operator* opr, Expression* rvalue);
 
-    Expression *BinaryExpression::GetLeftExpression() const {
-        return this->_lvalue.get();
-    }
-
-    Operator *BinaryExpression::GetOperator() const {
-        return this->_operator.get();
+        public:
+            const Expression* GetLeftExpression() const;
+            const Operator* GetOperator() const;
+            const Expression* GetRightExpression() const;
+        };
     }
 }
+
+#endif /* HCBINARYEXPR_H */
+

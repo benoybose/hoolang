@@ -17,41 +17,41 @@
  */
 
 /**
- * File: hcexpr.h
+ * File: literaltype.c
  * Author: Benoy Bose <benoybose@gmail.com>
- * Date: 29, March 2018
+ * Date: 25, March 2018
  */
 
-#ifndef HCEXPR_H
-#define HCEXPR_H
+#include <stdlib.h>
+#include <stdint.h>
+#include <memory.h>
 
-#include "Node.hh"
-#include <memory>
-#include <string>
+#include "LiteralExpression.hh"
+
+using namespace hoo;
 
 namespace hooc {
-    enum ExpressionType {
-        EXPRESSION_INVALID,
-        EXPRESSION_LITERAL,
-        EXPRESSION_BINARY
-    };
-
-    class Expression: public Node {
-
-    private:
-        ExpressionType _expressionType;
-
-    public:
-        explicit Expression(ExpressionType expressionType);
-
-    public:
-        ExpressionType GetExpressionType();
-    };
-
     namespace ast {
-        typedef std::shared_ptr<hooc::Expression> Expression;
+        LiteralExpression::LiteralExpression(LiteralType literaltype,
+                                             std::string &value) :
+                Expression(EXPRESSION_LITERAL),
+                _literalType(literaltype),
+                _value(value) {
+        }
+
+        LiteralExpression::LiteralExpression(LiteralType literaltype,
+                                             const std::string &value) :
+                Expression(EXPRESSION_LITERAL),
+                _literalType(literaltype),
+                _value(value) {
+        }
+
+        const LiteralType LiteralExpression::GetListeralType() const {
+            return this->_literalType;
+        }
+
+        const std::string LiteralExpression::GetValue() const {
+            return this->_value;
+        }
     }
 }
-
-#endif /* HCEXPR_H */
-

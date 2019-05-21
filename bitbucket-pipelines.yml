@@ -5,4 +5,3 @@ pipelines:
         script:
           - cmake -G "Unix Makefiles"
           - make all
-          - ctest

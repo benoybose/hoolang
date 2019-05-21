@@ -25,19 +25,25 @@ options {
     language=Cpp;
 }
 
+constant
+    : IntegerConstant #constantInteger
+    | FloatingConstant #constantFloating
+    | CharacterConstant #constantCharacter
+    ;
+
 primaryExpression
-    :   Identifier
-    |   Constant
-    |   StringLiteral+
-    |   primaryExpression '.' Identifier
-    |   primaryExpression '[' Constant? ']'
+    :   Identifier #primaryRefExpr
+    |   constant #primaryConstantExpr
+    |   StringLiteral #primaryStringExpr
+    |   parent=primaryExpression '.' name=Identifier #primaryNestedRefExpr
+    |   container=primaryExpression '[' accessIndex=primaryExpression ']' #primaryArrayAccessExpr
     ;
 
 expression
-    :   primaryExpression
-    |   invokeExpression
-    |   expression binaryOperator expression
-    |   '(' expression ')'
+    :   primaryExpression #exprPrimary
+    |   invokeExpression #exprInvoke
+    |   expression binaryOperator expression #exprBinary
+    |   '(' expression ')' #exprGrouped
     ;
 
 binaryOperator

@@ -17,42 +17,24 @@
  */
 
 /**
- * File: hcoperator.h
+ * File: hcoperator.c
  * Author: Benoy Bose <benoybose@gmail.com>
  * Date: 27, March 2018
  */
 
-#include "Node.hh"
+#include "Operator.hh"
 
-#ifndef HCOPERATOR_H
-#define HCOPERATOR_H
-
-#include <memory>
+#include <stdlib.h>
 
 namespace hooc {
-    enum OperatorType {
-        OPERATOR_INVALID,
-        OPERATOR_ADD,
-        OPERATOR_SUB,
-        OPERATOR_DIV,
-        OPERATOR_MUL,
-        OPERATOR_MOD
-    };
-
-    class Operator: public Node {
-    private:
-        OperatorType _operatorType;
-    public:
-        Operator(OperatorType operatorType);
-
-    public:
-        OperatorType getOperatorType();
-    };
-
     namespace ast {
-        typedef std::shared_ptr<hooc::Operator> Operator;
+        Operator::Operator(OperatorType operatorType)
+        {
+            this->_operatorType = operatorType;
+        }
+
+        const OperatorType Operator::GetOperatorType() const {
+            return this->_operatorType;
+        }
     }
-};
-
-#endif /* HCOPERATOR_H */
-
+}
