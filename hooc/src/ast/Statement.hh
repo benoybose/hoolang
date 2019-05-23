@@ -16,18 +16,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stdlib.h>
+#ifndef HCSTMT_H
+#define HCSTMT_H
 
-#include "ast/Expression.hh"
-#include "ExpressionStatement.hh"
+#include "Node.hh"
+
+#include <memory>
+#include <string>
 
 namespace hooc {
-//    ExpressionStatement::ExpressionStatement(hooc::ast::Expression expression):
-//            Statement(STMT_EXPRESSION),
-//            _expression(expression) {
-//    }
-//
-//    Expression *ExpressionStatement::GetExpression() {
-//         return this->_expression.get();
-//    }
+    namespace ast {
+        typedef enum {
+            STMT_INVALID,
+            STMT_EXPRESSION
+        } StatementType;
+
+        class Statement : public Node {
+        private:
+            StatementType _statementType;
+        public:
+            Statement(StatementType statementType);
+
+        public:
+            const StatementType GetStatementType() const;
+        };
+    }
 }
+
+#endif /* HCSTMT_H */
+

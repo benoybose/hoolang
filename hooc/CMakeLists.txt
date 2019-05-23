@@ -44,8 +44,8 @@ SET(hooc_header_files
         src/ast/LiteralExpression.hh
 		src/Logger.hh
         src/ast/BinaryExpression.hh
-		src/Statement.hh
-		src/ExpressionStatement.hh
+		src/ast/Statement.hh
+		src/ast/ExpressionStatement.hh
 		src/StatementList.hh
 		src/compiler/CompilationUnit.hh
         src/compiler/CompilationError.hh
@@ -67,8 +67,8 @@ SET(hooc_source_files
         src/ast/LiteralExpression.cpp
         src/Logger.cpp
         src/ast/BinaryExpression.cpp
-        src/Statement.cpp
-        src/ExpressionStatement.cpp
+		src/ast/Statement.cpp
+		src/ast/ExpressionStatement.cpp
         src/StatementList.cpp
 		src/compiler/CompilationUnit.cpp
         src/compiler/CompilationError.cpp

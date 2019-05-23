@@ -19,7 +19,7 @@
 #ifndef INCLUDE_NODES_HCSTMTLIST_H_
 #define INCLUDE_NODES_HCSTMTLIST_H_
 
-#include "Statement.hh"
+#include "ast/Statement.hh"
 
 #include <list>
 #include <memory>
