@@ -11,6 +11,7 @@
 #include "ast/LiteralExpression.hh"
 #include "ast/BinaryExpression.hh"
 #include "ast/ArrayAccessExpression.hh"
+#include "ast/InvokeExpression.h"
 
 #include <list>
 #include <string>
@@ -183,3 +184,40 @@ Any UnitVisitor::visitConstantCharacter(HooParser::ConstantCharacterContext *ctx
     return Any(expression);
 }
 
+Any UnitVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx) {
+    auto expression = this->visit(ctx->invokeExpression()).as<Expression*>();
+    return Any(expression);
+}
+
+Any UnitVisitor::visitExprBinary(HooParser::ExprBinaryContext *ctx) {
+    auto lvalue = this->visit(ctx->lvalue).as<Expression*>();
+    auto opr = new Operator(ctx->opr->getText());
+    auto rvalue = this->visit(ctx->rvalue).as<Expression*>();
+
+    auto binaryExpresion = new BinaryExpression(lvalue, opr, rvalue);
+    return Any(binaryExpresion);
+}
+
+Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
+    auto expression = this->visit(ctx->expression()).as<Expression*>();
+    return Any(expression);
+}
+
+Any UnitVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx) {
+    auto primaryExpression = this->visit(ctx->primaryExpression()).as<Expression*>();
+    return Any(primaryExpression);
+}
+
+Any UnitVisitor::visitInvokeExpression(HooParser::InvokeExpressionContext *ctx) {
+    auto receiver = this->visit(ctx->receiver).as<Expression*>();
+    std::list<Expression*> argumentList;
+    if(nullptr != ctx->arguments) {
+        auto arguments = ctx->arguments->expression();
+        for(auto argument: arguments) {
+            auto expression = this->visit(argument).as<Expression*>();
+            argumentList.push_back(expression);
+        }
+    }
+    auto invokeExpression = new InvokeExpression(receiver, argumentList);
+    return Any(invokeExpression);
+}

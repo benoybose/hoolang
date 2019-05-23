@@ -42,7 +42,7 @@ primaryExpression
 expression
     :   primaryExpression #exprPrimary
     |   invokeExpression #exprInvoke
-    |   expression binaryOperator expression #exprBinary
+    |   lvalue=expression opr=binaryOperator rvalue=expression #exprBinary
     |   '(' expression ')' #exprGrouped
     ;
 
@@ -80,7 +80,7 @@ initializer
     ;
 
 invokeExpression
-    : primaryExpression '(' expressionList? ')'
+    : receiver=primaryExpression '(' arguments=expressionList? ')'
     ;
 
 expressionList

@@ -34,7 +34,8 @@ namespace hooc {
             EXPRESSION_LITERAL,
             EXPRESSION_BINARY,
             EXPRESSION_REFERENCE,
-            EXPRESSION_ARRAY
+            EXPRESSION_ARRAY,
+            EXPRESSION_INVOKE
         };
 
         class Expression {

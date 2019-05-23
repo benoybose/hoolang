@@ -32,18 +32,42 @@
 namespace hooc {
     namespace ast {
         enum OperatorType {
+            INVALID_OPERATOR,
+
             OPERATOR_ADD,
             OPERATOR_SUB,
             OPERATOR_DIV,
             OPERATOR_MUL,
-            OPERATOR_MOD
+            OPERATOR_MOD,
+
+            OPERATOR_EQUAL,
+            OPERATOR_NOT_EQUAL,
+            OPERATOR_GREATER_THAN,
+            OPERATOR_LESS_THAN,
+            OPERATOR_GREATER_THAN_EQUAL,
+            OPERATOR_LESS_THAN_EQUAL,
+            OPERATOR_LOGICAL_AND,
+            OPERATOR_LOGICAL_OR,
+
+            OPERATOR_ASSIGN,
+            OPERATOR_ASSIGN_INC,
+            OPERATOR_ASSIGN_DEC,
+            OPERATOR_ASSIGN_DIV,
+            OPERATOR_ASSIGN_MUL,
+
+            OPERATOR_BIT_OR,
+            OPERATOR_BIT_AND,
+            OPERATOR_BIT_XOR,
+            OPERATOR_BIT_NOT,
+            OPERATOR_BIT_SHIFT_RIGHT,
+            OPERATOR_BIT_SHIFT_LEFT
         };
 
         class Operator {
         private:
             OperatorType _operatorType;
         public:
-            Operator(OperatorType operatorType);
+            explicit Operator(const std::string& operatorText);
 
         public:
             const OperatorType GetOperatorType() const;

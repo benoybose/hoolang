@@ -54,6 +54,16 @@ public:
 
     antlrcpp::Any visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) override;
 
+    antlrcpp::Any visitExprInvoke(HooParser::ExprInvokeContext *ctx) override;
+
+    antlrcpp::Any visitExprBinary(HooParser::ExprBinaryContext *ctx) override;
+
+    antlrcpp::Any visitExprGrouped(HooParser::ExprGroupedContext *ctx) override;
+
+    antlrcpp::Any visitExprPrimary(HooParser::ExprPrimaryContext *ctx) override;
+
+    antlrcpp::Any visitInvokeExpression(HooParser::InvokeExpressionContext *ctx) override;
+
 };
 
 

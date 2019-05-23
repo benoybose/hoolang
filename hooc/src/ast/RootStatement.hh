@@ -9,7 +9,8 @@ namespace hooc {
     namespace ast {
         typedef enum {
             Class,
-            Interface
+            Interface,
+            Statement
         } ROOT_STATEMENT_TYPE;
 
         class RootStatement {
