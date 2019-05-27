@@ -22,20 +22,20 @@
 namespace hooc {
     namespace ast {
         typedef enum {
-            Class,
-            Interface,
-            Statement
-        } ROOT_STATEMENT_TYPE;
+            ROOTSTMT_CLASS,
+            ROOTSTMT_INTERFACE,
+            ROOTSTMT_STATEMENT
+        } RootStatementType;
 
         class RootStatement {
         protected:
-            RootStatement(ROOT_STATEMENT_TYPE type);
+            RootStatement(RootStatementType type);
 
         private:
-            ROOT_STATEMENT_TYPE _type;
+            RootStatementType _type;
 
         public:
-            const ROOT_STATEMENT_TYPE GetType() const;
+            const RootStatementType GetType() const;
         };
     }
 }

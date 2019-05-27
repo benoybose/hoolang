@@ -105,7 +105,7 @@ variableDeclaraionStatement
     ;
 
 assignmentStatement
-    : primaryExpression '=' expression
+    : primaryExpression '=' expression ';'
     ;
 
 compoundStatement

@@ -20,13 +20,67 @@
 
 namespace hooc {
     namespace ast {
-        Statement::Statement(StatementType statementType):
-                Node(NODE_STATEMENT),
+        Statement::Statement(StatementType statementType) :
+                RootStatement(ROOTSTMT_STATEMENT),
                 _statementType(statementType) {
         }
 
         const StatementType Statement::GetStatementType() const {
             return this->_statementType;
+        }
+
+        CompoundStatement::CompoundStatement(std::list<Statement *> &statements) :
+                Statement(STMT_COMPOUND) {
+            for (auto statement: statements) {
+                this->_statements.push_back(statement);
+            }
+        }
+
+        const std::list<Statement *> &CompoundStatement::GetStatements() const {
+            return this->_statements;
+        }
+
+        ReturnStatement::ReturnStatement(Expression *expression) :
+                ExpressionStatement(expression, STMT_RETURN) {
+        }
+
+        AssignmentStatement::AssignmentStatement(Expression *primaryExpression,
+                                                 Expression *valueExpression) : Statement(STMT_ASSIGNMENT),
+                                                                                _primaryExpression(primaryExpression),
+                                                                                _valueExpression(valueExpression) {
+        }
+
+        const Expression *AssignmentStatement::GetPrimaryExpression() const {
+            return this->_primaryExpression;
+        }
+
+        const Expression *AssignmentStatement::GetValueExpression() const {
+            return this->_valueExpression;
+        }
+
+        VariableDeclarationStatement::VariableDeclarationStatement(Declaration *declaration) :
+                Statement(STMT_VARIABLE_DECLARATION),
+                _declaration(declaration) {
+
+        }
+
+        const Declaration *VariableDeclarationStatement::GetDeclaration() const {
+            return this->_declaration;
+        }
+
+        InvokeStatement::InvokeStatement(InvokeExpression *expression) :
+                ExpressionStatement(expression, STMT_INVOKE) {
+
+        }
+
+        ExpressionStatement::ExpressionStatement(Expression *expression, StatementType statementType) :
+                Statement(statementType),
+                _expression(expression) {
+
+        }
+
+        const Expression *ExpressionStatement::GetExpression() const {
+            return this->_expression;
         }
     }
 }

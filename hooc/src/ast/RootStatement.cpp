@@ -20,13 +20,13 @@
 
 namespace hooc {
     namespace ast {
-        RootStatement::RootStatement(ROOT_STATEMENT_TYPE type)
+        RootStatement::RootStatement(RootStatementType type)
                 : _type(type) {
 
         }
 
-        const ROOT_STATEMENT_TYPE RootStatement::GetType() const {
-            return Interface;
+        const RootStatementType RootStatement::GetType() const {
+            return this->_type;
         }
     }
 }

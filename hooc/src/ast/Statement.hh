@@ -16,22 +16,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HCSTMT_H
-#define HCSTMT_H
+#ifndef HC_STATEMENT_H
+#define HC_STATEMENT_H
 
-#include "Node.hh"
+#include "RootStatement.hh"
+#include "Expression.hh"
+#include "Declaration.hh"
+#include "InvokeExpression.h"
 
 #include <memory>
 #include <string>
+#include <list>
 
 namespace hooc {
     namespace ast {
         typedef enum {
-            STMT_INVALID,
-            STMT_EXPRESSION
+            STMT_COMPOUND,
+            STMT_RETURN,
+            STMT_ASSIGNMENT,
+            STMT_VARIABLE_DECLARATION,
+            STMT_INVOKE
         } StatementType;
 
-        class Statement : public Node {
+        class Statement : public RootStatement {
         private:
             StatementType _statementType;
         public:
@@ -40,8 +47,60 @@ namespace hooc {
         public:
             const StatementType GetStatementType() const;
         };
+
+        class CompoundStatement : public Statement {
+        private:
+            std::list<Statement *> _statements;
+        public:
+            explicit CompoundStatement(std::list<Statement *> &statements);
+
+        public:
+            const std::list<Statement *> &GetStatements() const;
+        };
+
+        class ExpressionStatement : public Statement {
+        private:
+            Expression *_expression;
+        public:
+            ExpressionStatement(Expression *expression,
+                                StatementType statementType);
+
+        public:
+            const Expression *GetExpression() const;
+        };
+
+        class ReturnStatement : public ExpressionStatement {
+        public:
+            explicit ReturnStatement(Expression *expression);
+        };
+
+        class AssignmentStatement: public Statement {
+        private:
+            Expression* _primaryExpression;
+            Expression* _valueExpression;
+        public:
+            explicit AssignmentStatement(Expression *primaryExpression,
+                                         Expression *valueExpression);
+        public:
+            const Expression* GetPrimaryExpression() const;
+            const Expression* GetValueExpression() const;
+        };
+
+        class VariableDeclarationStatement: public Statement {
+        private:
+            Declaration* _declaration;
+        public:
+            VariableDeclarationStatement(Declaration* declaration);
+        public:
+            const Declaration* GetDeclaration() const;
+        };
+
+        class InvokeStatement: public ExpressionStatement {
+        public:
+            InvokeStatement(InvokeExpression* expression);
+        };
     }
 }
 
-#endif /* HCSTMT_H */
+#endif /* HC_STATEMENT_H */
 
