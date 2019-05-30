@@ -32,21 +32,28 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
     auto source_path = boost::filesystem::absolute("test.hoo")
             .string();
 
-    const std::string source = "namespace test.grammar;\n"
-                               "\n"
-                               "class Application\n"
-                               "{\n"
-                               "\tfunc:int (args:string[]) main\n"
-                               "\t{\n"
-                               "\t\tvar result = add(10, 45);\n"
-                               "\t\tconsole.print(result);\n"
-                               "\t}\n"
-                               "\t\n"
-                               "\tfunc:int(a:int, b:int) add\n"
-                               "\t{\n"
-                               "\t\treturn a + b;\n"
-                               "\t}\n"
-                               "}";
-    ParserDriver driver(source, source_path);
-    auto unit = driver.Compile();
+//    const std::string source = "namespace test.grammar;\n"
+//                               "\n"
+//                               "class Application\n"
+//                               "{\n"
+//                               "\tfunc:int (args:string[]) main\n"
+//                               "\t{\n"
+//                               "\t\tvar result = add(10, 45);\n"
+//                               "\t\tconsole.print(result);\n"
+//                               "\t}\n"
+//                               "\t\n"
+//                               "\tfunc:int(a:int, b:int) add\n"
+//                               "\t{\n"
+//                               "\t\treturn a + b;\n"
+//                               "\t}\n"
+//                               "}";
+//    ParserDriver driver(source, source_path);
+//    auto unit = driver.Compile();
+
+    auto variable_declaration1 = "var age:int;";
+    ParserDriver driver(variable_declaration1, source_path);
+    auto statement = driver.Compile();
+
+
+
 }

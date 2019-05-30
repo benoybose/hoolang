@@ -70,7 +70,6 @@ namespace hooc {
 
         InvokeStatement::InvokeStatement(InvokeExpression *expression) :
                 ExpressionStatement(expression, STMT_INVOKE) {
-
         }
 
         ExpressionStatement::ExpressionStatement(Expression *expression, StatementType statementType) :
@@ -81,6 +80,9 @@ namespace hooc {
 
         const Expression *ExpressionStatement::GetExpression() const {
             return this->_expression;
+        }
+
+        NoopStatement::NoopStatement(): Statement(STMT_NOOP) {
         }
     }
 }

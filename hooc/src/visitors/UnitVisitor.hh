@@ -78,6 +78,16 @@ public:
 
     antlrcpp::Any visitInvokeExpression(HooParser::InvokeExpressionContext *ctx) override;
 
+    antlrcpp::Any visitReturnStatement(HooParser::ReturnStatementContext *ctx) override;
+
+    antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
+
+    antlrcpp::Any visitAssignmentStatement(HooParser::AssignmentStatementContext *ctx) override;
+
+    antlrcpp::Any visitVariableDeclaraionStatement(HooParser::VariableDeclaraionStatementContext *ctx) override;
+
+    antlrcpp::Any visitInvokeStatement(HooParser::InvokeStatementContext *ctx) override;
+
 };
 
 

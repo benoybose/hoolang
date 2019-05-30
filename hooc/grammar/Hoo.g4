@@ -105,7 +105,7 @@ variableDeclaraionStatement
     ;
 
 assignmentStatement
-    : primaryExpression '=' expression ';'
+    : primary=primaryExpression '=' value=expression ';'
     ;
 
 compoundStatement
@@ -113,7 +113,7 @@ compoundStatement
     ;
 
 returnStatement
-    :   'return' expression
+    :   'return' returnValue=expression ';'
     ;
 
 classDefinition
@@ -165,9 +165,9 @@ useSpecifier
     :   'use' Identifier ( '.' Identifier)* ('as' Identifier) ';'
     ;
 
-rootStatement:
-    classDefinition |
-    statement
+rootStatement
+    :   classDefinition |
+        statement
     ;
 
 unit

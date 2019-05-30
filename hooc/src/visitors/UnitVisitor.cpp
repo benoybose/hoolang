@@ -26,6 +26,7 @@
 #include "ast/BinaryExpression.hh"
 #include "ast/ArrayAccessExpression.hh"
 #include "ast/InvokeExpression.h"
+#include "ast/Statement.hh"
 
 #include <list>
 #include <string>
@@ -235,3 +236,40 @@ Any UnitVisitor::visitInvokeExpression(HooParser::InvokeExpressionContext *ctx) 
     auto invokeExpression = new InvokeExpression(receiver, argumentList);
     return Any(invokeExpression);
 }
+
+Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx) {
+    auto expression = this->visit(ctx->returnValue).as<Expression*>();
+    auto statement = new ReturnStatement(expression);
+    return Any(statement);
+}
+
+Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx) {
+    auto statements = ctx->statement();
+    std::list<Statement*> statement_list;
+    for(auto statement_ctx: statements) {
+        auto statement = this->visit(statement_ctx).as<Statement*>();
+        statement_list.push_back(statement);
+    }
+    auto compoundStatement = new CompoundStatement(statement_list);
+    return Any(compoundStatement);
+}
+
+Any UnitVisitor::visitAssignmentStatement(HooParser::AssignmentStatementContext *ctx) {
+    auto primary = this->visit(ctx->primary).as<Expression*>();
+    auto value = this->visit(ctx->value).as<Expression*>();
+    auto statement = new AssignmentStatement(primary, value);
+    return Any(statement);
+}
+
+Any UnitVisitor::visitVariableDeclaraionStatement(HooParser::VariableDeclaraionStatementContext *ctx) {
+    auto declaration = this->visit(ctx->declaration()).as<Declaration*>();
+    auto statement = new VariableDeclarationStatement(declaration);
+    return Any(statement);
+}
+
+Any UnitVisitor::visitInvokeStatement(HooParser::InvokeStatementContext *ctx) {
+    auto expression = this->visit(ctx->invokeExpression()).as<InvokeExpression*>();
+    auto statement = new InvokeStatement(expression);
+    return Any(statement);
+}
+

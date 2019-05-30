@@ -31,6 +31,7 @@
 namespace hooc {
     namespace ast {
         typedef enum {
+            STMT_NOOP,
             STMT_COMPOUND,
             STMT_RETURN,
             STMT_ASSIGNMENT,
@@ -98,6 +99,11 @@ namespace hooc {
         class InvokeStatement: public ExpressionStatement {
         public:
             InvokeStatement(InvokeExpression* expression);
+        };
+
+        class NoopStatement: public Statement {
+        public:
+            NoopStatement();
         };
     }
 }
