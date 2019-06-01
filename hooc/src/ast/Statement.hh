@@ -23,6 +23,7 @@
 #include "Expression.hh"
 #include "Declaration.hh"
 #include "InvokeExpression.h"
+#include "UnitItem.hh"
 
 #include <memory>
 #include <string>
@@ -39,11 +40,11 @@ namespace hooc {
             STMT_INVOKE
         } StatementType;
 
-        class Statement : public RootStatement {
+        class Statement : public UnitItem {
         private:
-            StatementType _statementType;
+            StatementType _statement_type;
         public:
-            Statement(StatementType statementType);
+            explicit Statement(StatementType statement_type);
 
         public:
             const StatementType GetStatementType() const;
@@ -87,18 +88,20 @@ namespace hooc {
             const Expression* GetValueExpression() const;
         };
 
-        class VariableDeclarationStatement: public Statement {
+        class DeclarationStatement: public Statement {
         private:
             Declaration* _declaration;
+            std::string _declarator;
         public:
-            VariableDeclarationStatement(Declaration* declaration);
+            DeclarationStatement(const std::string& declarator, Declaration* declaration);
         public:
             const Declaration* GetDeclaration() const;
+            const std::string& GetDeclarator() const;
         };
 
         class InvokeStatement: public ExpressionStatement {
         public:
-            InvokeStatement(InvokeExpression* expression);
+            explicit InvokeStatement(InvokeExpression* expression);
         };
 
         class NoopStatement: public Statement {

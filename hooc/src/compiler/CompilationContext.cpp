@@ -54,7 +54,7 @@ namespace hooc {
         }
 
         HooParser::UnitContext* CompilationContext::GetUnitContext() {
-            this->parser->unit();
+            return this->parser->unit();
         }
     }
 }

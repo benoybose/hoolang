@@ -92,7 +92,7 @@ statement
     |   compoundStatement
     |   returnStatement
     |   assignmentStatement
-    |   variableDeclaraionStatement
+    |   declarationStatement
     |   invokeStatement
     ;
 
@@ -100,8 +100,8 @@ invokeStatement
     : invokeExpression ';'
     ;
 
-variableDeclaraionStatement
-    :   'var' declaration ';'
+declarationStatement
+    :   Declarator declaration ';'
     ;
 
 assignmentStatement
@@ -117,7 +117,9 @@ returnStatement
     ;
 
 classDefinition
-    : 'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
+    :   namespaceDeclaration?
+        useSpecifier*
+        'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
     ;
 
 classBody
@@ -128,12 +130,12 @@ classBody
     ;
 
 classBodyItem
-    : method
-    | field
+    :   functionDefinition
+    |   declarationStatement
     ;
 
 functionDefinition
-    :   'func' ( ':' returnType=typeSpecifier )? '(' paramList? ')' name=Identifier statement
+    :   Declarator? 'func' ( ':' returnType=typeSpecifier )? '(' paramList? ')' name=Identifier compoundStatement
     ;
 
 declaration
@@ -145,16 +147,8 @@ paramList
     |   paramList ( ',' decl=declaration )+ #multipleItemParamList
     ;
 
-method
-    : AccessSpecifier? functionDefinition
-    ;
-
-field
-    : AccessSpecifier? declaration
-    ;
-
-AccessSpecifier
-    : 'private' | 'public' | 'protected'
+Declarator
+    :   'private' | 'public' | 'protected' | 'var'
     ;
 
 namespaceDeclaration
@@ -165,17 +159,13 @@ useSpecifier
     :   'use' Identifier ( '.' Identifier)* ('as' Identifier) ';'
     ;
 
-rootStatement
-    :   classDefinition |
-        statement
+unitItem
+    :   classDefinition
+    |   statement
     ;
 
 unit
-    :
-        namespaceDeclaration?
-        useSpecifier*
-        rootStatement
-        EOF
+    :   unitItem* EOF
     ;
 
 ExtraSymbolCharacters: ( '#' | '@' | '$' | '`' | '?' )

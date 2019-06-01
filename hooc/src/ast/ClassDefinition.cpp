@@ -16,39 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_FUNCTIONDEFINITION_HH
-#define HC_FUNCTIONDEFINITION_HH
-
-#include "TypeSpecification.hh"
-#include "Declaration.hh"
-#include "Statement.hh"
-
-#include <string>
-#include <list>
+#include "ClassDefinition.hh"
 
 namespace hooc {
     namespace ast {
-        class FunctionDefinition {
-        private:
-            std::string _declarator;
-            TypeSpecification *_returnType;
-            std::string _name;
-            std::list<Declaration *> _param_list;
-            CompoundStatement *_statement;
-        public:
-            FunctionDefinition(const std::string &declarator, std::string &name, TypeSpecification *returnType,
-                                           std::list<Declaration *> &param_list, CompoundStatement *statement);
-
-        public:
-            const std::string GetName() const;
-
-            const TypeSpecification *GetReturnType() const;
-
-            const std::list<Declaration *> &GetParamList() const;
-
-            const void *GetStatement() const;
-        };
+        ClassDefinition::ClassDefinition() :
+                UnitItem(UNIT_ITEM_CLASS) {
+        }
     }
 }
-
-#endif //PROJECT_FUNCTIONDEFINITION_HH

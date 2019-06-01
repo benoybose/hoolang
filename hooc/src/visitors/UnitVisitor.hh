@@ -22,27 +22,12 @@
 #include "HooBaseVisitor.h"
 
 
-class UnitVisitor: public HooBaseVisitor  {
+class UnitVisitor : public HooBaseVisitor {
 public:
-    antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
 
     antlrcpp::Any visitNamespaceDeclaration(HooParser::NamespaceDeclarationContext *ctx) override;
 
-    antlrcpp::Any visitUseSpecifier(HooParser::UseSpecifierContext *ctx) override;
-
-    antlrcpp::Any visitRootStatement(HooParser::RootStatementContext *ctx) override;
-
     antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
-
-    antlrcpp::Any visitClassDefinition(HooParser::ClassDefinitionContext *ctx) override;
-
-    antlrcpp::Any visitClassBody(HooParser::ClassBodyContext *ctx) override;
-
-    antlrcpp::Any visitClassBodyItem(HooParser::ClassBodyItemContext *ctx) override;
-
-    antlrcpp::Any visitMethod(HooParser::MethodContext *ctx) override;
-
-    antlrcpp::Any visitField(HooParser::FieldContext *ctx) override;
 
     antlrcpp::Any visitDeclaration(HooParser::DeclarationContext *ctx) override;
 
@@ -83,8 +68,6 @@ public:
     antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
 
     antlrcpp::Any visitAssignmentStatement(HooParser::AssignmentStatementContext *ctx) override;
-
-    antlrcpp::Any visitVariableDeclaraionStatement(HooParser::VariableDeclaraionStatementContext *ctx) override;
 
     antlrcpp::Any visitInvokeStatement(HooParser::InvokeStatementContext *ctx) override;
 

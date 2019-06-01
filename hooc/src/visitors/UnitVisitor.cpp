@@ -34,17 +34,6 @@
 using namespace hooc::ast;
 using namespace antlrcpp;
 
-Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {
-    std::list<std::string> unit_namespace;
-    if (nullptr == ctx->namespaceDeclaration()) {
-        unit_namespace = this->visit(ctx->namespaceDeclaration())
-                .as<std::list<std::string>>();
-    }
-
-    //todo: Process use blocks
-    return HooBaseVisitor::visitUnit(ctx);
-}
-
 Any UnitVisitor::visitNamespaceDeclaration(HooParser::NamespaceDeclarationContext *ctx) {
     auto identifiers = ctx->Identifier();
     std::list<std::string> namespace_items;
@@ -55,19 +44,11 @@ Any UnitVisitor::visitNamespaceDeclaration(HooParser::NamespaceDeclarationContex
     return antlrcpp::Any(namespace_items);
 }
 
-Any UnitVisitor::visitUseSpecifier(HooParser::UseSpecifierContext *ctx) {
-    // todo" Construct use block
-    return HooBaseVisitor::visitUseSpecifier(ctx);
-}
 
-Any UnitVisitor::visitRootStatement(HooParser::RootStatementContext *ctx) {
-    if (nullptr != ctx->classDefinition()) {
-        this->visit(ctx->classDefinition());
-    }
-    return HooBaseVisitor::visitRootStatement(ctx);
-}
 
 Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
+
+    auto declarator = ctx->Declarator()->getText();
     TypeSpecification *return_type = nullptr;
     if (nullptr != ctx->returnType) {
         return_type = this->visit(ctx->returnType).as<TypeSpecification *>();
@@ -77,39 +58,19 @@ Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *c
     if(nullptr != ctx->paramList()) {
         param_list = this->visit(ctx->paramList()).as<std::list<Declaration*>>();
     }
-    auto statement = ctx->statement();
-    auto function_definition = new FunctionDefinition(function_name,
-            return_type,
-            param_list,
-            statement);
+    auto statement = this->visit(ctx->compoundStatement()).as<CompoundStatement*>();
+    auto function_definition = new FunctionDefinition(declarator, function_name,
+                                                      return_type,
+                                                      param_list,
+                                                      statement);
     return Any(function_definition);
-}
-
-Any UnitVisitor::visitClassDefinition(HooParser::ClassDefinitionContext *ctx) {
-    return HooBaseVisitor::visitClassDefinition(ctx);
-}
-
-Any UnitVisitor::visitClassBody(HooParser::ClassBodyContext *ctx) {
-    return HooBaseVisitor::visitClassBody(ctx);
-}
-
-Any UnitVisitor::visitClassBodyItem(HooParser::ClassBodyItemContext *ctx) {
-    return HooBaseVisitor::visitClassBodyItem(ctx);
-}
-
-Any UnitVisitor::visitMethod(HooParser::MethodContext *ctx) {
-    return HooBaseVisitor::visitMethod(ctx);
-}
-
-Any UnitVisitor::visitField(HooParser::FieldContext *ctx) {
-    return HooBaseVisitor::visitField(ctx);
 }
 
 Any UnitVisitor::visitDeclaration(HooParser::DeclarationContext *ctx) {
     auto name = ctx->name->getText();
     auto declared_type = this->visit(ctx->declared_type).as<TypeSpecification *>();
-    auto initialiser = this->visit(ctx->init->expression()).as<Expression*>();
-    auto declaration = new Declaration(name, declared_type, initialiser);
+    auto initializer = this->visit(ctx->init->expression()).as<Expression*>();
+    auto declaration = new Declaration(name, declared_type, initializer);
     return declaration;
 }
 
@@ -261,15 +222,8 @@ Any UnitVisitor::visitAssignmentStatement(HooParser::AssignmentStatementContext 
     return Any(statement);
 }
 
-Any UnitVisitor::visitVariableDeclaraionStatement(HooParser::VariableDeclaraionStatementContext *ctx) {
-    auto declaration = this->visit(ctx->declaration()).as<Declaration*>();
-    auto statement = new VariableDeclarationStatement(declaration);
-    return Any(statement);
-}
-
 Any UnitVisitor::visitInvokeStatement(HooParser::InvokeStatementContext *ctx) {
     auto expression = this->visit(ctx->invokeExpression()).as<InvokeExpression*>();
     auto statement = new InvokeStatement(expression);
     return Any(statement);
 }
-

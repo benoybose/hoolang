@@ -20,13 +20,13 @@
 
 namespace hooc {
     namespace ast {
-        Statement::Statement(StatementType statementType) :
-                RootStatement(ROOTSTMT_STATEMENT),
-                _statementType(statementType) {
+        Statement::Statement(StatementType statement_type) :
+                UnitItem(UNIT_ITEM_STATEMENT),
+                _statement_type(statement_type) {
         }
 
         const StatementType Statement::GetStatementType() const {
-            return this->_statementType;
+            return this->_statement_type;
         }
 
         CompoundStatement::CompoundStatement(std::list<Statement *> &statements) :
@@ -58,14 +58,20 @@ namespace hooc {
             return this->_valueExpression;
         }
 
-        VariableDeclarationStatement::VariableDeclarationStatement(Declaration *declaration) :
+        DeclarationStatement::DeclarationStatement(const std::string& declarator,
+                                                   Declaration *declaration) :
                 Statement(STMT_VARIABLE_DECLARATION),
+                _declarator(declarator),
                 _declaration(declaration) {
 
         }
 
-        const Declaration *VariableDeclarationStatement::GetDeclaration() const {
+        const Declaration *DeclarationStatement::GetDeclaration() const {
             return this->_declaration;
+        }
+
+        const std::string& DeclarationStatement::GetDeclarator() const {
+            return this->_declarator;
         }
 
         InvokeStatement::InvokeStatement(InvokeExpression *expression) :
@@ -82,7 +88,7 @@ namespace hooc {
             return this->_expression;
         }
 
-        NoopStatement::NoopStatement(): Statement(STMT_NOOP) {
+        NoopStatement::NoopStatement() : Statement(STMT_NOOP) {
         }
     }
 }

@@ -20,12 +20,15 @@
 
 namespace hooc {
     namespace ast {
-        FunctionDefinition::FunctionDefinition(std::string name, TypeSpecification *returnType,
+        FunctionDefinition::FunctionDefinition(const std::string &declarator, std::string &name,
+                                               TypeSpecification *returnType,
                                                std::list<Declaration *> &param_list,
-                                               void *statement): _name(name),
-                                               _returnType(returnType),
-                                               _param_list(param_list),
-                                               _statement(statement) {
+                                               CompoundStatement *statement) :
+                _declarator(declarator),
+                _name(name),
+                _returnType(returnType),
+                _param_list(param_list),
+                _statement(statement) {
         }
 
         const std::string FunctionDefinition::GetName() const {
