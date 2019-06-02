@@ -40,7 +40,7 @@ primaryExpression
 
 expression
     :   primaryExpression #exprPrimary
-    |   invokeExpression #exprInvoke
+    |   invocationExpression #exprInvoke
     |   lvalue=expression opr=binaryOperator rvalue=expression #exprBinary
     |   '(' expression ')' #exprGrouped
     ;
@@ -78,7 +78,7 @@ initializer
     :   '=' expression
     ;
 
-invokeExpression
+invocationExpression
     : receiver=primaryExpression '(' arguments=expressionList? ')'
     ;
 
@@ -91,21 +91,16 @@ statement
     :   ';'
     |   compoundStatement
     |   returnStatement
-    |   assignmentStatement
     |   declarationStatement
-    |   invokeStatement
+    |   expressionStatement
     ;
 
-invokeStatement
-    : invokeExpression ';'
+expressionStatement
+    :   expression ';'
     ;
 
 declarationStatement
-    :   Declarator declaration ';'
-    ;
-
-assignmentStatement
-    : primary=primaryExpression '=' value=expression ';'
+    :   declaration ';'
     ;
 
 compoundStatement
@@ -139,7 +134,7 @@ functionDefinition
     ;
 
 declaration
-    :   name=Identifier (':' declared_type=typeSpecifier)? init=initializer?
+    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? init=initializer?
     ;
 
 paramList

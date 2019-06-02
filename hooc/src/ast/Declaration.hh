@@ -20,13 +20,12 @@
 #define PROJECT_DECLARATION_HH
 
 #include "TypeSpecification.hh"
+#include "Expression.hh"
 
 #include <string>
 
 namespace hooc {
     namespace ast {
-        class Expression;
-
         class Declaration {
         private:
             TypeSpecification *_declared_type;
@@ -34,7 +33,11 @@ namespace hooc {
             Expression *_initializer;
 
         public:
-            Declaration(std::string name, TypeSpecification *declared_type, Expression *initializer);
+            Declaration(const std::string &declarator,
+                        const std::string &name,
+                        TypeSpecification *declared_type,
+                        Expression *initializer
+            );
 
             virtual ~Declaration();
 
@@ -44,6 +47,8 @@ namespace hooc {
             const std::string &GetName() const;
 
             const Expression *GetInitializer() const;
+
+            const std::string& GetDeclarator() const;
         };
     }
 }

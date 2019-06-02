@@ -34,10 +34,9 @@ namespace hooc {
         typedef enum {
             STMT_NOOP,
             STMT_COMPOUND,
+            STMT_EXPRESSION,
             STMT_RETURN,
-            STMT_ASSIGNMENT,
-            STMT_VARIABLE_DECLARATION,
-            STMT_INVOKE
+            STMT_DECLARATION,
         } StatementType;
 
         class Statement : public UnitItem {
@@ -48,6 +47,11 @@ namespace hooc {
 
         public:
             const StatementType GetStatementType() const;
+        };
+
+        class NoopStatement : public Statement {
+        public:
+            NoopStatement();
         };
 
         class CompoundStatement : public Statement {
@@ -64,8 +68,7 @@ namespace hooc {
         private:
             Expression *_expression;
         public:
-            ExpressionStatement(Expression *expression,
-                                StatementType statementType);
+            ExpressionStatement(Expression *expression);
 
         public:
             const Expression *GetExpression() const;
@@ -76,37 +79,17 @@ namespace hooc {
             explicit ReturnStatement(Expression *expression);
         };
 
-        class AssignmentStatement: public Statement {
+        class DeclarationStatement : public Statement {
         private:
-            Expression* _primaryExpression;
-            Expression* _valueExpression;
-        public:
-            explicit AssignmentStatement(Expression *primaryExpression,
-                                         Expression *valueExpression);
-        public:
-            const Expression* GetPrimaryExpression() const;
-            const Expression* GetValueExpression() const;
-        };
-
-        class DeclarationStatement: public Statement {
-        private:
-            Declaration* _declaration;
+            Declaration *_declaration;
             std::string _declarator;
         public:
-            DeclarationStatement(const std::string& declarator, Declaration* declaration);
-        public:
-            const Declaration* GetDeclaration() const;
-            const std::string& GetDeclarator() const;
-        };
+            DeclarationStatement(const std::string &declarator, Declaration *declaration);
 
-        class InvokeStatement: public ExpressionStatement {
         public:
-            explicit InvokeStatement(InvokeExpression* expression);
-        };
+            const Declaration *GetDeclaration() const;
 
-        class NoopStatement: public Statement {
-        public:
-            NoopStatement();
+            const std::string &GetDeclarator() const;
         };
     }
 }

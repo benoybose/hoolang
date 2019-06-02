@@ -20,7 +20,8 @@
 
 namespace hooc {
     namespace ast {
-        Declaration::Declaration(std::string name,
+        Declaration::Declaration(const std::string &declarator,
+                                 const std::string &name,
                                  TypeSpecification *declared_type,
                                  Expression *initializer) :
                 _name(name),

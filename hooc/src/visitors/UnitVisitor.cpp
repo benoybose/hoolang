@@ -67,10 +67,11 @@ Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *c
 }
 
 Any UnitVisitor::visitDeclaration(HooParser::DeclarationContext *ctx) {
+    auto declarator = ctx->Declarator()->getText();
     auto name = ctx->name->getText();
     auto declared_type = this->visit(ctx->declared_type).as<TypeSpecification *>();
     auto initializer = this->visit(ctx->init->expression()).as<Expression*>();
-    auto declaration = new Declaration(name, declared_type, initializer);
+    auto declaration = new Declaration(declarator, name, declared_type, initializer);
     return declaration;
 }
 
@@ -160,11 +161,6 @@ Any UnitVisitor::visitConstantCharacter(HooParser::ConstantCharacterContext *ctx
     return Any(expression);
 }
 
-Any UnitVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx) {
-    auto expression = this->visit(ctx->invokeExpression()).as<Expression*>();
-    return Any(expression);
-}
-
 Any UnitVisitor::visitExprBinary(HooParser::ExprBinaryContext *ctx) {
     auto lvalue = this->visit(ctx->lvalue).as<Expression*>();
     auto opr = new Operator(ctx->opr->getText());
@@ -179,12 +175,7 @@ Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
     return Any(expression);
 }
 
-Any UnitVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx) {
-    auto primaryExpression = this->visit(ctx->primaryExpression()).as<Expression*>();
-    return Any(primaryExpression);
-}
-
-Any UnitVisitor::visitInvokeExpression(HooParser::InvokeExpressionContext *ctx) {
+Any UnitVisitor::visitInvocationExpression(HooParser::InvocationExpressionContext *ctx) {
     auto receiver = this->visit(ctx->receiver).as<Expression*>();
     std::list<Expression*> argumentList;
     if(nullptr != ctx->arguments) {
@@ -194,6 +185,7 @@ Any UnitVisitor::visitInvokeExpression(HooParser::InvokeExpressionContext *ctx) 
             argumentList.push_back(expression);
         }
     }
+
     auto invokeExpression = new InvokeExpression(receiver, argumentList);
     return Any(invokeExpression);
 }
@@ -213,17 +205,4 @@ Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx
     }
     auto compoundStatement = new CompoundStatement(statement_list);
     return Any(compoundStatement);
-}
-
-Any UnitVisitor::visitAssignmentStatement(HooParser::AssignmentStatementContext *ctx) {
-    auto primary = this->visit(ctx->primary).as<Expression*>();
-    auto value = this->visit(ctx->value).as<Expression*>();
-    auto statement = new AssignmentStatement(primary, value);
-    return Any(statement);
-}
-
-Any UnitVisitor::visitInvokeStatement(HooParser::InvokeStatementContext *ctx) {
-    auto expression = this->visit(ctx->invokeExpression()).as<InvokeExpression*>();
-    auto statement = new InvokeStatement(expression);
-    return Any(statement);
 }
