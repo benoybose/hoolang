@@ -16,47 +16,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "CompilationUnit.hh"
+#include "CompilationErrorListener.hh"
+#include "CompilationError.hh"
+#include "antlr4-runtime.h"
 
-#include <string>
-#include <exception>
-#include <boost/regex.hpp>
-#include <boost/filesystem.hpp>
-#include "CompilationUnit.hh"
-
+using namespace antlr4;
 
 namespace hooc {
     namespace compiler {
-
-        CompilationUnit::CompilationUnit(boost::filesystem::path compilation_root, boost::filesystem::path module_path,
-                                         ast::Unit *unit, std::list<CompilationError *> errors)
-                : _compilation_root(compilation_root),
-                _module_path(module_path),
-                _statement(unit),
-                _errors(errors){
-
+        void CompilationErrorListener::syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line,
+                                                   size_t charPositionInLine, const std::string &msg,
+                                                   std::exception_ptr e) {
+            auto error = new CompilationError(line, charPositionInLine, msg);
+            this->_errors.push_back(error);
         }
 
-        const boost::filesystem::path
-        &CompilationUnit::GetCompilationRoot() const {
-            return this->_compilation_root;
-        }
-
-        const boost::filesystem::path
-        &CompilationUnit::GetModulePath() const {
-            return this->_module_path;
-        }
-
-        const ast::Unit *CompilationUnit::GetUnit() {
-            return this->_statement;
-        }
-
-        bool CompilationUnit::Success() {
-            return this->_errors.empty();
-        }
-
-        const std::list<CompilationError *> & CompilationUnit::GetErrors() const {
+        const std::list<CompilationError *> &CompilationErrorListener::GetErrors() const {
             return this->_errors;
         }
     }
 }
+

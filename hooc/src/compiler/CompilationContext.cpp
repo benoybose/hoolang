@@ -53,7 +53,7 @@ namespace hooc {
             this->parser->addErrorListener(errorListener);
         }
 
-        HooParser::UnitContext* CompilationContext::GetUnitContext() {
+        HooParser::UnitContext* CompilationContext::GetUnit() {
             return this->parser->unit();
         }
     }

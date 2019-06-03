@@ -16,43 +16,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOC_COMPILATION_UNIT_H
-#define HOOC_COMPILATION_UNIT_H
+#ifndef HC_UNIT_H
+#define HC_UNIT_H
 
-#include "CompilationError.hh"
-#include "ast/Unit.h"
+#include "UnitItem.hh"
 
-#include <string>
-#include <memory>
 #include <list>
-#include <boost/filesystem.hpp>
 
 
 namespace hooc {
-    namespace compiler {
-        class CompilationUnit {
-
-        public:
-            CompilationUnit(boost::filesystem::path compilation_root,
-                            boost::filesystem::path module_path,
-                            ast::Unit *unit,
-                            std::list<CompilationError *> errors);
-
+    namespace ast {
+        class Unit {
         private:
-            boost::filesystem::path _compilation_root;
-            boost::filesystem::path _module_path;
-            ast::Unit* _statement;
-            std::list<CompilationError*> _errors;
+            std::list<UnitItem*> _items;
+        public:
+            Unit(std::list<UnitItem*>  items);
 
         public:
-            const boost::filesystem::path& GetCompilationRoot() const;
-            const boost::filesystem::path& GetModulePath() const;
-            const ast::Unit* GetUnit();
-            bool Success();
-            const std::list<CompilationError *> & GetErrors() const;
+            const std::list<UnitItem*>& GetItems() const;
         };
     }
 }
 
-#endif
 
+
+#endif //HC_UNIT_H

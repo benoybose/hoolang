@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
  * Copyright 2019 Benoy Bose
  *
@@ -16,43 +18,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOC_COMPILATION_UNIT_H
-#define HOOC_COMPILATION_UNIT_H
-
-#include "CompilationError.hh"
-#include "ast/Unit.h"
-
-#include <string>
-#include <memory>
-#include <list>
-#include <boost/filesystem.hpp>
-
+#include "Unit.h"
 
 namespace hooc {
-    namespace compiler {
-        class CompilationUnit {
+    namespace ast {
+        Unit::Unit(std::list<UnitItem *> items)
+                : _items(std::move(items)) {
 
-        public:
-            CompilationUnit(boost::filesystem::path compilation_root,
-                            boost::filesystem::path module_path,
-                            ast::Unit *unit,
-                            std::list<CompilationError *> errors);
+        }
 
-        private:
-            boost::filesystem::path _compilation_root;
-            boost::filesystem::path _module_path;
-            ast::Unit* _statement;
-            std::list<CompilationError*> _errors;
-
-        public:
-            const boost::filesystem::path& GetCompilationRoot() const;
-            const boost::filesystem::path& GetModulePath() const;
-            const ast::Unit* GetUnit();
-            bool Success();
-            const std::list<CompilationError *> & GetErrors() const;
-        };
+        const std::list<UnitItem *> &Unit::GetItems() const {
+            return this->_items;
+        }
     }
 }
-
-#endif
-

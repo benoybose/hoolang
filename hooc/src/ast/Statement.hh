@@ -82,14 +82,11 @@ namespace hooc {
         class DeclarationStatement : public Statement {
         private:
             Declaration *_declaration;
-            std::string _declarator;
         public:
-            DeclarationStatement(const std::string &declarator, Declaration *declaration);
+            DeclarationStatement(Declaration *declaration);
 
         public:
             const Declaration *GetDeclaration() const;
-
-            const std::string &GetDeclarator() const;
         };
     }
 }

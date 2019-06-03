@@ -27,6 +27,7 @@
 #include "ast/ArrayAccessExpression.hh"
 #include "ast/InvokeExpression.h"
 #include "ast/Statement.hh"
+#include "ast/Unit.h"
 
 #include <list>
 #include <string>
@@ -190,12 +191,6 @@ Any UnitVisitor::visitInvocationExpression(HooParser::InvocationExpressionContex
     return Any(invokeExpression);
 }
 
-Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx) {
-    auto expression = this->visit(ctx->returnValue).as<Expression*>();
-    auto statement = new ReturnStatement(expression);
-    return Any(statement);
-}
-
 Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx) {
     auto statements = ctx->statement();
     std::list<Statement*> statement_list;
@@ -205,4 +200,33 @@ Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx
     }
     auto compoundStatement = new CompoundStatement(statement_list);
     return Any(compoundStatement);
+}
+
+Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx) {
+    auto expression = this->visit(ctx->returnValue).as<Expression*>();
+    auto statement = new ReturnStatement(expression);
+    return Any(statement);
+}
+
+Any UnitVisitor::visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) {
+    auto declaration = this->visit(ctx->declaration()).as<Declaration*>();
+    auto declarationStatement = new DeclarationStatement(declaration);
+    return Any(declarationStatement);
+}
+
+Any UnitVisitor::visitExpressionStatement(HooParser::ExpressionStatementContext *ctx) {
+    auto expression = this->visit(ctx->expression()).as<Expression*>();
+    auto expressionStatement = new ExpressionStatement(expression);
+    return Any(expressionStatement);
+}
+
+Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {
+    auto items = ctx->unitItem();
+    std::list<UnitItem*> unit_items;
+    for(auto item: items) {
+        auto unit_item = this->visit(item).as<UnitItem*>();
+        unit_items.push_back(unit_item);
+    }
+    auto unit = new Unit(unit_items);
+    return Any(unit);
 }

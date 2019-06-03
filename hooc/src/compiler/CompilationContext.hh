@@ -47,7 +47,7 @@ namespace hooc {
         public:
             void AddErrorListener(antlr4::ANTLRErrorListener *errorListener);
 
-            HooParser::UnitContext *GetUnitContext();
+            HooParser::UnitContext *GetUnit();
         };
     }
 }

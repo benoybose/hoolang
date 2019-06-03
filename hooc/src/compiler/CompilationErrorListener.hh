@@ -16,43 +16,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOC_COMPILATION_UNIT_H
-#define HOOC_COMPILATION_UNIT_H
+#ifndef HC_COMPILATIONERRORLISTENER_HH
+#define HC_COMPILATIONERRORLISTENER_HH
 
+#include "antlr4-runtime.h"
 #include "CompilationError.hh"
-#include "ast/Unit.h"
 
-#include <string>
-#include <memory>
 #include <list>
-#include <boost/filesystem.hpp>
 
+using namespace antlr4;
 
 namespace hooc {
     namespace compiler {
-        class CompilationUnit {
-
-        public:
-            CompilationUnit(boost::filesystem::path compilation_root,
-                            boost::filesystem::path module_path,
-                            ast::Unit *unit,
-                            std::list<CompilationError *> errors);
-
+        class CompilationErrorListener: public BaseErrorListener {
         private:
-            boost::filesystem::path _compilation_root;
-            boost::filesystem::path _module_path;
-            ast::Unit* _statement;
             std::list<CompilationError*> _errors;
 
         public:
-            const boost::filesystem::path& GetCompilationRoot() const;
-            const boost::filesystem::path& GetModulePath() const;
-            const ast::Unit* GetUnit();
-            bool Success();
-            const std::list<CompilationError *> & GetErrors() const;
+            void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
+                             const std::string &msg, std::exception_ptr e) override;
+
+        public:
+            const std::list<CompilationError*>& GetErrors() const;
+
         };
     }
 }
 
-#endif
 
+
+
+#endif //HC_COMPILATIONERRORLISTENER_HH

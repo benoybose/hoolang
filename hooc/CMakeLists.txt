@@ -78,7 +78,7 @@ SET(hooc_source_files
 		src/visitors/UnitVisitor.cpp
 		src/ast/FunctionDefinition.cpp
 		src/ast/FunctionDefinition.hh
-		src/ast/Declaration.cpp src/ast/Declaration.hh src/ast/ReferenceExpression.cpp src/ast/ReferenceExpression.hh src/ast/ArrayAccessExpression.cpp src/ast/ArrayAccessExpression.hh src/ast/InvokeExpression.cpp src/ast/InvokeExpression.h src/ast/UnitItem.cpp src/ast/UnitItem.hh src/ast/ClassDefinition.cpp src/ast/ClassDefinition.hh)
+		src/ast/Declaration.cpp src/ast/Declaration.hh src/ast/ReferenceExpression.cpp src/ast/ReferenceExpression.hh src/ast/ArrayAccessExpression.cpp src/ast/ArrayAccessExpression.hh src/ast/InvokeExpression.cpp src/ast/InvokeExpression.h src/ast/UnitItem.cpp src/ast/UnitItem.hh src/ast/ClassDefinition.cpp src/ast/ClassDefinition.hh src/ast/Unit.cpp src/ast/Unit.h src/compiler/CompilationErrorListener.cpp src/compiler/CompilationErrorListener.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})

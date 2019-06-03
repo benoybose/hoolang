@@ -59,9 +59,16 @@ public:
 
     antlrcpp::Any visitInvocationExpression(HooParser::InvocationExpressionContext *ctx) override;
 
+    antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
+
     antlrcpp::Any visitReturnStatement(HooParser::ReturnStatementContext *ctx) override;
 
-    antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
+    antlrcpp::Any visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) override;
+
+    antlrcpp::Any visitExpressionStatement(HooParser::ExpressionStatementContext *ctx) override;
+
+    antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
+
 };
 
 

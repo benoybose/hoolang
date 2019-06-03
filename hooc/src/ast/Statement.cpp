@@ -44,20 +44,14 @@ namespace hooc {
                 ExpressionStatement(expression) {
         }
 
-        DeclarationStatement::DeclarationStatement(const std::string& declarator,
-                                                   Declaration *declaration) :
+        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
                 Statement(STMT_DECLARATION),
-                _declarator(declarator),
                 _declaration(declaration) {
 
         }
 
         const Declaration *DeclarationStatement::GetDeclaration() const {
             return this->_declaration;
-        }
-
-        const std::string& DeclarationStatement::GetDeclarator() const {
-            return this->_declarator;
         }
 
         ExpressionStatement::ExpressionStatement(Expression *expression) :
