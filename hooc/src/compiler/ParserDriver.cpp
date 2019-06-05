@@ -44,7 +44,7 @@ namespace hooc {
                                                            boost::filesystem::current_path());
         }
 
-        CompilationUnit* ParserDriver::BuildCompilationUnit() {
+        CompilationUnit* ParserDriver::BuildModule() {
             CompilationContext context(this->_source_code);
             CompilationErrorListener error_listener;
             context.AddErrorListener(&error_listener);

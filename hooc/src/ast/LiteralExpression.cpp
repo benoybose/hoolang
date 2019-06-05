@@ -40,7 +40,7 @@ namespace hooc {
                 _value(value) {
         }
 
-        const LiteralType LiteralExpression::GetListeralType() const {
+        const LiteralType LiteralExpression::GetLiteralType() const {
             return this->_literalType;
         }
 

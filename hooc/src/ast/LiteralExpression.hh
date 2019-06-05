@@ -48,7 +48,7 @@ namespace hooc {
             LiteralExpression(LiteralType literaltype, const std::string& value);
 
         public:
-            const LiteralType GetListeralType() const;
+            const LiteralType GetLiteralType() const;
             const std::string GetValue() const;
         };
     }

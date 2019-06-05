@@ -41,7 +41,7 @@ namespace hooc {
         private:
             boost::filesystem::path _compilation_root;
             boost::filesystem::path _module_path;
-            ast::Unit* _statement;
+            ast::Unit* _unit;
             std::list<CompilationError*> _errors;
 
         public:

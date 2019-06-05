@@ -44,7 +44,7 @@ namespace hooc {
                          const std::string &file_path);
 
         public:
-            CompilationUnit *BuildCompilationUnit();
+            CompilationUnit *BuildModule();
         };
     }
 }

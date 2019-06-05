@@ -29,6 +29,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 #include <string>
+#include <ast/LiteralExpression.hh>
 
 using namespace std;
 using namespace hooc;
@@ -55,26 +56,31 @@ BOOST_AUTO_TEST_SUITE(GrammarTest)
 //                                   "\t}\n"
 //                                   "}";
 //        ParserDriver driver(source, source_path);
-//        auto unit = driver.BuildCompilationUnit();
+//        auto unit = driver.BuildModule();
     }
 
     BOOST_AUTO_TEST_CASE(SimpleVaraibleDeclaration) {
         BOOST_TEST_MESSAGE("Testing variable declaration without initializer");
         auto source_path = boost::filesystem::absolute("test.hoo").string();
-        auto variable_declaration1 = "var age:int;";
-        ParserDriver driver1(variable_declaration1, source_path);
-        auto module1 = driver1.BuildCompilationUnit();
-        BOOST_CHECK(nullptr != module1);
-        auto unit = module1->GetUnit();
+        auto source = "var age:int;";
+        ParserDriver driver1(source, source_path);
+        auto module = driver1.BuildModule();
+        BOOST_CHECK(nullptr != module);
+
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
+
         auto unit_items = unit->GetItems();
         BOOST_CHECK(1 == unit_items.size());
+
         auto item = *(unit_items.begin());
         auto item_type = item->GetUnitItemType();
         BOOST_CHECK(UNIT_ITEM_STATEMENT == item_type);
+
         auto statement = (Statement *) item;
         auto statement_type = statement->GetStatementType();
         BOOST_CHECK(statement_type == STMT_DECLARATION);
+
         auto stmt_declaration = (DeclarationStatement *) statement;
         auto declaration = stmt_declaration->GetDeclaration();
         BOOST_CHECK(nullptr != declaration);
@@ -93,10 +99,33 @@ BOOST_AUTO_TEST_SUITE(GrammarTest)
     BOOST_AUTO_TEST_CASE(VariableDeclarationInitializer) {
         BOOST_TEST_MESSAGE("Testing variable declaration with initializer");
         auto source_path = boost::filesystem::absolute("test.hoo").string();
-        auto variable_declaration2 = "var age:int = 362880;";
-        ParserDriver driver2(variable_declaration2, source_path);
-        auto compilation_unit2 = driver2.BuildCompilationUnit();
-        BOOST_CHECK(nullptr != compilation_unit2);
+        auto source = "var age:int = 362880;";
+        ParserDriver driver2(source, source_path);
+        auto module = driver2.BuildModule();
+        BOOST_CHECK(nullptr != module);
+
+        auto unit = module->GetUnit();
+        BOOST_CHECK(nullptr != unit);
+        BOOST_CHECK(1 == unit->GetItems().size());
+
+        auto item = *unit->GetItems().begin();
+        BOOST_CHECK(nullptr != item);
+        BOOST_CHECK(UNIT_ITEM_STATEMENT == item->GetUnitItemType());
+
+        auto stmt = (Statement*) item;
+        BOOST_CHECK(STMT_DECLARATION == stmt->GetStatementType());
+
+        auto decl = ((DeclarationStatement*) stmt)->GetDeclaration();
+        BOOST_CHECK(decl->GetName() == "age");
+        BOOST_CHECK(decl->GetDeclarator() == "var");
+        BOOST_CHECK(decl->GetDelcaredType()->GetName() == "int");
+
+        auto initializer = decl->GetInitializer();
+        BOOST_CHECK(nullptr != initializer);
+        BOOST_CHECK(EXPRESSION_LITERAL == initializer->GetExpressionType());
+        auto expression = (LiteralExpression*) initializer;
+        BOOST_CHECK(LITERAL_INTEGER == expression->GetLiteralType());
+        BOOST_CHECK("362880" == expression->GetValue());
     }
 
 BOOST_AUTO_TEST_SUITE_END()

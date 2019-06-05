@@ -119,25 +119,25 @@ Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext 
 
 Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
     auto name = ctx->Identifier()->getText();
-    auto expression = new ReferenceExpression(name);
+    auto expression = (Expression*) new ReferenceExpression(name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) {
     auto parent = this->visit(ctx->parent).as<ReferenceExpression*>();
     auto name = ctx->name->getText();
-    auto expression = new ReferenceExpression(parent, name);
+    auto expression = (Expression*) new ReferenceExpression(parent, name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) {
-    auto expression = this->visit(ctx->constant());
+    auto expression = (Expression*) this->visit(ctx->constant()).as<LiteralExpression*>();
     return Any(expression);
 }
 
 Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) {
     auto text = ctx->StringLiteral()->getText();
-    auto expression = new LiteralExpression(LITERAL_STRING, text);
+    auto expression = (Expression*) new LiteralExpression(LITERAL_STRING, text);
     return Any(expression);
 }
 
@@ -163,6 +163,16 @@ Any UnitVisitor::visitConstantFloating(HooParser::ConstantFloatingContext *ctx) 
 Any UnitVisitor::visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) {
     auto value = ctx->getText();
     auto expression = new LiteralExpression(LITERAL_CHARACTER, value);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx) {
+    auto expression = (Expression*) this->visit(ctx->invocationExpression()).as<InvokeExpression*>();
+    return Any(expression);
+}
+
+Any UnitVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx) {
+    auto expression = this->visit(ctx->primaryExpression()).as<Expression*>();
     return Any(expression);
 }
 

@@ -32,7 +32,7 @@ namespace hooc {
                                          ast::Unit *unit, std::list<CompilationError *> errors)
                 : _compilation_root(compilation_root),
                 _module_path(module_path),
-                _statement(unit),
+                _unit(unit),
                 _errors(errors){
 
         }
@@ -48,7 +48,7 @@ namespace hooc {
         }
 
         const ast::Unit *CompilationUnit::GetUnit() {
-            return this->_statement;
+            return this->_unit;
         }
 
         bool CompilationUnit::Success() {
