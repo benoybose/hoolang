@@ -54,11 +54,11 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
 //                               "\t}\n"
 //                               "}";
 //    ParserDriver driver(source, source_path);
-//    auto unit = driver.Compile();
+//    auto unit = driver.BuildCompilationUnit();
 
     auto variable_declaration1 = "var age:int;";
     ParserDriver driver(variable_declaration1, source_path);
-    auto compilation_unit = driver.Compile();
+    auto compilation_unit = driver.BuildCompilationUnit();
     BOOST_CHECK(nullptr != compilation_unit);
     auto unit = compilation_unit->GetUnit();
     BOOST_CHECK(nullptr != unit);
