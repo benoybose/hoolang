@@ -74,10 +74,6 @@ typeSpecifier
     |   typeSpecifier '[' ']'
     ;
 
-initializer
-    :   '=' expression
-    ;
-
 invocationExpression
     : receiver=primaryExpression '(' arguments=expressionList? ')'
     ;
@@ -88,11 +84,11 @@ expressionList
     ;
 
 statement
-    :   ';'
-    |   compoundStatement
-    |   returnStatement
-    |   declarationStatement
-    |   expressionStatement
+    :   ';' #stmtNoop
+    |   compoundStatement #stmtCompound
+    |   returnStatement #stmtReturn
+    |   declarationStatement #stmtDeclaration
+    |   expressionStatement #stmtExpression
     ;
 
 expressionStatement
@@ -134,7 +130,7 @@ functionDefinition
     ;
 
 declaration
-    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? init=initializer?
+    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? init=expression?
     ;
 
 paramList
@@ -155,8 +151,8 @@ useSpecifier
     ;
 
 unitItem
-    :   classDefinition
-    |   statement
+    :   classDefinition #classDefinitionUnitItem
+    |   statement #statementUnitItem
     ;
 
 unit

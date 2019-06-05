@@ -24,6 +24,7 @@ namespace hooc {
                                  const std::string &name,
                                  TypeSpecification *declared_type,
                                  Expression *initializer) :
+                _declarator(declarator),
                 _name(name),
                 _declared_type(declared_type),
                 _initializer(initializer) {
@@ -49,6 +50,10 @@ namespace hooc {
 
         const Expression *Declaration::GetInitializer() const {
             return _initializer;
+        }
+
+        const std::string &Declaration::GetDeclarator() const {
+            return this->_declarator;
         }
     }
 }

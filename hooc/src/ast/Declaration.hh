@@ -28,6 +28,7 @@ namespace hooc {
     namespace ast {
         class Declaration {
         private:
+            std::string _declarator;
             TypeSpecification *_declared_type;
             std::string _name;
             Expression *_initializer;

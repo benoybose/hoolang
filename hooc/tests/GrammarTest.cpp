@@ -20,13 +20,19 @@
 
 #include "compiler/ParserDriver.hh"
 #include "antlr4-runtime.h"
+#include "ast/Unit.h"
+#include "ast/Statement.hh"
+#include "ast/Declaration.hh"
+#include "ast/TypeSpecification.hh"
 
 #include <boost/test/included/unit_test.hpp>
 #include <boost/filesystem.hpp>
+#include <string>
 
 using namespace std;
 using namespace hooc;
 using namespace hooc::compiler;
+using namespace hooc::ast;
 
 BOOST_AUTO_TEST_CASE(GrammarTest) {
     auto source_path = boost::filesystem::absolute("test.hoo")
@@ -52,8 +58,29 @@ BOOST_AUTO_TEST_CASE(GrammarTest) {
 
     auto variable_declaration1 = "var age:int;";
     ParserDriver driver(variable_declaration1, source_path);
-    auto statement = driver.Compile();
+    auto compilation_unit = driver.Compile();
+    BOOST_CHECK(nullptr != compilation_unit);
+    auto unit = compilation_unit->GetUnit();
+    BOOST_CHECK(nullptr != unit);
+    auto unit_items = unit->GetItems();
+    BOOST_CHECK(1 == unit_items.size());
+    auto item = *(unit_items.begin());
+    auto item_type = item->GetUnitItemType();
+    BOOST_CHECK(UNIT_ITEM_STATEMENT == item_type);
+    auto statement = (Statement*) item;
+    auto statement_type = statement->GetStatementType();
+    BOOST_CHECK(statement_type == STMT_DECLARATION);
+    auto stmt_declaration = (DeclarationStatement*) statement;
+    auto declaration = stmt_declaration->GetDeclaration();
+    BOOST_CHECK(nullptr != declaration);
 
+    auto declarator = declaration->GetDeclarator();
+    auto name = declaration->GetName();
+    auto type = declaration->GetDelcaredType();
 
-
+    BOOST_CHECK(declarator == "var");
+    BOOST_CHECK(name == "age");
+    BOOST_CHECK(nullptr != type);
+    auto type_name = type->GetName();
+    BOOST_CHECK(type_name == "int");
 }

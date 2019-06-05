@@ -31,6 +31,7 @@
 
 #include <list>
 #include <string>
+#include <ast/ClassDefinition.hh>
 
 using namespace hooc::ast;
 using namespace antlrcpp;
@@ -71,7 +72,10 @@ Any UnitVisitor::visitDeclaration(HooParser::DeclarationContext *ctx) {
     auto declarator = ctx->Declarator()->getText();
     auto name = ctx->name->getText();
     auto declared_type = this->visit(ctx->declared_type).as<TypeSpecification *>();
-    auto initializer = this->visit(ctx->init->expression()).as<Expression*>();
+    Expression* initializer = nullptr;
+    if(nullptr != ctx->init) {
+        initializer = this->visit(ctx->init).as<Expression *>();
+    }
     auto declaration = new Declaration(declarator, name, declared_type, initializer);
     return declaration;
 }
@@ -220,12 +224,56 @@ Any UnitVisitor::visitExpressionStatement(HooParser::ExpressionStatementContext 
     return Any(expressionStatement);
 }
 
+Any UnitVisitor::visitStmtNoop(HooParser::StmtNoopContext *ctx) {
+    auto noop_statement = new NoopStatement();
+    auto stmt = (Statement*) noop_statement;
+    return Any(stmt);
+}
+
+Any UnitVisitor::visitStmtCompound(HooParser::StmtCompoundContext *ctx) {
+    auto compound_statement = this->visit(ctx->compoundStatement()).as<CompoundStatement*>();
+    auto stmt = (Statement*) compound_statement;
+    return Any(stmt);
+}
+
+Any UnitVisitor::visitStmtReturn(HooParser::StmtReturnContext *ctx) {
+    auto return_statement = this->visit(ctx->returnStatement()).as<ReturnStatement*>();
+    auto stmt = (Statement*) return_statement;
+    return Any(stmt);
+}
+
+Any UnitVisitor::visitStmtDeclaration(HooParser::StmtDeclarationContext *ctx) {
+    auto declaration_statement = this->visit(ctx->declarationStatement()).as<DeclarationStatement*>();
+    auto stmt = (Statement*) declaration_statement;
+    return Any(stmt);
+}
+
+Any UnitVisitor::visitStmtExpression(HooParser::StmtExpressionContext *ctx) {
+    auto expression_statement = this->visit(ctx->expressionStatement()).as<ExpressionStatement*>();
+    auto stmt = (Statement*) expression_statement;
+    return Any(stmt);
+}
+
+Any UnitVisitor::visitClassDefinitionUnitItem(HooParser::ClassDefinitionUnitItemContext *ctx) {
+    auto class_definition = this->visit(ctx->classDefinition()).as<ClassDefinition*>();
+    auto unit_item = (UnitItem*) class_definition;
+    return Any(unit_item);
+}
+
+Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) {
+    auto statement = this->visit(ctx->statement()).as<Statement*>();
+    auto unit_item = (UnitItem*) statement;
+    return Any(unit_item);
+}
+
 Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {
     auto items = ctx->unitItem();
     std::list<UnitItem*> unit_items;
     for(auto item: items) {
         auto unit_item = this->visit(item).as<UnitItem*>();
-        unit_items.push_back(unit_item);
+        if(nullptr != unit_item) {
+            unit_items.push_back(unit_item);
+        }
     }
     auto unit = new Unit(unit_items);
     return Any(unit);
