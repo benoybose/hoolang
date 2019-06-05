@@ -130,7 +130,7 @@ functionDefinition
     ;
 
 declaration
-    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? init=expression?
+    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? ( '=' init=expression)?
     ;
 
 paramList
