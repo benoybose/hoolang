@@ -63,9 +63,9 @@ HexQuad
     ;
 
 IntegerConstant
-    :   DecimalConstant IntegerSuffix?
-    |   OctalConstant IntegerSuffix?
-    |   HexadecimalConstant IntegerSuffix?
+    :   DecimalConstant
+    |   OctalConstant
+    |   HexadecimalConstant
     |	BinaryConstant
     ;
 
@@ -107,29 +107,6 @@ OctalDigit
 fragment
 HexadecimalDigit
     :   [0-9a-fA-F]
-    ;
-
-fragment
-IntegerSuffix
-    :   UnsignedSuffix LongSuffix?
-    |   UnsignedSuffix LongLongSuffix
-    |   LongSuffix UnsignedSuffix?
-    |   LongLongSuffix UnsignedSuffix?
-    ;
-
-fragment
-UnsignedSuffix
-    :   [uU]
-    ;
-
-fragment
-LongSuffix
-    :   [lL]
-    ;
-
-fragment
-LongLongSuffix
-    :   'll' | 'LL'
     ;
 
 FloatingConstant
