@@ -29,6 +29,10 @@ using namespace antlr4;
 namespace hooc {
     namespace compiler {
         class CompilationErrorListener: public BaseErrorListener {
+
+        public:
+            CompilationErrorListener();
+
         private:
             std::list<CompilationError*> _errors;
 

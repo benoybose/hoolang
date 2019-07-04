@@ -21,8 +21,8 @@
 namespace hooc {
     namespace compiler {
         CompilationError::CompilationError(size_t line_number,
-                size_t character_position,
-                const std::string &message) :
+                                           size_t character_position,
+                                           std::string &message) :
                 _line_number(line_number),
                 _character_position(character_position),
                 _message(message) {

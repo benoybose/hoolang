@@ -20,6 +20,8 @@
 #include "CompilationError.hh"
 #include "antlr4-runtime.h"
 
+#include <sstream>
+
 using namespace antlr4;
 
 namespace hooc {
@@ -27,12 +29,19 @@ namespace hooc {
         void CompilationErrorListener::syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line,
                                                    size_t charPositionInLine, const std::string &msg,
                                                    std::exception_ptr e) {
-            auto error = new CompilationError(line, charPositionInLine, msg);
+            std::stringstream out;
+            out << "Syntax error on line " << line
+            << " at " << charPositionInLine << ".\n";
+            auto message = out.str();
+            auto error = new CompilationError(line, charPositionInLine, message);
             this->_errors.push_back(error);
         }
 
         const std::list<CompilationError *> &CompilationErrorListener::GetErrors() const {
             return this->_errors;
+        }
+
+        CompilationErrorListener::CompilationErrorListener(): BaseErrorListener() {
         }
     }
 }

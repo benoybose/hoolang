@@ -79,7 +79,9 @@ SET(hooc_source_files
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
-ADD_EXECUTABLE(grammar_test tests/GrammarTest.cpp)
+ADD_EXECUTABLE(
+		grammar_test tests/GrammarTest.cpp
+		tests/VariableDeclaration.cpp tests/IntegerLiteral.cpp)
 ADD_DEPENDENCIES(grammar_test antlr4_static)
 TARGET_LINK_LIBRARIES(grammar_test ${hooc_link_libraries} antlr4-runtime${static_lib_suffix})
 

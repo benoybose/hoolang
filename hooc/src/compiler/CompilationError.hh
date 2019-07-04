@@ -32,7 +32,7 @@ namespace hooc {
 
         public:
             CompilationError(size_t line_number, size_t character_position,
-                             const std::string &message);
+                             std::string &message);
 
         public:
             int GetLineNumber() const;

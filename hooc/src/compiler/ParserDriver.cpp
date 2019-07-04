@@ -67,7 +67,8 @@ namespace hooc {
                 unit = visitor.visit(unitContext).as<Unit*>();
 
             } catch (const std::exception &ex) {
-                auto error = new CompilationError(0, 0, ex.what());
+                std::string message(ex.what());
+                auto error = new CompilationError(0, 0, message);
                 errors.push_back(error);
             }
 

@@ -76,7 +76,7 @@ BinaryConstant
 
 fragment
 DecimalConstant
-    :   NonzeroDigit Digit*
+    :   ('+' | '-')? NonzeroDigit Digit*
     ;
 
 fragment

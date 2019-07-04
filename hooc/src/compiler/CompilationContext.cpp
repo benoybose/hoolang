@@ -29,6 +29,8 @@ namespace hooc {
             parser = new HooParser(tokens);
             auto errorHandler = std::shared_ptr<antlr4::ANTLRErrorStrategy>(new antlr4::DefaultErrorStrategy());
             parser->setErrorHandler(errorHandler);
+            lexer->removeErrorListeners();
+            parser->removeErrorListeners();
         }
 
         CompilationContext::~CompilationContext() {
