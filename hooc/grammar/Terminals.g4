@@ -116,14 +116,14 @@ FloatingConstant
 
 fragment
 DecimalFloatingConstant
-    :   FractionalConstant ExponentPart? FloatingSuffix?
-    |   DigitSequence ExponentPart FloatingSuffix?
+    :   FractionalConstant ExponentPart?
+    |   DigitSequence ExponentPart
     ;
 
 fragment
 HexadecimalFloatingConstant
-    :   HexadecimalPrefix HexadecimalFractionalConstant BinaryExponentPart FloatingSuffix?
-    |   HexadecimalPrefix HexadecimalDigitSequence BinaryExponentPart FloatingSuffix?
+    :   HexadecimalPrefix HexadecimalFractionalConstant BinaryExponentPart
+    |   HexadecimalPrefix HexadecimalDigitSequence BinaryExponentPart
     ;
 
 fragment
@@ -162,11 +162,6 @@ BinaryExponentPart
 fragment
 HexadecimalDigitSequence
     :   HexadecimalDigit+
-    ;
-
-fragment
-FloatingSuffix
-    :   'f' | 'l' | 'F' | 'L'
     ;
 
 CharacterConstant
