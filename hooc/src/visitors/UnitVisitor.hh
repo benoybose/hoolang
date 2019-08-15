@@ -87,6 +87,8 @@ public:
 
     antlrcpp::Any visitStmtExpression(HooParser::StmtExpressionContext *ctx) override;
 
+    antlrcpp::Any visitBooleanConstant(HooParser::BooleanConstantContext *ctx) override;
+
 };
 
 

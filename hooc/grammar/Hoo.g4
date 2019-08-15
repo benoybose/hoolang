@@ -28,6 +28,7 @@ constant
     : IntegerConstant #constantInteger
     | FloatingConstant #constantFloating
     | CharacterConstant #constantCharacter
+    | BooleanConstant #booleanConstant
     ;
 
 primaryExpression
@@ -130,7 +131,7 @@ functionDefinition
     ;
 
 declaration
-    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? ( '=' init=expression)?
+    :   Declarator? name=Identifier ':' declared_type=typeSpecifier ( '=' init=expression)?
     ;
 
 paramList

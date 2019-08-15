@@ -28,29 +28,6 @@
 
 grammar Terminals;
 
-Identifier
-    :   IdentifierNondigit
-        (   IdentifierNondigit
-        |   Digit
-        )*
-    ;
-
-fragment
-IdentifierNondigit
-    :   Nondigit
-    |   UniversalCharacterName
-    ;
-
-fragment
-Nondigit
-    :   [a-zA-Z_]
-    ;
-
-fragment
-Digit
-    :   [0-9]
-    ;
-
 fragment
 UniversalCharacterName
     :   '\\u' HexQuad
@@ -227,6 +204,33 @@ SChar
     |   EscapeSequence
     |   '\\\n'   // Added line
     |   '\\\r\n' // Added line
+    ;
+
+BooleanConstant
+    : 'true' | 'false'
+    ;
+
+Identifier
+    :   IdentifierNondigit
+        (   IdentifierNondigit
+        |   Digit
+        )*
+    ;
+
+fragment
+IdentifierNondigit
+    :   Nondigit
+    |   UniversalCharacterName
+    ;
+
+fragment
+Nondigit
+    :   [a-zA-Z_]
+    ;
+
+fragment
+Digit
+    :   [0-9]
     ;
 
 Whitespace
