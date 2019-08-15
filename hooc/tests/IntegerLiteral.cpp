@@ -17,12 +17,9 @@
  */
 
 #include "compiler/ParserDriver.hh"
-#include "antlr4-runtime.h"
 #include "ast/Unit.h"
 #include "ast/Statement.hh"
 #include "ast/Declaration.hh"
-#include "ast/TypeSpecification.hh"
-
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>

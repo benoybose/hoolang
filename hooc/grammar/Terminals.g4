@@ -76,7 +76,7 @@ BinaryConstant
 
 fragment
 DecimalConstant
-    :   ('+' | '-')? NonzeroDigit Digit*
+    :   Sign? NonzeroDigit Digit*
     ;
 
 fragment
@@ -116,8 +116,8 @@ FloatingConstant
 
 fragment
 DecimalFloatingConstant
-    :   FractionalConstant ExponentPart?
-    |   DigitSequence ExponentPart
+    :   Sign? FractionalConstant ExponentPart?
+    |   Sign? DigitSequence ExponentPart
     ;
 
 fragment
