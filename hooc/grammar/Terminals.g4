@@ -166,9 +166,6 @@ HexadecimalDigitSequence
 
 CharacterConstant
     :   '\'' CCharSequence '\''
-    |   'L\'' CCharSequence '\''
-    |   'u\'' CCharSequence '\''
-    |   'U\'' CCharSequence '\''
     ;
 
 fragment

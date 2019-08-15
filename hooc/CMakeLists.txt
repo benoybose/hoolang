@@ -81,7 +81,7 @@ SET(hooc_link_libraries hooc hoo ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(
 		hooc_test tests/HoocTest.cpp
-		tests/VariableDeclaration.cpp tests/IntegerLiteral.cpp tests/DecimalLiteral.cpp)
+		tests/VariableDeclaration.cpp tests/IntegerLiteral.cpp tests/DecimalLiteral.cpp tests/CharacterLiteral.cpp)
 ADD_DEPENDENCIES(hooc_test antlr4_static)
 TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4-runtime${static_lib_suffix})
 
