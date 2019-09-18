@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.6)
 CMAKE_POLICY(SET CMP0074 NEW)
 SET (CMAKE_VERBOSE_MAKEFILE ON)
+MESSAGE("CMake Version: ${CMAKE_VERSION}")
 
-#MESSAGE("Configuring hoo for 64-bit platform.")
 SET (CMAKE_CXX_STANDARD 11)
 
 IF(${MSVC} MATCHES 1)
@@ -18,25 +18,18 @@ IF(${CMAKE_COMPILER_IS_GNUCC} MATCHES 1)
 ENDIF()
 
 INCLUDE("${CMAKE_HOME_DIRECTORY}/packages/packages.cmake")
+
 SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_MULTITHREADED ON)
 SET(Boost_USE_STATIC_RUNTIME ON)
+
 FIND_PACKAGE(Boost REQUIRED COMPONENTS filesystem regex)
 FIND_PACKAGE(antlr4-runtime REQUIRED)
 FIND_PACKAGE(antlr4-generator REQUIRED)
 FIND_PACKAGE(Java REQUIRED)
 
-#
-#SET(HOO_DIST "${CMAKE_HOME_DIRECTORY}/dist")
-#SET(static_lib_suffix ${CMAKE_STATIC_LIBRARY_SUFFIX})
-#add_subdirectory(${CMAKE_HOME_DIRECTORY}/libs/antlr4-cpp-runtime)
 
 ADD_SUBDIRECTORY(./hoo)
 ADD_SUBDIRECTORY(./hooc)
-GET_TARGET_PROPERTY(dirs hooc_test LINK_DIRECTORIES)
-FOREACH(dir ${dirs})
-    MESSAGE(STATUS "Include Dir='${dir}'")
-ENDFOREACH()
-#
 ENABLE_TESTING()
 ADD_TEST(NAME test_hooc COMMAND hooc/hooc_test)
