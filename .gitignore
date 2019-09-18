@@ -1,6 +1,7 @@
 nbproject/
 .vscode/
 build/
+build-*/
 hc
 hc.exe
 hoo.exe
