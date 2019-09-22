@@ -27,6 +27,14 @@ namespace hooc {
 
         }
 
+        Unit::~Unit() {
+            while(this->_items.begin() != this->_items.end()) {
+                auto item = *(this->_items.begin());
+                this->_items.remove(item);
+                delete item;
+            }
+        }
+
         const std::list<UnitItem *> &Unit::GetItems() const {
             return this->_items;
         }

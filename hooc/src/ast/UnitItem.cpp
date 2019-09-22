@@ -24,6 +24,9 @@ namespace hooc {
                 _unit_item_type(unit_item_type) {
         }
 
+        UnitItem::~UnitItem() {
+        }
+
         const UnitItemType UnitItem::GetUnitItemType() const {
             return this->_unit_item_type;
         }

@@ -28,10 +28,15 @@ namespace hooc {
         class UnitItem {
         private:
             UnitItemType _unit_item_type;
+
         public:
             explicit UnitItem(const UnitItemType unit_item_type);
+
         public:
             const UnitItemType GetUnitItemType() const;
+
+        public:
+            virtual ~UnitItem();
         };
     }
 }

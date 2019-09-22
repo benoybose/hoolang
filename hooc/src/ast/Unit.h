@@ -34,6 +34,9 @@ namespace hooc {
 
         public:
             const std::list<UnitItem*>& GetItems() const;
+
+        public:
+            virtual ~Unit();
         };
     }
 }
