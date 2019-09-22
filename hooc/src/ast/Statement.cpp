@@ -36,12 +36,28 @@ namespace hooc {
             }
         }
 
+        CompoundStatement::~CompoundStatement() {
+            while (this->_statements.begin()
+                   != this->_statements.end()) {
+                auto statement = *(this->_statements.begin());
+                this->_statements.remove(statement);
+                delete statement;
+            }
+        }
+
         const std::list<Statement *> &CompoundStatement::GetStatements() const {
             return this->_statements;
         }
 
         ReturnStatement::ReturnStatement(Expression *expression) :
                 ExpressionStatement(expression) {
+        }
+
+        ReturnStatement::~ReturnStatement() {
+        }
+
+        ExpressionStatement::~ExpressionStatement() {
+            delete this->_expression;
         }
 
         DeclarationStatement::DeclarationStatement(Declaration *declaration) :

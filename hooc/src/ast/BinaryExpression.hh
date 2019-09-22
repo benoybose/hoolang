@@ -37,6 +37,9 @@ namespace hooc {
             const Expression* GetLeftExpression() const;
             const Operator* GetOperator() const;
             const Expression* GetRightExpression() const;
+
+        public:
+            virtual ~BinaryExpression();
         };
     }
 }

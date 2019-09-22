@@ -29,12 +29,16 @@ namespace hooc {
         private:
             Expression* _receiver;
             std::list<Expression*> _arguments;
+
         public:
             InvokeExpression(Expression* receiver, std::list<Expression*> arguments);
 
         public:
             const Expression* GetReceiver() const;
             const std::list<Expression*> GetArguments() const;
+
+        public:
+            virtual ~InvokeExpression();
         };
     }
 }

@@ -22,7 +22,7 @@
 #include "RootStatement.hh"
 #include "Expression.hh"
 #include "Declaration.hh"
-#include "InvokeExpression.h"
+#include "InvokeExpression.hh"
 #include "UnitItem.hh"
 
 #include <memory>
@@ -62,6 +62,8 @@ namespace hooc {
 
         public:
             const std::list<Statement *> &GetStatements() const;
+
+            virtual ~CompoundStatement();
         };
 
         class ExpressionStatement : public Statement {
@@ -72,11 +74,17 @@ namespace hooc {
 
         public:
             const Expression *GetExpression() const;
+
+        public:
+            virtual ~ExpressionStatement();
         };
 
         class ReturnStatement : public ExpressionStatement {
         public:
             explicit ReturnStatement(Expression *expression);
+
+        public:
+            virtual ~ReturnStatement();
         };
 
         class DeclarationStatement : public Statement {

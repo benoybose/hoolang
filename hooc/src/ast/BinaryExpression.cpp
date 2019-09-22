@@ -32,6 +32,12 @@ namespace hooc {
                 _rvalue(rvalue) {
         }
 
+        BinaryExpression::~BinaryExpression() {
+            delete this->_lvalue;
+            delete this->_rvalue;
+            delete this->_rvalue;
+        }
+
         const Expression *BinaryExpression::GetLeftExpression() const {
             return this->_lvalue;
         }

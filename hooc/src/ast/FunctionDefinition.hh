@@ -41,12 +41,12 @@ namespace hooc {
 
         public:
             const std::string GetName() const;
-
             const TypeSpecification *GetReturnType() const;
-
             const std::list<Declaration *> &GetParamList() const;
-
             const void *GetStatement() const;
+
+        public:
+            virtual ~FunctionDefinition();
         };
     }
 }

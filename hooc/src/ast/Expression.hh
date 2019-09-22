@@ -42,6 +42,9 @@ namespace hooc {
 
         public:
             const ExpressionType GetExpressionType() const;
+
+        public:
+            virtual ~Expression();
         };
     }
 }

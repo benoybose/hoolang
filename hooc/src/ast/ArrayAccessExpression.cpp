@@ -24,6 +24,11 @@ namespace hooc {
                 Expression(EXPRESSION_ARRAY), _container(container), _index(index) {
         }
 
+        ArrayAccessExpression::~ArrayAccessExpression() {
+            delete this->_container;
+            delete this->_index;
+        }
+
         const Expression *ArrayAccessExpression::GetContainer() const {
             return this->_container;
         }

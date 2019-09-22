@@ -50,6 +50,9 @@ namespace hooc {
         public:
             const LiteralType GetLiteralType() const;
             const std::string GetValue() const;
+
+        public:
+            virtual ~LiteralExpression();
         };
     }
 };

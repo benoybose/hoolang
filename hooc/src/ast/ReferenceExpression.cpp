@@ -46,6 +46,12 @@ namespace hooc {
 
         }
 
+        ReferenceExpression::~ReferenceExpression() {
+            if(nullptr != this->_parent) {
+                delete this->_parent;
+            }
+        }
+
         const std::string &ReferenceExpression::GetName() const {
             return this->_name;
         }

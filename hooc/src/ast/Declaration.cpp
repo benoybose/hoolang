@@ -31,13 +31,8 @@ namespace hooc {
         }
 
         Declaration::~Declaration() {
-            if (nullptr != this->_declared_type) {
-                delete this->_declared_type;
-            }
-
-            if (nullptr != this->_initializer) {
-                delete this->_initializer;
-            }
+            delete this->_declared_type;
+            delete this->_initializer;
         }
 
         const TypeSpecification *Declaration::GetDelcaredType() const {

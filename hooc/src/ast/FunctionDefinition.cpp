@@ -31,6 +31,16 @@ namespace hooc {
                 _statement(statement) {
         }
 
+        FunctionDefinition::~FunctionDefinition() {
+            delete this->_returnType;
+            while(_param_list.begin() != _param_list.end()) {
+                auto param = *(_param_list.begin());
+                _param_list.remove(param);
+                delete param;
+            }
+            delete this->_statement;
+        }
+
         const std::string FunctionDefinition::GetName() const {
             return this->_name;
         }

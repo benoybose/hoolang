@@ -25,7 +25,7 @@
 #include "ast/LiteralExpression.hh"
 #include "ast/BinaryExpression.hh"
 #include "ast/ArrayAccessExpression.hh"
-#include "ast/InvokeExpression.h"
+#include "ast/InvokeExpression.hh"
 #include "ast/Statement.hh"
 #include "ast/Unit.h"
 

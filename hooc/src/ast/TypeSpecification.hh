@@ -40,9 +40,13 @@ namespace hooc {
         public:
             explicit TypeSpecification(std::string &name);
             explicit TypeSpecification(const std::string &name);
+
         public:
             const std::string &GetName() const;
             const TYPESPEC_TYPE GetType() const;
+
+        public:
+            virtual ~TypeSpecification();
         };
 
         class NestedTypeSpecification : public TypeSpecification {
@@ -53,11 +57,17 @@ namespace hooc {
                     const std::string& name);
         public:
             const TypeSpecification *GetParent() const;
+
+        public:
+            virtual ~NestedTypeSpecification();
         };
 
         class ArrayTypeSpecification: public NestedTypeSpecification {
         public:
             ArrayTypeSpecification(TypeSpecification* parent);
+
+        public:
+            virtual ~ArrayTypeSpecification();
         };
     }
 }

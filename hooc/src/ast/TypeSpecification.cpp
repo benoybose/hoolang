@@ -36,6 +36,9 @@ namespace hooc {
                 _parent(nullptr){
         }
 
+        TypeSpecification::~TypeSpecification() {
+        }
+
         const TYPESPEC_TYPE TypeSpecification::GetType() const {
             return this->_type;
         }
@@ -54,12 +57,21 @@ namespace hooc {
                 TypeSpecification(name) {
         }
 
+        NestedTypeSpecification::~NestedTypeSpecification() {
+            if(nullptr != this->_parent) {
+                delete this->_parent;
+            }
+        }
+
         const TypeSpecification *NestedTypeSpecification::GetParent() const {
             return this->_parent;
         }
 
         ArrayTypeSpecification::ArrayTypeSpecification(TypeSpecification *parent):
                 NestedTypeSpecification(parent, ""){
+        }
+
+        ArrayTypeSpecification::~ArrayTypeSpecification() {
         }
     }
 }

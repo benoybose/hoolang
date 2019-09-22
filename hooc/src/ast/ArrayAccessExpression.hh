@@ -34,6 +34,9 @@ namespace hooc {
         public:
             const Expression* GetContainer() const;
             const Expression* GetIndex() const;
+
+        public:
+            virtual ~ArrayAccessExpression();
         };
     }
 }

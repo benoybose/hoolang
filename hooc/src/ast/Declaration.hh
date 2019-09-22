@@ -40,16 +40,14 @@ namespace hooc {
                         Expression *initializer
             );
 
-            virtual ~Declaration();
-
         public:
             const TypeSpecification *GetDelcaredType() const;
-
             const std::string &GetName() const;
-
             const Expression *GetInitializer() const;
-
             const std::string& GetDeclarator() const;
+
+        public:
+            virtual ~Declaration();
         };
     }
 }

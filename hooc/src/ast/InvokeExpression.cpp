@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "InvokeExpression.h"
+#include "InvokeExpression.hh"
 
 namespace hooc {
     namespace ast {
@@ -24,6 +24,15 @@ namespace hooc {
                 Expression(EXPRESSION_INVOKE),
                 _receiver(receiver),
                 _arguments(arguments) {
+        }
+
+        InvokeExpression::~InvokeExpression() {
+            delete _receiver;
+            while (_arguments.begin() != _arguments.end()) {
+                auto arg = *(_arguments.begin());
+                _arguments.remove(arg);
+                delete arg;
+            }
         }
 
         const Expression *InvokeExpression::GetReceiver() const {

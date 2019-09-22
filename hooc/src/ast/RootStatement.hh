@@ -36,6 +36,9 @@ namespace hooc {
 
         public:
             const RootStatementType GetType() const;
+
+        public:
+            virtual ~RootStatement();
         };
     }
 }

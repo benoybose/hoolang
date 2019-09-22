@@ -39,6 +39,9 @@ namespace hooc {
         public:
             const std::string& GetName() const;
             const ReferenceExpression* GetParent() const;
+
+        public:
+            virtual ~ReferenceExpression();
         };
     }
 }

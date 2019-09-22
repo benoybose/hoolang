@@ -37,7 +37,7 @@ SET(hooc_header_files
 		src/ast/Declaration.hh
 		src/ast/ReferenceExpression.hh
 		src/ast/ArrayAccessExpression.hh
-		src/ast/InvokeExpression.h
+        src/ast/InvokeExpression.hh
 		src/ast/UnitItem.hh
 		src/ast/ClassDefinition.hh
 		src/ast/Unit.h

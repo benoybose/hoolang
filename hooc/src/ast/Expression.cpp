@@ -24,6 +24,9 @@ namespace hooc {
             this->_expressionType = expressionType;
         }
 
+        Expression::~Expression() {
+        }
+
         const ExpressionType Expression::GetExpressionType() const {
             return this->_expressionType;
         }

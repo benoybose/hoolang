@@ -22,7 +22,9 @@ namespace hooc {
     namespace ast {
         RootStatement::RootStatement(RootStatementType type)
                 : _type(type) {
+        }
 
+        RootStatement::~RootStatement() {
         }
 
         const RootStatementType RootStatement::GetType() const {

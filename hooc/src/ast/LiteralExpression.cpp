@@ -40,6 +40,9 @@ namespace hooc {
                 _value(value) {
         }
 
+        LiteralExpression::~LiteralExpression() {
+        }
+
         const LiteralType LiteralExpression::GetLiteralType() const {
             return this->_literalType;
         }
