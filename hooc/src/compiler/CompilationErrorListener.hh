@@ -43,6 +43,9 @@ namespace hooc {
         public:
             const std::list<CompilationError*>& GetErrors() const;
 
+        public:
+            virtual ~CompilationErrorListener();
+
         };
     }
 }

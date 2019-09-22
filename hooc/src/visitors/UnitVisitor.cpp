@@ -27,7 +27,7 @@
 #include "ast/ArrayAccessExpression.hh"
 #include "ast/InvokeExpression.hh"
 #include "ast/Statement.hh"
-#include "ast/Unit.h"
+#include "ast/Unit.hh"
 
 #include <list>
 #include <string>

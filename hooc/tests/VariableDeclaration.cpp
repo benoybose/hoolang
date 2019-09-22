@@ -18,7 +18,7 @@
 
 #include "compiler/ParserDriver.hh"
 #include "antlr4-runtime.h"
-#include "ast/Unit.h"
+#include "ast/Unit.hh"
 #include "ast/Statement.hh"
 #include "ast/Declaration.hh"
 #include "ast/TypeSpecification.hh"

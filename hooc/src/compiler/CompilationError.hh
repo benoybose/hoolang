@@ -38,6 +38,9 @@ namespace hooc {
             int GetLineNumber() const;
             int GetCharacterPosition() const;
             const std::string &GetMessage() const;
+
+        public:
+            virtual ~CompilationError();
         };
     }
 }

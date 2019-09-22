@@ -37,6 +37,14 @@ namespace hooc {
             this->_errors.push_back(error);
         }
 
+        CompilationErrorListener::~CompilationErrorListener() {
+            while(this->_errors.begin() != this->_errors.end()) {
+                auto error = *(this->_errors.begin());
+                this->_errors.remove(error);
+                delete error;
+            }
+        }
+
         const std::list<CompilationError *> &CompilationErrorListener::GetErrors() const {
             return this->_errors;
         }

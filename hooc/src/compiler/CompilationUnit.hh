@@ -20,7 +20,7 @@
 #define HOOC_COMPILATION_UNIT_H
 
 #include "CompilationError.hh"
-#include "ast/Unit.h"
+#include "ast/Unit.hh"
 
 #include <string>
 #include <memory>
@@ -50,6 +50,8 @@ namespace hooc {
             const ast::Unit* GetUnit();
             bool Success();
             const std::list<CompilationError *> & GetErrors() const;
+
+            virtual ~CompilationUnit();
         };
     }
 }

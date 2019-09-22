@@ -28,6 +28,9 @@ namespace hooc {
                 _message(message) {
         }
 
+        CompilationError::~CompilationError() {
+        }
+
         int CompilationError::GetLineNumber() const {
             return this->_line_number;
         }

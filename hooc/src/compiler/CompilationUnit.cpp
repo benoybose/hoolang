@@ -37,6 +37,15 @@ namespace hooc {
 
         }
 
+        CompilationUnit::~CompilationUnit() {
+            delete this->_unit;
+            while(this->_errors.begin() != this->_errors.end()) {
+                auto error = *(this->_errors.begin());
+                this->_errors.remove(error);
+                delete error;
+            }
+        }
+
         const boost::filesystem::path
         &CompilationUnit::GetCompilationRoot() const {
             return this->_compilation_root;

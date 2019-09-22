@@ -40,7 +40,7 @@ SET(hooc_header_files
         src/ast/InvokeExpression.hh
 		src/ast/UnitItem.hh
 		src/ast/ClassDefinition.hh
-		src/ast/Unit.h
+        src/ast/Unit.hh
 		src/compiler/CompilationErrorListener.hh)
 
 SET(hooc_source_files

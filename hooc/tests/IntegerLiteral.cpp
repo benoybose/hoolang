@@ -17,7 +17,7 @@
  */
 
 #include "compiler/ParserDriver.hh"
-#include "ast/Unit.h"
+#include "ast/Unit.hh"
 #include "ast/Statement.hh"
 #include "ast/Declaration.hh"
 

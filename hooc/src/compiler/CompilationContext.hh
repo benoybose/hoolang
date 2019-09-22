@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PARSECONTEXT_HH
-#define PARSECONTEXT_HH
+#ifndef COMPILATION_CONTECT_HH
+#define COMPILATION_CONTECT_HH
 
 #include "antlr4-runtime.h"
 #include "HooParser.h"
@@ -42,14 +42,14 @@ namespace hooc {
             CompilationContext(std::string source_code);
 
         public:
-            ~CompilationContext();
-
-        public:
             void AddErrorListener(antlr4::ANTLRErrorListener *errorListener);
 
             HooParser::UnitContext *GetUnit();
+
+        public:
+            ~CompilationContext();
         };
     }
 }
 
-#endif //PROJECT_PARSECONTEXT_HH
+#endif //COMPILATION_CONTECT_HH
