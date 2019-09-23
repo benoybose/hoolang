@@ -45,6 +45,7 @@ BOOST_AUTO_TEST_SUITE(BooleanLiteral)
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_BOOLEAN);
         BOOST_CHECK("true" == expression->GetValue());
+        delete compilation_unit;
     }
 
     BOOST_AUTO_TEST_CASE(BooleanLiteral_2) {

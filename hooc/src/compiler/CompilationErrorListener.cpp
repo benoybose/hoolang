@@ -31,25 +31,24 @@ namespace hooc {
                                                    std::exception_ptr e) {
             std::stringstream out;
             out << "Syntax error on line " << line
-            << " at " << charPositionInLine << ".\n";
+                << " at " << charPositionInLine << ".\n";
             auto message = out.str();
             auto error = new CompilationError(line, charPositionInLine, message);
             this->_errors.push_back(error);
         }
 
+        void CompilationErrorListener::Add(CompilationError *error) {
+            _errors.push_back(error);
+        }
+
         CompilationErrorListener::~CompilationErrorListener() {
-            while(this->_errors.begin() != this->_errors.end()) {
-                auto error = *(this->_errors.begin());
-                this->_errors.remove(error);
-                delete error;
-            }
         }
 
         const std::list<CompilationError *> &CompilationErrorListener::GetErrors() const {
             return this->_errors;
         }
 
-        CompilationErrorListener::CompilationErrorListener(): BaseErrorListener() {
+        CompilationErrorListener::CompilationErrorListener() : BaseErrorListener() {
         }
     }
 }

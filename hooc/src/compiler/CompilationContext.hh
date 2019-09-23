@@ -23,6 +23,7 @@
 #include "HooParser.h"
 #include "HooLexer.h"
 #include "compiler/CompilationUnit.hh"
+#include "compiler/CompilationErrorListener.hh"
 
 #include <string>
 #include <memory>
@@ -37,14 +38,15 @@ namespace hooc {
             HooParser *parser = nullptr;
             HooParser::UnitContext *unitContext = nullptr;
             CompilationUnit *unit = nullptr;
+            CompilationErrorListener* error_listener = nullptr;
 
         public:
             CompilationContext(std::string source_code);
 
         public:
-            void AddErrorListener(antlr4::ANTLRErrorListener *errorListener);
-
             HooParser::UnitContext *GetUnit();
+            void AddCompilationError(CompilationError* error);
+            const std::list<CompilationError*>& GetErrors() const;
 
         public:
             ~CompilationContext();

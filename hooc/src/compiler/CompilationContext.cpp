@@ -27,36 +27,32 @@ namespace hooc {
             lexer = new HooLexer(stream);
             tokens = new antlr4::CommonTokenStream(lexer);
             parser = new HooParser(tokens);
+            error_listener = new CompilationErrorListener();
             auto errorHandler = std::shared_ptr<antlr4::ANTLRErrorStrategy>(new antlr4::DefaultErrorStrategy());
             parser->setErrorHandler(errorHandler);
             lexer->removeErrorListeners();
             parser->removeErrorListeners();
+            parser->addErrorListener(error_listener);
         }
 
         CompilationContext::~CompilationContext() {
-            if (nullptr != this->parser) {
-                delete this->parser;
-            }
-
-            if (nullptr != this->tokens) {
-                delete this->tokens;
-            }
-
-            if (nullptr != this->lexer) {
-                delete this->lexer;
-            }
-
-            if (nullptr != this->stream) {
-                delete this->stream;
-            }
-        }
-
-        void CompilationContext::AddErrorListener(antlr4::ANTLRErrorListener *errorListener) {
-            this->parser->addErrorListener(errorListener);
+            delete parser;
+            delete tokens;
+            delete lexer;
+            delete stream;
+            delete error_listener;
         }
 
         HooParser::UnitContext* CompilationContext::GetUnit() {
             return this->parser->unit();
+        }
+
+        void CompilationContext::AddCompilationError(CompilationError *error) {
+            error_listener->Add(error);
+        }
+
+        const std::list<CompilationError *> &CompilationContext::GetErrors() const {
+            return error_listener->GetErrors();
         }
     }
 }

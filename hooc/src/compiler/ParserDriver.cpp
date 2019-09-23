@@ -46,10 +46,7 @@ namespace hooc {
 
         CompilationUnit* ParserDriver::BuildModule() {
             CompilationContext context(this->_source_code);
-            CompilationErrorListener error_listener;
-            context.AddErrorListener(&error_listener);
             CompilationUnit* compilation_unit = nullptr;
-            std::list<CompilationError*> errors;
             Unit* unit = nullptr;
 
             try {
@@ -58,21 +55,17 @@ namespace hooc {
                     throw std::runtime_error("Parsing failed because of unknown error.");
                 }
 
-                auto syntaxErrors = error_listener.GetErrors();
-                for(auto error: syntaxErrors){
-                    errors.push_back(error);
-                }
-
                 UnitVisitor visitor;
                 unit = visitor.visit(unitContext).as<Unit*>();
-
             } catch (const std::exception &ex) {
                 std::string message(ex.what());
                 auto error = new CompilationError(0, 0, message);
-                errors.push_back(error);
+                context.AddCompilationError(error);
             }
 
-            compilation_unit = new CompilationUnit("", "", unit, errors);
+            auto errors = context.GetErrors();
+            compilation_unit = new CompilationUnit("", "",
+                    unit, errors);
             return compilation_unit;
         }
     }

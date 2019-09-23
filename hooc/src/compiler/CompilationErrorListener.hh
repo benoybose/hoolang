@@ -39,6 +39,7 @@ namespace hooc {
         public:
             void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
                              const std::string &msg, std::exception_ptr e) override;
+            void Add(CompilationError* error);
 
         public:
             const std::list<CompilationError*>& GetErrors() const;
