@@ -22,6 +22,17 @@
             "options": {
                 "cwd": "${workspaceRoot}/build"
             }
+        },
+        {
+            "label": "Make Clean (MSVC)",
+            "type": "shell",
+            "command": "nmake",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            }
         }
     ]
 }
