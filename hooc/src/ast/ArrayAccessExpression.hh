@@ -36,7 +36,7 @@ namespace hooc {
             const Expression* GetIndex() const;
 
         public:
-            virtual ~ArrayAccessExpression();
+            ~ArrayAccessExpression() override;
         };
     }
 }
