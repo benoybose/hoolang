@@ -35,14 +35,14 @@ namespace hooc {
         ReferenceExpression::ReferenceExpression(ReferenceExpression *parent,
                                                  std::string &name) :
                 Expression(EXPRESSION_REFERENCE),
-                _parent(nullptr), _name(name) {
+                _parent(parent), _name(name) {
 
         }
 
         ReferenceExpression::ReferenceExpression(ReferenceExpression *parent,
                                                  const std::string &name) :
                 Expression(EXPRESSION_REFERENCE),
-                _parent(nullptr), _name(name) {
+                _parent(parent), _name(name) {
 
         }
 

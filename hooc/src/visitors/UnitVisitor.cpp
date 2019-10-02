@@ -128,7 +128,7 @@ Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
 }
 
 Any UnitVisitor::visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) {
-    auto parent = this->visit(ctx->parent).as<ReferenceExpression *>();
+    auto parent = (ReferenceExpression*) this->visit(ctx->parent).as<Expression *>();
     auto name = ctx->name->getText();
     auto expression = (Expression *) new ReferenceExpression(parent, name);
     return Any(expression);
