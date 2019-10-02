@@ -82,7 +82,7 @@ ADD_EXECUTABLE(
 		tests/DecimalLiteral.cpp
 		tests/CharacterLiteral.cpp
 		tests/BooleanLiteral.cpp
-		tests/StringLiteral.cpp)
+		tests/StringLiteral.cpp tests/IdentifierPrimaryExpression.cpp)
 ADD_DEPENDENCIES(hooc_test antlr4_static)
 TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_static)
 
