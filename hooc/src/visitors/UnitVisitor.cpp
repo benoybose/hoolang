@@ -148,7 +148,7 @@ Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx
 Any UnitVisitor::visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) {
     auto container = this->visit(ctx->container).as<Expression *>();
     auto accessIndex = this->visit(ctx->accessIndex).as<Expression *>();
-    auto expression = new ArrayAccessExpression(container, accessIndex);
+    auto expression = (Expression*) new ArrayAccessExpression(container, accessIndex);
     return Any(expression);
 }
 

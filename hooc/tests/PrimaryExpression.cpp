@@ -20,7 +20,8 @@
 #include "ast/Unit.hh"
 #include "ast/Statement.hh"
 #include "ast/ReferenceExpression.hh"
-
+#include "ast/ArrayAccessExpression.hh"
+#include "ast/LiteralExpression.hh"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
@@ -106,6 +107,38 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         BOOST_CHECK_NE(nullptr, home);
         BOOST_CHECK_EQUAL("home", home->GetName());
         BOOST_CHECK_EQUAL(nullptr, home->GetParent());
+    }
+
+    BOOST_AUTO_TEST_CASE(ArrayAccessExpression1) {
+        auto source = "persons[0];";
+        ParserDriver driver(source, "test.hoo");
+        auto compilation_unit = driver.BuildModule();
+        BOOST_CHECK(compilation_unit->Success());
+        auto unit = compilation_unit->GetUnit();
+        BOOST_CHECK_NE(nullptr, unit);
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto firstItem = *(items.begin());
+        BOOST_CHECK_EQUAL(firstItem->GetUnitItemType(), UNIT_ITEM_STATEMENT);
+        auto statement = (Statement*) firstItem;
+        BOOST_CHECK_NE(nullptr, statement);
+        BOOST_CHECK_EQUAL(statement->GetStatementType(), STMT_EXPRESSION);
+        auto expression = ((ExpressionStatement*) statement)->GetExpression();
+        BOOST_CHECK_NE(nullptr, expression);
+        BOOST_CHECK_EQUAL(expression->GetExpressionType(), EXPRESSION_ARRAY);
+        auto array_expr = (ArrayAccessExpression*) expression;
+        BOOST_CHECK_NE(nullptr, array_expr);
+        auto container = array_expr->GetContainer();
+        BOOST_CHECK_EQUAL(container->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto persons = (ReferenceExpression*) container;
+        BOOST_CHECK_NE(nullptr, persons);
+        BOOST_CHECK_EQUAL("persons", persons->GetName());
+        auto index = array_expr->GetIndex();
+        BOOST_CHECK_NE(nullptr, index);
+        BOOST_CHECK_EQUAL(index->GetExpressionType(), EXPRESSION_LITERAL);
+        auto literal = (LiteralExpression*) index;
+        BOOST_CHECK_EQUAL(literal->GetLiteralType(), LITERAL_INTEGER);
+        BOOST_CHECK_EQUAL(literal->GetValue(), "0");
     }
 
 BOOST_AUTO_TEST_SUITE_END()
