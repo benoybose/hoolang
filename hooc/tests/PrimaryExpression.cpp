@@ -177,4 +177,37 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         BOOST_CHECK_EQUAL("home", home->GetName());
     }
 
+    BOOST_AUTO_TEST_CASE(ArrayAccessExpression3) {
+        auto source = "home.persons[12891].name;";
+        ParserDriver driver(source, "test.hoo");
+        auto compilation_unit = driver.BuildModule();
+        BOOST_CHECK(compilation_unit->Success());
+        auto unit = compilation_unit->GetUnit();
+        BOOST_CHECK_NE(nullptr, unit);
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto firstItem = *(items.begin());
+        BOOST_CHECK_EQUAL(firstItem->GetUnitItemType(), UNIT_ITEM_STATEMENT);
+        auto statement = (Statement*) firstItem;
+        BOOST_CHECK_NE(nullptr, statement);
+        BOOST_CHECK_EQUAL(statement->GetStatementType(), STMT_EXPRESSION);
+        auto expression = ((ExpressionStatement*) statement)->GetExpression();
+        BOOST_CHECK_NE(nullptr, expression);
+        BOOST_CHECK_EQUAL(expression->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto name = (ReferenceExpression*) expression;
+        BOOST_CHECK_EQUAL("name", name->GetName());
+        auto persons = name->GetParent();
+        BOOST_CHECK_EQUAL(persons->GetExpressionType(), EXPRESSION_ARRAY);
+        auto persons_index = ((ArrayAccessExpression*) persons)->GetIndex();
+        auto persons_container = ((ArrayAccessExpression*) persons)->GetContainer();
+        BOOST_CHECK_EQUAL(persons_index->GetExpressionType(), EXPRESSION_LITERAL);
+        BOOST_CHECK_EQUAL(persons_container->GetExpressionType(), EXPRESSION_REFERENCE);
+        BOOST_CHECK_EQUAL(LITERAL_INTEGER, ((LiteralExpression*) persons_index)->GetLiteralType());
+        BOOST_CHECK_EQUAL("12891", ((LiteralExpression*) persons_index)->GetValue());
+        BOOST_CHECK_EQUAL("persons", ((ReferenceExpression*) persons_container)->GetName());
+        auto home = ((ReferenceExpression*)persons_container)->GetParent();
+        BOOST_CHECK_EQUAL("home", home->GetName());
+        BOOST_CHECK_EQUAL(nullptr, home->GetParent());
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
