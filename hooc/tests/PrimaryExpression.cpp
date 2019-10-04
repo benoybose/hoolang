@@ -210,4 +210,58 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         BOOST_CHECK_EQUAL(nullptr, home->GetParent());
     }
 
+    BOOST_AUTO_TEST_CASE(ArrayAccessExpression4) {
+        auto source = "object[key];";
+        ParserDriver driver(source, "test.hoo");
+        auto compilation_unit = driver.BuildModule();
+        BOOST_CHECK(compilation_unit->Success());
+        auto unit = compilation_unit->GetUnit();
+        BOOST_CHECK_NE(nullptr, unit);
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto firstItem = *(items.begin());
+        BOOST_CHECK_EQUAL(firstItem->GetUnitItemType(), UNIT_ITEM_STATEMENT);
+        auto statement = (Statement*) firstItem;
+        BOOST_CHECK_NE(nullptr, statement);
+        BOOST_CHECK_EQUAL(statement->GetStatementType(), STMT_EXPRESSION);
+        auto expression = ((ExpressionStatement*) statement)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_ARRAY, expression->GetExpressionType());
+        auto array = (ArrayAccessExpression*) expression;
+        auto index_expression = array->GetIndex();
+        auto container_expression = array->GetContainer();
+        BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, index_expression->GetExpressionType());
+        BOOST_CHECK_EQUAL("key", ((ReferenceExpression*)index_expression)->GetName());
+        BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, container_expression->GetExpressionType());
+        BOOST_CHECK_EQUAL("object", ((ReferenceExpression*)container_expression)->GetName());
+    }
+
+    BOOST_AUTO_TEST_CASE(ArrayAccessExpression5) {
+        auto source = "object[key.index];";
+        ParserDriver driver(source, "test.hoo");
+        auto compilation_unit = driver.BuildModule();
+        BOOST_CHECK(compilation_unit->Success());
+        auto unit = compilation_unit->GetUnit();
+        BOOST_CHECK_NE(nullptr, unit);
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto firstItem = *(items.begin());
+        BOOST_CHECK_EQUAL(firstItem->GetUnitItemType(), UNIT_ITEM_STATEMENT);
+        auto statement = (Statement*) firstItem;
+        BOOST_CHECK_NE(nullptr, statement);
+        BOOST_CHECK_EQUAL(statement->GetStatementType(), STMT_EXPRESSION);
+        auto expression = ((ExpressionStatement*) statement)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_ARRAY, expression->GetExpressionType());
+        auto array = (ArrayAccessExpression*) expression;
+        auto index_expression = array->GetIndex();
+        auto container_expression = array->GetContainer();
+
+        BOOST_CHECK_EQUAL(index_expression->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto index = (ReferenceExpression* ) index_expression;
+        BOOST_CHECK_EQUAL("index", index->GetName());
+        auto key = (ReferenceExpression*) index->GetParent();
+        BOOST_CHECK_EQUAL("key", key->GetName());
+        auto object = (ReferenceExpression*) container_expression;
+        BOOST_CHECK_EQUAL("object", object->GetName());
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
