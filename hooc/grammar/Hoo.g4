@@ -36,7 +36,7 @@ primaryExpression
     |   constant #primaryConstantExpr
     |   StringLiteral #primaryStringExpr
     |   parent=primaryExpression '.' name=Identifier #primaryNestedRefExpr
-    |   container=primaryExpression '[' accessIndex=primaryExpression ']' #primaryArrayAccessExpr
+    |   container=primaryExpression '[' accessIndex=expression ']' #primaryArrayAccessExpr
     ;
 
 expression
