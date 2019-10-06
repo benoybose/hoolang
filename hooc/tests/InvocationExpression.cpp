@@ -77,4 +77,30 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         BOOST_CHECK_EQUAL(0, arguments.size());
     }
 
+    BOOST_AUTO_TEST_CASE(ParameteredInvocationExpression1) {
+        auto source = "console.print(\"Hello World!\");";
+        ParserDriver driver(source, "test.hoo");
+        auto compilation_unit = driver.BuildModule();
+        auto unit = compilation_unit->GetUnit();
+        auto items = unit->GetItems();
+        auto first_item = *(items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
+        auto stmt = (Statement*) first_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto stmt_expr = (ExpressionStatement*) stmt;
+        auto expr = stmt_expr->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_INVOKE, expr->GetExpressionType());
+        auto invoke_expr = (InvokeExpression*) expr;
+        auto bar = invoke_expr->GetReceiver();
+        BOOST_CHECK_EQUAL(bar->GetExpressionType(), EXPRESSION_REFERENCE);
+        BOOST_CHECK_EQUAL("print", ((ReferenceExpression*) bar)->GetName());
+        BOOST_CHECK_EQUAL("console", ((ReferenceExpression*) bar)->GetParent()->GetName());
+        auto arguments = invoke_expr->GetArguments();
+        BOOST_CHECK_EQUAL(1, arguments.size());
+        auto arg1 = *(arguments.begin());
+        BOOST_CHECK_EQUAL(EXPRESSION_LITERAL, arg1->GetExpressionType());
+        auto hello_world = (LiteralExpression*) arg1;
+        BOOST_CHECK_EQUAL(LITERAL_STRING, hello_world->GetLiteralType());
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
