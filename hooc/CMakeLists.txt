@@ -24,7 +24,7 @@ SET(hooc_header_files
         src/ast/BinaryExpression.hh
 		src/ast/Statement.hh
         src/StatementList.hh
-		src/compiler/CompilationUnit.hh
+        src/compiler/Module.hh
         src/compiler/CompilationError.hh
         src/compiler/ParserDriver.hh
 		src/compiler/CompilationContext.hh
@@ -52,7 +52,7 @@ SET(hooc_source_files
         src/ast/BinaryExpression.cpp
 		src/ast/Statement.cpp
         src/StatementList.cpp
-		src/compiler/CompilationUnit.cpp
+        src/compiler/Module.cpp
         src/compiler/CompilationError.cpp
         src/compiler/ParserDriver.cpp
 		src/compiler/CompilationContext.cpp

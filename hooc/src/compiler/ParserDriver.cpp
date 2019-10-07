@@ -44,9 +44,9 @@ namespace hooc {
                                                            boost::filesystem::current_path());
         }
 
-        CompilationUnit* ParserDriver::BuildModule() {
+        Module* ParserDriver::BuildModule() {
             CompilationContext context(this->_source_code);
-            CompilationUnit* compilation_unit = nullptr;
+            Module* compilation_unit = nullptr;
             Unit* unit = nullptr;
 
             try {
@@ -64,8 +64,8 @@ namespace hooc {
             }
 
             auto errors = context.GetErrors();
-            compilation_unit = new CompilationUnit("", "",
-                    unit, errors);
+            compilation_unit = new Module("", "",
+                                          unit, errors);
             return compilation_unit;
         }
     }

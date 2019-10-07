@@ -30,13 +30,13 @@
 
 namespace hooc {
     namespace compiler {
-        class CompilationUnit {
+        class Module {
 
         public:
-            CompilationUnit(boost::filesystem::path compilation_root,
-                            boost::filesystem::path module_path,
-                            ast::Unit *unit,
-                            std::list<CompilationError *> errors);
+            Module(boost::filesystem::path compilation_root,
+                   boost::filesystem::path module_path,
+                   ast::Unit *unit,
+                   std::list<CompilationError *> errors);
 
         private:
             boost::filesystem::path _compilation_root;
@@ -51,7 +51,7 @@ namespace hooc {
             bool Success();
             const std::list<CompilationError *> & GetErrors() const;
 
-            virtual ~CompilationUnit();
+            virtual ~Module();
         };
     }
 }

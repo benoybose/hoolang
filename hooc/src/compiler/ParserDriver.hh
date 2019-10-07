@@ -19,10 +19,10 @@
 #ifndef PARSERDRIVER_HH
 #define PARSERDRIVER_HH
 
-#include "compiler/CompilationUnit.hh"
+#include "compiler/Module.hh"
 #include "HooParser.h"
 #include "compiler/CompilationContext.hh"
-#include "compiler/CompilationUnit.hh"
+#include "compiler/Module.hh"
 #include "AccessSpecifier.hh"
 
 #include <string>
@@ -44,7 +44,7 @@ namespace hooc {
                          const std::string &file_path);
 
         public:
-            CompilationUnit *BuildModule();
+            Module *BuildModule();
         };
     }
 }

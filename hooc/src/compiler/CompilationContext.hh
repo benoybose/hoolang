@@ -22,7 +22,7 @@
 #include "antlr4-runtime.h"
 #include "HooParser.h"
 #include "HooLexer.h"
-#include "compiler/CompilationUnit.hh"
+#include "compiler/Module.hh"
 #include "compiler/CompilationErrorListener.hh"
 
 #include <string>
@@ -37,7 +37,7 @@ namespace hooc {
             antlr4::CommonTokenStream *tokens = nullptr;
             HooParser *parser = nullptr;
             HooParser::UnitContext *unitContext = nullptr;
-            CompilationUnit *unit = nullptr;
+            Module *unit = nullptr;
             CompilationErrorListener* error_listener = nullptr;
 
         public:
