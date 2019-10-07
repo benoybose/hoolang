@@ -70,7 +70,7 @@ Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *c
 Any UnitVisitor::visitDeclaration(HooParser::DeclarationContext *ctx) {
     std::string declaratorLabel = "";
     auto declarator = ctx->Declarator();
-    if(nullptr != declarator) {
+    if (nullptr != declarator) {
         declaratorLabel = ctx->Declarator()->getText();
     }
 
@@ -128,7 +128,7 @@ Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
 }
 
 Any UnitVisitor::visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) {
-    auto parent = (ReferenceExpression*) this->visit(ctx->parent).as<Expression *>();
+    auto parent = (ReferenceExpression *) this->visit(ctx->parent).as<Expression *>();
     auto name = ctx->name->getText();
     auto expression = (Expression *) new ReferenceExpression(parent, name);
     return Any(expression);
@@ -148,7 +148,7 @@ Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx
 Any UnitVisitor::visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) {
     auto container = this->visit(ctx->container).as<Expression *>();
     auto accessIndex = this->visit(ctx->accessIndex).as<Expression *>();
-    auto expression = (Expression*) new ArrayAccessExpression(container, accessIndex);
+    auto expression = (Expression *) new ArrayAccessExpression(container, accessIndex);
     return Any(expression);
 }
 
@@ -203,7 +203,7 @@ Any UnitVisitor::visitExprBinary(HooParser::ExprBinaryContext *ctx) {
     auto rvalue = this->visit(ctx->rvalue).as<Expression *>();
 
     auto binaryExpresion = new BinaryExpression(lvalue, opr, rvalue);
-    return Any(binaryExpresion);
+    return Any((Expression *) binaryExpresion);
 }
 
 Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
