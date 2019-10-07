@@ -66,9 +66,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_2) {
         auto source = "+362880;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(0 == compilation_unit->GetErrors().size());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(0 == module->GetErrors().size());
+        auto unit = module->GetUnit();
         auto unit_items = unit->GetItems();
         auto first_item = *(unit_items.begin());
         auto statement = (Statement*) first_item;
@@ -83,9 +83,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_3) {
         auto source = "-362880;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(0 == compilation_unit->GetErrors().size());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(0 == module->GetErrors().size());
+        auto unit = module->GetUnit();
         auto unit_items = unit->GetItems();
         auto first_item = *(unit_items.begin());
         auto statement = (Statement*) first_item;
@@ -100,9 +100,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_4) {
         auto source = "03620;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(0 == compilation_unit->GetErrors().size());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(0 == module->GetErrors().size());
+        auto unit = module->GetUnit();
         auto unit_items = unit->GetItems();
         auto first_item = *(unit_items.begin());
         auto statement = (Statement*) first_item;
@@ -117,9 +117,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_5) {
         auto source = "036208;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(!compilation_unit->Success());
-        auto errors = compilation_unit->GetErrors();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(!module->Success());
+        auto errors = module->GetErrors();
         BOOST_CHECK(1 == errors.size());
         auto first_error = *(errors.begin());
         BOOST_CHECK(1 == first_error->GetLineNumber());
@@ -129,9 +129,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_6) {
         auto source = "0xAB089;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(0 == compilation_unit->GetErrors().size());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(0 == module->GetErrors().size());
+        auto unit = module->GetUnit();
         auto unit_items = unit->GetItems();
         auto first_item = *(unit_items.begin());
         auto statement = (Statement*) first_item;
@@ -146,9 +146,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_7) {
         auto source = "0XAB089;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(0 == compilation_unit->GetErrors().size());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(0 == module->GetErrors().size());
+        auto unit = module->GetUnit();
         auto unit_items = unit->GetItems();
         auto first_item = *(unit_items.begin());
         auto statement = (Statement*) first_item;
@@ -163,9 +163,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_8) {
         auto source = "0xAB08K;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(!compilation_unit->Success());
-        auto errors = compilation_unit->GetErrors();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(!module->Success());
+        auto errors = module->GetErrors();
         BOOST_CHECK(1 == errors.size());
         auto first_error = *(errors.begin());
         BOOST_CHECK(1 == first_error->GetLineNumber());
@@ -175,9 +175,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_9) {
         auto source = "0b101010;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(0 == compilation_unit->GetErrors().size());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(0 == module->GetErrors().size());
+        auto unit = module->GetUnit();
         auto unit_items = unit->GetItems();
         auto first_item = *(unit_items.begin());
         auto statement = (Statement*) first_item;
@@ -192,9 +192,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_10) {
         auto source = "0B101010;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(0 == compilation_unit->GetErrors().size());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(0 == module->GetErrors().size());
+        auto unit = module->GetUnit();
         auto unit_items = unit->GetItems();
         auto first_item = *(unit_items.begin());
         auto statement = (Statement*) first_item;
@@ -209,9 +209,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_11) {
         auto source = "0b111203;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(!compilation_unit->Success());
-        auto errors = compilation_unit->GetErrors();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(!module->Success());
+        auto errors = module->GetErrors();
         BOOST_CHECK(1 == errors.size());
         auto first_error = *(errors.begin());
         BOOST_CHECK(1 == first_error->GetLineNumber());

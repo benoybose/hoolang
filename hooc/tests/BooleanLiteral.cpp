@@ -32,9 +32,9 @@ BOOST_AUTO_TEST_SUITE(BooleanLiteral)
     BOOST_AUTO_TEST_CASE(BooleanLiteral_1) {
         auto source = "true;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -45,15 +45,15 @@ BOOST_AUTO_TEST_SUITE(BooleanLiteral)
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_BOOLEAN);
         BOOST_CHECK("true" == expression->GetValue());
-        delete compilation_unit;
+        delete module;
     }
 
     BOOST_AUTO_TEST_CASE(BooleanLiteral_2) {
         auto source = "false;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -69,9 +69,9 @@ BOOST_AUTO_TEST_SUITE(BooleanLiteral)
     BOOST_AUTO_TEST_CASE(BooleanLiteral_3) {
         auto source = "False;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);

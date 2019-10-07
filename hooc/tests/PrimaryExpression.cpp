@@ -36,9 +36,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(SimpleReferenceExpression1) {
         auto source = "name;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());
@@ -59,9 +59,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(NestedReferenceExpression1) {
         auto source = "person.name;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());
@@ -83,9 +83,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(NestedReferenceExpression2) {
         auto source = "home.person.name;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());
@@ -112,9 +112,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(ArrayAccessExpression1) {
         auto source = "persons[0];";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());
@@ -144,9 +144,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(ArrayAccessExpression2) {
         auto source = "home.persons[23];";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());
@@ -180,9 +180,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(ArrayAccessExpression3) {
         auto source = "home.persons[12891].name;";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());
@@ -213,9 +213,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(ArrayAccessExpression4) {
         auto source = "object[key];";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());
@@ -238,9 +238,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
     BOOST_AUTO_TEST_CASE(ArrayAccessExpression5) {
         auto source = "object[key.index];";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         BOOST_CHECK_EQUAL(1, items.size());

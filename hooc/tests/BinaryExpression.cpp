@@ -22,6 +22,8 @@
 #include "ast/ReferenceExpression.hh"
 #include "ast/ArrayAccessExpression.hh"
 #include "ast/LiteralExpression.hh"
+#include "ast/BinaryExpression.hh"
+#include "HoocTestHelper.hh"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
@@ -31,12 +33,29 @@ using namespace hooc;
 using namespace hooc::compiler;
 using namespace hooc::ast;
 
-BOOST_AUTO_TEST_SUITE(BinaryExpression)
+BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
 
     BOOST_AUTO_TEST_CASE(BinaryExpression1) {
-        const std::string source = "2 + 3";
+        const std::string source = "2 + 3;";
         ParserDriver driver(source, "test.hoo");
-        auto comlilation_unit = driver.BuildModule();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto lvalue = binary_expr->GetLeftExpression();
+        auto rvalue = binary_expr->GetRightExpression();
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_LITERAL_EXPRESSION(lvalue, LITERAL_INTEGER, "2");
+        BOOST_CHECK_LITERAL_EXPRESSION(rvalue, LITERAL_INTEGER, "3");
+        BOOST_CHECK_EQUAL(OPERATOR_ADD, opr->GetOperatorType());
     }
 
 BOOST_AUTO_TEST_SUITE_END()

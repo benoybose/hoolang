@@ -37,8 +37,8 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
     BOOST_AUTO_TEST_CASE(SimpleInvocationExpression1) {
         auto source = "foo();";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        auto unit = module->GetUnit();
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
@@ -58,8 +58,8 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
     BOOST_AUTO_TEST_CASE(SimpleInvocationExpression2) {
         auto source = "foo.bar();";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        auto unit = module->GetUnit();
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
@@ -80,8 +80,8 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
     BOOST_AUTO_TEST_CASE(ParameteredInvocationExpression1) {
         auto source = "console.print(\"Hello World!\");";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        auto unit = module->GetUnit();
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
@@ -107,8 +107,8 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
     BOOST_AUTO_TEST_CASE(ParameteredInvocationExpression2) {
         auto source = "bar.foo(362880, 3.14678, true, 'B');";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        auto unit = module->GetUnit();
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
@@ -154,8 +154,8 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
     BOOST_AUTO_TEST_CASE(ParameteredInvocationExpression3) {
         auto source = "bar.foo(id, person.name);";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        auto unit = module->GetUnit();
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
@@ -188,8 +188,8 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
     BOOST_AUTO_TEST_CASE(ParameteredInvocationExpression4) {
         auto source = "bar.foo(bar(x, y), foo (a, b));";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        auto unit = module->GetUnit();
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
@@ -233,8 +233,8 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
     BOOST_AUTO_TEST_CASE(ParameteredInvocationExpression5) {
         auto source = "bar.foo(person[\"name\"]);";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        auto unit = module->GetUnit();
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());

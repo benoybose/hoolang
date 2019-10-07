@@ -32,9 +32,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_1) {
         auto source = "'a';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -50,9 +50,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_2) {
         auto source = "'Z';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -68,9 +68,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_3) {
         auto source = "'\\r';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -86,9 +86,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_4) {
         auto source = "'\\n';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -104,9 +104,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_5) {
         auto source = "'\n';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         BOOST_CHECK(unit->GetItems().empty());
     }
@@ -114,9 +114,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_6) {
         auto source = "'\r';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         BOOST_CHECK(unit->GetItems().empty());
     }
@@ -124,9 +124,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_7) {
         auto source = "'$';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -142,9 +142,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_8) {
         auto source = "'3';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -160,9 +160,9 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
     BOOST_AUTO_TEST_CASE(CharacterLiteral_9) {
         auto source = "'ab';";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);

@@ -32,9 +32,9 @@ BOOST_AUTO_TEST_SUITE(StringLiteral)
     BOOST_AUTO_TEST_CASE(StringLiteral_1) {
         auto source = "\"Benoy Bose\";";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
@@ -50,9 +50,9 @@ BOOST_AUTO_TEST_SUITE(StringLiteral)
     BOOST_AUTO_TEST_CASE(StringLiteral_2) {
         auto source = "\"Benoy\\nBose\";";
         ParserDriver driver(source, "test.hoo");
-        auto compilation_unit = driver.BuildModule();
-        BOOST_CHECK(compilation_unit->Success());
-        auto unit = compilation_unit->GetUnit();
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
         BOOST_CHECK(nullptr != unit);
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
