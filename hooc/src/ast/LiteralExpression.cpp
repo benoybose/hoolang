@@ -16,13 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <stdlib.h>
-#include <stdint.h>
-#include <memory.h>
-
 #include "LiteralExpression.hh"
-
-using namespace hoo;
 
 namespace hooc {
     namespace ast {

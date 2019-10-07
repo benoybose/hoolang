@@ -20,9 +20,6 @@
 #define _LITERALTYPEEXPR_H_
 
 #include "Expression.hh"
-#include "HooTypes.hh"
-#include "Value.hh"
-
 #include <cstdint>
 #include <cstdbool>
 #include <string>
