@@ -158,6 +158,12 @@ Any UnitVisitor::visitConstantInteger(HooParser::ConstantIntegerContext *ctx) {
     return Any(expression);
 }
 
+Any UnitVisitor::visitByteConstant(HooParser::ByteConstantContext *ctx) {
+    auto value = ctx->getText();
+    auto expression = new LiteralExpression(LITERAL_BYTE, value);
+    return Any(expression);
+}
+
 Any UnitVisitor::visitConstantFloating(HooParser::ConstantFloatingContext *ctx) {
     auto value = ctx->getText();
     auto expression = new LiteralExpression(LITERAL_DOUBLE, value);

@@ -29,6 +29,7 @@ constant
     | FloatingConstant #constantFloating
     | CharacterConstant #constantCharacter
     | BooleanConstant #booleanConstant
+    | ByteContant #byteConstant
     ;
 
 primaryExpression

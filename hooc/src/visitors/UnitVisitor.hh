@@ -89,6 +89,8 @@ public:
 
     antlrcpp::Any visitBooleanConstant(HooParser::BooleanConstantContext *ctx) override;
 
+    antlrcpp::Any visitByteConstant(HooParser::ByteConstantContext *ctx) override;
+
 };
 
 

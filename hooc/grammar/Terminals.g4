@@ -28,6 +28,10 @@
 
 grammar Terminals;
 
+ByteContant
+    : HexadecimalPrefix HexadecimalDigit HexadecimalDigit
+    ;
+
 fragment
 UniversalCharacterName
     :   '\\u' HexQuad
