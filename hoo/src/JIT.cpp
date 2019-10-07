@@ -24,17 +24,17 @@ namespace hoo {
 
         JIT::JIT() {}
 
-        Module &JIT::CreateModule(ModuleType module_type, std::string moduleName) {
+        JITModule &JIT::CreateModule(ModuleType module_type, std::string moduleName) {
             if (_modules.find(moduleName) != _modules.end()) {
                 throw JITException(HOO_ERROR_DUPLICATE_MODULE_NAME);
             }
 
-            Module *module = new Module(module_type, moduleName, this);
+            JITModule *module = new JITModule(module_type, moduleName, this);
             _modules[moduleName] = module;
             return *module;
         }
 
-        Module &JIT::GetModule(std::string moduleName) const {
+        JITModule &JIT::GetModule(std::string moduleName) const {
             auto module = _modules.at(moduleName);
             return *module;
         }

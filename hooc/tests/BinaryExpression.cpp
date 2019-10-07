@@ -34,6 +34,9 @@ using namespace hooc::ast;
 BOOST_AUTO_TEST_SUITE(BinaryExpression)
 
     BOOST_AUTO_TEST_CASE(BinaryExpression1) {
+        const std::string source = "2 + 3";
+        ParserDriver driver(source, "test.hoo");
+        auto comlilation_unit = driver.BuildModule();
     }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -35,21 +35,21 @@ namespace hoo {
 
         extern const std::string TYPENAME_VOID;
 
-        class Module;
+        class JITModule;
 
         class Method : public StackScope, public ICodeGeneratable {
-            friend class Module;
+            friend class JITModule;
 
         private:
-            Module *_module;
+            JITModule *_module;
             std::string _name;
             std::string _returnType;
 
         private:
-            Method(const std::string &methodName, Module *module);
+            Method(const std::string &methodName, JITModule *module);
 
         public:
-            Module *GetModule() const;
+            JITModule *GetModule() const;
 
             const std::string &GetName() const;
 

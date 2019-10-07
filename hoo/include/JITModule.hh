@@ -16,43 +16,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Module.hh"
+#ifndef PROJECT_MODULE_HH
+#define PROJECT_MODULE_HH
+
+#include "Method.hh"
+
+#include <string>
+#include <memory>
+#include <list>
+#include <map>
 
 namespace hoo {
     namespace jit {
-        Module::Module(ModuleType module_type, std::string name, JIT *jit) :
-                _moduleType(module_type),
-                _name(name),
-                _jit(jit) {
-        }
+        typedef enum {
+            MODULE_INSTANCE,
+            MODULE_CLASS
+        } ModuleType;
 
-        ModuleType Module::GetModuleType() const {
-            return _moduleType;
-        }
+        class JIT;
 
-        const std::string &Module::GetName() const {
-            return _name;
-        }
+        class JITModule;
 
-        JIT *Module::GetJIT() const {
-            return this->_jit;
-        }
+        class JITModule {
+            friend class JIT;
 
-        Method &Module::CreateMethod(const std::string &name) {
-            Method *method = new Method(name, this);
-            this->_methods.push_back(method);
-            return *(method);
-        }
+        private:
+            ModuleType _moduleType;
+            std::string _name;
+            JIT *_jit;
+            MethodList _methods;
 
-        Module::~Module() {
-            for(auto iterator = this->_methods.begin();
-                    iterator != this->_methods.end(); ++iterator) {
-                Method* method = *iterator;
-                if(nullptr != method) {
-                    delete method;
-                }
-            }
-            this->_methods.clear();
-        }
+        private:
+            JITModule(ModuleType module_type, std::string name, JIT *jit);
+
+        public:
+            virtual ~JITModule();
+
+        public:
+            ModuleType GetModuleType() const;
+
+            const std::string &GetName() const;
+
+            JIT *GetJIT() const;
+
+            Method &CreateMethod(const std::string &name);
+        };
+
+        typedef std::map<std::string, JITModule *> ModuleMap;
     }
 }
+
+#endif //PROJECT_MODULE_HH

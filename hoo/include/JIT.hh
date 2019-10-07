@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Module.hh"
+#include "JITModule.hh"
 
 #include <list>
 #include <memory>
@@ -37,9 +37,9 @@ namespace hoo {
             virtual ~JIT();
 
         public:
-            Module &CreateModule(ModuleType module_type, std::string moduleName);
+            JITModule &CreateModule(ModuleType module_type, std::string moduleName);
 
-            Module &GetModule(std::string moduleName) const;
+            JITModule &GetModule(std::string moduleName) const;
 
             std::list<std::string> GetModuleNames() const;
         };

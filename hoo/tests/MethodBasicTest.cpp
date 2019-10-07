@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE Method Basic Test
 
 #include "JIT.hh"
-#include "Module.hh"
+#include "JITModule.hh"
 #include "Method.hh"
 #include "Value.hh"
 

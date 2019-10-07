@@ -32,7 +32,7 @@ SET(HOO_HEADER_FILES
         include/HooConfig.hh
         include/HooTypes.hh
         include/JIT.hh
-        include/Module.hh
+        include/JITModule.hh
         include/Value.hh
         include/Object.hh
         include/String.hh
@@ -50,7 +50,7 @@ SET(HOO_HEADER_FILES
 
 SET(HOO_SOURCE_FILES
         src/JIT.cpp
-        src/Module.cpp
+        src/JITModule.cpp
         src/Value.cpp
         src/Object.cpp
         src/String.cpp

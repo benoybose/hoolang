@@ -27,14 +27,14 @@ namespace hoo {
     namespace jit {
         const std::string TYPENAME_VOID = "hoo.void";
 
-        Method::Method(const std::string &methodName, Module *module) :
+        Method::Method(const std::string &methodName, JITModule *module) :
                 StackScope(nullptr),
                 _name(methodName),
                 _module(module),
                 _returnType(TYPENAME_VOID) {
         }
 
-        Module *Method::GetModule() const {
+        JITModule *Method::GetModule() const {
             return this->_module;
         }
 

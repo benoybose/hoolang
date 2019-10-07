@@ -16,54 +16,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PROJECT_MODULE_HH
-#define PROJECT_MODULE_HH
-
-#include "Method.hh"
-
-#include <string>
-#include <memory>
-#include <list>
-#include <map>
+#include "JITModule.hh"
 
 namespace hoo {
     namespace jit {
-        typedef enum {
-            MODULE_INSTANCE,
-            MODULE_CLASS
-        } ModuleType;
+        JITModule::JITModule(ModuleType module_type, std::string name, JIT *jit) :
+                _moduleType(module_type),
+                _name(name),
+                _jit(jit) {
+        }
 
-        class JIT;
+        ModuleType JITModule::GetModuleType() const {
+            return _moduleType;
+        }
 
-        class Module;
+        const std::string &JITModule::GetName() const {
+            return _name;
+        }
 
-        class Module {
-            friend class JIT;
+        JIT *JITModule::GetJIT() const {
+            return this->_jit;
+        }
 
-        private:
-            ModuleType _moduleType;
-            std::string _name;
-            JIT *_jit;
-            MethodList _methods;
+        Method &JITModule::CreateMethod(const std::string &name) {
+            Method *method = new Method(name, this);
+            this->_methods.push_back(method);
+            return *(method);
+        }
 
-        private:
-            Module(ModuleType module_type, std::string name, JIT *jit);
-
-        public:
-            virtual ~Module();
-
-        public:
-            ModuleType GetModuleType() const;
-
-            const std::string &GetName() const;
-
-            JIT *GetJIT() const;
-
-            Method &CreateMethod(const std::string &name);
-        };
-
-        typedef std::map<std::string, Module *> ModuleMap;
+        JITModule::~JITModule() {
+            for(auto iterator = this->_methods.begin();
+                    iterator != this->_methods.end(); ++iterator) {
+                Method* method = *iterator;
+                if(nullptr != method) {
+                    delete method;
+                }
+            }
+            this->_methods.clear();
+        }
     }
 }
-
-#endif //PROJECT_MODULE_HH
