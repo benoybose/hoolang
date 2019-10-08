@@ -27,4 +27,9 @@
     BOOST_CHECK_EQUAL(type, ((LiteralExpression*) expr)->GetLiteralType());\
     BOOST_CHECK_EQUAL(value, ((LiteralExpression*) expr)->GetValue())
 
+#define BOOST_CHECK_REFERENCE_EXPRESSION(expr, value)\
+    BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, expr->GetExpressionType());\
+    BOOST_CHECK_EQUAL(value, ((ReferenceExpression*) expr)->GetName());\
+    BOOST_CHECK_EQUAL(nullptr, ((ReferenceExpression*) expr)->GetParent())
+
 #endif //HOOLANG_HOOCTESTHELPER_HH

@@ -58,4 +58,58 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_ADD, opr->GetOperatorType());
     }
 
+    BOOST_AUTO_TEST_CASE(BinaryExpression2) {
+        const std::string source = "a - b;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto lvalue = binary_expr->GetLeftExpression();
+        auto rvalue = binary_expr->GetRightExpression();
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_REFERENCE_EXPRESSION(lvalue, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(rvalue, "b");
+        BOOST_CHECK_EQUAL(OPERATOR_SUB, opr->GetOperatorType());
+    }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression3) {
+        const std::string source = "2 / 3 * 4;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto left_value = binary_expr->GetLeftExpression();
+        auto right_value = binary_expr->GetRightExpression();
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left_value->GetExpressionType());
+
+        auto binary_expr_1 = (BinaryExpression*) left_value;
+        auto binary_expr_1_left_value = binary_expr_1->GetLeftExpression();
+        auto binary_expr_1_right_value = binary_expr_1->GetRightExpression();
+        BOOST_CHECK_LITERAL_EXPRESSION(binary_expr_1_left_value, LITERAL_INTEGER, "2");
+        BOOST_CHECK_LITERAL_EXPRESSION(binary_expr_1_right_value, LITERAL_INTEGER, "3");
+        BOOST_CHECK_EQUAL(OPERATOR_DIV, binary_expr_1->GetOperator()->GetOperatorType());
+
+        BOOST_CHECK_LITERAL_EXPRESSION(right_value, LITERAL_INTEGER, "4");
+        BOOST_CHECK_EQUAL(OPERATOR_MUL, opr->GetOperatorType());
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
