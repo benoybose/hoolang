@@ -112,4 +112,82 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_MUL, opr->GetOperatorType());
     }
 
+    BOOST_AUTO_TEST_CASE(BinaryExpression4) {
+        const std::string source = "a / b * c % d;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+
+        auto opr = binary_expr->GetOperator();
+        auto left_expr = binary_expr->GetLeftExpression();
+        auto right_expr = binary_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left_expr->GetExpressionType());
+        BOOST_CHECK_REFERENCE_EXPRESSION(right_expr, "d");
+        BOOST_CHECK_EQUAL(OPERATOR_MOD, opr->GetOperatorType());
+
+        opr = ((BinaryExpression *) left_expr)->GetOperator();
+        right_expr = ((BinaryExpression *) left_expr)->GetRightExpression();
+        left_expr = ((BinaryExpression *) left_expr)->GetLeftExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left_expr->GetExpressionType());
+        BOOST_CHECK_REFERENCE_EXPRESSION(right_expr, "c");
+        BOOST_CHECK_EQUAL(OPERATOR_MUL, opr->GetOperatorType());
+
+        opr = ((BinaryExpression *) left_expr)->GetOperator();
+        right_expr = ((BinaryExpression *) left_expr)->GetRightExpression();
+        left_expr = ((BinaryExpression *) left_expr)->GetLeftExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(left_expr, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(right_expr, "b");
+        BOOST_CHECK_EQUAL(OPERATOR_DIV, opr->GetOperatorType());
+    }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression5) {
+        const std::string source = "(a / b) * (c % d);";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+
+        auto opr = binary_expr->GetOperator();
+        auto left_expr = binary_expr->GetLeftExpression();
+        auto right_expr = binary_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left_expr->GetExpressionType());
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, right_expr->GetExpressionType());
+        BOOST_CHECK_EQUAL(OPERATOR_MUL, opr->GetOperatorType());
+
+        auto l1 = ((BinaryExpression *) left_expr)->GetLeftExpression();
+        auto l2 = ((BinaryExpression *) left_expr)->GetRightExpression();
+        opr = ((BinaryExpression *) left_expr)->GetOperator();
+
+        BOOST_CHECK_REFERENCE_EXPRESSION(l1, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(l2, "b");
+        BOOST_CHECK_EQUAL(OPERATOR_DIV, opr->GetOperatorType());
+
+        auto r1 = ((BinaryExpression *) right_expr)->GetLeftExpression();
+        auto r2 = ((BinaryExpression *) right_expr)->GetRightExpression();
+        opr = ((BinaryExpression *) right_expr)->GetOperator();
+
+        BOOST_CHECK_REFERENCE_EXPRESSION(r1, "c");
+        BOOST_CHECK_REFERENCE_EXPRESSION(r2, "d");
+        BOOST_CHECK_EQUAL(OPERATOR_MOD, opr->GetOperatorType());
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
