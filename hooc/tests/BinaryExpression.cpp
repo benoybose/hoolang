@@ -190,4 +190,37 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_MOD, opr->GetOperatorType());
     }
 
+    BOOST_AUTO_TEST_CASE(BinaryExpression6) {
+        const std::string source = "a[0] == b[1];";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+
+        auto opr = binary_expr->GetOperator();
+        auto left_expr = binary_expr->GetLeftExpression();
+        auto right_expr = binary_expr->GetRightExpression();
+
+        BOOST_CHECK_EQUAL(OPERATOR_EQUAL, opr->GetOperatorType());
+        auto a_array = (ArrayAccessExpression *) left_expr;
+        auto b_array = (ArrayAccessExpression *) right_expr;
+        auto a = a_array->GetContainer();
+        auto index0 = a_array->GetIndex();
+        BOOST_CHECK_REFERENCE_EXPRESSION(a, "a");
+        BOOST_CHECK_LITERAL_EXPRESSION(index0, LITERAL_INTEGER, "0");
+        auto b = b_array->GetContainer();
+        auto index1 = b_array->GetIndex();
+        BOOST_CHECK_REFERENCE_EXPRESSION(b, "b");
+        BOOST_CHECK_LITERAL_EXPRESSION(index1, LITERAL_INTEGER, "1");
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
