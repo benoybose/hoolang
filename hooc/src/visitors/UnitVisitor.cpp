@@ -206,6 +206,14 @@ Any UnitVisitor::visitExprBinary(HooParser::ExprBinaryContext *ctx) {
     return Any((Expression *) binaryExpresion);
 }
 
+Any UnitVisitor::visitExprLogical(HooParser::ExprLogicalContext *ctx) {
+    auto lvalue = this->visit(ctx->lvalue).as<Expression *>();
+    auto rvalue = this->visit(ctx->rvalue).as<Expression *>();
+    auto opr = new Operator(ctx->opr->getText());
+    Expression* expr = new BinaryExpression(lvalue, opr, rvalue);
+    return Any((Expression*) expr);
+}
+
 Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
     auto expression = this->visit(ctx->expression()).as<Expression *>();
     return Any(expression);

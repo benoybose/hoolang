@@ -91,6 +91,8 @@ public:
 
     antlrcpp::Any visitByteConstant(HooParser::ByteConstantContext *ctx) override;
 
+    antlrcpp::Any visitExprLogical(HooParser::ExprLogicalContext *ctx) override;
+
 };
 
 

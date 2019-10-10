@@ -223,4 +223,37 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_LITERAL_EXPRESSION(index1, LITERAL_INTEGER, "1");
     }
 
+    BOOST_AUTO_TEST_CASE(BinaryExpression7) {
+        const std::string source = "a == b && c != d;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+
+        auto opr = ((BinaryExpression *) expr)->GetOperator();
+        auto left_expr = (BinaryExpression *) ((BinaryExpression *) expr)->GetLeftExpression();
+        auto right_expr = (BinaryExpression *) ((BinaryExpression *) expr)->GetRightExpression();
+        BOOST_CHECK_EQUAL(OPERATOR_LOGICAL_AND, opr->GetOperatorType());
+
+        auto expr1 = (ReferenceExpression *) left_expr->GetLeftExpression();
+        auto expr2 = (ReferenceExpression *) left_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(left_expr->GetOperator()->GetOperatorType(), OPERATOR_EQUAL);
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr1, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "b");
+
+        auto expr3 = (ReferenceExpression *) right_expr->GetLeftExpression();
+        auto expr4 = (ReferenceExpression *) right_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(right_expr->GetOperator()->GetOperatorType(), OPERATOR_NOT_EQUAL);
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr3, "c");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
+    }
+
 BOOST_AUTO_TEST_SUITE_END()

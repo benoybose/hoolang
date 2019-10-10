@@ -44,6 +44,7 @@ expression
     :   primaryExpression #exprPrimary
     |   invocationExpression #exprInvoke
     |   lvalue=expression opr=binaryOperator rvalue=expression #exprBinary
+    |   lvalue=expression opr=( '&&' | '||' ) rvalue=expression #exprLogical
     |   '(' expression ')' #exprGrouped
     ;
 
@@ -59,7 +60,7 @@ arithmeticOperator
     ;
 
 relationalOperator
-    : ( '==' | '!=' | '>' | '<' | '>=' | '<=' | '&&' | '||')
+    : ( '==' | '!=' | '>' | '<' | '>=' | '<=' )
     ;
 
 assignmentOperator
