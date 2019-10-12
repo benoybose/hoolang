@@ -16,27 +16,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Statement.hh"
+#include "ReturnStatement.hh"
 
 namespace hooc {
     namespace ast {
-        Statement::Statement(StatementType statement_type) :
-                UnitItem(UNIT_ITEM_STATEMENT),
-                _statement_type(statement_type) {
+        ReturnStatement::ReturnStatement(Expression *expression):
+            Statement(STMT_RETURN),
+            _expression(expression) {
         }
 
-        const StatementType Statement::GetStatementType() const {
-            return this->_statement_type;
+        Expression *ReturnStatement::GetExpression() const {
+            return this->_expression;
         }
 
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
-                Statement(STMT_DECLARATION),
-                _declaration(declaration) {
-
-        }
-
-        const Declaration *DeclarationStatement::GetDeclaration() const {
-            return this->_declaration;
+        ReturnStatement::~ReturnStatement() {
+            delete this->_expression;
         }
     }
 }

@@ -26,6 +26,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
+#include <ast/ExpressionStatement.hh>
 
 using namespace std;
 using namespace hooc;

@@ -49,43 +49,13 @@ namespace hooc {
             const StatementType GetStatementType() const;
         };
 
-        class NoopStatement : public Statement {
-        public:
-            NoopStatement();
-        };
 
-        class CompoundStatement : public Statement {
-        private:
-            std::list<Statement *> _statements;
-        public:
-            explicit CompoundStatement(std::list<Statement *> &statements);
 
-        public:
-            const std::list<Statement *> &GetStatements() const;
 
-            virtual ~CompoundStatement();
-        };
 
-        class ExpressionStatement : public Statement {
-        private:
-            Expression *_expression;
-        public:
-            ExpressionStatement(Expression *expression);
 
-        public:
-            const Expression *GetExpression() const;
 
-        public:
-            virtual ~ExpressionStatement();
-        };
 
-        class ReturnStatement : public ExpressionStatement {
-        public:
-            explicit ReturnStatement(Expression *expression);
-
-        public:
-            virtual ~ReturnStatement();
-        };
 
         class DeclarationStatement : public Statement {
         private:

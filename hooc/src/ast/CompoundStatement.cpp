@@ -16,27 +16,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Statement.hh"
+#include "CompoundStatement.hh"
 
 namespace hooc {
     namespace ast {
-        Statement::Statement(StatementType statement_type) :
-                UnitItem(UNIT_ITEM_STATEMENT),
-                _statement_type(statement_type) {
+        CompoundStatement::CompoundStatement(std::list<Statement *> &statements) :
+                Statement(STMT_COMPOUND) {
+            for (auto statement: statements) {
+                this->_statements.push_back(statement);
+            }
         }
 
-        const StatementType Statement::GetStatementType() const {
-            return this->_statement_type;
+        CompoundStatement::~CompoundStatement() {
+            while (this->_statements.begin()
+                   != this->_statements.end()) {
+                auto statement = *(this->_statements.begin());
+                this->_statements.remove(statement);
+                delete statement;
+            }
         }
 
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
-                Statement(STMT_DECLARATION),
-                _declaration(declaration) {
-
-        }
-
-        const Declaration *DeclarationStatement::GetDeclaration() const {
-            return this->_declaration;
+        const std::list<Statement *> &CompoundStatement::GetStatements() const {
+            return this->_statements;
         }
     }
 }

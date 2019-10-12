@@ -16,27 +16,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#ifndef HOOLANG_EXPRESSIONSTATEMENT_HH
+#define HOOLANG_EXPRESSIONSTATEMENT_HH
+
 #include "Statement.hh"
 
 namespace hooc {
     namespace ast {
-        Statement::Statement(StatementType statement_type) :
-                UnitItem(UNIT_ITEM_STATEMENT),
-                _statement_type(statement_type) {
-        }
+        class ExpressionStatement : public Statement {
+        private:
+            Expression *_expression;
+        public:
+            ExpressionStatement(Expression *expression);
 
-        const StatementType Statement::GetStatementType() const {
-            return this->_statement_type;
-        }
+        public:
+            const Expression *GetExpression() const;
 
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
-                Statement(STMT_DECLARATION),
-                _declaration(declaration) {
-
-        }
-
-        const Declaration *DeclarationStatement::GetDeclaration() const {
-            return this->_declaration;
-        }
+        public:
+            virtual ~ExpressionStatement();
+        };
     }
 }
+
+
+#endif //HOOLANG_EXPRESSIONSTATEMENT_HH

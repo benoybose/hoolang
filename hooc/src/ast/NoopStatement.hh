@@ -16,27 +16,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Statement.hh"
+#ifndef HOOLANG_NOOPSTATEMENT_HH
+#define HOOLANG_NOOPSTATEMENT_HH
+
+#include "ast/Statement.hh"
 
 namespace hooc {
     namespace ast {
-        Statement::Statement(StatementType statement_type) :
-                UnitItem(UNIT_ITEM_STATEMENT),
-                _statement_type(statement_type) {
-        }
-
-        const StatementType Statement::GetStatementType() const {
-            return this->_statement_type;
-        }
-
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
-                Statement(STMT_DECLARATION),
-                _declaration(declaration) {
-
-        }
-
-        const Declaration *DeclarationStatement::GetDeclaration() const {
-            return this->_declaration;
-        }
+        class NoopStatement : public Statement {
+        public:
+            NoopStatement();
+        };
     }
 }
+
+#endif //HOOLANG_NOOPSTATEMENT_HH

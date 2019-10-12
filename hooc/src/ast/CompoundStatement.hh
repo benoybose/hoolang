@@ -16,27 +16,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Statement.hh"
+#ifndef HOOLANG_COMPOUNDSTATEMENT_HH
+#define HOOLANG_COMPOUNDSTATEMENT_HH
+
+#include "ast/Statement.hh"
 
 namespace hooc {
     namespace ast {
-        Statement::Statement(StatementType statement_type) :
-                UnitItem(UNIT_ITEM_STATEMENT),
-                _statement_type(statement_type) {
-        }
+        class CompoundStatement : public Statement {
+        private:
+            std::list<Statement *> _statements;
+        public:
+            explicit CompoundStatement(std::list<Statement *> &statements);
 
-        const StatementType Statement::GetStatementType() const {
-            return this->_statement_type;
-        }
+        public:
+            const std::list<Statement *> &GetStatements() const;
 
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
-                Statement(STMT_DECLARATION),
-                _declaration(declaration) {
-
-        }
-
-        const Declaration *DeclarationStatement::GetDeclaration() const {
-            return this->_declaration;
-        }
+        public:
+            virtual ~CompoundStatement();
+        };
     }
 }
+
+#endif //HOOLANG_COMPOUNDSTATEMENT_HH

@@ -22,6 +22,7 @@
 #include "TypeSpecification.hh"
 #include "Declaration.hh"
 #include "Statement.hh"
+#include "CompoundStatement.hh"
 
 #include <string>
 #include <list>

@@ -27,11 +27,14 @@
 #include "ast/ArrayAccessExpression.hh"
 #include "ast/InvokeExpression.hh"
 #include "ast/Statement.hh"
+#include "ast/NoopStatement.hh"
+#include "ast/ReturnStatement.hh"
 #include "ast/Unit.hh"
 
 #include <list>
 #include <string>
 #include <ast/ClassDefinition.hh>
+#include <ast/ExpressionStatement.hh>
 
 using namespace hooc::ast;
 using namespace antlrcpp;

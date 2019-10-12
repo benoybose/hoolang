@@ -25,6 +25,7 @@
 #include <boost/filesystem.hpp>
 #include <string>
 #include <ast/LiteralExpression.hh>
+#include <ast/ExpressionStatement.hh>
 
 using namespace std;
 using namespace hooc;
