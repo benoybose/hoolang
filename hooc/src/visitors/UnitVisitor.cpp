@@ -197,21 +197,36 @@ Any UnitVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx) {
     return Any(expression);
 }
 
-Any UnitVisitor::visitExprBinary(HooParser::ExprBinaryContext *ctx) {
-    auto lvalue = this->visit(ctx->lvalue).as<Expression *>();
-    auto opr = new Operator(ctx->opr->getText());
-    auto rvalue = this->visit(ctx->rvalue).as<Expression *>();
+Any UnitVisitor::visitExprBitwise(HooParser::ExprBitwiseContext *ctx) {
+    auto expr = CreateBinaryExpression (ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression*) expr);
+}
 
-    auto binaryExpresion = new BinaryExpression(lvalue, opr, rvalue);
-    return Any((Expression *) binaryExpresion);
+Any UnitVisitor::visitExprAdditive(HooParser::ExprAdditiveContext *ctx) {
+    auto expr = CreateBinaryExpression (ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression*) expr);
+}
+
+Any UnitVisitor::visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx) {
+    auto expr = CreateBinaryExpression (ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression*) expr);
+}
+
+Any UnitVisitor::visitExprComparison(HooParser::ExprComparisonContext *ctx) {
+    auto expr = CreateBinaryExpression (ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression*) expr);
 }
 
 Any UnitVisitor::visitExprLogical(HooParser::ExprLogicalContext *ctx) {
-    auto lvalue = this->visit(ctx->lvalue).as<Expression *>();
-    auto rvalue = this->visit(ctx->rvalue).as<Expression *>();
-    auto opr = new Operator(ctx->opr->getText());
-    Expression* expr = new BinaryExpression(lvalue, opr, rvalue);
-    return Any((Expression*) expr);
+    Expression *expr = CreateBinaryExpression(ctx->lvalue,
+            ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
+}
+
+Any UnitVisitor::visitExpAssignment(HooParser::ExpAssignmentContext *ctx) {
+    Expression *expr = CreateBinaryExpression(ctx->lvalue,
+                                              ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
 }
 
 Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
@@ -316,4 +331,14 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {
     }
     auto unit = new Unit(unit_items);
     return Any(unit);
+}
+
+Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
+                                             antlr4::Token *opr,
+                                             HooParser::ExpressionContext *rvalue) {
+    auto left = this->visit(lvalue).as<Expression *>();
+    auto right = this->visit(rvalue).as<Expression *>();
+    auto oprText = new Operator(opr->getText());
+    Expression *expr = new BinaryExpression(left, oprText, right);
+    return expr;
 }

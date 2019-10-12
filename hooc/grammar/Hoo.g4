@@ -43,32 +43,13 @@ primaryExpression
 expression
     :   primaryExpression #exprPrimary
     |   invocationExpression #exprInvoke
-    |   lvalue=expression opr=binaryOperator rvalue=expression #exprBinary
+    |   lvalue=expression opr=('|' | '&' | '^' | '~' | '<<' | '>>') rvalue=expression #exprBitwise
+    |   lvalue=expression opr=( '+' | '-' ) rvalue=expression #exprAdditive
+    |   lvalue=expression opr=( '*' | '/' | '%') rvalue=expression #exprMultiplicative
+    |   lvalue=expression opr=( '==' | '!=' | '>' | '<' | '>=' | '<=' ) rvalue=expression #exprComparison
     |   lvalue=expression opr=( '&&' | '||' ) rvalue=expression #exprLogical
+    |   lvalue=expression opr=( '=' | '+=' | '-=' | '/=' | '*=' ) rvalue=expression #expAssignment
     |   '(' expression ')' #exprGrouped
-    ;
-
-binaryOperator
-    :   arithmeticOperator
-    |   relationalOperator
-    |   assignmentOperator
-    |   bitwiseOperator
-    ;
-
-arithmeticOperator
-    : ('+' | '-' | '*' | '/' | '%' )
-    ;
-
-relationalOperator
-    : ( '==' | '!=' | '>' | '<' | '>=' | '<=' )
-    ;
-
-assignmentOperator
-    : ( '=' | '+=' | '-=' | '/=' | '*=' )
-    ;
-
-bitwiseOperator
-    : ('|' | '&' | '^' | '~' | '<<' | '>>')
     ;
 
 typeSpecifier

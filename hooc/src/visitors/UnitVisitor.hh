@@ -20,7 +20,10 @@
 #define PROJECT_UNITVISITOR_HH
 
 #include "HooBaseVisitor.h"
+#include "ast/Expression.hh"
+#include "ast/Operator.hh"
 
+using namespace hooc::ast;
 
 class UnitVisitor : public HooBaseVisitor {
 public:
@@ -57,8 +60,6 @@ public:
 
     antlrcpp::Any visitExprPrimary(HooParser::ExprPrimaryContext *ctx) override;
 
-    antlrcpp::Any visitExprBinary(HooParser::ExprBinaryContext *ctx) override;
-
     antlrcpp::Any visitExprGrouped(HooParser::ExprGroupedContext *ctx) override;
 
     antlrcpp::Any visitInvocationExpression(HooParser::InvocationExpressionContext *ctx) override;
@@ -92,6 +93,21 @@ public:
     antlrcpp::Any visitByteConstant(HooParser::ByteConstantContext *ctx) override;
 
     antlrcpp::Any visitExprLogical(HooParser::ExprLogicalContext *ctx) override;
+
+    antlrcpp::Any visitExprAdditive(HooParser::ExprAdditiveContext *ctx) override;
+
+    antlrcpp::Any visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx) override;
+
+    antlrcpp::Any visitExprComparison(HooParser::ExprComparisonContext *ctx) override;
+
+    antlrcpp::Any visitExpAssignment(HooParser::ExpAssignmentContext *ctx) override;
+
+    antlrcpp::Any visitExprBitwise(HooParser::ExprBitwiseContext *ctx) override;
+
+private:
+
+    Expression* CreateBinaryExpression(HooParser::ExpressionContext* lvalue,
+            antlr4::Token* opr, HooParser::ExpressionContext* rvalue);
 
 };
 

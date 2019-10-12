@@ -256,4 +256,76 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
     }
 
+    BOOST_AUTO_TEST_CASE(BinaryExpression8) {
+        const std::string source = "a | b + c ~ d;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_EQUAL(OPERATOR_ADD, opr->GetOperatorType());
+        auto left = binary_expr->GetLeftExpression();
+        auto right = binary_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left->GetExpressionType());
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, right->GetExpressionType());
+        auto expr1 = ((BinaryExpression*) left)->GetLeftExpression();
+        auto expr2 = ((BinaryExpression*) left)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr1, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "b");
+        BOOST_CHECK_EQUAL(OPERATOR_BIT_OR,
+                ((BinaryExpression*) left)->GetOperator()->GetOperatorType());
+
+        auto expr3 = ((BinaryExpression*) right)->GetLeftExpression();
+        auto expr4 = ((BinaryExpression*) right)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr3, "c");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
+        BOOST_CHECK_EQUAL(OPERATOR_BIT_NOT,
+                ((BinaryExpression*) right)->GetOperator()->GetOperatorType());
+    }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression9) {
+        const std::string source = "a * b == c / d;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_EQUAL(OPERATOR_EQUAL, opr->GetOperatorType());
+        auto left = binary_expr->GetLeftExpression();
+        auto right = binary_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left->GetExpressionType());
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, right->GetExpressionType());
+        auto expr1 = ((BinaryExpression*) left)->GetLeftExpression();
+        auto expr2 = ((BinaryExpression*) left)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr1, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "b");
+        BOOST_CHECK_EQUAL(OPERATOR_MUL,
+                          ((BinaryExpression*) left)->GetOperator()->GetOperatorType());
+
+        auto expr3 = ((BinaryExpression*) right)->GetLeftExpression();
+        auto expr4 = ((BinaryExpression*) right)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr3, "c");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
+        BOOST_CHECK_EQUAL(OPERATOR_DIV,
+                          ((BinaryExpression*) right)->GetOperator()->GetOperatorType());
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
