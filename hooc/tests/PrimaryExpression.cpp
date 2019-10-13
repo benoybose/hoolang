@@ -77,8 +77,10 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         auto reference_expr = (ReferenceExpression*) expression;
         BOOST_CHECK_NE(nullptr, reference_expr);
         BOOST_CHECK_EQUAL("name", reference_expr->GetName());
-        BOOST_CHECK_NE(nullptr, reference_expr->GetParent());
-        BOOST_CHECK_EQUAL("person", reference_expr->GetParent()->GetName());
+        auto parent = reference_expr->GetParent();
+        BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, parent->GetExpressionType());
+        auto person = (ReferenceExpression* ) parent;
+        BOOST_CHECK_EQUAL("person", person->GetName());
     }
 
     BOOST_AUTO_TEST_CASE(NestedReferenceExpression2) {
@@ -102,8 +104,8 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         BOOST_CHECK_NE(nullptr, reference_expr);
         BOOST_CHECK_EQUAL("name", reference_expr->GetName());
         BOOST_CHECK_NE(nullptr, reference_expr->GetParent());
-        BOOST_CHECK_EQUAL("person", reference_expr->GetParent()->GetName());
-        auto home = reference_expr->GetParent()
+        BOOST_CHECK_EQUAL("person", ((ReferenceExpression *) reference_expr->GetParent())->GetName());
+        auto home = (ReferenceExpression *) ((ReferenceExpression *) reference_expr->GetParent())
                 ->GetParent();
         BOOST_CHECK_NE(nullptr, home);
         BOOST_CHECK_EQUAL("home", home->GetName());
@@ -173,7 +175,8 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         auto persons = (ReferenceExpression*) container;
         BOOST_CHECK_NE(nullptr, persons);
         BOOST_CHECK_EQUAL("persons", persons->GetName());
-        auto home = persons->GetParent();
+        BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, persons->GetParent()->GetExpressionType());
+        auto home = (ReferenceExpression *) persons->GetParent();
         BOOST_CHECK_NE(nullptr, home);
         BOOST_CHECK_EQUAL("home", home->GetName());
     }
@@ -206,9 +209,9 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         BOOST_CHECK_EQUAL(LITERAL_INTEGER, ((LiteralExpression*) persons_index)->GetLiteralType());
         BOOST_CHECK_EQUAL("12891", ((LiteralExpression*) persons_index)->GetValue());
         BOOST_CHECK_EQUAL("persons", ((ReferenceExpression*) persons_container)->GetName());
-        auto home = ((ReferenceExpression*)persons_container)->GetParent();
-        BOOST_CHECK_EQUAL("home", home->GetName());
-        BOOST_CHECK_EQUAL(nullptr, home->GetParent());
+        auto home = ((ReferenceExpression *) persons_container)->GetParent();
+        BOOST_CHECK_EQUAL("home", ((ReferenceExpression *) home)->GetName());
+        BOOST_CHECK_EQUAL(nullptr, ((ReferenceExpression *) home)->GetParent());
     }
 
     BOOST_AUTO_TEST_CASE(ArrayAccessExpression4) {

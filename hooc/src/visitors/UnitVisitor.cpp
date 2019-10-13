@@ -35,6 +35,7 @@
 #include <string>
 #include <ast/ClassDefinition.hh>
 #include <ast/ExpressionStatement.hh>
+#include <ast/DeclarationStatement.hh>
 
 using namespace hooc::ast;
 using namespace antlrcpp;

@@ -46,7 +46,7 @@ namespace hooc {
 
         Module* ParserDriver::BuildModule() {
             CompilationContext context(this->_source_code);
-            Module* compilation_unit = nullptr;
+            Module* module = nullptr;
             Unit* unit = nullptr;
 
             try {
@@ -64,9 +64,9 @@ namespace hooc {
             }
 
             auto errors = context.GetErrors();
-            compilation_unit = new Module("", "",
-                                          unit, errors);
-            return compilation_unit;
+            module = new Module("", "",
+                                unit, errors);
+            return module;
         }
     }
 }

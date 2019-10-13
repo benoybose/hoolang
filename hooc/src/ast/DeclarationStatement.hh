@@ -16,30 +16,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "ReferenceExpression.hh"
+#ifndef HOOLANG_DECLARATIONSTATEMENT_HH
+#define HOOLANG_DECLARATIONSTATEMENT_HH
+
+#include "Declaration.hh"
+#include "Statement.hh"
 
 namespace hooc {
     namespace ast {
-        ReferenceExpression::ReferenceExpression(std::string &name) :
-                Expression(EXPRESSION_REFERENCE), _parent(nullptr), _name(name) {
-        }
+        class DeclarationStatement : public Statement {
+        private:
+            Declaration *_declaration;
+        public:
+            DeclarationStatement(Declaration *declaration);
 
-        ReferenceExpression::ReferenceExpression(Expression *parent, std::string &name) :
-                Expression(EXPRESSION_REFERENCE),
-                _parent(parent), _name(name) {
-
-        }
-
-        const std::string &ReferenceExpression::GetName() const {
-            return this->_name;
-        }
-
-        const Expression *ReferenceExpression::GetParent() const {
-            return this->_parent;
-        }
-
-        ReferenceExpression::~ReferenceExpression() {
-            delete this->_parent;
-        }
+        public:
+            const Declaration *GetDeclaration() const;
+        };
     }
 }
+
+#endif //HOOLANG_DECLARATIONSTATEMENT_HH

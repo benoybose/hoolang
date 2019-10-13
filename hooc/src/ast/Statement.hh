@@ -48,24 +48,6 @@ namespace hooc {
         public:
             const StatementType GetStatementType() const;
         };
-
-
-
-
-
-
-
-
-
-        class DeclarationStatement : public Statement {
-        private:
-            Declaration *_declaration;
-        public:
-            DeclarationStatement(Declaration *declaration);
-
-        public:
-            const Declaration *GetDeclaration() const;
-        };
     }
 }
 

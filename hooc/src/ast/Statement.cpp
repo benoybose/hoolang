@@ -28,15 +28,5 @@ namespace hooc {
         const StatementType Statement::GetStatementType() const {
             return this->_statement_type;
         }
-
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
-                Statement(STMT_DECLARATION),
-                _declaration(declaration) {
-
-        }
-
-        const Declaration *DeclarationStatement::GetDeclaration() const {
-            return this->_declaration;
-        }
     }
 }

@@ -50,6 +50,7 @@ BOOST_AUTO_TEST_SUITE(ReturnStatementTest)
         BOOST_CHECK_EQUAL(STMT_RETURN, stmt->GetStatementType());
         auto stmt_return = (ReturnStatement *) stmt;
         BOOST_CHECK_LITERAL_EXPRESSION(stmt_return->GetExpression(), LITERAL_INTEGER, "102");
+        delete module;
     }
 
     BOOST_AUTO_TEST_CASE(ReturnStatement2) {
@@ -66,6 +67,7 @@ BOOST_AUTO_TEST_SUITE(ReturnStatementTest)
         BOOST_CHECK_EQUAL(STMT_RETURN, stmt->GetStatementType());
         auto stmt_return = (ReturnStatement *) stmt;
         BOOST_CHECK_REFERENCE_EXPRESSION(stmt_return->GetExpression(), "name");
+        delete module;
     }
 
     BOOST_AUTO_TEST_CASE(ReturnStatement3) {
@@ -85,9 +87,10 @@ BOOST_AUTO_TEST_SUITE(ReturnStatementTest)
         BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, expr_return->GetExpressionType());
         auto name = (ReferenceExpression *) expr_return;
         BOOST_CHECK_EQUAL("name", name->GetName());
-        auto person = name->GetParent();
+        auto person = (ReferenceExpression *) name->GetParent();
         BOOST_CHECK_EQUAL("person", person->GetName());
         BOOST_CHECK_EQUAL(nullptr, person->GetParent());
+        delete module;
     }
 
 BOOST_AUTO_TEST_SUITE_END()
