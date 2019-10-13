@@ -36,13 +36,13 @@ primaryExpression
     :   Identifier #primaryRefExpr
     |   constant #primaryConstantExpr
     |   StringLiteral #primaryStringExpr
-    |   parent=primaryExpression '.' name=Identifier #primaryNestedRefExpr
-    |   container=primaryExpression '[' accessIndex=expression ']' #primaryArrayAccessExpr
     ;
 
 expression
     :   primaryExpression #exprPrimary
-    |   invocationExpression #exprInvoke
+    |   container=expression '[' accessIndex=expression ']' #arrayAccessExpr
+    |   receiver=expression '(' arguments=expressionList? ')' #exprInvoke
+    |   parent=expression '.' name=Identifier #primaryNestedRefExpr
     |   lvalue=expression opr=('|' | '&' | '^' | '~' | '<<' | '>>') rvalue=expression #exprBitwise
     |   lvalue=expression opr=( '+' | '-' ) rvalue=expression #exprAdditive
     |   lvalue=expression opr=( '*' | '/' | '%') rvalue=expression #exprMultiplicative
@@ -56,10 +56,6 @@ typeSpecifier
     :   Identifier
     |   typeSpecifier '.' Identifier
     |   typeSpecifier '[' ']'
-    ;
-
-invocationExpression
-    : receiver=primaryExpression '(' arguments=expressionList? ')'
     ;
 
 expressionList

@@ -132,7 +132,7 @@ Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
 }
 
 Any UnitVisitor::visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) {
-    auto parent = (ReferenceExpression *) this->visit(ctx->parent).as<Expression *>();
+    auto parent = this->visit(ctx->parent).as<Expression *>();
     auto name = ctx->name->getText();
     auto expression = (Expression *) new ReferenceExpression(parent, name);
     return Any(expression);
@@ -149,7 +149,7 @@ Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx
     return Any(expression);
 }
 
-Any UnitVisitor::visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) {
+Any UnitVisitor::visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx) {
     auto container = this->visit(ctx->container).as<Expression *>();
     auto accessIndex = this->visit(ctx->accessIndex).as<Expression *>();
     auto expression = (Expression *) new ArrayAccessExpression(container, accessIndex);
@@ -192,7 +192,17 @@ Any UnitVisitor::visitBooleanConstant(HooParser::BooleanConstantContext *ctx) {
 }
 
 Any UnitVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx) {
-    auto expression = (Expression *) this->visit(ctx->invocationExpression()).as<InvokeExpression *>();
+    auto receiver = this->visit(ctx->receiver).as<Expression *>();
+    std::list<Expression *> argumentList;
+    if (nullptr != ctx->arguments) {
+        auto arguments = ctx->arguments->expression();
+        for (auto argument: arguments) {
+            auto expression = this->visit(argument).as<Expression *>();
+            argumentList.push_back(expression);
+        }
+    }
+
+    Expression* expression = new InvokeExpression(receiver, argumentList);
     return Any(expression);
 }
 
@@ -236,21 +246,6 @@ Any UnitVisitor::visitExpAssignment(HooParser::ExpAssignmentContext *ctx) {
 Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
     auto expression = this->visit(ctx->expression()).as<Expression *>();
     return Any(expression);
-}
-
-Any UnitVisitor::visitInvocationExpression(HooParser::InvocationExpressionContext *ctx) {
-    auto receiver = this->visit(ctx->receiver).as<Expression *>();
-    std::list<Expression *> argumentList;
-    if (nullptr != ctx->arguments) {
-        auto arguments = ctx->arguments->expression();
-        for (auto argument: arguments) {
-            auto expression = this->visit(argument).as<Expression *>();
-            argumentList.push_back(expression);
-        }
-    }
-
-    auto invokeExpression = new InvokeExpression(receiver, argumentList);
-    return Any(invokeExpression);
 }
 
 Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx) {

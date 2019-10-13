@@ -60,7 +60,9 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto source = "foo.bar();";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
         auto unit = module->GetUnit();
+        BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());

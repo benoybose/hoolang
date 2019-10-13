@@ -48,7 +48,7 @@ public:
 
     antlrcpp::Any visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) override;
 
-    antlrcpp::Any visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) override;
+    antlrcpp::Any visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx) override;
 
     antlrcpp::Any visitConstantInteger(HooParser::ConstantIntegerContext *ctx) override;
 
@@ -61,8 +61,6 @@ public:
     antlrcpp::Any visitExprPrimary(HooParser::ExprPrimaryContext *ctx) override;
 
     antlrcpp::Any visitExprGrouped(HooParser::ExprGroupedContext *ctx) override;
-
-    antlrcpp::Any visitInvocationExpression(HooParser::InvocationExpressionContext *ctx) override;
 
     antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
 
