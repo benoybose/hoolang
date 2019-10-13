@@ -22,6 +22,7 @@
 #include "ast/ReferenceExpression.hh"
 #include "ast/ArrayAccessExpression.hh"
 #include "ast/LiteralExpression.hh"
+#include "HoocTestHelper.hh"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
@@ -110,6 +111,35 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         BOOST_CHECK_NE(nullptr, home);
         BOOST_CHECK_EQUAL("home", home->GetName());
         BOOST_CHECK_EQUAL(nullptr, home->GetParent());
+    }
+
+    BOOST_AUTO_TEST_CASE(NestedReferenceExpression3) {
+        auto source = "home.person().name;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        BOOST_CHECK_NE(nullptr, unit);
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto firstItem = *(items.begin());
+        BOOST_CHECK_EQUAL(firstItem->GetUnitItemType(), UNIT_ITEM_STATEMENT);
+        auto statement = (Statement*) firstItem;
+        BOOST_CHECK_NE(nullptr, statement);
+        BOOST_CHECK_EQUAL(statement->GetStatementType(), STMT_EXPRESSION);
+        auto expression = ((ExpressionStatement*) statement)->GetExpression();
+        BOOST_CHECK_NE(nullptr, expression);
+        BOOST_CHECK_EQUAL(expression->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto reference_expr = (ReferenceExpression*) expression;
+        BOOST_CHECK_NE(nullptr, reference_expr);
+        BOOST_CHECK_EQUAL("name", reference_expr->GetName());
+        BOOST_CHECK_NE(nullptr, reference_expr->GetParent());
+        BOOST_CHECK_EQUAL(EXPRESSION_INVOKE, reference_expr->GetParent()->GetExpressionType());
+        auto persons = (InvokeExpression *) reference_expr->GetParent();
+        BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, persons->GetReceiver()->GetExpressionType());
+        auto container = (ReferenceExpression *) persons->GetReceiver();
+        BOOST_CHECK_EQUAL("person", container->GetName());
+        BOOST_CHECK_REFERENCE_EXPRESSION(container->GetParent(), "home");
     }
 
     BOOST_AUTO_TEST_CASE(ArrayAccessExpression1) {
@@ -267,5 +297,8 @@ BOOST_AUTO_TEST_SUITE(PrimaryExpression)
         auto object = (ReferenceExpression*) container_expression;
         BOOST_CHECK_EQUAL("object", object->GetName());
     }
+
+    // todo: test getPersons()[0]; - Directly accessing an element in array returned by a function
+    // todo: test array[0](a, b); - Directly invoke a function from an array elements of function pointer.
 
 BOOST_AUTO_TEST_SUITE_END()

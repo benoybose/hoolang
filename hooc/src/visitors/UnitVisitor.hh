@@ -27,12 +27,9 @@ using namespace hooc::ast;
 
 class UnitVisitor : public HooBaseVisitor {
 public:
-
-    antlrcpp::Any visitNamespaceDeclaration(HooParser::NamespaceDeclarationContext *ctx) override;
-
     antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
 
-    antlrcpp::Any visitDeclaration(HooParser::DeclarationContext *ctx) override;
+    antlrcpp::Any visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) override;
 
     antlrcpp::Any visitTypeSpecifier(HooParser::TypeSpecifierContext *ctx) override;
 
@@ -42,7 +39,7 @@ public:
 
     antlrcpp::Any visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) override;
 
-    antlrcpp::Any visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) override;
+    antlrcpp::Any visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) override;
 
     antlrcpp::Any visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) override;
 
@@ -71,8 +68,6 @@ public:
     antlrcpp::Any visitExpressionStatement(HooParser::ExpressionStatementContext *ctx) override;
 
     antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
-
-    antlrcpp::Any visitClassDefinitionUnitItem(HooParser::ClassDefinitionUnitItemContext *ctx) override;
 
     antlrcpp::Any visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) override;
 
@@ -104,8 +99,8 @@ public:
 
 private:
 
-    Expression* CreateBinaryExpression(HooParser::ExpressionContext* lvalue,
-            antlr4::Token* opr, HooParser::ExpressionContext* rvalue);
+    Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
+                                       antlr4::Token *opr, HooParser::ExpressionContext *rvalue);
 
 };
 

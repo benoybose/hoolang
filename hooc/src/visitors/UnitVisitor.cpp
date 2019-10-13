@@ -40,38 +40,7 @@
 using namespace hooc::ast;
 using namespace antlrcpp;
 
-Any UnitVisitor::visitNamespaceDeclaration(HooParser::NamespaceDeclarationContext *ctx) {
-    auto identifiers = ctx->Identifier();
-    std::list<std::string> namespace_items;
-    for (auto identifier : identifiers) {
-        auto namespace_item = identifier->getText();
-        namespace_items.push_back(namespace_item);
-    }
-    return antlrcpp::Any(namespace_items);
-}
-
-
-Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
-
-    auto declarator = ctx->Declarator()->getText();
-    TypeSpecification *return_type = nullptr;
-    if (nullptr != ctx->returnType) {
-        return_type = this->visit(ctx->returnType).as<TypeSpecification *>();
-    }
-    std::string function_name = ctx->name->getText();
-    std::list<Declaration *> param_list;
-    if (nullptr != ctx->paramList()) {
-        param_list = this->visit(ctx->paramList()).as<std::list<Declaration *>>();
-    }
-    auto statement = this->visit(ctx->compoundStatement()).as<CompoundStatement *>();
-    auto function_definition = new FunctionDefinition(declarator, function_name,
-                                                      return_type,
-                                                      param_list,
-                                                      statement);
-    return Any(function_definition);
-}
-
-Any UnitVisitor::visitDeclaration(HooParser::DeclarationContext *ctx) {
+Any UnitVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) {
     std::string declaratorLabel = "";
     auto declarator = ctx->Declarator();
     if (nullptr != declarator) {
@@ -109,8 +78,8 @@ Any UnitVisitor::visitTypeSpecifier(HooParser::TypeSpecifierContext *ctx) {
 }
 
 Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) {
-    auto param_list = this->visit(ctx->paramList()).as<std::list<Declaration *>>();
-    auto declarations = ctx->declaration();
+    auto param_list = this->visit(ctx->list).as<std::list<Declaration *>>();
+    auto declarations = ctx->variableDeclaration();
     for (auto declaration: declarations) {
         auto item = this->visit(declaration).as<Declaration *>();
         param_list.push_back(item);
@@ -119,7 +88,7 @@ Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListCont
 }
 
 Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx) {
-    auto declaration = this->visit(ctx->declaration()).as<Declaration *>();
+    auto declaration = this->visit(ctx->decl).as<Declaration *>();
     std::list<Declaration *> param_list;
     param_list.push_back(declaration);
     return Any(param_list);
@@ -131,7 +100,7 @@ Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
     return Any(expression);
 }
 
-Any UnitVisitor::visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) {
+Any UnitVisitor::visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) {
     auto parent = this->visit(ctx->parent).as<Expression *>();
     auto name = ctx->name->getText();
     auto expression = (Expression *) new ReferenceExpression(parent, name);
@@ -270,7 +239,7 @@ Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx) {
 }
 
 Any UnitVisitor::visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) {
-    auto declaration = this->visit(ctx->declaration()).as<Declaration *>();
+    auto declaration = this->visit(ctx->variableDeclaration()).as<Declaration *>();
     auto declarationStatement = new DeclarationStatement(declaration);
     return Any(declarationStatement);
 }
@@ -311,10 +280,8 @@ Any UnitVisitor::visitStmtExpression(HooParser::StmtExpressionContext *ctx) {
     return Any(stmt);
 }
 
-Any UnitVisitor::visitClassDefinitionUnitItem(HooParser::ClassDefinitionUnitItemContext *ctx) {
-    auto class_definition = this->visit(ctx->classDefinition()).as<ClassDefinition *>();
-    auto unit_item = (UnitItem *) class_definition;
-    return Any(unit_item);
+antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
+    return HooBaseVisitor::visitFunctionDefinition(ctx);
 }
 
 Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) {

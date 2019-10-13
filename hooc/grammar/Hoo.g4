@@ -42,7 +42,7 @@ expression
     :   primaryExpression #exprPrimary
     |   container=expression '[' accessIndex=expression ']' #arrayAccessExpr
     |   receiver=expression '(' arguments=expressionList? ')' #exprInvoke
-    |   parent=expression '.' name=Identifier #primaryNestedRefExpr
+    |   parent=expression '.' name=Identifier #nestedRefExpr
     |   lvalue=expression opr=('|' | '&' | '^' | '~' | '<<' | '>>') rvalue=expression #exprBitwise
     |   lvalue=expression opr=( '+' | '-' ) rvalue=expression #exprAdditive
     |   lvalue=expression opr=( '*' | '/' | '%') rvalue=expression #exprMultiplicative
@@ -76,7 +76,7 @@ expressionStatement
     ;
 
 declarationStatement
-    :   declaration ';'
+    :   variableDeclaration ';'
     ;
 
 compoundStatement
@@ -88,9 +88,7 @@ returnStatement
     ;
 
 classDefinition
-    :   namespaceDeclaration?
-        useSpecifier*
-        'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
+    :   'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
     ;
 
 classBody
@@ -106,32 +104,33 @@ classBodyItem
     ;
 
 functionDefinition
-    :   Declarator? 'func' ( ':' returnType=typeSpecifier )? '(' paramList? ')' name=Identifier compoundStatement
+    :   functionDeclaration compoundStatement
     ;
 
-declaration
+functionDeclaration
+    :   Declarator? 'func' ( ':' returnType=typeSpecifier )? '(' paramList? ')' name=Identifier
+    ;
+
+variableDeclaration
     :   Declarator? name=Identifier ':' declared_type=typeSpecifier ( '=' init=expression)?
     ;
 
 paramList
-    :   declaration #singleItemParamList
-    |   paramList ( ',' decl=declaration )+ #multipleItemParamList
+    :   decl=variableDeclaration #singleItemParamList
+    |   list=paramList ( ',' variableDeclaration )+ #multipleItemParamList
     ;
 
 Declarator
     :   'private' | 'public' | 'protected' | 'var'
     ;
 
-namespaceDeclaration
-    :   'namespace' Identifier ( '.' Identifier)* ';'
-    ;
-
-useSpecifier
-    :   'use' Identifier ( '.' Identifier)* ('as' Identifier) ';'
+defenition
+    :   classDefinition #classDef
+    |   functionDefinition #funcDef
     ;
 
 unitItem
-    :   classDefinition #classDefinitionUnitItem
+    :   defenition #defUnitItem
     |   statement #statementUnitItem
     ;
 
