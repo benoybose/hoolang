@@ -29,6 +29,7 @@ namespace hooc {
             Expression *_expression;
 
         public:
+            ReturnStatement();
             explicit ReturnStatement(Expression *expression);
 
         public:

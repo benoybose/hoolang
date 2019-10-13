@@ -88,7 +88,7 @@ compoundStatement
     ;
 
 returnStatement
-    :   'return' returnValue=expression ';'
+    :   'return' (returnValue=expression)? ';'
     ;
 
 classDefinition

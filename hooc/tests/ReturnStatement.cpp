@@ -93,4 +93,89 @@ BOOST_AUTO_TEST_SUITE(ReturnStatementTest)
         delete module;
     }
 
+    BOOST_AUTO_TEST_CASE(ReturnStatement4) {
+        std::string source = "return persons[0];";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto first_item = *(items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
+        auto stmt = (Statement *) first_item;
+        BOOST_CHECK_EQUAL(STMT_RETURN, stmt->GetStatementType());
+        auto stmt_return = (ReturnStatement *) stmt;
+        auto expr_return = stmt_return->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_ARRAY, expr_return->GetExpressionType());
+        auto persons = (ArrayAccessExpression *) expr_return;
+        auto persons_index = persons->GetIndex();
+        auto persons_container = persons->GetContainer();
+        BOOST_CHECK_LITERAL_EXPRESSION(persons_index, LITERAL_INTEGER, "0");
+        BOOST_CHECK_REFERENCE_EXPRESSION(persons_container, "persons");
+        delete module;
+    }
+
+    BOOST_AUTO_TEST_CASE(ReturnStatement5) {
+        std::string source = "return foo();";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto first_item = *(items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
+        auto stmt = (Statement *) first_item;
+        BOOST_CHECK_EQUAL(STMT_RETURN, stmt->GetStatementType());
+        auto stmt_return = (ReturnStatement *) stmt;
+        auto expr_return = stmt_return->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_INVOKE, expr_return->GetExpressionType());
+        auto foo = (InvokeExpression* ) expr_return;
+        auto receiver = foo->GetReceiver();
+        BOOST_CHECK_REFERENCE_EXPRESSION(receiver, "foo");
+        BOOST_CHECK_EQUAL(0, foo->GetArguments().size());
+        delete module;
+    }
+
+    BOOST_AUTO_TEST_CASE(ReturnStatement6) {
+        std::string source = "return a + b;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto first_item = *(items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
+        auto stmt = (Statement *) first_item;
+        BOOST_CHECK_EQUAL(STMT_RETURN, stmt->GetStatementType());
+        auto stmt_return = (ReturnStatement *) stmt;
+        auto expr_return = stmt_return->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr_return->GetExpressionType());
+        auto binary = (BinaryExpression *) expr_return;
+        BOOST_CHECK_EQUAL(OPERATOR_ADD, binary->GetOperator()->GetOperatorType());
+        BOOST_CHECK_REFERENCE_EXPRESSION(binary->GetLeftExpression(), "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(binary->GetRightExpression(), "b");
+        delete module;
+    }
+
+    BOOST_AUTO_TEST_CASE(ReturnStatement7) {
+        std::string source = "return;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, items.size());
+        auto first_item = *(items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
+        auto stmt = (Statement *) first_item;
+        BOOST_CHECK_EQUAL(STMT_RETURN, stmt->GetStatementType());
+        auto stmt_return = (ReturnStatement *) stmt;
+        auto expr_return = stmt_return->GetExpression();
+        BOOST_CHECK_EQUAL(nullptr, expr_return);
+        delete module;
+    }
+
 BOOST_AUTO_TEST_SUITE_END()

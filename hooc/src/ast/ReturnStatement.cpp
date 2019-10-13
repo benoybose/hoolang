@@ -20,9 +20,16 @@
 
 namespace hooc {
     namespace ast {
-        ReturnStatement::ReturnStatement(Expression *expression):
-            Statement(STMT_RETURN),
-            _expression(expression) {
+
+        ReturnStatement::ReturnStatement() :
+                Statement(STMT_RETURN),
+                _expression(nullptr) {
+
+        }
+
+        ReturnStatement::ReturnStatement(Expression *expression) :
+                Statement(STMT_RETURN),
+                _expression(expression) {
         }
 
         Expression *ReturnStatement::GetExpression() const {
@@ -30,7 +37,9 @@ namespace hooc {
         }
 
         ReturnStatement::~ReturnStatement() {
-            delete this->_expression;
+            if (nullptr != this->_expression) {
+                delete this->_expression;
+            }
         }
     }
 }

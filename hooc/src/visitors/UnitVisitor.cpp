@@ -265,9 +265,13 @@ Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx
 }
 
 Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx) {
-    auto expression = this->visit(ctx->returnValue).as<Expression *>();
-    auto statement = new ReturnStatement(expression);
-    return Any(statement);
+    if (nullptr == ctx->returnValue) {
+        return Any(new ReturnStatement());
+    } else {
+        auto expression = this->visit(ctx->returnValue).as<Expression *>();
+        auto statement = new ReturnStatement(expression);
+        return Any(statement);
+    }
 }
 
 Any UnitVisitor::visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) {
