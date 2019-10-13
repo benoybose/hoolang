@@ -20,7 +20,7 @@
 #include "antlr4-runtime.h"
 #include "ast/Unit.hh"
 #include "ast/Statement.hh"
-#include "ast/Declaration.hh"
+#include "ast/VariableDeclaration.hh"
 #include "ast/TypeSpecification.hh"
 
 

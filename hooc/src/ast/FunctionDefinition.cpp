@@ -22,7 +22,7 @@ namespace hooc {
     namespace ast {
         FunctionDefinition::FunctionDefinition(const std::string &declarator, std::string &name,
                                                TypeSpecification *returnType,
-                                               std::list<Declaration *> &param_list,
+                                               std::list<VariableDeclaration *> &param_list,
                                                CompoundStatement *statement) :
                 _declarator(declarator),
                 _name(name),
@@ -49,7 +49,7 @@ namespace hooc {
             return this->_returnType;
         }
 
-        const std::list<Declaration *> &FunctionDefinition::GetParamList() const {
+        const std::list<VariableDeclaration *> &FunctionDefinition::GetParamList() const {
             return this->_param_list;
         }
 

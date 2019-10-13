@@ -20,7 +20,7 @@
 #define HC_FUNCTIONDEFINITION_HH
 
 #include "TypeSpecification.hh"
-#include "Declaration.hh"
+#include "VariableDeclaration.hh"
 #include "Statement.hh"
 #include "CompoundStatement.hh"
 
@@ -34,16 +34,16 @@ namespace hooc {
             std::string _declarator;
             TypeSpecification *_returnType;
             std::string _name;
-            std::list<Declaration *> _param_list;
+            std::list<VariableDeclaration *> _param_list;
             CompoundStatement *_statement;
         public:
             FunctionDefinition(const std::string &declarator, std::string &name, TypeSpecification *returnType,
-                                           std::list<Declaration *> &param_list, CompoundStatement *statement);
+                               std::list<VariableDeclaration *> &param_list, CompoundStatement *statement);
 
         public:
             const std::string GetName() const;
             const TypeSpecification *GetReturnType() const;
-            const std::list<Declaration *> &GetParamList() const;
+            const std::list<VariableDeclaration *> &GetParamList() const;
             const void *GetStatement() const;
 
         public:

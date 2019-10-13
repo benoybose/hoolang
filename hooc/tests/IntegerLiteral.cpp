@@ -19,7 +19,7 @@
 #include "compiler/ParserDriver.hh"
 #include "ast/Unit.hh"
 #include "ast/Statement.hh"
-#include "ast/Declaration.hh"
+#include "ast/VariableDeclaration.hh"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>

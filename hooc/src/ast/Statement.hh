@@ -21,7 +21,7 @@
 
 #include "RootStatement.hh"
 #include "Expression.hh"
-#include "Declaration.hh"
+#include "VariableDeclaration.hh"
 #include "InvokeExpression.hh"
 #include "UnitItem.hh"
 

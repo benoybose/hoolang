@@ -33,7 +33,7 @@ SET(hooc_header_files
 		src/ast/RootStatement.hh
 		src/visitors/UnitVisitor.hh
 		src/ast/FunctionDefinition.hh
-		src/ast/Declaration.hh
+		src/ast/VariableDeclaration.hh
 		src/ast/ReferenceExpression.hh
 		src/ast/ArrayAccessExpression.hh
         src/ast/InvokeExpression.hh
@@ -61,7 +61,7 @@ SET(hooc_source_files
 		src/ast/RootStatement.cpp
 		src/visitors/UnitVisitor.cpp
 		src/ast/FunctionDefinition.cpp
-		src/ast/Declaration.cpp
+		src/ast/VariableDeclaration.cpp
 		src/ast/ReferenceExpression.cpp
 		src/ast/ArrayAccessExpression.cpp
 		src/ast/InvokeExpression.cpp

@@ -16,41 +16,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PROJECT_DECLARATION_HH
-#define PROJECT_DECLARATION_HH
-
-#include "TypeSpecification.hh"
-#include "Expression.hh"
-
-#include <string>
+#include "VariableDeclaration.hh"
 
 namespace hooc {
     namespace ast {
-        class Declaration {
-        private:
-            std::string _declarator;
-            TypeSpecification *_declared_type;
-            std::string _name;
-            Expression *_initializer;
+        VariableDeclaration::VariableDeclaration(const std::string &declarator,
+                                                 const std::string &name,
+                                                 TypeSpecification *declared_type,
+                                                 Expression *initializer) :
+                _declarator(declarator),
+                _name(name),
+                _declared_type(declared_type),
+                _initializer(initializer) {
+        }
 
-        public:
-            Declaration(const std::string &declarator,
-                        const std::string &name,
-                        TypeSpecification *declared_type,
-                        Expression *initializer
-            );
+        VariableDeclaration::~VariableDeclaration() {
+            delete this->_declared_type;
+            delete this->_initializer;
+        }
 
-        public:
-            const TypeSpecification *GetDelcaredType() const;
-            const std::string &GetName() const;
-            const Expression *GetInitializer() const;
-            const std::string& GetDeclarator() const;
+        const TypeSpecification *VariableDeclaration::GetDelcaredType() const {
+            return _declared_type;
+        }
 
-        public:
-            virtual ~Declaration();
-        };
+        const std::string &VariableDeclaration::GetName() const {
+            return _name;
+        }
+
+        const Expression *VariableDeclaration::GetInitializer() const {
+            return _initializer;
+        }
+
+        const std::string &VariableDeclaration::GetDeclarator() const {
+            return this->_declarator;
+        }
     }
 }
-
-
-#endif //PROJECT_DECLARATION_HH

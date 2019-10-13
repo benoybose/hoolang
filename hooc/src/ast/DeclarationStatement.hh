@@ -19,19 +19,19 @@
 #ifndef HOOLANG_DECLARATIONSTATEMENT_HH
 #define HOOLANG_DECLARATIONSTATEMENT_HH
 
-#include "Declaration.hh"
+#include "VariableDeclaration.hh"
 #include "Statement.hh"
 
 namespace hooc {
     namespace ast {
         class DeclarationStatement : public Statement {
         private:
-            Declaration *_declaration;
+            VariableDeclaration *_declaration;
         public:
-            DeclarationStatement(Declaration *declaration);
+            DeclarationStatement(VariableDeclaration *declaration);
 
         public:
-            const Declaration *GetDeclaration() const;
+            const VariableDeclaration *GetDeclaration() const;
         };
     }
 }

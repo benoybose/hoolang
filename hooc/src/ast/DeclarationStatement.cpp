@@ -20,13 +20,13 @@
 
 namespace hooc {
     namespace ast {
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
+        DeclarationStatement::DeclarationStatement(VariableDeclaration *declaration) :
                 Statement(STMT_DECLARATION),
                 _declaration(declaration) {
 
         }
 
-        const Declaration *DeclarationStatement::GetDeclaration() const {
+        const VariableDeclaration *DeclarationStatement::GetDeclaration() const {
             return this->_declaration;
         }
     }

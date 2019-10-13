@@ -19,7 +19,7 @@
 #include "HooLexer.h"
 #include "UnitVisitor.hh"
 #include "ast/TypeSpecification.hh"
-#include "ast/Declaration.hh"
+#include "ast/VariableDeclaration.hh"
 #include "ast/FunctionDefinition.hh"
 #include "ast/ReferenceExpression.hh"
 #include "ast/LiteralExpression.hh"
@@ -53,7 +53,7 @@ Any UnitVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext 
     if (nullptr != ctx->init) {
         initializer = this->visit(ctx->init).as<Expression *>();
     }
-    auto declaration = new Declaration(declaratorLabel, name, declared_type, initializer);
+    auto declaration = new VariableDeclaration(declaratorLabel, name, declared_type, initializer);
     return declaration;
 }
 
@@ -78,18 +78,18 @@ Any UnitVisitor::visitTypeSpecifier(HooParser::TypeSpecifierContext *ctx) {
 }
 
 Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) {
-    auto param_list = this->visit(ctx->list).as<std::list<Declaration *>>();
+    auto param_list = this->visit(ctx->list).as<std::list<VariableDeclaration *>>();
     auto declarations = ctx->variableDeclaration();
     for (auto declaration: declarations) {
-        auto item = this->visit(declaration).as<Declaration *>();
+        auto item = this->visit(declaration).as<VariableDeclaration *>();
         param_list.push_back(item);
     }
     return Any(param_list);
 }
 
 Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx) {
-    auto declaration = this->visit(ctx->decl).as<Declaration *>();
-    std::list<Declaration *> param_list;
+    auto declaration = this->visit(ctx->decl).as<VariableDeclaration *>();
+    std::list<VariableDeclaration *> param_list;
     param_list.push_back(declaration);
     return Any(param_list);
 }
@@ -239,7 +239,7 @@ Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx) {
 }
 
 Any UnitVisitor::visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) {
-    auto declaration = this->visit(ctx->variableDeclaration()).as<Declaration *>();
+    auto declaration = this->visit(ctx->variableDeclaration()).as<VariableDeclaration *>();
     auto declarationStatement = new DeclarationStatement(declaration);
     return Any(declarationStatement);
 }

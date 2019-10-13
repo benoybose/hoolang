@@ -16,39 +16,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Declaration.hh"
+#ifndef PROJECT_DECLARATION_HH
+#define PROJECT_DECLARATION_HH
+
+#include "TypeSpecification.hh"
+#include "Expression.hh"
+
+#include <string>
 
 namespace hooc {
     namespace ast {
-        Declaration::Declaration(const std::string &declarator,
-                                 const std::string &name,
-                                 TypeSpecification *declared_type,
-                                 Expression *initializer) :
-                _declarator(declarator),
-                _name(name),
-                _declared_type(declared_type),
-                _initializer(initializer) {
-        }
+        class VariableDeclaration {
+        private:
+            std::string _declarator;
+            TypeSpecification *_declared_type;
+            std::string _name;
+            Expression *_initializer;
 
-        Declaration::~Declaration() {
-            delete this->_declared_type;
-            delete this->_initializer;
-        }
+        public:
+            VariableDeclaration(const std::string &declarator,
+                                const std::string &name,
+                                TypeSpecification *declared_type,
+                                Expression *initializer
+            );
 
-        const TypeSpecification *Declaration::GetDelcaredType() const {
-            return _declared_type;
-        }
+        public:
+            const TypeSpecification *GetDelcaredType() const;
+            const std::string &GetName() const;
+            const Expression *GetInitializer() const;
+            const std::string& GetDeclarator() const;
 
-        const std::string &Declaration::GetName() const {
-            return _name;
-        }
-
-        const Expression *Declaration::GetInitializer() const {
-            return _initializer;
-        }
-
-        const std::string &Declaration::GetDeclarator() const {
-            return this->_declarator;
-        }
+        public:
+            virtual ~VariableDeclaration();
+        };
     }
 }
+
+
+#endif //PROJECT_DECLARATION_HH
