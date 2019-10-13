@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(Function001)
         std::string source = "func:int add(a:int, b:int) { return a + b; }";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
-//        BOOST_CHECK(module->Success());
+        BOOST_CHECK(module->Success());
     }
 
 BOOST_AUTO_TEST_SUITE_END()
