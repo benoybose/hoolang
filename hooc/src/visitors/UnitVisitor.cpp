@@ -30,6 +30,7 @@
 #include "ast/NoopStatement.hh"
 #include "ast/ReturnStatement.hh"
 #include "ast/Unit.hh"
+#include "ast/FunctionDeclaration.hh"
 
 #include <list>
 #include <string>
@@ -290,6 +291,31 @@ Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx
     return Any(unit_item);
 }
 
+Any UnitVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) {
+    DeclaratorType declarator_type = DECLARATOR_NONE;
+    auto declarator = ctx->Declarator();
+    if(nullptr != declarator) {
+        declarator_type = this->GetDeclarator(declarator->getText());
+    }
+
+    TypeSpecification* return_type = nullptr;
+    if(nullptr != ctx->returnType) {
+        return_type = this->visit(ctx->returnType).as<TypeSpecification*>();
+    }
+
+    std::string name = ctx->name->getText();
+    auto parameterList = ctx->paramList();
+    std::list<VariableDeclaration*> param_list;
+    if(nullptr != parameterList) {
+        param_list = this->visit(parameterList)
+                .as<std::list<VariableDeclaration*>>();
+    }
+
+    auto declaration = new FunctionDeclaration(declarator_type,
+            return_type, name, param_list);
+    return Any(declaration);
+}
+
 Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {
     auto items = ctx->unitItem();
     std::list<UnitItem *> unit_items;
@@ -311,4 +337,20 @@ Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lv
     auto oprText = new Operator(opr->getText());
     Expression *expr = new BinaryExpression(left, oprText, right);
     return expr;
+}
+
+DeclaratorType UnitVisitor::GetDeclarator(const std::string &declarator) const {
+    if(declarator.empty()) {
+        return DECLARATOR_NONE;
+    } else if(declarator == "public") {
+        return DECLARATOR_PUBLIC;
+    } else if(declarator == "private") {
+        return DECLARATOR_PRIVATE;
+    } else if(declarator == "protected") {
+        return DECLARATOR_PROTECTED;
+    } else if(declarator == "var") {
+        return DECLARATOR_VAR;
+    } else {
+        return DECLARATOR_INVALID;
+    }
 }

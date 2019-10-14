@@ -22,6 +22,7 @@
 #include "HooBaseVisitor.h"
 #include "ast/Expression.hh"
 #include "ast/Operator.hh"
+#include "ast/Declarator.hh"
 
 using namespace hooc::ast;
 
@@ -97,10 +98,14 @@ public:
 
     antlrcpp::Any visitExprBitwise(HooParser::ExprBitwiseContext *ctx) override;
 
+    antlrcpp::Any visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) override;
+
 private:
 
     Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
                                        antlr4::Token *opr, HooParser::ExpressionContext *rvalue);
+
+    DeclaratorType GetDeclarator(const std::string& declarator) const;
 
 };
 
