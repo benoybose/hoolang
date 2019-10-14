@@ -286,14 +286,11 @@ Any UnitVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext 
     return Any(declaration);
 }
 
-antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
-    return HooBaseVisitor::visitFunctionDefinition(ctx);
-}
-
-Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) {
-    auto statement = this->visit(ctx->statement()).as<Statement *>();
-    auto unit_item = (UnitItem *) statement;
-    return Any(unit_item);
+Any UnitVisitor::visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) {
+    auto declaration = this->visit(ctx->functionDeclaration())
+            .as<FunctionDeclaration* >();
+    auto stmt = new DeclarationStatement(declaration);
+    return Any(stmt);
 }
 
 Any UnitVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) {
@@ -319,6 +316,16 @@ Any UnitVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext 
     auto declaration = new FunctionDeclaration(declarator_type,
                                                return_type, name, param_list);
     return Any(declaration);
+}
+
+antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
+    return HooBaseVisitor::visitFunctionDefinition(ctx);
+}
+
+Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) {
+    auto statement = this->visit(ctx->statement()).as<Statement *>();
+    auto unit_item = (UnitItem *) statement;
+    return Any(unit_item);
 }
 
 Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {

@@ -100,6 +100,8 @@ public:
 
     antlrcpp::Any visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx) override;
 
+    antlrcpp::Any visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) override;
+
 private:
 
     Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
