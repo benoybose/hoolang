@@ -47,6 +47,18 @@ BOOST_AUTO_TEST_SUITE(FunctionDeclarationTest)
         BOOST_CHECK_EQUAL(STMT_DECLARATION, stmt->GetStatementType());
         auto declaration = ((DeclarationStatement *) stmt)->GetDeclaration();
         BOOST_CHECK_EQUAL(DECLARATION_FUNCTION, declaration->GetDeclarationType());
+        auto add = (FunctionDeclaration *) declaration;
+        BOOST_CHECK_EQUAL("add", add->GetName());
+        auto return_type = add->GetReturnType();
+        BOOST_CHECK_EQUAL("int", return_type->GetName());
+        auto parameters = add->GetParamList();
+        BOOST_CHECK_EQUAL(2, parameters.size());
+        auto param1 = *(parameters.begin());
+        auto param2 = *(++ parameters.begin());
+        BOOST_CHECK_EQUAL("a", param1->GetName());
+        BOOST_CHECK_EQUAL("int", param1->GetDelcaredType()->GetName());
+        BOOST_CHECK_EQUAL("b", param2->GetName());
+        BOOST_CHECK_EQUAL("int", param2->GetDelcaredType()->GetName());
     }
 
 BOOST_AUTO_TEST_SUITE_END()
