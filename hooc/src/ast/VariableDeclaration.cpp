@@ -20,10 +20,11 @@
 
 namespace hooc {
     namespace ast {
-        VariableDeclaration::VariableDeclaration(const std::string &declarator,
+        VariableDeclaration::VariableDeclaration(DeclaratorType declarator,
                                                  const std::string &name,
                                                  TypeSpecification *declared_type,
                                                  Expression *initializer) :
+                Declaration(DECLARATION_VARIABLE, declarator),
                 _declarator(declarator),
                 _name(name),
                 _declared_type(declared_type),
@@ -45,10 +46,6 @@ namespace hooc {
 
         const Expression *VariableDeclaration::GetInitializer() const {
             return _initializer;
-        }
-
-        const std::string &VariableDeclaration::GetDeclarator() const {
-            return this->_declarator;
         }
     }
 }

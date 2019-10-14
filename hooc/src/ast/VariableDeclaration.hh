@@ -19,6 +19,8 @@
 #ifndef PROJECT_DECLARATION_HH
 #define PROJECT_DECLARATION_HH
 
+#include "Declaration.hh"
+#include "Declarator.hh"
 #include "TypeSpecification.hh"
 #include "Expression.hh"
 
@@ -26,15 +28,15 @@
 
 namespace hooc {
     namespace ast {
-        class VariableDeclaration {
+        class VariableDeclaration: public Declaration {
         private:
-            std::string _declarator;
+            DeclaratorType _declarator;
             TypeSpecification *_declared_type;
             std::string _name;
             Expression *_initializer;
 
         public:
-            VariableDeclaration(const std::string &declarator,
+            VariableDeclaration(DeclaratorType declarator,
                                 const std::string &name,
                                 TypeSpecification *declared_type,
                                 Expression *initializer
@@ -44,7 +46,6 @@ namespace hooc {
             const TypeSpecification *GetDelcaredType() const;
             const std::string &GetName() const;
             const Expression *GetInitializer() const;
-            const std::string& GetDeclarator() const;
 
         public:
             virtual ~VariableDeclaration();

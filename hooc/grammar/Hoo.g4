@@ -76,7 +76,8 @@ expressionStatement
     ;
 
 declarationStatement
-    :   variableDeclaration ';'
+    :   variableDeclaration ';' #stmtVariableDeclaration
+    |   functionDeclaration ';' #stmtfunctionDeclaration
     ;
 
 compoundStatement
