@@ -53,9 +53,10 @@ expression
     ;
 
 typeSpecifier
-    :   Identifier
-    |   typeSpecifier '.' Identifier
-    |   typeSpecifier '[' ']'
+    :   BasicDataType #basicDataTypeSpecifier
+    |   Identifier  #identifierTypeSpecifier
+    |   typeSpecifier '.' Identifier #nestedTypeSpecifier
+    |   typeSpecifier '[' ']' #arrayTypeSpecifier
     ;
 
 expressionList

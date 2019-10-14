@@ -28,6 +28,10 @@
 
 grammar Terminals;
 
+BasicDataType
+    : ('int' | 'char' | 'string' | 'bool' | 'byte')
+    ;
+
 ByteContant
     : HexadecimalPrefix HexadecimalDigit HexadecimalDigit
     ;

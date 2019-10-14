@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Benoy Bose
+ * Copyright 2019 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,37 +16,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef TYPESPECIFICATION_HH
-#define TYPESPECIFICATION_HH
 
-#include "HooTypes.hh"
-
-#include <string>
-#include <list>
+#ifndef HOOLANG_BASICDATATYPES_HH
+#define HOOLANG_BASICDATATYPES_HH
 
 namespace hooc {
     namespace ast {
         typedef enum {
-            TYPE_SPEC_BASIC,
-            TYPE_SPEC_REFERENCE,
-            TYPE_SPEC_ARRAY
-        } TypeSpecificationType;
-
-        class TypeSpecification {
-        public:
-            explicit TypeSpecification(TypeSpecificationType type);
-
-        private:
-            TypeSpecificationType _type;
-
-        public:
-            TypeSpecificationType GetType() const;
-
-        public:
-            virtual ~TypeSpecification();
-        };
+            BASIC_DATA_TYPE_INT,
+            BASIC_DATA_TYPE_CHAR,
+            BASIC_DATA_TYPE_STRING,
+            BASIC_DATA_TYPE_BOOL,
+            BASIC_DATA_TYPE_BYTE
+        } BasicDataTypeType;
     }
 }
 
-
-#endif //PROJECT_TYPESPECIFICATION_HH
+#endif //HOOLANG_BASICDATATYPES_HH

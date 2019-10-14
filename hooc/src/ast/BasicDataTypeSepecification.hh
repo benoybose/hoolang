@@ -16,37 +16,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef TYPESPECIFICATION_HH
-#define TYPESPECIFICATION_HH
+#ifndef HOOLANG_BASICDATATYPESEPECIFICATION_HH
+#define HOOLANG_BASICDATATYPESEPECIFICATION_HH
 
-#include "HooTypes.hh"
-
-#include <string>
-#include <list>
+#include "TypeSpecification.hh"
+#include "BasicDataTypes.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            TYPE_SPEC_BASIC,
-            TYPE_SPEC_REFERENCE,
-            TYPE_SPEC_ARRAY
-        } TypeSpecificationType;
-
-        class TypeSpecification {
-        public:
-            explicit TypeSpecification(TypeSpecificationType type);
-
+        class BasicDataTypeSepecification: public TypeSpecification  {
         private:
-            TypeSpecificationType _type;
+            BasicDataTypeType _data_type;
 
         public:
-            TypeSpecificationType GetType() const;
+            explicit BasicDataTypeSepecification(BasicDataTypeType data_type);
 
-        public:
-            virtual ~TypeSpecification();
         };
     }
 }
 
 
-#endif //PROJECT_TYPESPECIFICATION_HH
+
+#endif //HOOLANG_BASICDATATYPESEPECIFICATION_HH

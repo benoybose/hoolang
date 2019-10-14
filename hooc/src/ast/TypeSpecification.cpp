@@ -17,61 +17,74 @@
  */
 
 #include "TypeSpecification.hh"
-#include "LiteralExpression.hh"
 
 #include <string>
 #include <list>
 
 namespace hooc {
     namespace ast {
-        TypeSpecification::TypeSpecification(std::string &name) :
-                _name(name),
-                _is_array(false),
-                _parent(nullptr) {
+
+        TypeSpecification::TypeSpecification(TypeSpecificationType type) :
+                _type(type) {
+
         }
 
-        TypeSpecification::TypeSpecification(const std::string &name) :
-                _name(name),
-                _is_array(false),
-                _parent(nullptr){
+        TypeSpecificationType TypeSpecification::GetType() const {
+            return _type;
         }
 
         TypeSpecification::~TypeSpecification() {
+
         }
 
-        const TYPESPEC_TYPE TypeSpecification::GetType() const {
-            return this->_type;
-        }
-
-        const std::string &TypeSpecification::GetName() const {
-            return _name;
-        }
-
-        NestedTypeSpecification::NestedTypeSpecification(TypeSpecification *typeSpecification,
-                                                         std::string &name) :
-                TypeSpecification(name) {
-        }
-
-        NestedTypeSpecification::NestedTypeSpecification(TypeSpecification *typeSpecification,
-                                                         const std::string &name) :
-                TypeSpecification(name) {
-        }
-
-        NestedTypeSpecification::~NestedTypeSpecification() {
-            if(nullptr != this->_parent) {
-                delete this->_parent;
-            }
-        }
-
-        const TypeSpecification *NestedTypeSpecification::GetParent() const {
-            return this->_parent;
-        }
-
-        ArrayTypeSpecification::ArrayTypeSpecification(TypeSpecification *parent):
-                NestedTypeSpecification(parent, ""){
-        }
-
-        ArrayTypeSpecification::~ArrayTypeSpecification() {
-        }
+//        TypeSpecification::TypeSpecification(std::string &name) :
+//                _name(name),
+//                _is_array(false),
+//                _parent(nullptr) {
+//        }
+//
+//        TypeSpecification::TypeSpecification(const std::string &name) :
+//                _name(name),
+//                _is_array(false),
+//                _parent(nullptr){
+//        }
+//
+//        TypeSpecification::~TypeSpecification() {
+//        }
+//
+//        const TYPESPEC_TYPE TypeSpecification::GetType() const {
+//            return this->_type;
+//        }
+//
+//        const std::string &TypeSpecification::GetName() const {
+//            return _name;
+//        }
+//
+//        NestedTypeSpecification::NestedTypeSpecification(TypeSpecification *typeSpecification,
+//                                                         std::string &name) :
+//                TypeSpecification(name) {
+//        }
+//
+//        NestedTypeSpecification::NestedTypeSpecification(TypeSpecification *typeSpecification,
+//                                                         const std::string &name) :
+//                TypeSpecification(name) {
+//        }
+//
+//        NestedTypeSpecification::~NestedTypeSpecification() {
+//            if(nullptr != this->_parent) {
+//                delete this->_parent;
+//            }
+//        }
+//
+//        const TypeSpecification *NestedTypeSpecification::GetParent() const {
+//            return this->_parent;
+//        }
+//
+//        ArrayTypeSpecification::ArrayTypeSpecification(TypeSpecification *parent):
+//                NestedTypeSpecification(parent, ""){
+//        }
+//
+//        ArrayTypeSpecification::~ArrayTypeSpecification() {
+//        }
     }
 }

@@ -32,7 +32,6 @@
 #include "ast/Unit.hh"
 #include "ast/FunctionDeclaration.hh"
 #include "ast/Declarator.hh"
-#include "ast/Declaration.hh"
 
 #include <list>
 #include <string>
@@ -43,24 +42,20 @@
 using namespace hooc::ast;
 using namespace antlrcpp;
 
-Any UnitVisitor::visitTypeSpecifier(HooParser::TypeSpecifierContext *ctx) {
-    if (nullptr != ctx->Identifier()) {
-        auto name = ctx->Identifier()->getText();
-        if (nullptr != ctx->typeSpecifier()) {
-            auto parent = this->visit(ctx->typeSpecifier()).as<TypeSpecification *>();
-            auto type = new NestedTypeSpecification(parent, name);
-            return Any(type);
-        } else {
-            auto type = new TypeSpecification(name);
-            return Any(type);
-        }
-    } else if (nullptr != ctx->typeSpecifier()) {
-        auto refer = this->visit(ctx->typeSpecifier()).as<TypeSpecification *>();
-        auto type = new ArrayTypeSpecification(refer);
-        return Any(type);
-    } else {
-        return Any(nullptr);
-    }
+Any UnitVisitor::visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx) {
+    return HooBaseVisitor::visitBasicDataTypeSpecifier(ctx);
+}
+
+Any UnitVisitor::visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx) {
+    return HooBaseVisitor::visitNestedTypeSpecifier(ctx);
+}
+
+Any UnitVisitor::visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx) {
+    return HooBaseVisitor::visitIdentifierTypeSpecifier(ctx);
+}
+
+Any UnitVisitor::visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) {
+    return HooBaseVisitor::visitArrayTypeSpecifier(ctx);
 }
 
 Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) {
