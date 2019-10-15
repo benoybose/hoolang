@@ -18,9 +18,9 @@
 
 #include "ParserDriver.hh"
 #include "antlr4-runtime.h"
-#include "CompilationError.hh"
+#include "SyntaxError.hh"
 #include "compiler/CompilationContext.hh"
-#include "compiler/CompilationError.hh"
+#include "compiler/SyntaxError.hh"
 #include "compiler/CompilationErrorListener.hh"
 #include "visitors/UnitVisitor.hh"
 
@@ -59,7 +59,7 @@ namespace hooc {
                 unit = visitor.visit(unitContext).as<Unit*>();
             } catch (const std::exception &ex) {
                 std::string message(ex.what());
-                auto error = new CompilationError(0, 0, message);
+                auto error = new SyntaxError(0, 0, message);
                 context.AddCompilationError(error);
             }
 

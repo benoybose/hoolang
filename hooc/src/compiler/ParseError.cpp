@@ -16,31 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "CompilationError.hh"
+#include "ParseError.hh"
 
 namespace hooc {
     namespace compiler {
-        CompilationError::CompilationError(size_t line_number,
-                                           size_t character_position,
-                                           std::string &message) :
-                _line_number(line_number),
-                _character_position(character_position),
-                _message(message) {
-        }
-
-        CompilationError::~CompilationError() {
-        }
-
-        int CompilationError::GetLineNumber() const {
-            return this->_line_number;
-        }
-
-        int CompilationError::GetCharacterPosition() const {
-            return this->_character_position;
-        }
-
-        const std::string &CompilationError::GetMessage() const {
-            return this->_message;
+        ParseError::ParseError(ErrorCode code, const std::string &message) :
+                BaseError(ERROR_HOOC_PARSE, code, message) {
         }
     }
 }

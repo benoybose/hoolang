@@ -23,7 +23,7 @@ SET(hooc_header_files
         src/ast/BinaryExpression.hh
 		src/ast/Statement.hh
         src/compiler/Module.hh
-        src/compiler/CompilationError.hh
+		src/compiler/SyntaxError.hh
         src/compiler/ParserDriver.hh
 		src/compiler/CompilationContext.hh
 		src/ast/TypeSpecification.hh
@@ -59,7 +59,7 @@ SET(hooc_source_files
         src/ast/BinaryExpression.cpp
 		src/ast/Statement.cpp
         src/compiler/Module.cpp
-        src/compiler/CompilationError.cpp
+		src/compiler/SyntaxError.cpp
         src/compiler/ParserDriver.cpp
 		src/compiler/CompilationContext.cpp
 		src/ast/TypeSpecification.cpp
@@ -85,7 +85,7 @@ SET(hooc_source_files
 		src/ast/BasicDataTypeSpecification.hh
 		src/ast/BasicDataTypes.cpp
 		src/ast/ReferenceDataTypeSpecification.cpp
-		src/ast/ArrayDataTypeSpecification.cpp src/compiler/BaseError.cpp src/compiler/BaseError.hh)
+		src/ast/ArrayDataTypeSpecification.cpp src/compiler/BaseError.cpp src/compiler/BaseError.hh src/compiler/ParseError.cpp src/compiler/ParseError.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 

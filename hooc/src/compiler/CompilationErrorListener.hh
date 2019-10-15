@@ -20,7 +20,7 @@
 #define HC_COMPILATIONERRORLISTENER_HH
 
 #include "antlr4-runtime.h"
-#include "CompilationError.hh"
+#include "SyntaxError.hh"
 
 #include <list>
 
@@ -34,15 +34,15 @@ namespace hooc {
             CompilationErrorListener();
 
         private:
-            std::list<CompilationError*> _errors;
+            std::list<SyntaxError*> _errors;
 
         public:
             void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
                              const std::string &msg, std::exception_ptr e) override;
-            void Add(CompilationError* error);
+            void Add(SyntaxError* error);
 
         public:
-            const std::list<CompilationError*>& GetErrors() const;
+            const std::list<SyntaxError*>& GetErrors() const;
 
         public:
             virtual ~CompilationErrorListener();

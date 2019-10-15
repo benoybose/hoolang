@@ -31,7 +31,7 @@
 
 namespace hooc {
     namespace compiler {
-        typedef std::list<CompilationError> CompilationErrorList;
+        typedef std::list<SyntaxError> CompilationErrorList;
 
         class ParserDriver {
         private:

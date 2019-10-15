@@ -16,40 +16,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "CompilationErrorListener.hh"
-#include "SyntaxError.hh"
-#include "antlr4-runtime.h"
+#ifndef COMPILATIONERROR_HH
+#define COMPILATIONERROR_HH
 
-#include <sstream>
+#include "BaseError.hh"
 
-using namespace antlr4;
+#include <string>
+#include <list>
 
 namespace hooc {
     namespace compiler {
-        void CompilationErrorListener::syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line,
-                                                   size_t charPositionInLine, const std::string &msg,
-                                                   std::exception_ptr e) {
-            std::stringstream out;
-            out << "Syntax error on line " << line
-                << " at " << charPositionInLine << ".\n";
-            auto message = out.str();
-            auto error = new SyntaxError(line, charPositionInLine, message);
-            this->_errors.push_back(error);
-        }
+        class SyntaxError: public BaseError {
+        private:
+            size_t _line_number;
+            size_t _character_position;
 
-        void CompilationErrorListener::Add(SyntaxError *error) {
-            _errors.push_back(error);
-        }
+        public:
+            SyntaxError(size_t line_number, size_t character_position,
+                        std::string &message);
 
-        CompilationErrorListener::~CompilationErrorListener() {
-        }
+        public:
+            int GetLineNumber() const;
+            int GetCharacterPosition() const;
 
-        const std::list<SyntaxError *> &CompilationErrorListener::GetErrors() const {
-            return this->_errors;
-        }
-
-        CompilationErrorListener::CompilationErrorListener() : BaseErrorListener() {
-        }
+        public:
+            virtual ~SyntaxError();
+        };
     }
 }
 
+
+
+#endif //PROJECT_COMPILATIONERROR_HH

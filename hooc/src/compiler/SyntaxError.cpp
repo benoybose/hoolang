@@ -16,35 +16,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef COMPILATIONERROR_HH
-#define COMPILATIONERROR_HH
-
-#include <string>
-#include <list>
+#include "SyntaxError.hh"
 
 namespace hooc {
     namespace compiler {
-        class CompilationError {
-        private:
-            size_t _line_number;
-            size_t _character_position;
-            std::string _message;
+        SyntaxError::SyntaxError(size_t line_number,
+                                 size_t character_position,
+                                 std::string &message) :
+                BaseError(ERROR_HOOC_SYNTAX, ERROR_CODE_WRONG_SYNTAX, message),
+                _line_number(line_number),
+                _character_position(character_position) {
+        }
 
-        public:
-            CompilationError(size_t line_number, size_t character_position,
-                             std::string &message);
+        SyntaxError::~SyntaxError() {
+        }
 
-        public:
-            int GetLineNumber() const;
-            int GetCharacterPosition() const;
-            const std::string &GetMessage() const;
+        int SyntaxError::GetLineNumber() const {
+            return this->_line_number;
+        }
 
-        public:
-            virtual ~CompilationError();
-        };
+        int SyntaxError::GetCharacterPosition() const {
+            return this->_character_position;
+        }
     }
 }
-
-
-
-#endif //PROJECT_COMPILATIONERROR_HH

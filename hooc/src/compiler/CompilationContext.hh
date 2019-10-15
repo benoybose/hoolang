@@ -45,8 +45,8 @@ namespace hooc {
 
         public:
             HooParser::UnitContext *GetUnit();
-            void AddCompilationError(CompilationError* error);
-            const std::list<CompilationError*>& GetErrors() const;
+            void AddCompilationError(SyntaxError* error);
+            const std::list<SyntaxError*>& GetErrors() const;
 
         public:
             ~CompilationContext();

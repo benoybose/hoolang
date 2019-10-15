@@ -16,43 +16,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_BASEERROR_HH
-#define HOOLANG_BASEERROR_HH
+#ifndef HOOLANG_PARSEERROR_HH
+#define HOOLANG_PARSEERROR_HH
 
-#include <string>
+#include "BaseError.hh"
 
 namespace hooc {
     namespace compiler {
-        typedef enum {
-            ERROR_HOOC_SYNTAX,
-            ERROR_HOOC_PARSE,
-            ERROR_HOOC_SEMANTIC
-        } ErrorType;
-
-        typedef enum {
-            ERROR_CODE_WRONG_SYNTAX = 1024,
-            ERROR_CODE_FAILED_PARSING = 1025,
-            ERROR_CODE_BAD_CAST_PARSING = 1026
-        } ErrorCode;
-
-        class BaseError {
-        private:
-            ErrorType _type;
-            ErrorCode _code;
-            std::string _message;
-
+        class ParseError: public BaseError {
         public:
-            BaseError(ErrorType type, ErrorCode code, const std::string& message);
-
-            ErrorType GetType() const;
-
-            ErrorCode GetCode() const;
-
-            const std::string &GetMessage() const;
+            ParseError(ErrorCode code, const std::string& message);
         };
     }
 }
 
 
 
-#endif //HOOLANG_BASEERROR_HH
+#endif //HOOLANG_PARSEERROR_HH

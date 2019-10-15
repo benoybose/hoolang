@@ -19,7 +19,7 @@
 #ifndef HOOC_COMPILATION_UNIT_H
 #define HOOC_COMPILATION_UNIT_H
 
-#include "CompilationError.hh"
+#include "SyntaxError.hh"
 #include "ast/Unit.hh"
 
 #include <string>
@@ -36,20 +36,20 @@ namespace hooc {
             Module(boost::filesystem::path compilation_root,
                    boost::filesystem::path module_path,
                    ast::Unit *unit,
-                   std::list<CompilationError *> errors);
+                   std::list<SyntaxError *> errors);
 
         private:
             boost::filesystem::path _compilation_root;
             boost::filesystem::path _module_path;
             ast::Unit* _unit;
-            std::list<CompilationError*> _errors;
+            std::list<SyntaxError*> _errors;
 
         public:
             const boost::filesystem::path& GetCompilationRoot() const;
             const boost::filesystem::path& GetModulePath() const;
             const ast::Unit* GetUnit();
             bool Success();
-            const std::list<CompilationError *> & GetErrors() const;
+            const std::list<SyntaxError *> & GetErrors() const;
 
             virtual ~Module();
         };
