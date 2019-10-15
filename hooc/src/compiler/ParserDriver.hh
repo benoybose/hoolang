@@ -23,7 +23,6 @@
 #include "HooParser.h"
 #include "compiler/CompilationContext.hh"
 #include "compiler/Module.hh"
-#include "AccessSpecifier.hh"
 
 #include <string>
 #include <list>

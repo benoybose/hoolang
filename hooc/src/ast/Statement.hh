@@ -19,7 +19,6 @@
 #ifndef HC_STATEMENT_H
 #define HC_STATEMENT_H
 
-#include "RootStatement.hh"
 #include "Expression.hh"
 #include "VariableDeclaration.hh"
 #include "InvokeExpression.hh"
