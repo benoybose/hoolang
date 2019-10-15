@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2018 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,34 +16,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_BASICDATATYPES_HH
-#define HOOLANG_BASICDATATYPES_HH
-
-#include <string>
+#include "BasicDataTypeSpecification.hh"
+#include "BasicDataTypes.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            BASIC_DATA_TYPE_INT,
-            BASIC_DATA_TYPE_CHAR,
-            BASIC_DATA_TYPE_STRING,
-            BASIC_DATA_TYPE_BOOL,
-            BASIC_DATA_TYPE_DOUBLE,
-            BASIC_DATA_TYPE_BYTE,
-            BASIC_DATA_TYPE_INVALID
-        } BasicDataTypeType;
 
-        extern const std::string NAME_INT;
-        extern const std::string NAME_CHAR;
-        extern const std::string NAME_STRING;
-        extern const std::string NAME_BOOL;
-        extern const std::string NAME_DOUBLE;
-        extern const std::string NAME_BYTE;
-        extern const std::string NAME_INVALID;
+        BasicDataTypeSpecification::BasicDataTypeSpecification(BasicDataTypeType data_type) :
+                TypeSpecification(TYPE_SPEC_BASIC),
+                _data_type(data_type) {
+        }
 
-        extern const std::string& GetBasicDataTypeName(BasicDataTypeType type);
-        extern const BasicDataTypeType GetBasicDataType(const std::string& text);
+        BasicDataTypeType BasicDataTypeSpecification::GetDataType() const {
+            return _data_type;
+        }
+
+        const std::string &BasicDataTypeSpecification::GetName() const {
+            return GetBasicDataTypeName(this->_data_type);
+        }
+
+        BasicDataTypeSpecification::~BasicDataTypeSpecification() {
+        }
     }
 }
-
-#endif //HOOLANG_BASICDATATYPES_HH

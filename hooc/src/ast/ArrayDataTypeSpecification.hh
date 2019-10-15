@@ -16,25 +16,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_BASICDATATYPESEPECIFICATION_HH
-#define HOOLANG_BASICDATATYPESEPECIFICATION_HH
+#ifndef HOOLANG_ARRAYDATATYPESPECIFICATION_HH
+#define HOOLANG_ARRAYDATATYPESPECIFICATION_HH
 
 #include "TypeSpecification.hh"
-#include "BasicDataTypes.hh"
 
 namespace hooc {
     namespace ast {
-        class BasicDataTypeSepecification: public TypeSpecification  {
+        class ArrayDataTypeSpecification: public TypeSpecification {
         private:
-            BasicDataTypeType _data_type;
+            std::string _name;
+            TypeSpecification* _parent;
 
         public:
-            explicit BasicDataTypeSepecification(BasicDataTypeType data_type);
+            explicit ArrayDataTypeSpecification(TypeSpecification* parent);
 
+            TypeSpecification *GetParent() const;
+
+            const std::string &GetName() const override;
         };
     }
 }
 
 
 
-#endif //HOOLANG_BASICDATATYPESEPECIFICATION_HH
+#endif //HOOLANG_ARRAYDATATYPESPECIFICATION_HH

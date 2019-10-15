@@ -68,7 +68,7 @@ SET(hooc_source_files
 		src/ast/UnitItem.cpp
 		src/ast/ClassDefinition.cpp
 		src/ast/Unit.cpp
-		src/compiler/CompilationErrorListener.cpp src/ast/NoopStatement.cpp src/ast/NoopStatement.hh src/ast/CompoundStatement.cpp src/ast/CompoundStatement.hh src/ast/ExpressionStatement.cpp src/ast/ExpressionStatement.hh src/ast/ReturnStatement.cpp src/ast/ReturnStatement.hh src/ast/DeclarationStatement.cpp src/ast/DeclarationStatement.hh src/ast/Definition.cpp src/ast/Definition.hh src/ast/Declaration.cpp src/ast/Declaration.hh src/ast/FunctionDeclaration.cpp src/ast/FunctionDeclaration.hh src/ast/Declarator.hh src/ast/BasicDataTypes.hh src/ast/BasicDataTypeSepecification.cpp src/ast/BasicDataTypeSepecification.hh)
+		src/compiler/CompilationErrorListener.cpp src/ast/NoopStatement.cpp src/ast/NoopStatement.hh src/ast/CompoundStatement.cpp src/ast/CompoundStatement.hh src/ast/ExpressionStatement.cpp src/ast/ExpressionStatement.hh src/ast/ReturnStatement.cpp src/ast/ReturnStatement.hh src/ast/DeclarationStatement.cpp src/ast/DeclarationStatement.hh src/ast/Definition.cpp src/ast/Definition.hh src/ast/Declaration.cpp src/ast/Declaration.hh src/ast/FunctionDeclaration.cpp src/ast/FunctionDeclaration.hh src/ast/Declarator.hh src/ast/BasicDataTypes.hh src/ast/BasicDataTypeSpecification.cpp src/ast/BasicDataTypeSpecification.hh src/ast/BasicDataTypes.cpp src/ast/ReferenceDataTypeSpecification.cpp src/ast/ReferenceDataTypeSpecification.hh src/ast/ArrayDataTypeSpecification.cpp src/ast/ArrayDataTypeSpecification.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 

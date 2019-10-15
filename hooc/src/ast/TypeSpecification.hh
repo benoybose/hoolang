@@ -41,6 +41,7 @@ namespace hooc {
 
         public:
             TypeSpecificationType GetType() const;
+            virtual const std::string& GetName() const = 0;
 
         public:
             virtual ~TypeSpecification();

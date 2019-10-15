@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2018 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,34 +16,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_BASICDATATYPES_HH
-#define HOOLANG_BASICDATATYPES_HH
-
-#include <string>
+#include "ArrayDataTypeSpecification.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            BASIC_DATA_TYPE_INT,
-            BASIC_DATA_TYPE_CHAR,
-            BASIC_DATA_TYPE_STRING,
-            BASIC_DATA_TYPE_BOOL,
-            BASIC_DATA_TYPE_DOUBLE,
-            BASIC_DATA_TYPE_BYTE,
-            BASIC_DATA_TYPE_INVALID
-        } BasicDataTypeType;
+        ArrayDataTypeSpecification::ArrayDataTypeSpecification(TypeSpecification *parent) :
+                TypeSpecification(TYPE_SPEC_ARRAY),
+                _parent(parent),
+                _name("") {
 
-        extern const std::string NAME_INT;
-        extern const std::string NAME_CHAR;
-        extern const std::string NAME_STRING;
-        extern const std::string NAME_BOOL;
-        extern const std::string NAME_DOUBLE;
-        extern const std::string NAME_BYTE;
-        extern const std::string NAME_INVALID;
+            std::string name;
+            if(nullptr != parent) {
+                name += this->_parent->GetName();
+            }
+            name += "[]";
+            this->_name = name;
+        }
 
-        extern const std::string& GetBasicDataTypeName(BasicDataTypeType type);
-        extern const BasicDataTypeType GetBasicDataType(const std::string& text);
+        TypeSpecification *ArrayDataTypeSpecification::GetParent() const {
+            return _parent;
+        }
+
+        const std::string &ArrayDataTypeSpecification::GetName() const {
+            return this->_name;
+        }
     }
 }
-
-#endif //HOOLANG_BASICDATATYPES_HH

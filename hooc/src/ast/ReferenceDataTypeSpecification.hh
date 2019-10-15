@@ -16,13 +16,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "BasicDataTypeSepecification.hh"
+#ifndef HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
+#define HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
+
+#include "TypeSpecification.hh"
+
+#include <string>
 
 namespace hooc {
     namespace ast {
-        BasicDataTypeSepecification::BasicDataTypeSepecification(BasicDataTypeType data_type):
-            TypeSpecification(TYPE_SPEC_BASIC),
-            _data_type(data_type) {
-        }
+        class ReferenceDataTypeSpecification: public TypeSpecification {
+        private:
+            std::string _name;
+            std::string _full_name;
+            ReferenceDataTypeSpecification* _parent;
+
+        public:
+            ReferenceDataTypeSpecification(const std::string& name, ReferenceDataTypeSpecification* parent);
+
+        public:
+            const std::string &GetName() const;
+
+            ReferenceDataTypeSpecification *GetParent() const;
+
+            virtual ~ReferenceDataTypeSpecification();
+
+        };
     }
 }
+
+#endif //HOOLANG_REFERENCEDATATYPESPECIFICATION_HH

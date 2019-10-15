@@ -32,6 +32,10 @@
 #include "ast/Unit.hh"
 #include "ast/FunctionDeclaration.hh"
 #include "ast/Declarator.hh"
+#include "ast/BasicDataTypes.hh"
+#include "ast/BasicDataTypeSpecification.hh"
+#include "ast/ReferenceDataTypeSpecification.hh"
+#include "ast/ArrayDataTypeSpecification.hh"
 
 #include <list>
 #include <string>
@@ -43,19 +47,37 @@ using namespace hooc::ast;
 using namespace antlrcpp;
 
 Any UnitVisitor::visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx) {
-    return HooBaseVisitor::visitBasicDataTypeSpecifier(ctx);
+    auto basicDataType = GetBasicDataType(ctx->BasicDataType()->getText());
+    if(BASIC_DATA_TYPE_INVALID == basicDataType) {
+        // todo: Error handling
+    }
+    TypeSpecification* type = new BasicDataTypeSpecification(basicDataType);
+    return Any(type);
 }
 
 Any UnitVisitor::visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx) {
-    return HooBaseVisitor::visitNestedTypeSpecifier(ctx);
+    auto parent = this->visit(ctx->typeSpecifier())
+            .as<TypeSpecification*>();
+    if(TYPE_SPEC_REFERENCE != parent->GetType()) {
+        // todo: Error handling
+    }
+    auto name = ctx->Identifier()->getText();
+    TypeSpecification* type = new ReferenceDataTypeSpecification(name,
+            (ReferenceDataTypeSpecification*) parent);
+    return Any(type);
 }
 
 Any UnitVisitor::visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx) {
-    return HooBaseVisitor::visitIdentifierTypeSpecifier(ctx);
+    auto name = ctx->Identifier()->getText();
+    TypeSpecification* type = new ReferenceDataTypeSpecification(name, nullptr);
+    return Any(type);
 }
 
 Any UnitVisitor::visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) {
-    return HooBaseVisitor::visitArrayTypeSpecifier(ctx);
+    auto parent = this->visit(ctx->typeSpecifier())
+            .as<TypeSpecification*>();
+    TypeSpecification* type = new ArrayDataTypeSpecification(parent);
+    return Any(type);
 }
 
 Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) {
