@@ -42,9 +42,11 @@
 #include <ast/ClassDefinition.hh>
 #include <ast/ExpressionStatement.hh>
 #include <ast/DeclarationStatement.hh>
+#include <boost/regex.hpp>
 
 using namespace hooc::ast;
 using namespace antlrcpp;
+using namespace boost;
 
 Any UnitVisitor::visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx) {
     auto basicDataType = GetBasicDataType(ctx->BasicDataType()->getText());
@@ -106,6 +108,24 @@ Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
 Any UnitVisitor::visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) {
     auto parent = this->visit(ctx->parent).as<Expression *>();
     auto name = ctx->name->getText();
+    regex reg_expr("[0-9A-Fa-f]+");
+
+    if(parent->GetExpressionType() == EXPRESSION_LITERAL)
+    {
+        auto literal = (LiteralExpression *) parent;
+        if(LITERAL_INTEGER == literal->GetLiteralType()) {
+            cmatch match;
+            if(regex_match(name.c_str(), match, reg_expr)) {
+                std::string text = literal->GetValue();
+                text += ".";
+                text += name;
+                delete parent;
+                auto decimalExpression = (Expression *) new LiteralExpression(LITERAL_DOUBLE, text);
+                return Any(decimalExpression);
+            }
+        }
+    }
+
     auto expression = (Expression *) new ReferenceExpression(parent, name);
     return Any(expression);
 }
