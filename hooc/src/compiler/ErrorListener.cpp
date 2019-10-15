@@ -37,14 +37,14 @@ namespace hooc {
             this->_errors.push_back(error);
         }
 
-        void ErrorListener::Add(SyntaxError *error) {
+        void ErrorListener::Add(BaseError *error) {
             _errors.push_back(error);
         }
 
         ErrorListener::~ErrorListener() {
         }
 
-        const std::list<SyntaxError *> &ErrorListener::GetErrors() const {
+        const std::list<BaseError *> &ErrorListener::GetErrors() const {
             return this->_errors;
         }
 

@@ -29,7 +29,7 @@ namespace hooc {
     namespace compiler {
 
         Module::Module(boost::filesystem::path compilation_root, boost::filesystem::path module_path,
-                       ast::Unit *unit, std::list<SyntaxError *> errors)
+                       ast::Unit *unit, std::list<BaseError *> errors)
                 : _compilation_root(compilation_root),
                 _module_path(module_path),
                 _unit(unit),
@@ -64,7 +64,7 @@ namespace hooc {
             return this->_errors.empty();
         }
 
-        const std::list<SyntaxError *> & Module::GetErrors() const {
+        const std::list<BaseError *> & Module::GetErrors() const {
             return this->_errors;
         }
     }

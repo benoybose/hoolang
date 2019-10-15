@@ -47,11 +47,11 @@ namespace hooc {
             return this->parser->unit();
         }
 
-        void CompilationContext::AddCompilationError(SyntaxError *error) {
+        void CompilationContext::AddCompilationError(BaseError *error) {
             error_listener->Add(error);
         }
 
-        const std::list<SyntaxError *> &CompilationContext::GetErrors() const {
+        const std::list<BaseError *> &CompilationContext::GetErrors() const {
             return error_listener->GetErrors();
         }
     }

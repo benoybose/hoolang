@@ -24,6 +24,7 @@
 #include "HooLexer.h"
 #include "compiler/Module.hh"
 #include "compiler/ErrorListener.hh"
+#include "compiler/BaseError.hh"
 
 #include <string>
 #include <memory>
@@ -45,8 +46,8 @@ namespace hooc {
 
         public:
             HooParser::UnitContext *GetUnit();
-            void AddCompilationError(SyntaxError* error);
-            const std::list<SyntaxError*>& GetErrors() const;
+            void AddCompilationError(BaseError* error);
+            const std::list<BaseError*>& GetErrors() const;
 
         public:
             ~CompilationContext();

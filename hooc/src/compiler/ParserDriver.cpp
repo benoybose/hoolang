@@ -20,6 +20,7 @@
 #include "antlr4-runtime.h"
 #include "SyntaxError.hh"
 #include "compiler/CompilationContext.hh"
+#include "compiler/ParseError.hh"
 #include "compiler/SyntaxError.hh"
 #include "compiler/ErrorListener.hh"
 #include "visitors/UnitVisitor.hh"
@@ -56,10 +57,14 @@ namespace hooc {
                 }
 
                 UnitVisitor visitor;
-                unit = visitor.visit(unitContext).as<Unit*>();
+                unit = visitor.visit(unitContext).as<Unit *>();
+            } catch (const std::bad_cast& ex) {
+                std::string message(ex.what());
+                auto error = new ParseError(ERROR_CODE_BAD_CAST_PARSING, message);
+                context.AddCompilationError(error);
             } catch (const std::exception &ex) {
                 std::string message(ex.what());
-                auto error = new SyntaxError(0, 0, message);
+                auto error = new ParseError(ERROR_CODE_FAILED_PARSING, message);
                 context.AddCompilationError(error);
             }
 
