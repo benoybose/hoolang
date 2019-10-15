@@ -27,7 +27,7 @@ namespace hooc {
             lexer = new HooLexer(stream);
             tokens = new antlr4::CommonTokenStream(lexer);
             parser = new HooParser(tokens);
-            error_listener = new CompilationErrorListener();
+            error_listener = new ErrorListener();
             auto errorHandler = std::shared_ptr<antlr4::ANTLRErrorStrategy>(new antlr4::DefaultErrorStrategy());
             parser->setErrorHandler(errorHandler);
             lexer->removeErrorListeners();

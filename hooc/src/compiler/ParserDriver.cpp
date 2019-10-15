@@ -21,7 +21,7 @@
 #include "SyntaxError.hh"
 #include "compiler/CompilationContext.hh"
 #include "compiler/SyntaxError.hh"
-#include "compiler/CompilationErrorListener.hh"
+#include "compiler/ErrorListener.hh"
 #include "visitors/UnitVisitor.hh"
 
 #include <list>

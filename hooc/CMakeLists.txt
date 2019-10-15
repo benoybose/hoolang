@@ -36,7 +36,7 @@ SET(hooc_header_files
 		src/ast/UnitItem.hh
 		src/ast/ClassDefinition.hh
         src/ast/Unit.hh
-		src/compiler/CompilationErrorListener.hh
+		src/compiler/ErrorListener.hh
 		src/ast/NoopStatement.hh
 		src/ast/CompoundStatement.hh
 		src/ast/ExpressionStatement.hh
@@ -72,7 +72,7 @@ SET(hooc_source_files
 		src/ast/UnitItem.cpp
 		src/ast/ClassDefinition.cpp
 		src/ast/Unit.cpp
-		src/compiler/CompilationErrorListener.cpp
+		src/compiler/ErrorListener.cpp
 		src/ast/NoopStatement.cpp
 		src/ast/CompoundStatement.cpp
 		src/ast/ExpressionStatement.cpp

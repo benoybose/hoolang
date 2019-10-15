@@ -28,10 +28,10 @@ using namespace antlr4;
 
 namespace hooc {
     namespace compiler {
-        class CompilationErrorListener: public BaseErrorListener {
+        class ErrorListener: public BaseErrorListener {
 
         public:
-            CompilationErrorListener();
+            ErrorListener();
 
         private:
             std::list<SyntaxError*> _errors;
@@ -45,7 +45,7 @@ namespace hooc {
             const std::list<SyntaxError*>& GetErrors() const;
 
         public:
-            virtual ~CompilationErrorListener();
+            virtual ~ErrorListener();
 
         };
     }
