@@ -18,8 +18,6 @@
 
 #include "CompilationContext.hh"
 
-#include "CompilationContext.hh"
-
 namespace hooc {
     namespace compiler {
         CompilationContext::CompilationContext(std::string source_code) {

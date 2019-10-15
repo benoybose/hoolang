@@ -17,18 +17,11 @@
  */
 
 #include "ParserDriver.hh"
-#include "antlr4-runtime.h"
-#include "SyntaxError.hh"
 #include "compiler/CompilationContext.hh"
 #include "compiler/ParseError.hh"
-#include "compiler/SyntaxError.hh"
-#include "compiler/ErrorListener.hh"
 #include "visitors/UnitVisitor.hh"
 
-#include <list>
 #include <exception>
-#include <memory>
-#include <boost/log/trivial.hpp>
 #include <boost/filesystem.hpp>
 
 using namespace hooc;
