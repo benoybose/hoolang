@@ -27,6 +27,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
+#include <ast/ExpressionStatement.hh>
 
 using namespace std;
 using namespace hooc;
@@ -101,7 +102,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         auto opr = binary_expr->GetOperator();
         BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left_value->GetExpressionType());
 
-        auto binary_expr_1 = (BinaryExpression*) left_value;
+        auto binary_expr_1 = (BinaryExpression *) left_value;
         auto binary_expr_1_left_value = binary_expr_1->GetLeftExpression();
         auto binary_expr_1_right_value = binary_expr_1->GetRightExpression();
         BOOST_CHECK_LITERAL_EXPRESSION(binary_expr_1_left_value, LITERAL_INTEGER, "2");
@@ -222,5 +223,179 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_REFERENCE_EXPRESSION(b, "b");
         BOOST_CHECK_LITERAL_EXPRESSION(index1, LITERAL_INTEGER, "1");
     }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression7) {
+        const std::string source = "a == b && c != d;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+
+        auto opr = ((BinaryExpression *) expr)->GetOperator();
+        auto left_expr = (BinaryExpression *) ((BinaryExpression *) expr)->GetLeftExpression();
+        auto right_expr = (BinaryExpression *) ((BinaryExpression *) expr)->GetRightExpression();
+        BOOST_CHECK_EQUAL(OPERATOR_LOGICAL_AND, opr->GetOperatorType());
+
+        auto expr1 = (ReferenceExpression *) left_expr->GetLeftExpression();
+        auto expr2 = (ReferenceExpression *) left_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(left_expr->GetOperator()->GetOperatorType(), OPERATOR_EQUAL);
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr1, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "b");
+
+        auto expr3 = (ReferenceExpression *) right_expr->GetLeftExpression();
+        auto expr4 = (ReferenceExpression *) right_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(right_expr->GetOperator()->GetOperatorType(), OPERATOR_NOT_EQUAL);
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr3, "c");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
+    }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression8) {
+        const std::string source = "a | b + c ~ d;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_EQUAL(OPERATOR_ADD, opr->GetOperatorType());
+        auto left = binary_expr->GetLeftExpression();
+        auto right = binary_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left->GetExpressionType());
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, right->GetExpressionType());
+        auto expr1 = ((BinaryExpression *) left)->GetLeftExpression();
+        auto expr2 = ((BinaryExpression *) left)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr1, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "b");
+        BOOST_CHECK_EQUAL(OPERATOR_BIT_OR,
+                          ((BinaryExpression *) left)->GetOperator()->GetOperatorType());
+
+        auto expr3 = ((BinaryExpression *) right)->GetLeftExpression();
+        auto expr4 = ((BinaryExpression *) right)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr3, "c");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
+        BOOST_CHECK_EQUAL(OPERATOR_BIT_NOT,
+                          ((BinaryExpression *) right)->GetOperator()->GetOperatorType());
+    }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression9) {
+        const std::string source = "a * b == c / d;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_EQUAL(OPERATOR_EQUAL, opr->GetOperatorType());
+        auto left = binary_expr->GetLeftExpression();
+        auto right = binary_expr->GetRightExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, left->GetExpressionType());
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, right->GetExpressionType());
+        auto expr1 = ((BinaryExpression *) left)->GetLeftExpression();
+        auto expr2 = ((BinaryExpression *) left)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr1, "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "b");
+        BOOST_CHECK_EQUAL(OPERATOR_MUL,
+                          ((BinaryExpression *) left)->GetOperator()->GetOperatorType());
+
+        auto expr3 = ((BinaryExpression *) right)->GetLeftExpression();
+        auto expr4 = ((BinaryExpression *) right)->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr3, "c");
+        BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
+        BOOST_CHECK_EQUAL(OPERATOR_DIV,
+                          ((BinaryExpression *) right)->GetOperator()->GetOperatorType());
+    }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression10) {
+        const std::string source = "a = b;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto unit_items = unit->GetItems();
+        BOOST_CHECK_EQUAL(1, unit_items.size());
+        auto unit_item = *(unit_items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+        auto stmt = (Statement *) unit_item;
+        BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+        auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression *) expr;
+        auto opr = binary_expr->GetOperator();
+        BOOST_CHECK_EQUAL(OPERATOR_ASSIGN, opr->GetOperatorType());
+        BOOST_CHECK_REFERENCE_EXPRESSION(binary_expr->GetLeftExpression(), "a");
+        BOOST_CHECK_REFERENCE_EXPRESSION(binary_expr->GetRightExpression(), "b");
+    }
+
+    BOOST_AUTO_TEST_CASE(BinaryExpression11) {
+    const std::string source = "a = b + d;";
+    ParserDriver driver(source, "test.hoo");
+    auto module = driver.BuildModule();
+    BOOST_CHECK(module->Success());
+    auto unit = module->GetUnit();
+    auto unit_items = unit->GetItems();
+    BOOST_CHECK_EQUAL(1, unit_items.size());
+    auto unit_item = *(unit_items.begin());
+    BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+    auto stmt = (Statement *) unit_item;
+    BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+    auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+    BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+    auto binary_expr = (BinaryExpression *) expr;
+    auto opr = binary_expr->GetOperator();
+    BOOST_CHECK_EQUAL(OPERATOR_ASSIGN, opr->GetOperatorType());
+    BOOST_CHECK_REFERENCE_EXPRESSION(binary_expr->GetLeftExpression(), "a");
+    BOOST_CHECK_EQUAL(EXPRESSION_BINARY,
+                      binary_expr->GetRightExpression()->GetExpressionType());
+    auto right = (BinaryExpression *) binary_expr->GetRightExpression();
+    auto expr1 = right->GetLeftExpression();
+    auto expr2 = right->GetRightExpression();
+    BOOST_CHECK_REFERENCE_EXPRESSION(expr1, "b");
+    BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "d");
+}
+
+BOOST_AUTO_TEST_CASE(BinaryExpression12) {
+    const std::string source = "a += 3.14;";
+    ParserDriver driver(source, "test.hoo");
+    auto module = driver.BuildModule();
+    BOOST_CHECK(module->Success());
+    auto unit = module->GetUnit();
+    auto unit_items = unit->GetItems();
+    BOOST_CHECK_EQUAL(1, unit_items.size());
+    auto unit_item = *(unit_items.begin());
+    BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, unit_item->GetUnitItemType());
+    auto stmt = (Statement *) unit_item;
+    BOOST_CHECK_EQUAL(STMT_EXPRESSION, stmt->GetStatementType());
+    auto expr = ((ExpressionStatement *) unit_item)->GetExpression();
+    BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+    auto binary_expr = (BinaryExpression *) expr;
+    auto opr = binary_expr->GetOperator();
+    BOOST_CHECK_EQUAL(OPERATOR_ASSIGN_INC, opr->GetOperatorType());
+    BOOST_CHECK_REFERENCE_EXPRESSION(binary_expr->GetLeftExpression(), "a");
+    BOOST_CHECK_LITERAL_EXPRESSION(binary_expr->GetRightExpression(), LITERAL_DOUBLE, "3.14");
+}
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -22,6 +22,7 @@
 #include "ast/LiteralExpression.hh"
 
 #include <boost/test/unit_test.hpp>
+#include <ast/ExpressionStatement.hh>
 
 
 using namespace hooc::compiler;

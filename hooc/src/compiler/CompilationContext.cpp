@@ -18,8 +18,6 @@
 
 #include "CompilationContext.hh"
 
-#include "CompilationContext.hh"
-
 namespace hooc {
     namespace compiler {
         CompilationContext::CompilationContext(std::string source_code) {
@@ -27,7 +25,7 @@ namespace hooc {
             lexer = new HooLexer(stream);
             tokens = new antlr4::CommonTokenStream(lexer);
             parser = new HooParser(tokens);
-            error_listener = new CompilationErrorListener();
+            error_listener = new ErrorListener();
             auto errorHandler = std::shared_ptr<antlr4::ANTLRErrorStrategy>(new antlr4::DefaultErrorStrategy());
             parser->setErrorHandler(errorHandler);
             lexer->removeErrorListeners();
@@ -36,22 +34,22 @@ namespace hooc {
         }
 
         CompilationContext::~CompilationContext() {
-            delete parser;
+            delete error_listener;
             delete tokens;
             delete lexer;
             delete stream;
-            delete error_listener;
+            delete parser;
         }
 
         HooParser::UnitContext* CompilationContext::GetUnit() {
             return this->parser->unit();
         }
 
-        void CompilationContext::AddCompilationError(CompilationError *error) {
+        void CompilationContext::AddCompilationError(BaseError *error) {
             error_listener->Add(error);
         }
 
-        const std::list<CompilationError *> &CompilationContext::GetErrors() const {
+        const std::list<BaseError *> &CompilationContext::GetErrors() const {
             return error_listener->GetErrors();
         }
     }

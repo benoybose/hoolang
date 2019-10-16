@@ -16,29 +16,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#include "compiler/ParserDriver.hh"
+#include "ast/Unit.hh"
+#include "ast/Statement.hh"
+#include "ast/ReferenceExpression.hh"
+#include "ast/ArrayAccessExpression.hh"
+#include "ast/LiteralExpression.hh"
+#include "HoocTestHelper.hh"
 
-namespace hooc {
-    namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
+#include <boost/test/unit_test.hpp>
+#include <boost/filesystem.hpp>
+#include <ast/ExpressionStatement.hh>
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+using namespace std;
+using namespace hooc;
+using namespace hooc::compiler;
+using namespace hooc::ast;
 
-        public:
-            const UnitItemType GetUnitItemType() const;
+BOOST_AUTO_TEST_SUITE(Function001)
 
-        public:
-            virtual ~UnitItem();
-        };
+    BOOST_AUTO_TEST_CASE(F1) {
+        std::string source = "func:int add(a:int, b:int) { return a + b; }";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+//        BOOST_CHECK(module->Success());
     }
-}
 
-#endif
+BOOST_AUTO_TEST_SUITE_END()
+

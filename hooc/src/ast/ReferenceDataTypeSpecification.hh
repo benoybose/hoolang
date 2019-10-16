@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2018 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,16 +16,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef ACCESSSPECIFIER_HH
-#define ACCESSSPECIFIER_HH
+#ifndef HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
+#define HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
+
+#include "TypeSpecification.hh"
+
+#include <string>
 
 namespace hooc {
-    typedef enum {
-        ACCESS_INVALID,
-        ACCESS_PRIVATE,
-        ACCESS_PUBLIC,
-        ACCESS_PROTECTED
-    } AccessSpecifierType;
+    namespace ast {
+        class ReferenceDataTypeSpecification: public TypeSpecification {
+        private:
+            std::string _name;
+            std::string _full_name;
+            ReferenceDataTypeSpecification* _parent;
+
+        public:
+            ReferenceDataTypeSpecification(const std::string& name, ReferenceDataTypeSpecification* parent);
+
+        public:
+            const std::string &GetName() const;
+
+            ReferenceDataTypeSpecification *GetParent() const;
+
+            virtual ~ReferenceDataTypeSpecification();
+
+        };
+    }
 }
 
-#endif //ACCESSSPECIFIER_HH
+#endif //HOOLANG_REFERENCEDATATYPESPECIFICATION_HH

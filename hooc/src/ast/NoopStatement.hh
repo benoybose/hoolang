@@ -16,19 +16,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "RootStatement.hh"
+#ifndef HOOLANG_NOOPSTATEMENT_HH
+#define HOOLANG_NOOPSTATEMENT_HH
+
+#include "ast/Statement.hh"
 
 namespace hooc {
     namespace ast {
-        RootStatement::RootStatement(RootStatementType type)
-                : _type(type) {
-        }
-
-        RootStatement::~RootStatement() {
-        }
-
-        const RootStatementType RootStatement::GetType() const {
-            return this->_type;
-        }
+        class NoopStatement : public Statement {
+        public:
+            NoopStatement();
+        };
     }
 }
+
+#endif //HOOLANG_NOOPSTATEMENT_HH

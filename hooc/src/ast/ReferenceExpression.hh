@@ -25,28 +25,26 @@
 
 namespace hooc {
     namespace ast {
-        class ReferenceExpression: public Expression {
+        class ReferenceExpression : public Expression {
         private:
-            ReferenceExpression* _parent;
+            Expression *_parent;
             std::string _name;
 
         public:
-            explicit ReferenceExpression(std::string& name);
-            explicit ReferenceExpression(const std::string& name);
-            ReferenceExpression(ReferenceExpression* parent, std::string& name);
-            ReferenceExpression(ReferenceExpression* parent, const std::string& name);
+            explicit ReferenceExpression(std::string &name);
+
+            ReferenceExpression(Expression *parent, std::string &name);
 
         public:
-            const std::string& GetName() const;
-            const ReferenceExpression* GetParent() const;
+            const std::string &GetName() const;
+
+            const Expression *GetParent() const;
 
         public:
             virtual ~ReferenceExpression();
         };
     }
 }
-
-
 
 
 #endif //PROJECT_REFERENCEEXPRESSION_HH

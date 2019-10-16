@@ -16,59 +16,76 @@ INCLUDE_DIRECTORIES( ${ANTLR4_INCLUDE_DIR}
 		${ANTLR4_INCLUDE_DIR_HooANTLR4})
 
 SET(hooc_header_files
-		src/Node.hh
 		src/ast/Operator.hh
 		src/ast/Expression.hh
         src/ast/LiteralExpression.hh
 		src/Logger.hh
         src/ast/BinaryExpression.hh
 		src/ast/Statement.hh
-        src/StatementList.hh
         src/compiler/Module.hh
-        src/compiler/CompilationError.hh
+		src/compiler/SyntaxError.hh
         src/compiler/ParserDriver.hh
 		src/compiler/CompilationContext.hh
-		src/Class.hh src/AccessSpecifier.hh
 		src/ast/TypeSpecification.hh
-		src/ast/RootStatement.hh
 		src/visitors/UnitVisitor.hh
 		src/ast/FunctionDefinition.hh
-		src/ast/Declaration.hh
+		src/ast/VariableDeclaration.hh
 		src/ast/ReferenceExpression.hh
 		src/ast/ArrayAccessExpression.hh
         src/ast/InvokeExpression.hh
 		src/ast/UnitItem.hh
 		src/ast/ClassDefinition.hh
         src/ast/Unit.hh
-		src/compiler/CompilationErrorListener.hh)
+		src/compiler/ErrorListener.hh
+		src/ast/NoopStatement.hh
+		src/ast/CompoundStatement.hh
+		src/ast/ExpressionStatement.hh
+		src/ast/ReturnStatement.hh
+		src/ast/Definition.hh
+		src/ast/Declaration.hh
+		src/ast/FunctionDeclaration.hh
+		src/ast/Declarator.hh
+		src/ast/DeclarationStatement.hh
+		src/ast/BasicDataTypes.hh
+		src/ast/ReferenceDataTypeSpecification.hh
+		src/ast/ArrayDataTypeSpecification.hh)
 
 SET(hooc_source_files
 		${ANTLR4_SRC_FILES_HooANTLR4}
-        src/Node.cpp
 		src/ast/Operator.cpp
 		src/ast/Expression.cpp
         src/ast/LiteralExpression.cpp
         src/Logger.cpp
         src/ast/BinaryExpression.cpp
 		src/ast/Statement.cpp
-        src/StatementList.cpp
         src/compiler/Module.cpp
-        src/compiler/CompilationError.cpp
+		src/compiler/SyntaxError.cpp
         src/compiler/ParserDriver.cpp
 		src/compiler/CompilationContext.cpp
-		src/Class.cpp
 		src/ast/TypeSpecification.cpp
-		src/ast/RootStatement.cpp
 		src/visitors/UnitVisitor.cpp
 		src/ast/FunctionDefinition.cpp
-		src/ast/Declaration.cpp
+		src/ast/VariableDeclaration.cpp
 		src/ast/ReferenceExpression.cpp
 		src/ast/ArrayAccessExpression.cpp
 		src/ast/InvokeExpression.cpp
 		src/ast/UnitItem.cpp
 		src/ast/ClassDefinition.cpp
 		src/ast/Unit.cpp
-		src/compiler/CompilationErrorListener.cpp)
+		src/compiler/ErrorListener.cpp
+		src/ast/NoopStatement.cpp
+		src/ast/CompoundStatement.cpp
+		src/ast/ExpressionStatement.cpp
+		src/ast/ReturnStatement.cpp
+		src/ast/DeclarationStatement.cpp
+		src/ast/Definition.cpp
+		src/ast/Declaration.cpp
+		src/ast/FunctionDeclaration.cpp
+		src/ast/BasicDataTypeSpecification.cpp
+		src/ast/BasicDataTypeSpecification.hh
+		src/ast/BasicDataTypes.cpp
+		src/ast/ReferenceDataTypeSpecification.cpp
+		src/ast/ArrayDataTypeSpecification.cpp src/compiler/BaseError.cpp src/compiler/BaseError.hh src/compiler/ParseError.cpp src/compiler/ParseError.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
@@ -81,7 +98,14 @@ ADD_EXECUTABLE(
 		tests/DecimalLiteral.cpp
 		tests/CharacterLiteral.cpp
 		tests/BooleanLiteral.cpp
-		tests/StringLiteral.cpp tests/PrimaryExpression.cpp tests/InvocationExpression.cpp tests/BinaryExpression.cpp tests/HoocTestHelper.hh)
+		tests/StringLiteral.cpp tests/PrimaryExpression.cpp
+		tests/InvocationExpression.cpp
+		tests/BinaryExpression.cpp
+		tests/HoocTestHelper.hh
+		tests/ReturnStatement.cpp
+		tests/Function001.cpp
+		tests/FunctionDeclaration.cpp)
+
 ADD_DEPENDENCIES(hooc_test antlr4_static)
 TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_static)
 

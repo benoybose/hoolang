@@ -17,17 +17,11 @@
  */
 
 #include "ParserDriver.hh"
-#include "antlr4-runtime.h"
-#include "CompilationError.hh"
 #include "compiler/CompilationContext.hh"
-#include "compiler/CompilationError.hh"
-#include "compiler/CompilationErrorListener.hh"
+#include "compiler/ParseError.hh"
 #include "visitors/UnitVisitor.hh"
 
-#include <list>
 #include <exception>
-#include <memory>
-#include <boost/log/trivial.hpp>
 #include <boost/filesystem.hpp>
 
 using namespace hooc;
@@ -46,7 +40,7 @@ namespace hooc {
 
         Module* ParserDriver::BuildModule() {
             CompilationContext context(this->_source_code);
-            Module* compilation_unit = nullptr;
+            Module* module = nullptr;
             Unit* unit = nullptr;
 
             try {
@@ -56,17 +50,21 @@ namespace hooc {
                 }
 
                 UnitVisitor visitor;
-                unit = visitor.visit(unitContext).as<Unit*>();
+                unit = visitor.visit(unitContext).as<Unit *>();
+            } catch (const std::bad_cast& ex) {
+                std::string message(ex.what());
+                auto error = new ParseError(ERROR_CODE_BAD_CAST_PARSING, message);
+                context.AddCompilationError(error);
             } catch (const std::exception &ex) {
                 std::string message(ex.what());
-                auto error = new CompilationError(0, 0, message);
+                auto error = new ParseError(ERROR_CODE_FAILED_PARSING, message);
                 context.AddCompilationError(error);
             }
 
             auto errors = context.GetErrors();
-            compilation_unit = new Module("", "",
-                                          unit, errors);
-            return compilation_unit;
+            module = new Module("", "",
+                                unit, errors);
+            return module;
         }
     }
 }

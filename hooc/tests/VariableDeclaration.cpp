@@ -17,24 +17,22 @@
  */
 
 #include "compiler/ParserDriver.hh"
-#include "antlr4-runtime.h"
 #include "ast/Unit.hh"
 #include "ast/Statement.hh"
-#include "ast/Declaration.hh"
-#include "ast/TypeSpecification.hh"
-
+#include "ast/VariableDeclaration.hh"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 #include <string>
 #include <ast/LiteralExpression.hh>
+#include <ast/DeclarationStatement.hh>
 
 using namespace std;
 using namespace hooc;
 using namespace hooc::compiler;
 using namespace hooc::ast;
 
-BOOST_AUTO_TEST_SUITE(VariableDeclaration)
+BOOST_AUTO_TEST_SUITE(VariableDeclarationTest)
 
     BOOST_AUTO_TEST_CASE(SimpleVaraibleDeclaration) {
         BOOST_TEST_MESSAGE("Testing variable declaration without initializer");
@@ -64,14 +62,18 @@ BOOST_AUTO_TEST_SUITE(VariableDeclaration)
         BOOST_CHECK(nullptr != declaration);
 
         auto declarator = declaration->GetDeclarator();
-        auto name = declaration->GetName();
-        auto type = declaration->GetDelcaredType();
+        BOOST_CHECK_EQUAL(DECLARATION_VARIABLE, declaration->GetDeclarationType());
+        auto variable = (VariableDeclaration *) declaration;
 
-        BOOST_CHECK(declarator == "var");
+        auto name = variable->GetName();
+        auto type = variable->GetDelcaredType();
+
+        BOOST_CHECK_EQUAL(DECLARATOR_VAR, declarator);
         BOOST_CHECK(name == "age");
         BOOST_CHECK(nullptr != type);
         auto type_name = type->GetName();
         BOOST_CHECK(type_name == "int");
+        delete module;
     }
 
     BOOST_AUTO_TEST_CASE(VariableDeclarationInitializer) {
@@ -95,16 +97,20 @@ BOOST_AUTO_TEST_SUITE(VariableDeclaration)
         BOOST_CHECK(STMT_DECLARATION == stmt->GetStatementType());
 
         auto decl = ((DeclarationStatement *) stmt)->GetDeclaration();
-        BOOST_CHECK(decl->GetName() == "age");
-        BOOST_CHECK(decl->GetDeclarator() == "var");
-        BOOST_CHECK(decl->GetDelcaredType()->GetName() == "int");
+        BOOST_CHECK_EQUAL(DECLARATION_VARIABLE, decl->GetDeclarationType());
+        auto variable = (VariableDeclaration *) decl;
 
-        auto initializer = decl->GetInitializer();
+        BOOST_CHECK(variable->GetName() == "age");
+        BOOST_CHECK_EQUAL(DECLARATOR_VAR, decl->GetDeclarator());
+        BOOST_CHECK(variable->GetDelcaredType()->GetName() == "int");
+
+        auto initializer = variable->GetInitializer();
         BOOST_CHECK(nullptr != initializer);
         BOOST_CHECK(EXPRESSION_LITERAL == initializer->GetExpressionType());
         auto expression = (LiteralExpression *) initializer;
         BOOST_CHECK(LITERAL_INTEGER == expression->GetLiteralType());
         BOOST_CHECK("362880" == expression->GetValue());
+        delete module;
     }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -16,31 +16,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PROJECT_ROOTSTATEMENT_HH
-#define PROJECT_ROOTSTATEMENT_HH
+#include "BaseError.hh"
 
 namespace hooc {
-    namespace ast {
-        typedef enum {
-            ROOTSTMT_CLASS,
-            ROOTSTMT_INTERFACE,
-            ROOTSTMT_STATEMENT
-        } RootStatementType;
+    namespace compiler {
+        BaseError::BaseError(compiler::ErrorType type,
+                             compiler::ErrorCode code,
+                             const std::string &message) :
+                _type(type),
+                _code(code),
+                _message(message) {
 
-        class RootStatement {
-        protected:
-            RootStatement(RootStatementType type);
+        }
 
-        private:
-            RootStatementType _type;
+        ErrorType BaseError::GetType() const {
+            return _type;
+        }
 
-        public:
-            const RootStatementType GetType() const;
+        ErrorCode BaseError::GetCode() const {
+            return _code;
+        }
 
-        public:
-            virtual ~RootStatement();
-        };
+        const std::string &BaseError::GetMessage() const {
+            return _message;
+        }
     }
 }
-
-#endif //PROJECT_ROOTSTATEMENT_HH

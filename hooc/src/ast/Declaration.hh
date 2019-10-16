@@ -16,41 +16,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PROJECT_DECLARATION_HH
-#define PROJECT_DECLARATION_HH
+#ifndef HOOLANG_DECLARATION_HH
+#define HOOLANG_DECLARATION_HH
 
-#include "TypeSpecification.hh"
-#include "Expression.hh"
-
-#include <string>
+#include "Declarator.hh"
 
 namespace hooc {
     namespace ast {
+        typedef enum {
+            DECLARATION_VARIABLE,
+            DECLARATION_FUNCTION
+        } DeclarationType;
+
         class Declaration {
         private:
-            std::string _declarator;
-            TypeSpecification *_declared_type;
-            std::string _name;
-            Expression *_initializer;
+            DeclarationType _type;
+            DeclaratorType _declarator;
 
         public:
-            Declaration(const std::string &declarator,
-                        const std::string &name,
-                        TypeSpecification *declared_type,
-                        Expression *initializer
-            );
+            Declaration(DeclarationType type, DeclaratorType declarator);
 
         public:
-            const TypeSpecification *GetDelcaredType() const;
-            const std::string &GetName() const;
-            const Expression *GetInitializer() const;
-            const std::string& GetDeclarator() const;
+            DeclarationType GetDeclarationType() const;
 
-        public:
             virtual ~Declaration();
+
+            DeclaratorType GetDeclarator() const;
         };
     }
 }
 
-
-#endif //PROJECT_DECLARATION_HH
+#endif //HOOLANG_DECLARATION_HH

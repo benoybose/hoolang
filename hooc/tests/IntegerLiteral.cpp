@@ -19,12 +19,15 @@
 #include "compiler/ParserDriver.hh"
 #include "ast/Unit.hh"
 #include "ast/Statement.hh"
-#include "ast/Declaration.hh"
+#include "ast/VariableDeclaration.hh"
+#include "compiler/BaseError.hh"
+#include "compiler/SyntaxError.hh"
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 #include <string>
 #include <ast/LiteralExpression.hh>
+#include <ast/ExpressionStatement.hh>
 
 using namespace std;
 using namespace hooc;
@@ -122,8 +125,10 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         auto errors = module->GetErrors();
         BOOST_CHECK(1 == errors.size());
         auto first_error = *(errors.begin());
-        BOOST_CHECK(1 == first_error->GetLineNumber());
-        BOOST_CHECK(0 == first_error->GetCharacterPosition());
+        BOOST_CHECK_EQUAL(ERROR_HOOC_SYNTAX, first_error->GetType());
+        auto syntax_error = (SyntaxError*) first_error;
+        BOOST_CHECK(1 == syntax_error->GetLineNumber());
+        BOOST_CHECK(0 == syntax_error->GetCharacterPosition());
     }
 
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_6) {
@@ -168,8 +173,10 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         auto errors = module->GetErrors();
         BOOST_CHECK(1 == errors.size());
         auto first_error = *(errors.begin());
-        BOOST_CHECK(1 == first_error->GetLineNumber());
-        BOOST_CHECK(6 == first_error->GetCharacterPosition());
+        BOOST_CHECK_EQUAL(ERROR_HOOC_SYNTAX, first_error->GetType());
+        auto syntax_error = (SyntaxError*) first_error;
+        BOOST_CHECK(1 == syntax_error->GetLineNumber());
+        BOOST_CHECK(6 == syntax_error->GetCharacterPosition());
     }
 
     BOOST_AUTO_TEST_CASE(IntegerLiteralExpression_9) {
@@ -214,8 +221,10 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         auto errors = module->GetErrors();
         BOOST_CHECK(1 == errors.size());
         auto first_error = *(errors.begin());
-        BOOST_CHECK(1 == first_error->GetLineNumber());
-        BOOST_CHECK(5 == first_error->GetCharacterPosition());
+        BOOST_CHECK_EQUAL(ERROR_HOOC_SYNTAX, first_error->GetType());
+        auto syntax_error = (SyntaxError*) first_error;
+        BOOST_CHECK(1 == syntax_error->GetLineNumber());
+        BOOST_CHECK(5 == syntax_error->GetCharacterPosition());
     }
 
 BOOST_AUTO_TEST_SUITE_END()

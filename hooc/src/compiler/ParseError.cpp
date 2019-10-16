@@ -16,30 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef INCLUDE_NODES_HCSTMTLIST_H_
-#define INCLUDE_NODES_HCSTMTLIST_H_
-
-#include "ast/Statement.hh"
-
-#include <list>
-#include <memory>
+#include "ParseError.hh"
 
 namespace hooc {
-    class StatementList {
-    private:
-        std::list<ast::Statement> _statements;
-
-    public:
-        StatementList();
-
-    public:
-        void Add(ast::Statement statement);
-        const std::list<ast::Statement> &GetStatements() const;
-    };
-
-    namespace ast {
-        typedef std::shared_ptr<hooc::StatementList> StatementList;
+    namespace compiler {
+        ParseError::ParseError(ErrorCode code, const std::string &message) :
+                BaseError(ERROR_HOOC_PARSE, code, message) {
+        }
     }
 }
-
-#endif /* INCLUDE_NODES_HCSTMTLIST_H_ */

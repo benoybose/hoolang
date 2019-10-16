@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2018 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,29 +16,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#include "ReferenceDataTypeSpecification.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
+        ReferenceDataTypeSpecification::ReferenceDataTypeSpecification(const std::string &name,
+                                                                       ReferenceDataTypeSpecification *parent) :
+                TypeSpecification(TYPE_SPEC_REFERENCE),
+                _name(name),
+                _parent(parent),
+                _full_name("") {
+            std::string full_name;
+            if(nullptr != this->_parent) {
+                full_name += this->_parent->GetName();
+                full_name += ".";
+            }
+            full_name += this->_name;
+            this->_full_name = full_name;
+        }
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+        ReferenceDataTypeSpecification::~ReferenceDataTypeSpecification() {
+            delete this->_parent;
+        }
 
-        public:
-            const UnitItemType GetUnitItemType() const;
+        const std::string &ReferenceDataTypeSpecification::GetName() const {
+            return this->_full_name;
+        }
 
-        public:
-            virtual ~UnitItem();
-        };
+        ReferenceDataTypeSpecification *ReferenceDataTypeSpecification::GetParent() const {
+            return _parent;
+        }
     }
 }
-
-#endif

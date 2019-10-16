@@ -20,8 +20,8 @@
 
 namespace hooc {
     namespace ast {
-        ClassDefinition::ClassDefinition() :
-                UnitItem(UNIT_ITEM_CLASS) {
+        ClassDefinition::ClassDefinition():
+                Definition(DEFINITION_CLASS) {
         }
     }
 }

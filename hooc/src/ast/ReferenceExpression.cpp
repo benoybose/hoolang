@@ -21,43 +21,25 @@
 namespace hooc {
     namespace ast {
         ReferenceExpression::ReferenceExpression(std::string &name) :
-                Expression(EXPRESSION_REFERENCE),
-                _name(name), _parent(nullptr) {
-
+                Expression(EXPRESSION_REFERENCE), _parent(nullptr), _name(name) {
         }
 
-        ReferenceExpression::ReferenceExpression(const std::string &name) :
-                Expression(EXPRESSION_REFERENCE),
-                _name(name), _parent(nullptr) {
-
-        }
-
-        ReferenceExpression::ReferenceExpression(ReferenceExpression *parent,
-                                                 std::string &name) :
+        ReferenceExpression::ReferenceExpression(Expression *parent, std::string &name) :
                 Expression(EXPRESSION_REFERENCE),
                 _parent(parent), _name(name) {
 
-        }
-
-        ReferenceExpression::ReferenceExpression(ReferenceExpression *parent,
-                                                 const std::string &name) :
-                Expression(EXPRESSION_REFERENCE),
-                _parent(parent), _name(name) {
-
-        }
-
-        ReferenceExpression::~ReferenceExpression() {
-            if(nullptr != this->_parent) {
-                delete this->_parent;
-            }
         }
 
         const std::string &ReferenceExpression::GetName() const {
             return this->_name;
         }
 
-        const ReferenceExpression *ReferenceExpression::GetParent() const {
+        const Expression *ReferenceExpression::GetParent() const {
             return this->_parent;
+        }
+
+        ReferenceExpression::~ReferenceExpression() {
+            delete this->_parent;
         }
     }
 }

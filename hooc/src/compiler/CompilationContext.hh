@@ -23,7 +23,8 @@
 #include "HooParser.h"
 #include "HooLexer.h"
 #include "compiler/Module.hh"
-#include "compiler/CompilationErrorListener.hh"
+#include "compiler/ErrorListener.hh"
+#include "compiler/BaseError.hh"
 
 #include <string>
 #include <memory>
@@ -38,15 +39,15 @@ namespace hooc {
             HooParser *parser = nullptr;
             HooParser::UnitContext *unitContext = nullptr;
             Module *unit = nullptr;
-            CompilationErrorListener* error_listener = nullptr;
+            ErrorListener* error_listener = nullptr;
 
         public:
             CompilationContext(std::string source_code);
 
         public:
             HooParser::UnitContext *GetUnit();
-            void AddCompilationError(CompilationError* error);
-            const std::list<CompilationError*>& GetErrors() const;
+            void AddCompilationError(BaseError* error);
+            const std::list<BaseError*>& GetErrors() const;
 
         public:
             ~CompilationContext();

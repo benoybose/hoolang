@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2018 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,29 +16,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#include "BasicDataTypeSpecification.hh"
+#include "BasicDataTypes.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+        BasicDataTypeSpecification::BasicDataTypeSpecification(BasicDataTypeType data_type) :
+                TypeSpecification(TYPE_SPEC_BASIC),
+                _data_type(data_type) {
+        }
 
-        public:
-            const UnitItemType GetUnitItemType() const;
+        BasicDataTypeType BasicDataTypeSpecification::GetDataType() const {
+            return _data_type;
+        }
 
-        public:
-            virtual ~UnitItem();
-        };
+        const std::string &BasicDataTypeSpecification::GetName() const {
+            return GetBasicDataTypeName(this->_data_type);
+        }
+
+        BasicDataTypeSpecification::~BasicDataTypeSpecification() {
+        }
     }
 }
-
-#endif

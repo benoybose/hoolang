@@ -20,35 +20,20 @@
 
 namespace hooc {
     namespace ast {
-        Declaration::Declaration(const std::string &declarator,
-                                 const std::string &name,
-                                 TypeSpecification *declared_type,
-                                 Expression *initializer) :
-                _declarator(declarator),
-                _name(name),
-                _declared_type(declared_type),
-                _initializer(initializer) {
+        Declaration::Declaration(DeclarationType type, DeclaratorType declarator):
+            _type(type), _declarator(declarator) {
+
+        }
+
+        DeclarationType Declaration::GetDeclarationType() const {
+            return this->_type;
+        }
+
+        DeclaratorType Declaration::GetDeclarator() const {
+            return _declarator;
         }
 
         Declaration::~Declaration() {
-            delete this->_declared_type;
-            delete this->_initializer;
-        }
-
-        const TypeSpecification *Declaration::GetDelcaredType() const {
-            return _declared_type;
-        }
-
-        const std::string &Declaration::GetName() const {
-            return _name;
-        }
-
-        const Expression *Declaration::GetInitializer() const {
-            return _initializer;
-        }
-
-        const std::string &Declaration::GetDeclarator() const {
-            return this->_declarator;
         }
     }
 }

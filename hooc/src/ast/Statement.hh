@@ -19,9 +19,8 @@
 #ifndef HC_STATEMENT_H
 #define HC_STATEMENT_H
 
-#include "RootStatement.hh"
 #include "Expression.hh"
-#include "Declaration.hh"
+#include "VariableDeclaration.hh"
 #include "InvokeExpression.hh"
 #include "UnitItem.hh"
 
@@ -47,54 +46,6 @@ namespace hooc {
 
         public:
             const StatementType GetStatementType() const;
-        };
-
-        class NoopStatement : public Statement {
-        public:
-            NoopStatement();
-        };
-
-        class CompoundStatement : public Statement {
-        private:
-            std::list<Statement *> _statements;
-        public:
-            explicit CompoundStatement(std::list<Statement *> &statements);
-
-        public:
-            const std::list<Statement *> &GetStatements() const;
-
-            virtual ~CompoundStatement();
-        };
-
-        class ExpressionStatement : public Statement {
-        private:
-            Expression *_expression;
-        public:
-            ExpressionStatement(Expression *expression);
-
-        public:
-            const Expression *GetExpression() const;
-
-        public:
-            virtual ~ExpressionStatement();
-        };
-
-        class ReturnStatement : public ExpressionStatement {
-        public:
-            explicit ReturnStatement(Expression *expression);
-
-        public:
-            virtual ~ReturnStatement();
-        };
-
-        class DeclarationStatement : public Statement {
-        private:
-            Declaration *_declaration;
-        public:
-            DeclarationStatement(Declaration *declaration);
-
-        public:
-            const Declaration *GetDeclaration() const;
         };
     }
 }

@@ -36,48 +36,27 @@ primaryExpression
     :   Identifier #primaryRefExpr
     |   constant #primaryConstantExpr
     |   StringLiteral #primaryStringExpr
-    |   parent=primaryExpression '.' name=Identifier #primaryNestedRefExpr
-    |   container=primaryExpression '[' accessIndex=expression ']' #primaryArrayAccessExpr
     ;
 
 expression
     :   primaryExpression #exprPrimary
-    |   invocationExpression #exprInvoke
-    |   lvalue=expression opr=binaryOperator rvalue=expression #exprBinary
+    |   container=expression '[' accessIndex=expression ']' #arrayAccessExpr
+    |   receiver=expression '(' arguments=expressionList? ')' #exprInvoke
+    |   parent=expression '.' name=Identifier #nestedRefExpr
+    |   lvalue=expression opr=('|' | '&' | '^' | '~' | '<<' | '>>') rvalue=expression #exprBitwise
+    |   lvalue=expression opr=( '+' | '-' ) rvalue=expression #exprAdditive
+    |   lvalue=expression opr=( '*' | '/' | '%') rvalue=expression #exprMultiplicative
+    |   lvalue=expression opr=( '==' | '!=' | '>' | '<' | '>=' | '<=' ) rvalue=expression #exprComparison
+    |   lvalue=expression opr=( '&&' | '||' ) rvalue=expression #exprLogical
+    |   lvalue=expression opr=( '=' | '+=' | '-=' | '/=' | '*=' ) rvalue=expression #expAssignment
     |   '(' expression ')' #exprGrouped
     ;
 
-binaryOperator
-    :   arithmeticOperator
-    |   relationalOperator
-    |   assignmentOperator
-    |   bitwiseOperator
-    ;
-
-arithmeticOperator
-    : ('+' | '-' | '*' | '/' | '%' )
-    ;
-
-relationalOperator
-    : ( '==' | '!=' | '>' | '<' | '>=' | '<=' | '&&' | '||')
-    ;
-
-assignmentOperator
-    : ( '=' | '+=' | '-=' | '/=' | '*=' )
-    ;
-
-bitwiseOperator
-    : ('|' | '&' | '^' | '~' | '<<' | '>>')
-    ;
-
 typeSpecifier
-    :   Identifier
-    |   typeSpecifier '.' Identifier
-    |   typeSpecifier '[' ']'
-    ;
-
-invocationExpression
-    : receiver=primaryExpression '(' arguments=expressionList? ')'
+    :   BasicDataType #basicDataTypeSpecifier
+    |   Identifier  #identifierTypeSpecifier
+    |   typeSpecifier '.' Identifier #nestedTypeSpecifier
+    |   typeSpecifier '[' ']' #arrayTypeSpecifier
     ;
 
 expressionList
@@ -98,7 +77,8 @@ expressionStatement
     ;
 
 declarationStatement
-    :   declaration ';'
+    :   variableDeclaration ';' #stmtVariableDeclaration
+    |   functionDeclaration ';' #stmtFunctionDeclaration
     ;
 
 compoundStatement
@@ -106,13 +86,11 @@ compoundStatement
     ;
 
 returnStatement
-    :   'return' returnValue=expression ';'
+    :   'return' (returnValue=expression)? ';'
     ;
 
 classDefinition
-    :   namespaceDeclaration?
-        useSpecifier*
-        'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
+    :   'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
     ;
 
 classBody
@@ -128,32 +106,33 @@ classBodyItem
     ;
 
 functionDefinition
-    :   Declarator? 'func' ( ':' returnType=typeSpecifier )? '(' paramList? ')' name=Identifier compoundStatement
+    :   functionDeclaration compoundStatement
     ;
 
-declaration
+functionDeclaration
+    :   Declarator? 'func' ( ':' returnType=typeSpecifier )? name=Identifier '(' paramList? ')'
+    ;
+
+variableDeclaration
     :   Declarator? name=Identifier ':' declared_type=typeSpecifier ( '=' init=expression)?
     ;
 
 paramList
-    :   declaration #singleItemParamList
-    |   paramList ( ',' decl=declaration )+ #multipleItemParamList
+    :   decl=variableDeclaration #singleItemParamList
+    |   list=paramList ( ',' variableDeclaration )+ #multipleItemParamList
     ;
 
 Declarator
     :   'private' | 'public' | 'protected' | 'var'
     ;
 
-namespaceDeclaration
-    :   'namespace' Identifier ( '.' Identifier)* ';'
-    ;
-
-useSpecifier
-    :   'use' Identifier ( '.' Identifier)* ('as' Identifier) ';'
+defenition
+    :   classDefinition #classDef
+    |   functionDefinition #funcDef
     ;
 
 unitItem
-    :   classDefinition #classDefinitionUnitItem
+    :   defenition #defUnitItem
     |   statement #statementUnitItem
     ;
 

@@ -28,59 +28,5 @@ namespace hooc {
         const StatementType Statement::GetStatementType() const {
             return this->_statement_type;
         }
-
-        CompoundStatement::CompoundStatement(std::list<Statement *> &statements) :
-                Statement(STMT_COMPOUND) {
-            for (auto statement: statements) {
-                this->_statements.push_back(statement);
-            }
-        }
-
-        CompoundStatement::~CompoundStatement() {
-            while (this->_statements.begin()
-                   != this->_statements.end()) {
-                auto statement = *(this->_statements.begin());
-                this->_statements.remove(statement);
-                delete statement;
-            }
-        }
-
-        const std::list<Statement *> &CompoundStatement::GetStatements() const {
-            return this->_statements;
-        }
-
-        ReturnStatement::ReturnStatement(Expression *expression) :
-                ExpressionStatement(expression) {
-        }
-
-        ReturnStatement::~ReturnStatement() {
-        }
-
-        ExpressionStatement::~ExpressionStatement() {
-            delete this->_expression;
-        }
-
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
-                Statement(STMT_DECLARATION),
-                _declaration(declaration) {
-
-        }
-
-        const Declaration *DeclarationStatement::GetDeclaration() const {
-            return this->_declaration;
-        }
-
-        ExpressionStatement::ExpressionStatement(Expression *expression) :
-                Statement(STMT_EXPRESSION),
-                _expression(expression) {
-
-        }
-
-        const Expression *ExpressionStatement::GetExpression() const {
-            return this->_expression;
-        }
-
-        NoopStatement::NoopStatement() : Statement(STMT_NOOP) {
-        }
     }
 }

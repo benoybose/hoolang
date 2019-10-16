@@ -16,29 +16,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#ifndef HOOLANG_DECLARATOR_HH
+#define HOOLANG_DECLARATOR_HH
 
 namespace hooc {
     namespace ast {
         typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
-
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
-
-        public:
-            const UnitItemType GetUnitItemType() const;
-
-        public:
-            virtual ~UnitItem();
-        };
+            DECLARATOR_NONE,
+            DECLARATOR_PUBLIC,
+            DECLARATOR_PRIVATE,
+            DECLARATOR_PROTECTED,
+            DECLARATOR_VAR,
+            DECLARATOR_INVALID
+        } DeclaratorType;
     }
 }
 
-#endif
+#endif //HOOLANG_DECLARATOR_HH

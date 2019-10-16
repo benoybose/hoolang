@@ -16,29 +16,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#include "ErrorListener.hh"
+#include "SyntaxError.hh"
+#include "antlr4-runtime.h"
+
+#include <sstream>
+
+using namespace antlr4;
 
 namespace hooc {
-    namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
+    namespace compiler {
+        void ErrorListener::syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line,
+                                        size_t charPositionInLine, const std::string &msg,
+                                        std::exception_ptr e) {
+            std::stringstream out;
+            out << "Syntax error on line " << line
+                << " at " << charPositionInLine << ".\n";
+            auto message = out.str();
+            auto error = new SyntaxError(line, charPositionInLine, message);
+            this->_errors.push_back(error);
+        }
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+        void ErrorListener::Add(BaseError *error) {
+            _errors.push_back(error);
+        }
 
-        public:
-            const UnitItemType GetUnitItemType() const;
+        ErrorListener::~ErrorListener() {
+        }
 
-        public:
-            virtual ~UnitItem();
-        };
+        const std::list<BaseError *> &ErrorListener::GetErrors() const {
+            return this->_errors;
+        }
+
+        ErrorListener::ErrorListener() : BaseErrorListener() {
+        }
     }
 }
 
-#endif

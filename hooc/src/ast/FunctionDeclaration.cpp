@@ -16,29 +16,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#include <utility>
+
+#include "FunctionDeclaration.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+        FunctionDeclaration::FunctionDeclaration(DeclaratorType declarator_type, TypeSpecification *return_type,
+                                                 std::string name,
+                                                 std::list<VariableDeclaration *> param_list) :
+                Declaration(DECLARATION_FUNCTION, declarator_type),
+                _return_type(return_type),
+                _name(std::move(name)),
+                _param_list(std::move(param_list)) {
+        }
 
-        public:
-            const UnitItemType GetUnitItemType() const;
+        TypeSpecification *FunctionDeclaration::GetReturnType() const {
+            return _return_type;
+        }
 
-        public:
-            virtual ~UnitItem();
-        };
+        const std::string &FunctionDeclaration::GetName() const {
+            return _name;
+        }
+
+        const std::list<VariableDeclaration *> &FunctionDeclaration::GetParamList() const {
+            return _param_list;
+        }
+
+        FunctionDeclaration::~FunctionDeclaration() {
+                delete this->_return_type;
+        }
     }
 }
-
-#endif

@@ -20,18 +20,17 @@
 #define PROJECT_UNITVISITOR_HH
 
 #include "HooBaseVisitor.h"
+#include "ast/Expression.hh"
+#include "ast/Operator.hh"
+#include "ast/Declarator.hh"
 
+using namespace hooc::ast;
 
 class UnitVisitor : public HooBaseVisitor {
 public:
-
-    antlrcpp::Any visitNamespaceDeclaration(HooParser::NamespaceDeclarationContext *ctx) override;
-
     antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
 
-    antlrcpp::Any visitDeclaration(HooParser::DeclarationContext *ctx) override;
-
-    antlrcpp::Any visitTypeSpecifier(HooParser::TypeSpecifierContext *ctx) override;
+    antlrcpp::Any visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) override;
 
     antlrcpp::Any visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) override;
 
@@ -39,13 +38,13 @@ public:
 
     antlrcpp::Any visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) override;
 
-    antlrcpp::Any visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) override;
+    antlrcpp::Any visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) override;
 
     antlrcpp::Any visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) override;
 
     antlrcpp::Any visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) override;
 
-    antlrcpp::Any visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) override;
+    antlrcpp::Any visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx) override;
 
     antlrcpp::Any visitConstantInteger(HooParser::ConstantIntegerContext *ctx) override;
 
@@ -57,23 +56,15 @@ public:
 
     antlrcpp::Any visitExprPrimary(HooParser::ExprPrimaryContext *ctx) override;
 
-    antlrcpp::Any visitExprBinary(HooParser::ExprBinaryContext *ctx) override;
-
     antlrcpp::Any visitExprGrouped(HooParser::ExprGroupedContext *ctx) override;
-
-    antlrcpp::Any visitInvocationExpression(HooParser::InvocationExpressionContext *ctx) override;
 
     antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
 
     antlrcpp::Any visitReturnStatement(HooParser::ReturnStatementContext *ctx) override;
 
-    antlrcpp::Any visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) override;
-
     antlrcpp::Any visitExpressionStatement(HooParser::ExpressionStatementContext *ctx) override;
 
     antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
-
-    antlrcpp::Any visitClassDefinitionUnitItem(HooParser::ClassDefinitionUnitItemContext *ctx) override;
 
     antlrcpp::Any visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) override;
 
@@ -90,6 +81,39 @@ public:
     antlrcpp::Any visitBooleanConstant(HooParser::BooleanConstantContext *ctx) override;
 
     antlrcpp::Any visitByteConstant(HooParser::ByteConstantContext *ctx) override;
+
+    antlrcpp::Any visitExprLogical(HooParser::ExprLogicalContext *ctx) override;
+
+    antlrcpp::Any visitExprAdditive(HooParser::ExprAdditiveContext *ctx) override;
+
+    antlrcpp::Any visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx) override;
+
+    antlrcpp::Any visitExprComparison(HooParser::ExprComparisonContext *ctx) override;
+
+    antlrcpp::Any visitExpAssignment(HooParser::ExpAssignmentContext *ctx) override;
+
+    antlrcpp::Any visitExprBitwise(HooParser::ExprBitwiseContext *ctx) override;
+
+    antlrcpp::Any visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) override;
+
+    antlrcpp::Any visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx) override;
+
+    antlrcpp::Any visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) override;
+
+    antlrcpp::Any visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx) override;
+
+    antlrcpp::Any visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx) override;
+
+    antlrcpp::Any visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx) override;
+
+    antlrcpp::Any visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) override;
+
+private:
+
+    Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
+                                       antlr4::Token *opr, HooParser::ExpressionContext *rvalue);
+
+    DeclaratorType GetDeclarator(const std::string& declarator) const;
 
 };
 

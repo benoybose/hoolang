@@ -16,29 +16,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#ifndef HOOLANG_BASICDATATYPES_HH
+#define HOOLANG_BASICDATATYPES_HH
+
+#include <string>
 
 namespace hooc {
     namespace ast {
         typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
+            BASIC_DATA_TYPE_INT,
+            BASIC_DATA_TYPE_CHAR,
+            BASIC_DATA_TYPE_STRING,
+            BASIC_DATA_TYPE_BOOL,
+            BASIC_DATA_TYPE_DOUBLE,
+            BASIC_DATA_TYPE_BYTE,
+            BASIC_DATA_TYPE_INVALID
+        } BasicDataTypeType;
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+        extern const std::string NAME_INT;
+        extern const std::string NAME_CHAR;
+        extern const std::string NAME_STRING;
+        extern const std::string NAME_BOOL;
+        extern const std::string NAME_DOUBLE;
+        extern const std::string NAME_BYTE;
+        extern const std::string NAME_INVALID;
 
-        public:
-            const UnitItemType GetUnitItemType() const;
-
-        public:
-            virtual ~UnitItem();
-        };
+        extern const std::string& GetBasicDataTypeName(BasicDataTypeType type);
+        extern const BasicDataTypeType GetBasicDataType(const std::string& text);
     }
 }
 
-#endif
+#endif //HOOLANG_BASICDATATYPES_HH

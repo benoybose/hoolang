@@ -16,29 +16,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#ifndef HOOLANG_RETURNSTATEMENT_HH
+#define HOOLANG_RETURNSTATEMENT_HH
+
+#include "Statement.hh"
+#include "Expression.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
+        class ReturnStatement : public Statement {
         private:
-            UnitItemType _unit_item_type;
+            Expression *_expression;
 
         public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+            ReturnStatement();
+            explicit ReturnStatement(Expression *expression);
 
         public:
-            const UnitItemType GetUnitItemType() const;
+            Expression* GetExpression() const;
 
         public:
-            virtual ~UnitItem();
+            virtual ~ReturnStatement();
         };
     }
 }
 
-#endif
+#endif //HOOLANG_RETURNSTATEMENT_HH

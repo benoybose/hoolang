@@ -16,29 +16,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#ifndef COMPILATIONERROR_HH
+#define COMPILATIONERROR_HH
+
+#include "BaseError.hh"
+
+#include <string>
+#include <list>
 
 namespace hooc {
-    namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
+    namespace compiler {
+        class SyntaxError: public BaseError {
         private:
-            UnitItemType _unit_item_type;
+            size_t _line_number;
+            size_t _character_position;
 
         public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+            SyntaxError(size_t line_number, size_t character_position,
+                        std::string &message);
 
         public:
-            const UnitItemType GetUnitItemType() const;
+            int GetLineNumber() const;
+            int GetCharacterPosition() const;
 
         public:
-            virtual ~UnitItem();
+            virtual ~SyntaxError();
         };
     }
 }
 
-#endif
+
+
+#endif //PROJECT_COMPILATIONERROR_HH

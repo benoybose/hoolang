@@ -16,31 +16,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "CompilationError.hh"
+#ifndef HC_COMPILATIONERRORLISTENER_HH
+#define HC_COMPILATIONERRORLISTENER_HH
+
+#include "antlr4-runtime.h"
+#include "BaseError.hh"
+
+#include <list>
+
+using namespace antlr4;
 
 namespace hooc {
     namespace compiler {
-        CompilationError::CompilationError(size_t line_number,
-                                           size_t character_position,
-                                           std::string &message) :
-                _line_number(line_number),
-                _character_position(character_position),
-                _message(message) {
-        }
+        class ErrorListener: public BaseErrorListener {
 
-        CompilationError::~CompilationError() {
-        }
+        public:
+            ErrorListener();
 
-        int CompilationError::GetLineNumber() const {
-            return this->_line_number;
-        }
+        private:
+            std::list<BaseError*> _errors;
 
-        int CompilationError::GetCharacterPosition() const {
-            return this->_character_position;
-        }
+        public:
+            void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
+                             const std::string &msg, std::exception_ptr e) override;
+            void Add(BaseError* error);
 
-        const std::string &CompilationError::GetMessage() const {
-            return this->_message;
-        }
+        public:
+            const std::list<BaseError*>& GetErrors() const;
+
+        public:
+            virtual ~ErrorListener();
+
+        };
     }
 }
+
+
+
+
+#endif //HC_COMPILATIONERRORLISTENER_HH

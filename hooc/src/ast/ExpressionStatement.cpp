@@ -16,29 +16,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#include "ExpressionStatement.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
+        ExpressionStatement::ExpressionStatement(Expression *expression) :
+                Statement(STMT_EXPRESSION),
+                _expression(expression) {
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+        }
 
-        public:
-            const UnitItemType GetUnitItemType() const;
+        const Expression *ExpressionStatement::GetExpression() const {
+            return this->_expression;
+        }
 
-        public:
-            virtual ~UnitItem();
-        };
+        ExpressionStatement::~ExpressionStatement() {
+            delete this->_expression;
+        }
     }
 }
-
-#endif

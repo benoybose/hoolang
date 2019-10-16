@@ -35,7 +35,7 @@ namespace hooc {
         BinaryExpression::~BinaryExpression() {
             delete this->_lvalue;
             delete this->_rvalue;
-            delete this->_rvalue;
+            delete this->_operator;
         }
 
         const Expression *BinaryExpression::GetLeftExpression() const {

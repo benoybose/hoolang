@@ -16,18 +16,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Class.hh"
+#ifndef HOOLANG_COMPOUNDSTATEMENT_HH
+#define HOOLANG_COMPOUNDSTATEMENT_HH
 
-#include "Class.hh"
+#include "ast/Statement.hh"
 
 namespace hooc {
-    Class::Class(): _name("") {
-    }
+    namespace ast {
+        class CompoundStatement : public Statement {
+        private:
+            std::list<Statement *> _statements;
+        public:
+            explicit CompoundStatement(std::list<Statement *> &statements);
 
-    Class::Class(std::string name): _name(name) {
-    }
+        public:
+            const std::list<Statement *> &GetStatements() const;
 
-    const std::string &Class::GetName() const {
-        return this->_name;
+        public:
+            virtual ~CompoundStatement();
+        };
     }
 }
+
+#endif //HOOLANG_COMPOUNDSTATEMENT_HH

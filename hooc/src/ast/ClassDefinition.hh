@@ -19,11 +19,11 @@
 #ifndef HC_CLASS_DEFINITION_HH
 #define HC_CLASS_DEFINITION_HH
 
-#include "UnitItem.hh"
+#include "Definition.hh"
 
 namespace hooc {
     namespace ast {
-        class ClassDefinition : public UnitItem {
+        class ClassDefinition : public Definition {
         public:
             ClassDefinition();
         };

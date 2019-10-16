@@ -16,29 +16,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_UNITITEM_HH
-#define HC_UNITITEM_HH
+#include "VariableDeclaration.hh"
 
 namespace hooc {
     namespace ast {
-        typedef enum {
-            UNIT_ITEM_DEFINITION,
-            UNIT_ITEM_STATEMENT
-        } UnitItemType;
-        class UnitItem {
-        private:
-            UnitItemType _unit_item_type;
+        VariableDeclaration::VariableDeclaration(DeclaratorType declarator,
+                                                 const std::string &name,
+                                                 TypeSpecification *declared_type,
+                                                 Expression *initializer) :
+                Declaration(DECLARATION_VARIABLE, declarator),
+                _declarator(declarator),
+                _name(name),
+                _declared_type(declared_type),
+                _initializer(initializer) {
+        }
 
-        public:
-            explicit UnitItem(const UnitItemType unit_item_type);
+        VariableDeclaration::~VariableDeclaration() {
+            delete this->_declared_type;
+            delete this->_initializer;
+        }
 
-        public:
-            const UnitItemType GetUnitItemType() const;
+        const TypeSpecification *VariableDeclaration::GetDelcaredType() const {
+            return _declared_type;
+        }
 
-        public:
-            virtual ~UnitItem();
-        };
+        const std::string &VariableDeclaration::GetName() const {
+            return _name;
+        }
+
+        const Expression *VariableDeclaration::GetInitializer() const {
+            return _initializer;
+        }
     }
 }
-
-#endif

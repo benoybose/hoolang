@@ -16,35 +16,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef COMPILATIONERROR_HH
-#define COMPILATIONERROR_HH
+#ifndef HOOLANG_DECLARATIONSTATEMENT_HH
+#define HOOLANG_DECLARATIONSTATEMENT_HH
 
-#include <string>
-#include <list>
+#include "Declaration.hh"
+#include "Statement.hh"
 
 namespace hooc {
-    namespace compiler {
-        class CompilationError {
+    namespace ast {
+        class DeclarationStatement : public Statement {
         private:
-            size_t _line_number;
-            size_t _character_position;
-            std::string _message;
+            Declaration *_declaration;
 
         public:
-            CompilationError(size_t line_number, size_t character_position,
-                             std::string &message);
+            DeclarationStatement(Declaration *declaration);
 
         public:
-            int GetLineNumber() const;
-            int GetCharacterPosition() const;
-            const std::string &GetMessage() const;
-
-        public:
-            virtual ~CompilationError();
+            const Declaration *GetDeclaration() const;
         };
     }
 }
 
-
-
-#endif //PROJECT_COMPILATIONERROR_HH
+#endif //HOOLANG_DECLARATIONSTATEMENT_HH

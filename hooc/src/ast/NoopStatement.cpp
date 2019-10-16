@@ -16,42 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_COMPILATIONERRORLISTENER_HH
-#define HC_COMPILATIONERRORLISTENER_HH
-
-#include "antlr4-runtime.h"
-#include "CompilationError.hh"
-
-#include <list>
-
-using namespace antlr4;
+#include "NoopStatement.hh"
 
 namespace hooc {
-    namespace compiler {
-        class CompilationErrorListener: public BaseErrorListener {
-
-        public:
-            CompilationErrorListener();
-
-        private:
-            std::list<CompilationError*> _errors;
-
-        public:
-            void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
-                             const std::string &msg, std::exception_ptr e) override;
-            void Add(CompilationError* error);
-
-        public:
-            const std::list<CompilationError*>& GetErrors() const;
-
-        public:
-            virtual ~CompilationErrorListener();
-
-        };
+    namespace ast {
+        NoopStatement::NoopStatement() :
+                Statement(STMT_NOOP) {
+        }
     }
 }
-
-
-
-
-#endif //HC_COMPILATIONERRORLISTENER_HH

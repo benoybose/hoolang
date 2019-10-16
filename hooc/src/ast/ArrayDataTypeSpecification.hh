@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2018 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,28 +16,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Node.hh"
+#ifndef HOOLANG_ARRAYDATATYPESPECIFICATION_HH
+#define HOOLANG_ARRAYDATATYPESPECIFICATION_HH
 
-#include <string>
+#include "TypeSpecification.hh"
 
 namespace hooc {
-    Node::Node(hooc::NodeType nodeType) {
-        this->_nodeType = nodeType;
-    }
+    namespace ast {
+        class ArrayDataTypeSpecification: public TypeSpecification {
+        private:
+            std::string _name;
+            TypeSpecification* _parent;
 
-    NodeType Node::GetNodeType() {
-        return this->_nodeType;
-    }
+        public:
+            explicit ArrayDataTypeSpecification(TypeSpecification* parent);
 
-    std::string Node::GetNodeTypeName() {
-        switch(this->_nodeType) {
-            case hooc::NodeType ::NODE_INVALID: return "Invalid Node";
-            case hooc::NodeType ::NODE_EXPRESSION: return "Expression Node";
-            case hooc::NodeType ::NODE_OPERATOR: return "Operator Node";
-            case hooc::NodeType ::NODE_PROGRAM: return "Program Node";
-            case hooc::NodeType ::NODE_STATEMENTLIST: return "Statement List Node";
-            case hooc::NodeType ::NODE_STATEMENT: return "Statement Node";
-            default: return "Unknown Node";
-        }
+            TypeSpecification *GetParent() const;
+
+            const std::string &GetName() const override;
+        };
     }
 }
+
+
+
+#endif //HOOLANG_ARRAYDATATYPESPECIFICATION_HH

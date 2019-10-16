@@ -19,7 +19,7 @@
 #include "HooLexer.h"
 #include "UnitVisitor.hh"
 #include "ast/TypeSpecification.hh"
-#include "ast/Declaration.hh"
+#include "ast/VariableDeclaration.hh"
 #include "ast/FunctionDefinition.hh"
 #include "ast/ReferenceExpression.hh"
 #include "ast/LiteralExpression.hh"
@@ -27,96 +27,74 @@
 #include "ast/ArrayAccessExpression.hh"
 #include "ast/InvokeExpression.hh"
 #include "ast/Statement.hh"
+#include "ast/NoopStatement.hh"
+#include "ast/ReturnStatement.hh"
 #include "ast/Unit.hh"
+#include "ast/FunctionDeclaration.hh"
+#include "ast/Declarator.hh"
+#include "ast/BasicDataTypes.hh"
+#include "ast/BasicDataTypeSpecification.hh"
+#include "ast/ReferenceDataTypeSpecification.hh"
+#include "ast/ArrayDataTypeSpecification.hh"
 
 #include <list>
 #include <string>
 #include <ast/ClassDefinition.hh>
+#include <ast/ExpressionStatement.hh>
+#include <ast/DeclarationStatement.hh>
+#include <boost/regex.hpp>
 
 using namespace hooc::ast;
 using namespace antlrcpp;
+using namespace boost;
 
-Any UnitVisitor::visitNamespaceDeclaration(HooParser::NamespaceDeclarationContext *ctx) {
-    auto identifiers = ctx->Identifier();
-    std::list<std::string> namespace_items;
-    for (auto identifier : identifiers) {
-        auto namespace_item = identifier->getText();
-        namespace_items.push_back(namespace_item);
+Any UnitVisitor::visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx) {
+    auto basicDataType = GetBasicDataType(ctx->BasicDataType()->getText());
+    if(BASIC_DATA_TYPE_INVALID == basicDataType) {
+        // todo: Error handling
     }
-    return antlrcpp::Any(namespace_items);
+    TypeSpecification* type = new BasicDataTypeSpecification(basicDataType);
+    return Any(type);
 }
 
-
-Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
-
-    auto declarator = ctx->Declarator()->getText();
-    TypeSpecification *return_type = nullptr;
-    if (nullptr != ctx->returnType) {
-        return_type = this->visit(ctx->returnType).as<TypeSpecification *>();
+Any UnitVisitor::visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx) {
+    auto parent = this->visit(ctx->typeSpecifier())
+            .as<TypeSpecification*>();
+    if(TYPE_SPEC_REFERENCE != parent->GetType()) {
+        // todo: Error handling
     }
-    std::string function_name = ctx->name->getText();
-    std::list<Declaration *> param_list;
-    if (nullptr != ctx->paramList()) {
-        param_list = this->visit(ctx->paramList()).as<std::list<Declaration *>>();
-    }
-    auto statement = this->visit(ctx->compoundStatement()).as<CompoundStatement *>();
-    auto function_definition = new FunctionDefinition(declarator, function_name,
-                                                      return_type,
-                                                      param_list,
-                                                      statement);
-    return Any(function_definition);
+    auto name = ctx->Identifier()->getText();
+    TypeSpecification* type = new ReferenceDataTypeSpecification(name,
+            (ReferenceDataTypeSpecification*) parent);
+    return Any(type);
 }
 
-Any UnitVisitor::visitDeclaration(HooParser::DeclarationContext *ctx) {
-    std::string declaratorLabel = "";
-    auto declarator = ctx->Declarator();
-    if (nullptr != declarator) {
-        declaratorLabel = ctx->Declarator()->getText();
-    }
-
-    auto name = ctx->name->getText();
-    auto declared_type = this->visit(ctx->declared_type).as<TypeSpecification *>();
-    Expression *initializer = nullptr;
-    if (nullptr != ctx->init) {
-        initializer = this->visit(ctx->init).as<Expression *>();
-    }
-    auto declaration = new Declaration(declaratorLabel, name, declared_type, initializer);
-    return declaration;
+Any UnitVisitor::visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx) {
+    auto name = ctx->Identifier()->getText();
+    TypeSpecification* type = new ReferenceDataTypeSpecification(name, nullptr);
+    return Any(type);
 }
 
-Any UnitVisitor::visitTypeSpecifier(HooParser::TypeSpecifierContext *ctx) {
-    if (nullptr != ctx->Identifier()) {
-        auto name = ctx->Identifier()->getText();
-        if (nullptr != ctx->typeSpecifier()) {
-            auto parent = this->visit(ctx->typeSpecifier()).as<TypeSpecification *>();
-            auto type = new NestedTypeSpecification(parent, name);
-            return Any(type);
-        } else {
-            auto type = new TypeSpecification(name);
-            return Any(type);
-        }
-    } else if (nullptr != ctx->typeSpecifier()) {
-        auto refer = this->visit(ctx->typeSpecifier()).as<TypeSpecification *>();
-        auto type = new ArrayTypeSpecification(refer);
-        return Any(type);
-    } else {
-        return Any(nullptr);
-    }
+Any UnitVisitor::visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) {
+    auto parent = this->visit(ctx->typeSpecifier())
+            .as<TypeSpecification*>();
+    TypeSpecification* type = new ArrayDataTypeSpecification(parent);
+    return Any(type);
 }
 
 Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) {
-    auto param_list = this->visit(ctx->paramList()).as<std::list<Declaration *>>();
-    auto declarations = ctx->declaration();
+    auto param_list = this->visit(ctx->list).as<std::list<VariableDeclaration *>>();
+    auto declarations = ctx->variableDeclaration();
     for (auto declaration: declarations) {
-        auto item = this->visit(declaration).as<Declaration *>();
+        auto item = this->visit(declaration).as<VariableDeclaration *>();
         param_list.push_back(item);
     }
     return Any(param_list);
 }
 
 Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx) {
-    auto declaration = this->visit(ctx->declaration()).as<Declaration *>();
-    std::list<Declaration *> param_list;
+    auto declaration = this->visit(ctx->decl).as<VariableDeclaration *>();
+    std::list<VariableDeclaration *> param_list;
     param_list.push_back(declaration);
     return Any(param_list);
 }
@@ -127,9 +105,27 @@ Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
     return Any(expression);
 }
 
-Any UnitVisitor::visitPrimaryNestedRefExpr(HooParser::PrimaryNestedRefExprContext *ctx) {
-    auto parent = (ReferenceExpression *) this->visit(ctx->parent).as<Expression *>();
+Any UnitVisitor::visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) {
+    auto parent = this->visit(ctx->parent).as<Expression *>();
     auto name = ctx->name->getText();
+    regex reg_expr("[0-9A-Fa-f]+");
+
+    if(parent->GetExpressionType() == EXPRESSION_LITERAL)
+    {
+        auto literal = (LiteralExpression *) parent;
+        if(LITERAL_INTEGER == literal->GetLiteralType()) {
+            cmatch match;
+            if(regex_match(name.c_str(), match, reg_expr)) {
+                std::string text = literal->GetValue();
+                text += ".";
+                text += name;
+                delete parent;
+                auto decimalExpression = (Expression *) new LiteralExpression(LITERAL_DOUBLE, text);
+                return Any(decimalExpression);
+            }
+        }
+    }
+
     auto expression = (Expression *) new ReferenceExpression(parent, name);
     return Any(expression);
 }
@@ -145,7 +141,7 @@ Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx
     return Any(expression);
 }
 
-Any UnitVisitor::visitPrimaryArrayAccessExpr(HooParser::PrimaryArrayAccessExprContext *ctx) {
+Any UnitVisitor::visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx) {
     auto container = this->visit(ctx->container).as<Expression *>();
     auto accessIndex = this->visit(ctx->accessIndex).as<Expression *>();
     auto expression = (Expression *) new ArrayAccessExpression(container, accessIndex);
@@ -188,30 +184,6 @@ Any UnitVisitor::visitBooleanConstant(HooParser::BooleanConstantContext *ctx) {
 }
 
 Any UnitVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx) {
-    auto expression = (Expression *) this->visit(ctx->invocationExpression()).as<InvokeExpression *>();
-    return Any(expression);
-}
-
-Any UnitVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx) {
-    auto expression = this->visit(ctx->primaryExpression()).as<Expression *>();
-    return Any(expression);
-}
-
-Any UnitVisitor::visitExprBinary(HooParser::ExprBinaryContext *ctx) {
-    auto lvalue = this->visit(ctx->lvalue).as<Expression *>();
-    auto opr = new Operator(ctx->opr->getText());
-    auto rvalue = this->visit(ctx->rvalue).as<Expression *>();
-
-    auto binaryExpresion = new BinaryExpression(lvalue, opr, rvalue);
-    return Any((Expression *) binaryExpresion);
-}
-
-Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
-    auto expression = this->visit(ctx->expression()).as<Expression *>();
-    return Any(expression);
-}
-
-Any UnitVisitor::visitInvocationExpression(HooParser::InvocationExpressionContext *ctx) {
     auto receiver = this->visit(ctx->receiver).as<Expression *>();
     std::list<Expression *> argumentList;
     if (nullptr != ctx->arguments) {
@@ -222,8 +194,50 @@ Any UnitVisitor::visitInvocationExpression(HooParser::InvocationExpressionContex
         }
     }
 
-    auto invokeExpression = new InvokeExpression(receiver, argumentList);
-    return Any(invokeExpression);
+    Expression *expression = new InvokeExpression(receiver, argumentList);
+    return Any(expression);
+}
+
+Any UnitVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx) {
+    auto expression = this->visit(ctx->primaryExpression()).as<Expression *>();
+    return Any(expression);
+}
+
+Any UnitVisitor::visitExprBitwise(HooParser::ExprBitwiseContext *ctx) {
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
+}
+
+Any UnitVisitor::visitExprAdditive(HooParser::ExprAdditiveContext *ctx) {
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
+}
+
+Any UnitVisitor::visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx) {
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
+}
+
+Any UnitVisitor::visitExprComparison(HooParser::ExprComparisonContext *ctx) {
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
+}
+
+Any UnitVisitor::visitExprLogical(HooParser::ExprLogicalContext *ctx) {
+    Expression *expr = CreateBinaryExpression(ctx->lvalue,
+                                              ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
+}
+
+Any UnitVisitor::visitExpAssignment(HooParser::ExpAssignmentContext *ctx) {
+    Expression *expr = CreateBinaryExpression(ctx->lvalue,
+                                              ctx->opr, ctx->rvalue);
+    return Any((Expression *) expr);
+}
+
+Any UnitVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx) {
+    auto expression = this->visit(ctx->expression()).as<Expression *>();
+    return Any(expression);
 }
 
 Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx) {
@@ -238,15 +252,13 @@ Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx
 }
 
 Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx) {
-    auto expression = this->visit(ctx->returnValue).as<Expression *>();
-    auto statement = new ReturnStatement(expression);
-    return Any(statement);
-}
-
-Any UnitVisitor::visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) {
-    auto declaration = this->visit(ctx->declaration()).as<Declaration *>();
-    auto declarationStatement = new DeclarationStatement(declaration);
-    return Any(declarationStatement);
+    if (nullptr == ctx->returnValue) {
+        return Any(new ReturnStatement());
+    } else {
+        auto expression = this->visit(ctx->returnValue).as<Expression *>();
+        auto statement = new ReturnStatement(expression);
+        return Any(statement);
+    }
 }
 
 Any UnitVisitor::visitExpressionStatement(HooParser::ExpressionStatementContext *ctx) {
@@ -285,10 +297,66 @@ Any UnitVisitor::visitStmtExpression(HooParser::StmtExpressionContext *ctx) {
     return Any(stmt);
 }
 
-Any UnitVisitor::visitClassDefinitionUnitItem(HooParser::ClassDefinitionUnitItemContext *ctx) {
-    auto class_definition = this->visit(ctx->classDefinition()).as<ClassDefinition *>();
-    auto unit_item = (UnitItem *) class_definition;
-    return Any(unit_item);
+Any UnitVisitor::visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx) {
+    auto variableDeclaration = this->visit(ctx->variableDeclaration())
+            .as<VariableDeclaration *>();
+    auto stmt = new DeclarationStatement(variableDeclaration);
+    return Any(stmt);
+}
+
+Any UnitVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) {
+    DeclaratorType declaratorLabel = DECLARATOR_NONE;
+    auto declarator = ctx->Declarator();
+    if (nullptr != declarator) {
+        declaratorLabel = this->GetDeclarator(ctx->Declarator()->getText());
+    }
+
+    auto name = ctx->name->getText();
+    auto declared_type = this->visit(ctx->declared_type).as<TypeSpecification *>();
+    Expression *initializer = nullptr;
+    if (nullptr != ctx->init) {
+        initializer = this->visit(ctx->init).as<Expression *>();
+    }
+
+    auto declaration = new VariableDeclaration(declaratorLabel, name,
+                                               declared_type, initializer);
+    return Any(declaration);
+}
+
+Any UnitVisitor::visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) {
+    auto declaration = this->visit(ctx->functionDeclaration())
+            .as<FunctionDeclaration* >();
+    auto stmt = new DeclarationStatement(declaration);
+    return Any(stmt);
+}
+
+Any UnitVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) {
+    DeclaratorType declarator_type = DECLARATOR_NONE;
+    auto declarator = ctx->Declarator();
+    if (nullptr != declarator) {
+        declarator_type = this->GetDeclarator(declarator->getText());
+    }
+
+    TypeSpecification *return_type = nullptr;
+    if (nullptr != ctx->returnType) {
+        return_type = this->visit(ctx->returnType).as<TypeSpecification *>();
+    }
+
+    std::string name = ctx->name->getText();
+    auto parameterList = ctx->paramList();
+    std::list<VariableDeclaration *> param_list;
+    if (nullptr != parameterList) {
+        param_list = this->visit(parameterList)
+                .as<std::list<VariableDeclaration *>>();
+    }
+
+    auto declaration = new FunctionDeclaration(declarator_type,
+                                               return_type, name, param_list);
+    return Any(declaration);
+}
+
+antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
+    return HooBaseVisitor::visitFunctionDefinition(ctx);
 }
 
 Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) {
@@ -308,4 +376,30 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {
     }
     auto unit = new Unit(unit_items);
     return Any(unit);
+}
+
+Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
+                                                antlr4::Token *opr,
+                                                HooParser::ExpressionContext *rvalue) {
+    auto left = this->visit(lvalue).as<Expression *>();
+    auto right = this->visit(rvalue).as<Expression *>();
+    auto oprText = new Operator(opr->getText());
+    Expression *expr = new BinaryExpression(left, oprText, right);
+    return expr;
+}
+
+DeclaratorType UnitVisitor::GetDeclarator(const std::string &declarator) const {
+    if (declarator.empty()) {
+        return DECLARATOR_NONE;
+    } else if (declarator == "public") {
+        return DECLARATOR_PUBLIC;
+    } else if (declarator == "private") {
+        return DECLARATOR_PRIVATE;
+    } else if (declarator == "protected") {
+        return DECLARATOR_PROTECTED;
+    } else if (declarator == "var") {
+        return DECLARATOR_VAR;
+    } else {
+        return DECLARATOR_INVALID;
+    }
 }

@@ -17,6 +17,7 @@
  */
 
 #include <boost/test/unit_test.hpp>
+#include <ast/ExpressionStatement.hh>
 
 #include "compiler/ParserDriver.hh"
 #include "ast/UnitItem.hh"

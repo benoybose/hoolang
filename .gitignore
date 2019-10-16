@@ -29,5 +29,4 @@ hooc/grammar/HooBaseVisitor.cpp
 hooc/grammar/HooBaseVisitor.h
 hooc/grammar/HooVisitor.cpp
 hooc/grammar/HooVisitor.h
-
-
+hooc/grammar/output/

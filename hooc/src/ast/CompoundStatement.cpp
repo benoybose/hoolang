@@ -16,27 +16,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOC_CLASS_HH
-#define HOOC_CLASS_HH
-
-#include <string>
-#include <memory>
+#include "CompoundStatement.hh"
 
 namespace hooc {
-    class Class {
-    private:
-        std::string _name;
+    namespace ast {
+        CompoundStatement::CompoundStatement(std::list<Statement *> &statements) :
+                Statement(STMT_COMPOUND) {
+            for (auto statement: statements) {
+                this->_statements.push_back(statement);
+            }
+        }
 
-    public:
-        Class();
-        Class(std::string name);
+        CompoundStatement::~CompoundStatement() {
+            while (this->_statements.begin()
+                   != this->_statements.end()) {
+                auto statement = *(this->_statements.begin());
+                this->_statements.remove(statement);
+                delete statement;
+            }
+        }
 
-    public:
-        const std::string& GetName() const;
-    };
-
-    typedef std::shared_ptr<Class> ClassRef;
+        const std::list<Statement *> &CompoundStatement::GetStatements() const {
+            return this->_statements;
+        }
+    }
 }
-
-
-#endif //PROJECT_CLASS_HH

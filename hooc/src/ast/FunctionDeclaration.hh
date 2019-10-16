@@ -16,17 +16,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "StatementList.hh"
+#ifndef HOOLANG_FUNCTIONDECLARATION_HH
+#define HOOLANG_FUNCTIONDECLARATION_HH
+
+#include "Declaration.hh"
+#include "Declarator.hh"
+#include "TypeSpecification.hh"
+#include "VariableDeclaration.hh"
+
+#include <string>
+#include <list>
 
 namespace hooc {
-    StatementList::StatementList() {
-    }
+    namespace ast {
+        class FunctionDeclaration: public Declaration {
+        private:
+            TypeSpecification* _return_type;
+            std::string _name;
+            std::list<VariableDeclaration *> _param_list;
 
-    void StatementList::Add(hooc::ast::Statement statement) {
-        this->_statements.push_back(statement);
-    }
+        public:
+            FunctionDeclaration(DeclaratorType declarator_type, TypeSpecification* return_type,
+                    std::string name, std::list<VariableDeclaration*> param_list);
 
-    const std::list<ast::Statement> &StatementList::GetStatements() const {
-        return _statements;
+        public:
+            TypeSpecification *GetReturnType() const;
+
+            const std::string &GetName() const;
+
+            const std::list<VariableDeclaration *> &GetParamList() const;
+
+            virtual ~FunctionDeclaration();
+        };
     }
 }
+
+
+#endif //HOOLANG_FUNCTIONDECLARATION_HH

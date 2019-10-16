@@ -26,6 +26,7 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
+#include <ast/ExpressionStatement.hh>
 
 using namespace std;
 using namespace hooc;
@@ -59,7 +60,9 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto source = "foo.bar();";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
         auto unit = module->GetUnit();
+        BOOST_CHECK_NE(nullptr, unit);
         auto items = unit->GetItems();
         auto first_item = *(items.begin());
         BOOST_CHECK_EQUAL(UNIT_ITEM_STATEMENT, first_item->GetUnitItemType());
@@ -72,7 +75,7 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto bar = invoke_expr->GetReceiver();
         BOOST_CHECK_EQUAL(bar->GetExpressionType(), EXPRESSION_REFERENCE);
         BOOST_CHECK_EQUAL("bar", ((ReferenceExpression *) bar)->GetName());
-        BOOST_CHECK_EQUAL("foo", ((ReferenceExpression *) bar)->GetParent()->GetName());
+        BOOST_CHECK_EQUAL("foo", ((ReferenceExpression *) ((ReferenceExpression *) bar)->GetParent())->GetName());
         auto arguments = invoke_expr->GetArguments();
         BOOST_CHECK_EQUAL(0, arguments.size());
     }
@@ -94,7 +97,7 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto bar = invoke_expr->GetReceiver();
         BOOST_CHECK_EQUAL(bar->GetExpressionType(), EXPRESSION_REFERENCE);
         BOOST_CHECK_EQUAL("print", ((ReferenceExpression *) bar)->GetName());
-        BOOST_CHECK_EQUAL("console", ((ReferenceExpression *) bar)->GetParent()->GetName());
+        BOOST_CHECK_EQUAL("console", ((ReferenceExpression *) ((ReferenceExpression *) bar)->GetParent())->GetName());
         auto arguments = invoke_expr->GetArguments();
         BOOST_CHECK_EQUAL(1, arguments.size());
         auto arg1 = *(arguments.begin());
@@ -118,10 +121,12 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto expr = stmt_expr->GetExpression();
         BOOST_CHECK_EQUAL(EXPRESSION_INVOKE, expr->GetExpressionType());
         auto invoke_expr = (InvokeExpression *) expr;
-        auto bar = invoke_expr->GetReceiver();
-        BOOST_CHECK_EQUAL(bar->GetExpressionType(), EXPRESSION_REFERENCE);
-        BOOST_CHECK_EQUAL("foo", ((ReferenceExpression *) bar)->GetName());
-        BOOST_CHECK_EQUAL("bar", ((ReferenceExpression *) bar)->GetParent()->GetName());
+        BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, invoke_expr->GetReceiver()->GetExpressionType());
+        auto foo = (ReferenceExpression *) invoke_expr->GetReceiver();
+        BOOST_CHECK_EQUAL("foo", foo->GetName());
+        BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, foo->GetParent()->GetExpressionType());
+        auto bar = (ReferenceExpression *) foo->GetParent();
+        BOOST_CHECK_EQUAL("bar", bar->GetName());
         auto arguments = invoke_expr->GetArguments();
         BOOST_CHECK_EQUAL(4, arguments.size());
         auto iterator = arguments.begin();
@@ -165,10 +170,12 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto expr = stmt_expr->GetExpression();
         BOOST_CHECK_EQUAL(EXPRESSION_INVOKE, expr->GetExpressionType());
         auto invoke_expr = (InvokeExpression *) expr;
-        auto bar = invoke_expr->GetReceiver();
-        BOOST_CHECK_EQUAL(bar->GetExpressionType(), EXPRESSION_REFERENCE);
-        BOOST_CHECK_EQUAL("foo", ((ReferenceExpression *) bar)->GetName());
-        BOOST_CHECK_EQUAL("bar", ((ReferenceExpression *) bar)->GetParent()->GetName());
+        BOOST_CHECK_EQUAL(invoke_expr->GetReceiver()->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto foo = (ReferenceExpression *) invoke_expr->GetReceiver();
+        BOOST_CHECK_EQUAL("foo", foo->GetName());
+        BOOST_CHECK_EQUAL(foo->GetParent()->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto bar = (ReferenceExpression *) foo->GetParent();
+        BOOST_CHECK_EQUAL("bar", bar->GetName());
         auto arguments = invoke_expr->GetArguments();
         BOOST_CHECK_EQUAL(2, arguments.size());
         auto iterator = arguments.begin();
@@ -182,7 +189,7 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, arg1->GetExpressionType());
         auto arg_name = (ReferenceExpression *) arg2;
         BOOST_CHECK_EQUAL("name", arg_name->GetName());
-        BOOST_CHECK_EQUAL("person", arg_name->GetParent()->GetName());
+        BOOST_CHECK_EQUAL("person", ((ReferenceExpression *) arg_name->GetParent())->GetName());
     }
 
     BOOST_AUTO_TEST_CASE(ParameteredInvocationExpression4) {
@@ -199,10 +206,12 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto expr = stmt_expr->GetExpression();
         BOOST_CHECK_EQUAL(EXPRESSION_INVOKE, expr->GetExpressionType());
         auto invoke_expr = (InvokeExpression *) expr;
-        auto bar = invoke_expr->GetReceiver();
-        BOOST_CHECK_EQUAL(bar->GetExpressionType(), EXPRESSION_REFERENCE);
-        BOOST_CHECK_EQUAL("foo", ((ReferenceExpression *) bar)->GetName());
-        BOOST_CHECK_EQUAL("bar", ((ReferenceExpression *) bar)->GetParent()->GetName());
+        BOOST_CHECK_EQUAL(invoke_expr->GetReceiver()->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto foo = (ReferenceExpression *) invoke_expr->GetReceiver();
+        BOOST_CHECK_EQUAL("foo", foo->GetName());
+        BOOST_CHECK_EQUAL(foo->GetParent()->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto bar = (ReferenceExpression *) foo->GetParent();
+        BOOST_CHECK_EQUAL("bar", bar->GetName());
         auto arguments = invoke_expr->GetArguments();
         BOOST_CHECK_EQUAL(2, arguments.size());
         auto iterator = arguments.begin();
@@ -244,10 +253,12 @@ BOOST_AUTO_TEST_SUITE(InvocationExpression)
         auto expr = stmt_expr->GetExpression();
         BOOST_CHECK_EQUAL(EXPRESSION_INVOKE, expr->GetExpressionType());
         auto invoke_expr = (InvokeExpression *) expr;
-        auto bar = invoke_expr->GetReceiver();
-        BOOST_CHECK_EQUAL(bar->GetExpressionType(), EXPRESSION_REFERENCE);
-        BOOST_CHECK_EQUAL("foo", ((ReferenceExpression *) bar)->GetName());
-        BOOST_CHECK_EQUAL("bar", ((ReferenceExpression *) bar)->GetParent()->GetName());
+        BOOST_CHECK_EQUAL(invoke_expr->GetReceiver()->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto foo = (ReferenceExpression *) invoke_expr->GetReceiver();
+        BOOST_CHECK_EQUAL("foo", foo->GetName());
+        BOOST_CHECK_EQUAL(foo->GetParent()->GetExpressionType(), EXPRESSION_REFERENCE);
+        auto bar = (ReferenceExpression *) foo->GetParent();
+        BOOST_CHECK_EQUAL("bar", bar->GetName());
         auto arguments = invoke_expr->GetArguments();
         BOOST_CHECK_EQUAL(1, arguments.size());
         auto iterator = arguments.begin();

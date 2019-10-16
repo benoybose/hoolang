@@ -23,7 +23,6 @@
 #include "HooParser.h"
 #include "compiler/CompilationContext.hh"
 #include "compiler/Module.hh"
-#include "AccessSpecifier.hh"
 
 #include <string>
 #include <list>
@@ -32,8 +31,6 @@
 
 namespace hooc {
     namespace compiler {
-        typedef std::list<CompilationError> CompilationErrorList;
-
         class ParserDriver {
         private:
             std::string _source_code;

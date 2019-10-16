@@ -18,22 +18,20 @@
 
 #include "Module.hh"
 
-#include <string>
 #include <exception>
-#include <boost/regex.hpp>
 #include <boost/filesystem.hpp>
-#include "Module.hh"
+#include <utility>
 
 
 namespace hooc {
     namespace compiler {
 
         Module::Module(boost::filesystem::path compilation_root, boost::filesystem::path module_path,
-                       ast::Unit *unit, std::list<CompilationError *> errors)
-                : _compilation_root(compilation_root),
-                _module_path(module_path),
+                       ast::Unit *unit, std::list<BaseError *> errors)
+                : _compilation_root(std::move(compilation_root)),
+                _module_path(std::move(module_path)),
                 _unit(unit),
-                _errors(errors){
+                _errors(std::move(errors)){
 
         }
 
@@ -64,7 +62,7 @@ namespace hooc {
             return this->_errors.empty();
         }
 
-        const std::list<CompilationError *> & Module::GetErrors() const {
+        const std::list<BaseError *> & Module::GetErrors() const {
             return this->_errors;
         }
     }
