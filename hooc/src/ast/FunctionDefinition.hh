@@ -19,9 +19,8 @@
 #ifndef HC_FUNCTIONDEFINITION_HH
 #define HC_FUNCTIONDEFINITION_HH
 
-#include "TypeSpecification.hh"
-#include "VariableDeclaration.hh"
-#include "Statement.hh"
+#include "Definition.hh"
+#include "FunctionDeclaration.hh"
 #include "CompoundStatement.hh"
 
 #include <string>
@@ -29,22 +28,18 @@
 
 namespace hooc {
     namespace ast {
-        class FunctionDefinition {
+        class FunctionDefinition: public Definition {
         private:
-            std::string _declarator;
-            TypeSpecification *_returnType;
-            std::string _name;
-            std::list<VariableDeclaration *> _param_list;
-            CompoundStatement *_statement;
-        public:
-            FunctionDefinition(const std::string &declarator, std::string &name, TypeSpecification *returnType,
-                               std::list<VariableDeclaration *> &param_list, CompoundStatement *statement);
+            FunctionDeclaration *_declaration;
+            CompoundStatement *_statements;
 
         public:
-            const std::string GetName() const;
-            const TypeSpecification *GetReturnType() const;
-            const std::list<VariableDeclaration *> &GetParamList() const;
-            const void *GetStatement() const;
+            FunctionDefinition(FunctionDeclaration *declaration,
+                               CompoundStatement *statements);
+
+            FunctionDeclaration *GetDeclaration() const;
+
+            CompoundStatement *GetStatements() const;
 
         public:
             virtual ~FunctionDefinition();
