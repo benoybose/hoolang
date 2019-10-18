@@ -39,9 +39,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("2.0" == expression->GetValue());
@@ -57,9 +57,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("3.14" == expression->GetValue());
@@ -75,9 +75,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("314." == expression->GetValue());
@@ -93,9 +93,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK(".314" == expression->GetValue());
@@ -111,9 +111,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("+2.0" == expression->GetValue());
@@ -129,9 +129,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("+3.14" == expression->GetValue());
@@ -147,9 +147,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("+314." == expression->GetValue());
@@ -165,9 +165,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("+.314" == expression->GetValue());
@@ -183,9 +183,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("-2.0" == expression->GetValue());
@@ -201,9 +201,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("-3.14" == expression->GetValue());
@@ -219,9 +219,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("-314." == expression->GetValue());
@@ -237,9 +237,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("-.314" == expression->GetValue());
@@ -255,9 +255,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("3.6e34" == expression->GetValue());
@@ -273,9 +273,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("3.6E34" == expression->GetValue());
@@ -291,9 +291,9 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("3.6e-34" == expression->GetValue());
@@ -309,14 +309,67 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto item = *(unit->GetItems().begin());
         BOOST_CHECK(nullptr != item);
         BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-        auto statement = (ExpressionStatement*) item;
+        auto statement = (ExpressionStatement *) item;
         BOOST_CHECK(nullptr != statement);
-        auto expression = (LiteralExpression*) statement->GetExpression();
+        auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
         BOOST_CHECK("3.6E+34" == expression->GetValue());
     }
 
     // todo: HexadecimalFloatingConstant need to be tested
+    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa1) {
+        auto source = "0XAB089.AB089;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        BOOST_CHECK(nullptr != unit);
+        auto item = *(unit->GetItems().begin());
+        BOOST_CHECK(nullptr != item);
+        BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
+        auto statement = (ExpressionStatement *) item;
+        BOOST_CHECK(nullptr != statement);
+        auto expression = (LiteralExpression *) statement->GetExpression();
+        BOOST_CHECK(nullptr != expression);
+        BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
+        BOOST_CHECK("0XAB089.AB089" == expression->GetValue());
+    }
+
+    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa2) {
+        auto source = "0XAB089.";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        BOOST_CHECK(nullptr != unit);
+        auto item = *(unit->GetItems().begin());
+        BOOST_CHECK(nullptr != item);
+        BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
+        auto statement = (ExpressionStatement *) item;
+        BOOST_CHECK(nullptr != statement);
+        auto expression = (LiteralExpression *) statement->GetExpression();
+        BOOST_CHECK(nullptr != expression);
+        BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
+        BOOST_CHECK("0XAB089." == expression->GetValue());
+    }
+
+    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa3) {
+        auto source = ".0XAB089";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        BOOST_CHECK(nullptr != unit);
+        auto item = *(unit->GetItems().begin());
+        BOOST_CHECK(nullptr != item);
+        BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
+        auto statement = (ExpressionStatement *) item;
+        BOOST_CHECK(nullptr != statement);
+        auto expression = (LiteralExpression *) statement->GetExpression();
+        BOOST_CHECK(nullptr != expression);
+        BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
+        BOOST_CHECK(".0XAB089" == expression->GetValue());
+    }
 
 BOOST_AUTO_TEST_SUITE_END()
