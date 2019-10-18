@@ -356,7 +356,19 @@ Any UnitVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext 
 }
 
 antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
-    return HooBaseVisitor::visitFunctionDefinition(ctx);
+    auto declaration = this->visit(ctx->functionDeclaration())
+            .as<FunctionDeclaration *>();
+    auto statements = this->visit(ctx->compoundStatement())
+            .as<CompoundStatement *>();
+    auto definition = (Definition *) new FunctionDefinition(declaration, statements);
+    return Any(definition);
+}
+
+Any UnitVisitor::visitDefinitionUnitItem(HooParser::DefinitionUnitItemContext *ctx) {
+    auto definition = this->visit(ctx->defenition())
+            .as<Definition* >();
+    auto unit_item = (UnitItem *) definition;
+    return Any(unit_item);
 }
 
 Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) {

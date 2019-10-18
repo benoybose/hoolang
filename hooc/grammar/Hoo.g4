@@ -132,7 +132,7 @@ defenition
     ;
 
 unitItem
-    :   defenition #defUnitItem
+    :   defenition #definitionUnitItem
     |   statement #statementUnitItem
     ;
 

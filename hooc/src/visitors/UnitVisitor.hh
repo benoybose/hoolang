@@ -108,6 +108,8 @@ public:
 
     antlrcpp::Any visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) override;
 
+    antlrcpp::Any visitDefinitionUnitItem(HooParser::DefinitionUnitItemContext *ctx) override;
+
 private:
 
     Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,

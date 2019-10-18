@@ -27,6 +27,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 #include <ast/ExpressionStatement.hh>
+#include <ast/FunctionDefinition.hh>
 
 using namespace std;
 using namespace hooc;
@@ -39,7 +40,12 @@ BOOST_AUTO_TEST_SUITE(Function001)
         std::string source = "func:int add(a:int, b:int) { return a + b; }";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
-//        BOOST_CHECK(module->Success());
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto items = unit->GetItems();
+        auto first_item = *(items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_DEFINITION, first_item->GetUnitItemType());
+        auto definition = (FunctionDefinition* ) first_item;
     }
 
 BOOST_AUTO_TEST_SUITE_END()
