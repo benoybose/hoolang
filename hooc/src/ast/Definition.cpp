@@ -26,7 +26,7 @@ namespace hooc {
         }
 
         DefinitionType Definition::GetDefinitionType() const {
-            return DEFINITION_CLASS;
+            return this->_definition_type;
         }
     }
 }

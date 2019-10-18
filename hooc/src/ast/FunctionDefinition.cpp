@@ -20,41 +20,24 @@
 
 namespace hooc {
     namespace ast {
-        FunctionDefinition::FunctionDefinition(const std::string &declarator, std::string &name,
-                                               TypeSpecification *returnType,
-                                               std::list<VariableDeclaration *> &param_list,
-                                               CompoundStatement *statement) :
-                _declarator(declarator),
-                _name(name),
-                _returnType(returnType),
-                _param_list(param_list),
-                _statement(statement) {
+        FunctionDefinition::FunctionDefinition(FunctionDeclaration *declaration,
+                                               Statement *statements) :
+                Definition(DEFINITION_FUNCTION),
+                _declaration(declaration),
+                _statements(statements) {
+        }
+
+        FunctionDeclaration *FunctionDefinition::GetDeclaration() const {
+            return _declaration;
+        }
+
+        Statement * FunctionDefinition::GetBody() const {
+            return _statements;
         }
 
         FunctionDefinition::~FunctionDefinition() {
-            delete this->_returnType;
-            while(_param_list.begin() != _param_list.end()) {
-                auto param = *(_param_list.begin());
-                _param_list.remove(param);
-                delete param;
-            }
-            delete this->_statement;
-        }
-
-        const std::string FunctionDefinition::GetName() const {
-            return this->_name;
-        }
-
-        const TypeSpecification *FunctionDefinition::GetReturnType() const {
-            return this->_returnType;
-        }
-
-        const std::list<VariableDeclaration *> &FunctionDefinition::GetParamList() const {
-            return this->_param_list;
-        }
-
-        const void *FunctionDefinition::GetStatement() const {
-            return this->_statement;
+            delete this->_declaration;
+            delete this->_statements;
         }
     }
 }

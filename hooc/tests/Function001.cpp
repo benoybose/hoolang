@@ -27,6 +27,11 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
 #include <ast/ExpressionStatement.hh>
+#include <ast/FunctionDefinition.hh>
+#include <ast/BasicDataTypeSpecification.hh>
+#include <ast/CompoundStatement.hh>
+#include <ast/ReturnStatement.hh>
+#include <ast/BinaryExpression.hh>
 
 using namespace std;
 using namespace hooc;
@@ -39,7 +44,45 @@ BOOST_AUTO_TEST_SUITE(Function001)
         std::string source = "func:int add(a:int, b:int) { return a + b; }";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
-//        BOOST_CHECK(module->Success());
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto items = unit->GetItems();
+        auto first_item = *(items.begin());
+        BOOST_CHECK_EQUAL(UNIT_ITEM_DEFINITION, first_item->GetUnitItemType());
+        auto definition = (Definition* ) first_item;
+        BOOST_CHECK_EQUAL(DEFINITION_FUNCTION, definition->GetDefinitionType());
+        auto func_def = (FunctionDefinition*) definition;
+        auto func_decl = func_def->GetDeclaration();
+        BOOST_CHECK_EQUAL("add", func_decl->GetName());
+        auto func_return_type = func_decl->GetReturnType();
+        BOOST_CHECK_NE(nullptr, func_return_type);
+        BOOST_CHECK_EQUAL(TYPE_SPEC_BASIC, func_return_type->GetType());
+        BOOST_CHECK_EQUAL("int", func_return_type->GetName());
+        auto basic_type = (BasicDataTypeSpecification *) func_return_type;
+        BOOST_CHECK_EQUAL(BASIC_DATA_TYPE_INT, basic_type->GetDataType());
+        auto parameters = func_decl->GetParamList();
+        BOOST_CHECK_EQUAL(2, parameters.size());
+        auto param1 = *(parameters.begin());
+        BOOST_CHECK_EQUAL("a", param1->GetName());
+        BOOST_CHECK_EQUAL("int", param1->GetDelcaredType()->GetName());
+        auto param2 = *(++ parameters.begin());
+        BOOST_CHECK_EQUAL("b", param2->GetName());
+        BOOST_CHECK_EQUAL("int", param2->GetDelcaredType()->GetName());
+        auto body = func_def->GetBody();
+        BOOST_CHECK_EQUAL(STMT_COMPOUND, body->GetStatementType());
+        auto compound_stmt = (CompoundStatement *) body;
+        auto stmts = compound_stmt->GetStatements();
+        BOOST_CHECK_EQUAL(1, stmts.size());
+        auto first_stmt = *(stmts.begin());
+        BOOST_CHECK_EQUAL(STMT_RETURN, first_stmt->GetStatementType());
+        auto return_stmt = (ReturnStatement *) first_stmt;
+        auto expr = return_stmt->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression*) expr;
+        auto left = binary_expr->GetLeftExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(left, "a");
+        auto right = binary_expr->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(right, "b");
     }
 
 BOOST_AUTO_TEST_SUITE_END()
