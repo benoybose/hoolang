@@ -29,6 +29,9 @@
 #include <ast/ExpressionStatement.hh>
 #include <ast/FunctionDefinition.hh>
 #include <ast/BasicDataTypeSpecification.hh>
+#include <ast/CompoundStatement.hh>
+#include <ast/ReturnStatement.hh>
+#include <ast/BinaryExpression.hh>
 
 using namespace std;
 using namespace hooc;
@@ -65,8 +68,21 @@ BOOST_AUTO_TEST_SUITE(Function001)
         auto param2 = *(++ parameters.begin());
         BOOST_CHECK_EQUAL("b", param2->GetName());
         BOOST_CHECK_EQUAL("int", param2->GetDelcaredType()->GetName());
-        auto statements = func_def->GetBody();
-        BOOST_CHECK_EQUAL(STMT_COMPOUND, statements->GetStatementType());
+        auto body = func_def->GetBody();
+        BOOST_CHECK_EQUAL(STMT_COMPOUND, body->GetStatementType());
+        auto compound_stmt = (CompoundStatement *) body;
+        auto stmts = compound_stmt->GetStatements();
+        BOOST_CHECK_EQUAL(1, stmts.size());
+        auto first_stmt = *(stmts.begin());
+        BOOST_CHECK_EQUAL(STMT_RETURN, first_stmt->GetStatementType());
+        auto return_stmt = (ReturnStatement *) first_stmt;
+        auto expr = return_stmt->GetExpression();
+        BOOST_CHECK_EQUAL(EXPRESSION_BINARY, expr->GetExpressionType());
+        auto binary_expr = (BinaryExpression*) expr;
+        auto left = binary_expr->GetLeftExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(left, "a");
+        auto right = binary_expr->GetRightExpression();
+        BOOST_CHECK_REFERENCE_EXPRESSION(right, "b");
     }
 
 BOOST_AUTO_TEST_SUITE_END()
