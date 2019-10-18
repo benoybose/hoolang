@@ -21,7 +21,7 @@
 namespace hooc {
     namespace ast {
         FunctionDefinition::FunctionDefinition(FunctionDeclaration *declaration,
-                                               CompoundStatement *statements) :
+                                               Statement *statements) :
                 Definition(DEFINITION_FUNCTION),
                 _declaration(declaration),
                 _statements(statements) {
@@ -31,7 +31,7 @@ namespace hooc {
             return _declaration;
         }
 
-        CompoundStatement *FunctionDefinition::GetStatements() const {
+        Statement * FunctionDefinition::GetBody() const {
             return _statements;
         }
 

@@ -36,6 +36,7 @@
 #include "ast/BasicDataTypeSpecification.hh"
 #include "ast/ReferenceDataTypeSpecification.hh"
 #include "ast/ArrayDataTypeSpecification.hh"
+#include "ast/CompoundStatement.hh"
 
 #include <list>
 #include <string>
@@ -297,6 +298,12 @@ Any UnitVisitor::visitStmtExpression(HooParser::StmtExpressionContext *ctx) {
     return Any(stmt);
 }
 
+Any UnitVisitor::visitStmtOperative(HooParser::StmtOperativeContext *ctx) {
+    auto statement = this->visit(ctx->operativeStatement())
+            .as<Statement *>();
+    return Any(statement);
+}
+
 Any UnitVisitor::visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx) {
     auto variableDeclaration = this->visit(ctx->variableDeclaration())
             .as<VariableDeclaration *>();
@@ -358,9 +365,9 @@ Any UnitVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext 
 antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) {
     auto declaration = this->visit(ctx->functionDeclaration())
             .as<FunctionDeclaration *>();
-    auto statements = this->visit(ctx->compoundStatement())
-            .as<CompoundStatement *>();
-    auto definition = (Definition *) new FunctionDefinition(declaration, statements);
+    auto body = this->visit(ctx->operativeStatement())
+            .as<Statement *>();
+    auto definition = (Definition *) new FunctionDefinition(declaration, body);
     return Any(definition);
 }
 

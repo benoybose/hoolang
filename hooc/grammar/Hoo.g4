@@ -66,7 +66,11 @@ expressionList
 
 statement
     :   ';' #stmtNoop
-    |   compoundStatement #stmtCompound
+    |   operativeStatement #stmtOperative
+    ;
+
+operativeStatement
+    :   compoundStatement #stmtCompound
     |   returnStatement #stmtReturn
     |   declarationStatement #stmtDeclaration
     |   expressionStatement #stmtExpression
@@ -106,7 +110,7 @@ classBodyItem
     ;
 
 functionDefinition
-    :   functionDeclaration compoundStatement
+    :   functionDeclaration operativeStatement
     ;
 
 functionDeclaration

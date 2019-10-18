@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_SUITE(Function001)
         auto param2 = *(++ parameters.begin());
         BOOST_CHECK_EQUAL("b", param2->GetName());
         BOOST_CHECK_EQUAL("int", param2->GetDelcaredType()->GetName());
-        auto statements = func_def->GetStatements();
+        auto statements = func_def->GetBody();
         BOOST_CHECK_EQUAL(STMT_COMPOUND, statements->GetStatementType());
     }
 

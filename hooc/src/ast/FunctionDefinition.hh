@@ -21,7 +21,7 @@
 
 #include "Definition.hh"
 #include "FunctionDeclaration.hh"
-#include "CompoundStatement.hh"
+#include "Statement.hh"
 
 #include <string>
 #include <list>
@@ -31,15 +31,15 @@ namespace hooc {
         class FunctionDefinition: public Definition {
         private:
             FunctionDeclaration *_declaration;
-            CompoundStatement *_statements;
+            Statement *_statements;
 
         public:
             FunctionDefinition(FunctionDeclaration *declaration,
-                               CompoundStatement *statements);
+                               Statement *statements);
 
             FunctionDeclaration *GetDeclaration() const;
 
-            CompoundStatement *GetStatements() const;
+            Statement * GetBody() const;
 
         public:
             virtual ~FunctionDefinition();
