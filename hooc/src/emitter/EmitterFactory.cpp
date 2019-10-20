@@ -17,11 +17,16 @@
  */
 
 #include "EmitterFactory.hh"
+#include <emitter/WindowsAmd64CodeEmitter.hh>
 
 namespace hooc {
     namespace emitter {
-        Emitter *EmitterFactory::GetEmitter(EmitterOSType os, EmitterArchType arch) {
-            return nullptr;
+        Emitter *EmitterFactory::GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit) {
+            Emitter* emitter = nullptr;
+            if((EMITTER_OS_WINDOWS == os) && (EMITTER_ARCH_AMD64 == arch)) {
+                emitter = new WindowsAMD64CodeEmitter(unit);
+            }
+            return emitter;
         }
     }
 }

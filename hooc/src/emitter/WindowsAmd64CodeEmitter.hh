@@ -20,15 +20,22 @@
 #ifndef HOOLANG_WINDOWSAMD64CODEEMITTER_HH
 #define HOOLANG_WINDOWSAMD64CODEEMITTER_HH
 
+#include <ast/FunctionDefinition.hh>
 #include <emitter/Emitter.hh>
+
+using namespace hooc::ast;
 
 namespace hooc {
     namespace emitter {
         class WindowsAMD64CodeEmitter: public Emitter {
         public:
-            WindowsAMD64CodeEmitter(Unit *unit);
+            WindowsAMD64CodeEmitter(const Unit *unit);
 
+        public:
             std::list<Code *> GenerateCode() override;
+
+        private:
+            Code* GenerateCode(FunctionDefinition* function_definition);
         };
     }
 }

@@ -19,14 +19,40 @@
 
 #include "WindowsAmd64CodeEmitter.hh"
 
+#include <ast/Definition.hh>
+#include <ast/FunctionDefinition.hh>
+
 namespace hooc {
     namespace emitter {
-        WindowsAMD64CodeEmitter::WindowsAMD64CodeEmitter(Unit *unit) :
+        WindowsAMD64CodeEmitter::WindowsAMD64CodeEmitter(const Unit *unit) :
                 Emitter(unit) {
         }
 
         std::list<Code *> WindowsAMD64CodeEmitter::GenerateCode() {
-            return std::list<Code *>();
+            std::list<Code*> codes;
+            auto unit_items = this->GetUnit()
+                    ->GetItems();
+            for(auto unit_item: unit_items) {
+                try {
+                    if(unit_item->GetUnitItemType() == UNIT_ITEM_DEFINITION) {
+                        auto definition = (Definition*) unit_item;
+                        if(DEFINITION_FUNCTION == definition->GetDefinitionType()) {
+                            auto function_definition = (FunctionDefinition*) definition;
+                            auto code = this->GenerateCode(function_definition);
+                            if(nullptr != code) {
+                                codes.push_back(code);
+                            }
+                        }
+                    }
+                } catch (const std::exception& ex) {
+                    // todo: Handle exception
+                }
+            }
+            return codes;
+        }
+
+        Code *WindowsAMD64CodeEmitter::GenerateCode(FunctionDefinition *function_definition) {
+            return nullptr;
         }
     }
 }

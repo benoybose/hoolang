@@ -33,7 +33,7 @@ namespace hooc {
             Unit* _unit;
 
         public:
-            explicit Emitter(Unit* unit);
+            explicit Emitter(const Unit *unit);
 
         public:
             const Unit* GetUnit() const;

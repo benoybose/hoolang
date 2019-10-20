@@ -26,7 +26,8 @@
 namespace hooc {
     namespace emitter {
         class EmitterFactory {
-            static Emitter* GetEmitter(EmitterOSType os, EmitterArchType arch);
+        public:
+            static Emitter *GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit);
         };
     }
 }

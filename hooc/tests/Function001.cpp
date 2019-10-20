@@ -20,8 +20,6 @@
 #include "ast/Unit.hh"
 #include "ast/Statement.hh"
 #include "ast/ReferenceExpression.hh"
-#include "ast/ArrayAccessExpression.hh"
-#include "ast/LiteralExpression.hh"
 #include "HoocTestHelper.hh"
 
 #include <boost/test/unit_test.hpp>
@@ -32,11 +30,14 @@
 #include <ast/CompoundStatement.hh>
 #include <ast/ReturnStatement.hh>
 #include <ast/BinaryExpression.hh>
+#include <emitter/Emitter.hh>
+#include <emitter/EmitterFactory.hh>
 
 using namespace std;
 using namespace hooc;
 using namespace hooc::compiler;
 using namespace hooc::ast;
+using namespace hooc::emitter;
 
 BOOST_AUTO_TEST_SUITE(Function001)
 
@@ -83,6 +84,17 @@ BOOST_AUTO_TEST_SUITE(Function001)
         BOOST_CHECK_REFERENCE_EXPRESSION(left, "a");
         auto right = binary_expr->GetRightExpression();
         BOOST_CHECK_REFERENCE_EXPRESSION(right, "b");
+    }
+
+    BOOST_AUTO_TEST_CASE(F2) {
+        std::string source = "func:int add(a:int, b:int) { return a + b; }";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        auto emitter = EmitterFactory::GetEmitter(EMITTER_OS_WINDOWS,
+                EMITTER_ARCH_AMD64, unit);
+        auto codes = emitter->GenerateCode();
     }
 
 BOOST_AUTO_TEST_SUITE_END()

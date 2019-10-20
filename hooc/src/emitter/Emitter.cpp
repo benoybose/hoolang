@@ -20,8 +20,8 @@
 
 namespace hooc {
     namespace emitter {
-        Emitter::Emitter(Unit *unit) :
-                _unit(unit) {
+        Emitter::Emitter(const Unit *unit) :
+                _unit(const_cast<Unit *>(unit)) {
         }
 
         const Unit *Emitter::GetUnit() const {
