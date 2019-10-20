@@ -48,7 +48,14 @@ SET(hooc_header_files
 		src/ast/DeclarationStatement.hh
 		src/ast/BasicDataTypes.hh
 		src/ast/ReferenceDataTypeSpecification.hh
-		src/ast/ArrayDataTypeSpecification.hh)
+		src/ast/ArrayDataTypeSpecification.hh
+		src/compiler/BaseError.hh
+		src/compiler/ParseError.hh
+		src/ast/Node.hh
+		src/emitter/Emitter.hh
+		src/emitter/EmitterFactory.hh
+		src/emitter/EmitterOSTypes.hh
+		src/emitter/Code.hh)
 
 SET(hooc_source_files
 		${ANTLR4_SRC_FILES_HooANTLR4}
@@ -85,7 +92,16 @@ SET(hooc_source_files
 		src/ast/BasicDataTypeSpecification.hh
 		src/ast/BasicDataTypes.cpp
 		src/ast/ReferenceDataTypeSpecification.cpp
-		src/ast/ArrayDataTypeSpecification.cpp src/compiler/BaseError.cpp src/compiler/BaseError.hh src/compiler/ParseError.cpp src/compiler/ParseError.hh src/ast/Node.cpp src/ast/Node.hh src/ast/Position.cpp src/ast/Position.hh)
+		src/ast/ArrayDataTypeSpecification.cpp
+		src/compiler/BaseError.cpp
+		src/compiler/ParseError.cpp
+		src/ast/Node.cpp
+		src/ast/Position.cpp
+		src/ast/Position.hh
+		src/emitter/Emitter.cpp
+		src/emitter/EmitterFactory.cpp
+		src/emitter/EmitterArchTypes.hh
+		src/emitter/Code.cpp src/emitter/WindowsAmd64CodeEmitter.cpp src/emitter/WindowsAmd64CodeEmitter.hh src/emitter/CodeType.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
