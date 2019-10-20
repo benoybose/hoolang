@@ -317,9 +317,8 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("3.6E+34" == expression->GetValue());
     }
 
-    // todo: HexadecimalFloatingConstant need to be tested
     BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa1) {
-        auto source = "0XAB089.AB089;";
+        auto source = "0XAB089.AB089P0;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
         BOOST_CHECK(module->Success());
@@ -333,43 +332,43 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         auto expression = (LiteralExpression *) statement->GetExpression();
         BOOST_CHECK(nullptr != expression);
         BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
-        BOOST_CHECK("0XAB089.AB089" == expression->GetValue());
+        BOOST_CHECK("0XAB089.AB089P0" == expression->GetValue());
     }
 
-//    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa2) {
-//        auto source = "0XAB089.0p0;";
-//        ParserDriver driver(source, "test.hoo");
-//        auto module = driver.BuildModule();
-//        BOOST_CHECK(module->Success());
-//        auto unit = module->GetUnit();
-//        BOOST_CHECK(nullptr != unit);
-//        auto item = *(unit->GetItems().begin());
-//        BOOST_CHECK(nullptr != item);
-//        BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-//        auto statement = (ExpressionStatement *) item;
-//        BOOST_CHECK(nullptr != statement);
-//        auto expression = (LiteralExpression *) statement->GetExpression();
-//        BOOST_CHECK(nullptr != expression);
-//        BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
-//        BOOST_CHECK("0XAB089.p0" == expression->GetValue());
-//    }
+    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa2) {
+        auto source = "0XAB089.P0;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        BOOST_CHECK(nullptr != unit);
+        auto item = *(unit->GetItems().begin());
+        BOOST_CHECK(nullptr != item);
+        BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
+        auto statement = (ExpressionStatement *) item;
+        BOOST_CHECK(nullptr != statement);
+        auto expression = (LiteralExpression *) statement->GetExpression();
+        BOOST_CHECK(nullptr != expression);
+        BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
+        BOOST_CHECK("0XAB089.P0" == expression->GetValue());
+    }
 
-//    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa3) {
-//        auto source = ".0XAB089p0;";
-//        ParserDriver driver(source, "test.hoo");
-//        auto module = driver.BuildModule();
-//        BOOST_CHECK(module->Success());
-//        auto unit = module->GetUnit();
-//        BOOST_CHECK(nullptr != unit);
-//        auto item = *(unit->GetItems().begin());
-//        BOOST_CHECK(nullptr != item);
-//        BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
-//        auto statement = (ExpressionStatement *) item;
-//        BOOST_CHECK(nullptr != statement);
-//        auto expression = (LiteralExpression *) statement->GetExpression();
-//        BOOST_CHECK(nullptr != expression);
-//        BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
-//        BOOST_CHECK(".0XAB089" == expression->GetValue());
-//    }
+    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa3) {
+        auto source = "0x.AB089P0;";
+        ParserDriver driver(source, "test.hoo");
+        auto module = driver.BuildModule();
+        BOOST_CHECK(module->Success());
+        auto unit = module->GetUnit();
+        BOOST_CHECK(nullptr != unit);
+        auto item = *(unit->GetItems().begin());
+        BOOST_CHECK(nullptr != item);
+        BOOST_CHECK(item->GetUnitItemType() == UNIT_ITEM_STATEMENT);
+        auto statement = (ExpressionStatement *) item;
+        BOOST_CHECK(nullptr != statement);
+        auto expression = (LiteralExpression *) statement->GetExpression();
+        BOOST_CHECK(nullptr != expression);
+        BOOST_CHECK(expression->GetLiteralType() == LITERAL_DOUBLE);
+        BOOST_CHECK("0x.AB089P0" == expression->GetValue());
+    }
 
 BOOST_AUTO_TEST_SUITE_END()

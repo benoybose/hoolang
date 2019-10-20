@@ -118,7 +118,7 @@ Any UnitVisitor::visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) {
         name = ctx->name->getText();
     }
 
-    regex reg_expr("[0-9A-Fa-f]+");
+    regex reg_expr("([0-9A-Fa-f]+)(p|P)(\\d+)");
 
     if (parent->GetExpressionType() == EXPRESSION_LITERAL) {
         auto literal = (LiteralExpression *) parent;
