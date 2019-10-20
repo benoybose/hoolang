@@ -22,6 +22,9 @@
 #include "Expression.hh"
 
 #include <string>
+#include <ParserRuleContext.h>
+
+using namespace antlr4;
 
 namespace hooc {
     namespace ast {
@@ -31,9 +34,11 @@ namespace hooc {
             std::string _name;
 
         public:
-            explicit ReferenceExpression(std::string &name);
+            ReferenceExpression(std::string &name, ParserRuleContext *context,
+                    const std::string &file_name);
 
-            ReferenceExpression(Expression *parent, std::string &name);
+            ReferenceExpression(Expression *parent, std::string &name, ParserRuleContext *context,
+                                const std::string &file_name);
 
         public:
             const std::string &GetName() const;

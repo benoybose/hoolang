@@ -16,26 +16,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "LiteralExpression.hh"
+#ifndef HOOLANG_NODE_HH
+#define HOOLANG_NODE_HH
+
+#include "Position.hh"
+
+#include <ParserRuleContext.h>
+#include <string>
+
+using namespace antlr4;
 
 namespace hooc {
     namespace ast {
-        LiteralExpression::LiteralExpression(LiteralType literal_type, std::string &value,
-                                             ParserRuleContext *context, const std::string &file_name) :
-                Expression(EXPRESSION_LITERAL, context, file_name),
-                _literalType(literal_type),
-                _value(value) {
-        }
+        class Node {
+        private:
+            std::string _file_name;
+            Position *_start;
+            Position *_end;
 
-        LiteralExpression::~LiteralExpression() {
-        }
+        public:
+            Node(ParserRuleContext *context,
+                 std::string file_name);
 
-        const LiteralType LiteralExpression::GetLiteralType() const {
-            return this->_literalType;
-        }
+            const std::string &GetFileName() const;
 
-        const std::string LiteralExpression::GetValue() const {
-            return this->_value;
-        }
+            Position *GetStart() const;
+
+            Position *GetEnd() const;
+
+        public:
+            virtual ~Node();
+        };
     }
 }
+
+#endif // HOOLANG_NODE_HH
+

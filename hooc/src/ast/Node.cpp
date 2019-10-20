@@ -16,26 +16,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "LiteralExpression.hh"
+#include <utility>
+
+#include "Node.hh"
+#include <antlr4-runtime.h>
+
+using namespace antlr4;
 
 namespace hooc {
     namespace ast {
-        LiteralExpression::LiteralExpression(LiteralType literal_type, std::string &value,
-                                             ParserRuleContext *context, const std::string &file_name) :
-                Expression(EXPRESSION_LITERAL, context, file_name),
-                _literalType(literal_type),
-                _value(value) {
+        Node::Node(ParserRuleContext *context, std::string file_name) :
+                _file_name(std::move(file_name)),
+                _start(nullptr),
+                _end(nullptr) {
+            this->_start = new Position(context->start->getLine(),
+                                        context->start->getCharPositionInLine());
+            this->_end = new Position(context->stop->getLine(),
+                                      context->stop->getCharPositionInLine());
         }
 
-        LiteralExpression::~LiteralExpression() {
+        const std::string &Node::GetFileName() const {
+            return _file_name;
         }
 
-        const LiteralType LiteralExpression::GetLiteralType() const {
-            return this->_literalType;
+        Position *Node::GetStart() const {
+            return _start;
         }
 
-        const std::string LiteralExpression::GetValue() const {
-            return this->_value;
+        Position *Node::GetEnd() const {
+            return _end;
+        }
+
+        Node::~Node() {
+            delete this->_start;
+            delete this->_end;
         }
     }
 }

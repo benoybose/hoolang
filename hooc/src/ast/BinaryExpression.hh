@@ -22,6 +22,10 @@
 #include "ast/Expression.hh"
 #include "Operator.hh"
 
+#include <ParserRuleContext.h>
+
+using namespace antlr4;
+
 namespace hooc {
     namespace ast {
         class BinaryExpression: public Expression {
@@ -31,7 +35,8 @@ namespace hooc {
             Expression* _rvalue;
 
         public:
-            BinaryExpression(Expression* lvalue, Operator* opr, Expression* rvalue);
+            BinaryExpression(Expression *lvalue, Operator *opr, Expression *rvalue,
+                    ParserRuleContext *context, const std::string &file_name);
 
         public:
             const Expression* GetLeftExpression() const;

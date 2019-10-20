@@ -16,14 +16,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <utility>
+
 #include "InvokeExpression.hh"
 
 namespace hooc {
     namespace ast {
-        InvokeExpression::InvokeExpression(Expression *receiver, std::list<Expression *> arguments) :
-                Expression(EXPRESSION_INVOKE),
+        InvokeExpression::InvokeExpression(Expression *receiver, std::list<Expression *> arguments,
+                                           ParserRuleContext *context,
+                                           const std::string &file_name) :
+                Expression(EXPRESSION_INVOKE, context, file_name),
                 _receiver(receiver),
-                _arguments(arguments) {
+                _arguments(std::move(arguments)) {
         }
 
         InvokeExpression::~InvokeExpression() {

@@ -16,26 +16,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "LiteralExpression.hh"
+#include "Position.hh"
 
 namespace hooc {
     namespace ast {
-        LiteralExpression::LiteralExpression(LiteralType literal_type, std::string &value,
-                                             ParserRuleContext *context, const std::string &file_name) :
-                Expression(EXPRESSION_LITERAL, context, file_name),
-                _literalType(literal_type),
-                _value(value) {
+        Position::Position(size_t line_number, size_t character_position) :
+                _line(line_number),
+                _char_pos(character_position) {
+
         }
 
-        LiteralExpression::~LiteralExpression() {
+        size_t Position::GetLineNumber() const {
+            return _line;
         }
 
-        const LiteralType LiteralExpression::GetLiteralType() const {
-            return this->_literalType;
-        }
-
-        const std::string LiteralExpression::GetValue() const {
-            return this->_value;
+        size_t Position::GetCharacterPosition() const {
+            return _char_pos;
         }
     }
 }

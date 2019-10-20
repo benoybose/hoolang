@@ -49,7 +49,7 @@ namespace hooc {
                     throw std::runtime_error("Parsing failed because of unknown error.");
                 }
 
-                UnitVisitor visitor;
+                UnitVisitor visitor(this->_file_path.string());
                 unit = visitor.visit(unitContext).as<Unit *>();
             } catch (const std::bad_cast& ex) {
                 std::string message(ex.what());

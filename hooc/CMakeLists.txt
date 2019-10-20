@@ -85,7 +85,7 @@ SET(hooc_source_files
 		src/ast/BasicDataTypeSpecification.hh
 		src/ast/BasicDataTypes.cpp
 		src/ast/ReferenceDataTypeSpecification.cpp
-		src/ast/ArrayDataTypeSpecification.cpp src/compiler/BaseError.cpp src/compiler/BaseError.hh src/compiler/ParseError.cpp src/compiler/ParseError.hh)
+		src/ast/ArrayDataTypeSpecification.cpp src/compiler/BaseError.cpp src/compiler/BaseError.hh src/compiler/ParseError.cpp src/compiler/ParseError.hh src/ast/Node.cpp src/ast/Node.hh src/ast/Position.cpp src/ast/Position.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 

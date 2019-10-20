@@ -21,6 +21,10 @@
 
 #include "Expression.hh"
 
+#include <ParserRuleContext.h>
+
+using namespace antlr4;
+
 namespace hooc {
     namespace ast {
         class ArrayAccessExpression: public Expression {
@@ -29,7 +33,8 @@ namespace hooc {
             Expression* _index;
 
         public:
-            ArrayAccessExpression(Expression* container, Expression* index);
+            ArrayAccessExpression(Expression *container, Expression *index,
+                    ParserRuleContext *context, const std::string &file_name);
 
         public:
             const Expression* GetContainer() const;

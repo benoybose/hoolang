@@ -20,12 +20,15 @@
 
 namespace hooc {
     namespace ast {
-        ReferenceExpression::ReferenceExpression(std::string &name) :
-                Expression(EXPRESSION_REFERENCE), _parent(nullptr), _name(name) {
+        ReferenceExpression::ReferenceExpression(std::string &name, ParserRuleContext *context,
+                                                 const std::string &file_name) :
+                Expression(EXPRESSION_REFERENCE, context, file_name),
+                _parent(nullptr), _name(name) {
         }
 
-        ReferenceExpression::ReferenceExpression(Expression *parent, std::string &name) :
-                Expression(EXPRESSION_REFERENCE),
+        ReferenceExpression::ReferenceExpression(Expression *parent, std::string &name,
+                                                 ParserRuleContext *context, const std::string &file_name) :
+                Expression(EXPRESSION_REFERENCE, context, file_name),
                 _parent(parent), _name(name) {
 
         }

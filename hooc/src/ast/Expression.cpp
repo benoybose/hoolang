@@ -20,7 +20,9 @@
 
 namespace hooc {
     namespace ast {
-        Expression::Expression(ExpressionType expressionType) {
+        Expression::Expression(ExpressionType expressionType,
+                ParserRuleContext *context, const std::string& file_name) :
+                Node(context, file_name) {
             this->_expressionType = expressionType;
         }
 

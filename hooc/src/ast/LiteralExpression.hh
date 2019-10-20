@@ -20,9 +20,13 @@
 #define _LITERALTYPEEXPR_H_
 
 #include "Expression.hh"
+
+#include <ParserRuleContext.h>
 #include <cstdint>
 #include <cstdbool>
 #include <string>
+
+using namespace antlr4;
 
 namespace hooc {
     namespace ast {
@@ -41,8 +45,8 @@ namespace hooc {
             std::string _value;
 
         public:
-            LiteralExpression(LiteralType literaltype, std::string& value);
-            LiteralExpression(LiteralType literaltype, const std::string& value);
+            LiteralExpression(LiteralType literal_type, std::string &value,
+                              ParserRuleContext *context, const std::string &file_name);
 
         public:
             const LiteralType GetLiteralType() const;

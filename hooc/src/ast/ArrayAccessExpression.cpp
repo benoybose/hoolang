@@ -20,8 +20,11 @@
 
 namespace hooc {
     namespace ast {
-        ArrayAccessExpression::ArrayAccessExpression(Expression *container, Expression *index) :
-                Expression(EXPRESSION_ARRAY), _container(container), _index(index) {
+        ArrayAccessExpression::ArrayAccessExpression(Expression *container, Expression *index,
+                                                     ParserRuleContext *context,
+                                                     const std::string &file_name) :
+                Expression(EXPRESSION_ARRAY, context, file_name),
+                _container(container), _index(index) {
         }
 
         ArrayAccessExpression::~ArrayAccessExpression() {

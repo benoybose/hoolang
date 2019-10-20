@@ -24,9 +24,17 @@
 #include "ast/Operator.hh"
 #include "ast/Declarator.hh"
 
+#include <string>
+
 using namespace hooc::ast;
 
 class UnitVisitor : public HooBaseVisitor {
+private:
+    std::string _file_name;
+
+public:
+    explicit UnitVisitor(std::string  file_name);
+
 public:
     antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
 
@@ -112,10 +120,12 @@ public:
 
     antlrcpp::Any visitStmtOperative(HooParser::StmtOperativeContext *ctx) override;
 
+    const std::string &GetFileName() const;
+
 private:
 
-    Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
-                                       antlr4::Token *opr, HooParser::ExpressionContext *rvalue);
+    Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
+                                       HooParser::ExpressionContext *rvalue, ParserRuleContext *context);
 
     DeclaratorType GetDeclarator(const std::string& declarator) const;
 

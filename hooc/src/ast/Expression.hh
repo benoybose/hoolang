@@ -19,8 +19,13 @@
 #ifndef HCEXPR_H
 #define HCEXPR_H
 
+#include "Node.hh"
+
+#include <ParserRuleContext.h>
 #include <memory>
 #include <string>
+
+using namespace antlr4;
 
 namespace hooc {
     namespace ast {
@@ -32,13 +37,14 @@ namespace hooc {
             EXPRESSION_INVOKE
         };
 
-        class Expression {
+        class Expression: Node {
 
         private:
             ExpressionType _expressionType;
 
         public:
-            explicit Expression(ExpressionType expressionType);
+            Expression(ExpressionType expressionType,
+                    ParserRuleContext *context, const std::string& file_name);
 
         public:
             const ExpressionType GetExpressionType() const;

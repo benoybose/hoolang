@@ -21,28 +21,32 @@
 
 #include "Expression.hh"
 
+#include <ParserRuleContext.h>
 #include <list>
+
+using namespace antlr4;
 
 namespace hooc {
     namespace ast {
-        class InvokeExpression: public Expression {
+        class InvokeExpression : public Expression {
         private:
-            Expression* _receiver;
-            std::list<Expression*> _arguments;
+            Expression *_receiver;
+            std::list<Expression *> _arguments;
 
         public:
-            InvokeExpression(Expression* receiver, std::list<Expression*> arguments);
+            InvokeExpression(Expression *receiver, std::list<Expression *> arguments,
+                             ParserRuleContext *context, const std::string &file_name);
 
         public:
-            const Expression* GetReceiver() const;
-            const std::list<Expression*> GetArguments() const;
+            const Expression *GetReceiver() const;
+
+            const std::list<Expression *> GetArguments() const;
 
         public:
             virtual ~InvokeExpression();
         };
     }
 }
-
 
 
 #endif //HC_INVOKEEXPRESSION_H

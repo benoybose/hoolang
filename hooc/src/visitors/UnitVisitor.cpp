@@ -44,42 +44,47 @@
 #include <ast/ExpressionStatement.hh>
 #include <ast/DeclarationStatement.hh>
 #include <boost/regex.hpp>
+#include <utility>
 
 using namespace hooc::ast;
 using namespace antlrcpp;
 using namespace boost;
 
+UnitVisitor::UnitVisitor(std::string file_name) :
+        _file_name(std::move(file_name)) {
+}
+
 Any UnitVisitor::visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx) {
     auto basicDataType = GetBasicDataType(ctx->BasicDataType()->getText());
-    if(BASIC_DATA_TYPE_INVALID == basicDataType) {
+    if (BASIC_DATA_TYPE_INVALID == basicDataType) {
         // todo: Error handling
     }
-    TypeSpecification* type = new BasicDataTypeSpecification(basicDataType);
+    TypeSpecification *type = new BasicDataTypeSpecification(basicDataType);
     return Any(type);
 }
 
 Any UnitVisitor::visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx) {
     auto parent = this->visit(ctx->typeSpecifier())
-            .as<TypeSpecification*>();
-    if(TYPE_SPEC_REFERENCE != parent->GetType()) {
+            .as<TypeSpecification *>();
+    if (TYPE_SPEC_REFERENCE != parent->GetType()) {
         // todo: Error handling
     }
     auto name = ctx->Identifier()->getText();
-    TypeSpecification* type = new ReferenceDataTypeSpecification(name,
-            (ReferenceDataTypeSpecification*) parent);
+    TypeSpecification *type = new ReferenceDataTypeSpecification(name,
+                                                                 (ReferenceDataTypeSpecification *) parent);
     return Any(type);
 }
 
 Any UnitVisitor::visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx) {
     auto name = ctx->Identifier()->getText();
-    TypeSpecification* type = new ReferenceDataTypeSpecification(name, nullptr);
+    TypeSpecification *type = new ReferenceDataTypeSpecification(name, nullptr);
     return Any(type);
 }
 
 Any UnitVisitor::visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) {
     auto parent = this->visit(ctx->typeSpecifier())
-            .as<TypeSpecification*>();
-    TypeSpecification* type = new ArrayDataTypeSpecification(parent);
+            .as<TypeSpecification *>();
+    TypeSpecification *type = new ArrayDataTypeSpecification(parent);
     return Any(type);
 }
 
@@ -102,32 +107,37 @@ Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext 
 
 Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) {
     auto name = ctx->Identifier()->getText();
-    auto expression = (Expression *) new ReferenceExpression(name);
+    auto expression = (Expression *) new ReferenceExpression(name, ctx, this->_file_name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) {
     auto parent = this->visit(ctx->parent).as<Expression *>();
-    auto name = ctx->name->getText();
+    std::string name = "";
+    if(nullptr != ctx->name) {
+        name = ctx->name->getText();
+    }
+
     regex reg_expr("[0-9A-Fa-f]+");
 
-    if(parent->GetExpressionType() == EXPRESSION_LITERAL)
-    {
+    if (parent->GetExpressionType() == EXPRESSION_LITERAL) {
         auto literal = (LiteralExpression *) parent;
-        if(LITERAL_INTEGER == literal->GetLiteralType()) {
+        if (LITERAL_INTEGER == literal->GetLiteralType()) {
             cmatch match;
-            if(regex_match(name.c_str(), match, reg_expr)) {
+            if (regex_match(name.c_str(), match, reg_expr)) {
                 std::string text = literal->GetValue();
                 text += ".";
                 text += name;
                 delete parent;
-                auto decimalExpression = (Expression *) new LiteralExpression(LITERAL_DOUBLE, text);
+                auto decimalExpression = (Expression *) new LiteralExpression(LITERAL_DOUBLE, text, ctx,
+                                                                              this->_file_name);
                 return Any(decimalExpression);
             }
         }
     }
 
-    auto expression = (Expression *) new ReferenceExpression(parent, name);
+    auto expression = (Expression *) new ReferenceExpression(parent, name,
+                                                             ctx, this->_file_name);
     return Any(expression);
 }
 
@@ -138,38 +148,44 @@ Any UnitVisitor::visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext 
 
 Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) {
     auto text = ctx->StringLiteral()->getText();
-    auto expression = (Expression *) new LiteralExpression(LITERAL_STRING, text);
+    auto expression = (Expression *) new LiteralExpression(LITERAL_STRING, text,
+                                                           ctx, this->_file_name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx) {
     auto container = this->visit(ctx->container).as<Expression *>();
     auto accessIndex = this->visit(ctx->accessIndex).as<Expression *>();
-    auto expression = (Expression *) new ArrayAccessExpression(container, accessIndex);
+    auto expression = (Expression *) new ArrayAccessExpression(container, accessIndex,
+                                                               ctx, this->_file_name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitConstantInteger(HooParser::ConstantIntegerContext *ctx) {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_INTEGER, value);
+    auto expression = new LiteralExpression(LITERAL_INTEGER, value,
+                                            ctx, this->_file_name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitByteConstant(HooParser::ByteConstantContext *ctx) {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_BYTE, value);
+    auto expression = new LiteralExpression(LITERAL_BYTE, value,
+                                            ctx, this->_file_name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitConstantFloating(HooParser::ConstantFloatingContext *ctx) {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_DOUBLE, value);
+    auto expression = new LiteralExpression(LITERAL_DOUBLE, value,
+                                            ctx, this->_file_name);
     return Any(expression);
 }
 
 Any UnitVisitor::visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_CHARACTER, value);
+    auto expression = new LiteralExpression(LITERAL_CHARACTER, value,
+                                            ctx, this->_file_name);
     return Any(expression);
 }
 
@@ -177,7 +193,8 @@ Any UnitVisitor::visitBooleanConstant(HooParser::BooleanConstantContext *ctx) {
     auto value = ctx->getText();
     if ((0 == value.compare("true")) ||
         (0 == value.compare("false"))) {
-        auto expression = new LiteralExpression(LITERAL_BOOLEAN, value);
+        auto expression = new LiteralExpression(LITERAL_BOOLEAN, value,
+                                                ctx, this->_file_name);
         return Any(expression);
     } else {
         return Any(nullptr);
@@ -195,7 +212,8 @@ Any UnitVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx) {
         }
     }
 
-    Expression *expression = new InvokeExpression(receiver, argumentList);
+    Expression *expression = new InvokeExpression(receiver, argumentList,
+            ctx, this->_file_name);
     return Any(expression);
 }
 
@@ -205,34 +223,34 @@ Any UnitVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx) {
 }
 
 Any UnitVisitor::visitExprBitwise(HooParser::ExprBitwiseContext *ctx) {
-    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
     return Any((Expression *) expr);
 }
 
 Any UnitVisitor::visitExprAdditive(HooParser::ExprAdditiveContext *ctx) {
-    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
     return Any((Expression *) expr);
 }
 
 Any UnitVisitor::visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx) {
-    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
     return Any((Expression *) expr);
 }
 
 Any UnitVisitor::visitExprComparison(HooParser::ExprComparisonContext *ctx) {
-    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue);
+    auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
     return Any((Expression *) expr);
 }
 
 Any UnitVisitor::visitExprLogical(HooParser::ExprLogicalContext *ctx) {
     Expression *expr = CreateBinaryExpression(ctx->lvalue,
-                                              ctx->opr, ctx->rvalue);
+                                              ctx->opr, ctx->rvalue, ctx);
     return Any((Expression *) expr);
 }
 
 Any UnitVisitor::visitExpAssignment(HooParser::ExpAssignmentContext *ctx) {
     Expression *expr = CreateBinaryExpression(ctx->lvalue,
-                                              ctx->opr, ctx->rvalue);
+                                              ctx->opr, ctx->rvalue, ctx);
     return Any((Expression *) expr);
 }
 
@@ -332,7 +350,7 @@ Any UnitVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext 
 
 Any UnitVisitor::visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) {
     auto declaration = this->visit(ctx->functionDeclaration())
-            .as<FunctionDeclaration* >();
+            .as<FunctionDeclaration *>();
     auto stmt = new DeclarationStatement(declaration);
     return Any(stmt);
 }
@@ -373,7 +391,7 @@ antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinition
 
 Any UnitVisitor::visitDefinitionUnitItem(HooParser::DefinitionUnitItemContext *ctx) {
     auto definition = this->visit(ctx->defenition())
-            .as<Definition* >();
+            .as<Definition *>();
     auto unit_item = (UnitItem *) definition;
     return Any(unit_item);
 }
@@ -397,13 +415,17 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx) {
     return Any(unit);
 }
 
-Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
-                                                antlr4::Token *opr,
-                                                HooParser::ExpressionContext *rvalue) {
+const std::string &UnitVisitor::GetFileName() const {
+    return _file_name;
+}
+
+Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
+                                                HooParser::ExpressionContext *rvalue, ParserRuleContext *context) {
     auto left = this->visit(lvalue).as<Expression *>();
     auto right = this->visit(rvalue).as<Expression *>();
     auto oprText = new Operator(opr->getText());
-    Expression *expr = new BinaryExpression(left, oprText, right);
+    Expression *expr = new BinaryExpression(left, oprText, right,
+                                            context, this->_file_name);
     return expr;
 }
 

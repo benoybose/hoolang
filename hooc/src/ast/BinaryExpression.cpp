@@ -24,10 +24,10 @@
 
 namespace hooc {
     namespace ast {
-        BinaryExpression::BinaryExpression(Expression *lvalue,
-                Operator *opr,
-                Expression *rvalue):
-                Expression(EXPRESSION_BINARY),
+        BinaryExpression::BinaryExpression(Expression *lvalue, Operator *opr, Expression *rvalue,
+                                           ParserRuleContext *context,
+                                           const std::string &file_name) :
+                Expression(EXPRESSION_BINARY, context, file_name),
                 _lvalue(lvalue), _operator(opr),
                 _rvalue(rvalue) {
         }

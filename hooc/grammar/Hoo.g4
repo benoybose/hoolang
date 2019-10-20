@@ -25,17 +25,17 @@ options {
 }
 
 constant
-    : IntegerConstant #constantInteger
-    | FloatingConstant #constantFloating
-    | CharacterConstant #constantCharacter
-    | BooleanConstant #booleanConstant
-    | ByteContant #byteConstant
+    :   ByteContant #byteConstant
+    |   IntegerConstant #constantInteger
+    |   FloatingConstant #constantFloating
+    |   CharacterConstant #constantCharacter
+    |   BooleanConstant #booleanConstant
     ;
 
 primaryExpression
-    :   Identifier #primaryRefExpr
-    |   constant #primaryConstantExpr
+    :   constant #primaryConstantExpr
     |   StringLiteral #primaryStringExpr
+    |   Identifier #primaryRefExpr
     ;
 
 expression
