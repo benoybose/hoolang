@@ -16,19 +16,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "EmitterFactory.hh"
-#include <emitter/amd64/WindowsAmd64CodeEmitter.hh>
+#ifndef HOOLANG_OPCODEPREFIXES_HH
+#define HOOLANG_OPCODEPREFIXES_HH
 
-using namespace hooc::emitter::amd;
+#include <cstdint>
 
 namespace hooc {
     namespace emitter {
-        Emitter *EmitterFactory::GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit) {
-            Emitter* emitter = nullptr;
-            if((EMITTER_OS_WINDOWS == os) && (EMITTER_ARCH_AMD64 == arch)) {
-                emitter = new WindowsAMD64CodeEmitter(unit);
-            }
-            return emitter;
+        namespace amd {
+            const uint8_t PREFIX_LOCK = 0xF0;
+            const uint8_t PREFIX_REPNE = 0xF2;
+            const uint8_t PREFIX_REPNZ = 0xF2;
+            const uint8_t PREFIX_REP = 0xF3;
+            const uint8_t PREFIX_REPE = 0xF3;
+            const uint8_t PREFIX_REPZ = 0xF3;
+
+            const uint8_t PREFIX_SEGMENT_CS = 0x2E;
+            const uint8_t PREFIX_SEGMENT_SS = 0x36;
+            const uint8_t PREFIX_SEGMENT_DS = 0x3E;
+            const uint8_t PREFIX_SEGMENT_ES = 0x26;
+            const uint8_t PREFIX_SEGMENT_FS = 0x64;
+            const uint8_t PREFIX_SEGMENT_GS = 0x65;
+            const uint8_t PREFIX_BRANCH_NOT_TAKEN = 0x2E;
+            const uint8_t PREFIX_BRANCH_TAKEN = 0x3E;
+
+            const uint8_t PREFIX_OPERAND_SIZE_OVERRIDE = 0x66;
+            const uint8_t PREFIX_ADDRESS_SIZE_OVERRIDE = 0x67;
         }
     }
 }
+
+#endif //HOOLANG_OPCODEPREFIXES_HH

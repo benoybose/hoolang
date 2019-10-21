@@ -16,28 +16,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#ifndef HOOLANG_ENCODER_HH
+#define HOOLANG_ENCODER_HH
 
-#ifndef HOOLANG_WINDOWSAMD64CODEEMITTER_HH
-#define HOOLANG_WINDOWSAMD64CODEEMITTER_HH
-
-#include <ast/FunctionDefinition.hh>
-#include <emitter/Emitter.hh>
-
-using namespace hooc::ast;
+#include <cstdint>
+#include <vector>
 
 namespace hooc {
     namespace emitter {
-        class WindowsAMD64CodeEmitter: public Emitter {
-        public:
-            WindowsAMD64CodeEmitter(const Unit *unit);
-
-        public:
-            std::list<Code *> GenerateCode() override;
-
-        private:
-            Code* GenerateCode(FunctionDefinition* function_definition);
-        };
+        namespace amd {
+            class Encoder {
+            public:
+                static std::vector<uint8_t> PushRegister(uint8_t reg);
+                static std::vector<uint8_t> MoveReg64toReg64(uint8_t reg64_from, uint8_t reg64_to);
+            };
+        }
     }
 }
 
-#endif //HOOLANG_WINDOWSAMD64CODEEMITTER_HH
+
+#endif //HOOLANG_ENCODER_HH
