@@ -16,34 +16,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_OPCODEPREFIXES_HH
-#define HOOLANG_OPCODEPREFIXES_HH
-
-#include <cstdint>
+#include "Encoder.hh"
 
 namespace hooc {
     namespace emitter {
-        namespace amd {
-            const uint8_t PREFIX_LOCK = 0xF0;
-            const uint8_t PREFIX_REPNE = 0xF2;
-            const uint8_t PREFIX_REPNZ = 0xF2;
-            const uint8_t PREFIX_REP = 0xF3;
-            const uint8_t PREFIX_REPE = 0xF3;
-            const uint8_t PREFIX_REPZ = 0xF3;
+        namespace x86 {
+            std::vector<uint8_t> Encoder::PushRegister(uint8_t reg) {
+                std::vector<uint8_t> ins;
+                uint8_t opcode = 0x50 + reg; // 50+rd
+                ins.push_back(opcode);
+                return ins;
+            }
 
-            const uint8_t PREFIX_SEGMENT_CS = 0x2E;
-            const uint8_t PREFIX_SEGMENT_SS = 0x36;
-            const uint8_t PREFIX_SEGMENT_DS = 0x3E;
-            const uint8_t PREFIX_SEGMENT_ES = 0x26;
-            const uint8_t PREFIX_SEGMENT_FS = 0x64;
-            const uint8_t PREFIX_SEGMENT_GS = 0x65;
-            const uint8_t PREFIX_BRANCH_NOT_TAKEN = 0x2E;
-            const uint8_t PREFIX_BRANCH_TAKEN = 0x3E;
+            std::vector<uint8_t> Encoder::MoveReg64toReg64(uint8_t reg64_from, uint8_t reg64_to) {
+                std::vector<uint8_t> ins;
+                ins.push_back(0x48); // REX prefix for 64 bit operands
+                ins.push_back(0x89); // Opcode for MOV
 
-            const uint8_t PREFIX_OPERAND_SIZE_OVERRIDE = 0x66;
-            const uint8_t PREFIX_ADDRESS_SIZE_OVERRIDE = 0x67;
+                uint8_t mod_r_m = 0x03;
+                mod_r_m <<= 6; // ModR/M register direct addressing model. Bits 7, 6
+                mod_r_m += (reg64_from << 3); // Setting source register to reg bit field. Bits 5, 4, 3
+                mod_r_m += reg64_to; // Setting destination register to rm bit field. Bits 2, 1, 0
+                ins.push_back(mod_r_m);
+                return ins;
+            }
         }
     }
 }
-
-#endif //HOOLANG_OPCODEPREFIXES_HH

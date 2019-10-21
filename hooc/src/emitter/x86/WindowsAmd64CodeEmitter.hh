@@ -16,30 +16,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Encoder.hh"
+
+#ifndef HOOLANG_WINDOWSAMD64CODEEMITTER_HH
+#define HOOLANG_WINDOWSAMD64CODEEMITTER_HH
+
+#include <ast/FunctionDefinition.hh>
+#include <emitter/Emitter.hh>
+
+using namespace hooc::ast;
 
 namespace hooc {
     namespace emitter {
-        namespace amd {
-            std::vector<uint8_t> Encoder::PushRegister(uint8_t reg) {
-                std::vector<uint8_t> ins;
-                uint8_t opcode = 0x50 + reg; // 50+rd
-                ins.push_back(opcode);
-                return ins;
-            }
+        namespace x86 {
+            class WindowsAMD64CodeEmitter : public Emitter {
+            public:
+                WindowsAMD64CodeEmitter(const Unit *unit);
 
-            std::vector<uint8_t> Encoder::MoveReg64toReg64(uint8_t reg64_from, uint8_t reg64_to) {
-                std::vector<uint8_t> ins;
-                ins.push_back(0x48); // REX prefix for 64 bit operands
-                ins.push_back(0x89); // Opcode for MOV
+            public:
+                std::list<Code *> GenerateCode() override;
 
-                uint8_t mod_r_m = 0x03;
-                mod_r_m <<= 6; // ModR/M register direct addressing model. Bits 7, 6
-                mod_r_m += (reg64_from << 3); // Setting source register to reg bit field. Bits 5, 4, 3
-                mod_r_m += reg64_to; // Setting destination register to rm bit field. Bits 2, 1, 0
-                ins.push_back(mod_r_m);
-                return ins;
-            }
+            private:
+                Code *GenerateCode(FunctionDefinition *function_definition);
+            };
         }
     }
 }
+
+#endif //HOOLANG_WINDOWSAMD64CODEEMITTER_HH

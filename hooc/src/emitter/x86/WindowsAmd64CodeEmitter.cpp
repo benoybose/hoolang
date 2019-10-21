@@ -22,11 +22,11 @@
 
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
-#include <emitter/amd64/AMDRegisters.hh>
+#include <emitter/x86/AMDRegisters.hh>
 
 namespace hooc {
     namespace emitter {
-        namespace amd {
+        namespace x86 {
             WindowsAMD64CodeEmitter::WindowsAMD64CodeEmitter(const Unit *unit) :
                     Emitter(unit) {
             }

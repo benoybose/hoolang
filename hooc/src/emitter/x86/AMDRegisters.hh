@@ -23,7 +23,7 @@
 
 namespace hooc {
     namespace emitter {
-        namespace amd {
+        namespace x86 {
             const uint8_t REG_AL = 0;
             const uint8_t REG_BL = 3;
             const uint8_t REG_CL = 1;

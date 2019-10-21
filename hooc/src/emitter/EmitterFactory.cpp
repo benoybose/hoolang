@@ -17,9 +17,9 @@
  */
 
 #include "EmitterFactory.hh"
-#include <emitter/amd64/WindowsAmd64CodeEmitter.hh>
+#include <emitter/x86/WindowsAmd64CodeEmitter.hh>
 
-using namespace hooc::emitter::amd;
+using namespace hooc::emitter::x86;
 
 namespace hooc {
     namespace emitter {
