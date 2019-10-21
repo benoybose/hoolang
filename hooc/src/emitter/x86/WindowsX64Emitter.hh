@@ -16,19 +16,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "EmitterFactory.hh"
-#include <emitter/x86/WindowsX64Emitter.hh>
 
-using namespace hooc::emitter::x86;
+#ifndef HOOLANG_WINDOWSX64EMITTER_HH
+#define HOOLANG_WINDOWSX64EMITTER_HH
+
+#include <ast/FunctionDefinition.hh>
+#include <emitter/Emitter.hh>
+#include <emitter/x86/EncoderX64.hh>
+
+using namespace hooc::ast;
 
 namespace hooc {
     namespace emitter {
-        Emitter *EmitterFactory::GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit) {
-            Emitter* emitter = nullptr;
-            if((EMITTER_OS_WINDOWS == os) && (EMITTER_ARCH_AMD64 == arch)) {
-                emitter = new WindowsX64Emitter(unit);
-            }
-            return emitter;
+        namespace x86 {
+            class WindowsX64Emitter : public Emitter {
+            private:
+                EncoderX64 _encoder;
+            public:
+                explicit WindowsX64Emitter(const Unit *unit);
+
+            public:
+                std::list<Code *> GenerateCode() override;
+
+            private:
+                Code *GenerateCode(FunctionDefinition *function_definition);
+            };
         }
     }
 }
+
+#endif //HOOLANG_WINDOWSX64EMITTER_HH

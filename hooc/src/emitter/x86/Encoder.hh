@@ -26,10 +26,11 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
+            typedef std::uint8_t byte;
+            typedef std::vector<byte> instruction;
             class Encoder {
-            public:
-                static std::vector<uint8_t> PUSH(X86RegisterType reg);
-                static std::vector<uint8_t> MOV(X86RegisterType reg64_from, X86RegisterType reg64_to);
+                virtual instruction PUSH(X86RegisterType reg) = 0;
+                virtual instruction MOV(X86RegisterType reg64_from, X86RegisterType reg64_to) = 0;
             };
         }
     }

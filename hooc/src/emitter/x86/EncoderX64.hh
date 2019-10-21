@@ -16,19 +16,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "EmitterFactory.hh"
-#include <emitter/x86/WindowsX64Emitter.hh>
+#ifndef HOOLANG_ENCODERX64_HH
+#define HOOLANG_ENCODERX64_HH
 
-using namespace hooc::emitter::x86;
+#include <cstdint>
+#include <vector>
+
+#include "Encoder.hh"
 
 namespace hooc {
     namespace emitter {
-        Emitter *EmitterFactory::GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit) {
-            Emitter* emitter = nullptr;
-            if((EMITTER_OS_WINDOWS == os) && (EMITTER_ARCH_AMD64 == arch)) {
-                emitter = new WindowsX64Emitter(unit);
-            }
-            return emitter;
+        namespace x86 {
+            class EncoderX64: public Encoder {
+            public:
+                instruction PUSH(X86RegisterType reg) override;
+                instruction MOV(X86RegisterType reg64_from, X86RegisterType reg64_to) override;
+            };
         }
     }
 }
+
+
+#endif //HOOLANG_ENCODERX64_HH

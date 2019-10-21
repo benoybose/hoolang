@@ -17,8 +17,8 @@
  */
 
 
-#include "WindowsAmd64CodeEmitter.hh"
-#include "Encoder.hh"
+#include "WindowsX64Emitter.hh"
+#include "EncoderX64.hh"
 
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
@@ -27,11 +27,11 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            WindowsAMD64CodeEmitter::WindowsAMD64CodeEmitter(const Unit *unit) :
+            WindowsX64Emitter::WindowsX64Emitter(const Unit *unit) :
                     Emitter(unit) {
             }
 
-            std::list<Code *> WindowsAMD64CodeEmitter::GenerateCode() {
+            std::list<Code *> WindowsX64Emitter::GenerateCode() {
                 std::list<Code *> codes;
                 auto unit_items = this->GetUnit()
                         ->GetItems();
@@ -54,15 +54,16 @@ namespace hooc {
                 return codes;
             }
 
-            Code *WindowsAMD64CodeEmitter::GenerateCode(FunctionDefinition *function_definition) {
+            Code *WindowsX64Emitter::GenerateCode(FunctionDefinition *function_definition) {
                 std::vector<uint8_t> header;
-                auto ins_push_rbp = Encoder::PUSH(X86_REG_RBP);
+                auto ins_push_rbp = this->_encoder.PUSH(X86_REG_RBP);
                 header.insert(header.end(), ins_push_rbp.begin(),
-                        ins_push_rbp.end());
+                              ins_push_rbp.end());
 
-                auto ins_mov_rsp_rbp = Encoder::MOV(X86_REG_RSP, X86_REG_RBP);
+                auto ins_mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP,
+                                                          X86_REG_RBP);
                 header.insert(header.end(), ins_mov_rsp_rbp.begin(),
-                        ins_mov_rsp_rbp.end());
+                              ins_mov_rsp_rbp.end());
                 return nullptr;
             }
         }
