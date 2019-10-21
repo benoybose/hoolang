@@ -16,31 +16,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Encoder.hh"
-#include "X86RegisterTypes.hh"
+#ifndef HOOLANG_X86REGISTERTYPES_HH
+#define HOOLANG_X86REGISTERTYPES_HH
+
+#include <cstdint>
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            std::vector<uint8_t> Encoder::PUSH(X86RegisterType reg) {
-                std::vector<uint8_t> ins;
-                uint8_t opcode = 0x50 + reg; // 50+rd
-                ins.push_back(opcode);
-                return ins;
-            }
+            typedef enum {
+                X86_REG_RAX = 0,
+                X86_REG_RCX = 1,
+                X86_REG_RBX = 3,
+                X86_REG_RDX = 2,
+                X86_REG_RSP = 4,
+                X86_REG_RBP = 5,
+                X86_REG_RSI = 6,
+                X86_REG_RDI = 7,
+                X86_REG_R8 = 8,
+                X86_REG_R9 = 9,
+                X86_REG_R10 = 10,
+                X86_REG_R11 = 11,
+                X86_REG_R12 = 12,
+                X86_REG_R13 = 13,
+                X86_REG_R14 = 14,
+                X86_REG_R15 = 15,
+            } X86RegisterType;
 
-            std::vector<uint8_t> Encoder::MOV(X86RegisterType reg64_from, X86RegisterType reg64_to) {
-                std::vector<uint8_t> ins;
-                ins.push_back(0x48); // REX prefix for 64 bit operands
-                ins.push_back(0x89); // Opcode for MOV
+            typedef enum {
+                X86_REG_AH = 4,
+                X86_REG_BH = 7,
+                X86_REG_CH = 5,
+                X86_REG_DH = 6
 
-                uint8_t mod_r_m = 0x03;
-                mod_r_m <<= 6; // ModR/M register direct addressing model. Bits 7, 6
-                mod_r_m += (reg64_from << 3); // Setting source register to reg bit field. Bits 5, 4, 3
-                mod_r_m += reg64_to; // Setting destination register to rm bit field. Bits 2, 1, 0
-                ins.push_back(mod_r_m);
-                return ins;
-            }
+            } X86SpecialRegisterType;
         }
     }
 }
+
+#endif //HOOLANG_X86REGISTERTYPES_HH

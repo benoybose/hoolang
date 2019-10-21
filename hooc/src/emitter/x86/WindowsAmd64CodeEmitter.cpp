@@ -22,7 +22,7 @@
 
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
-#include <emitter/x86/AMDRegisters.hh>
+#include <emitter/x86/X86RegisterTypes.hh>
 
 namespace hooc {
     namespace emitter {
@@ -56,11 +56,11 @@ namespace hooc {
 
             Code *WindowsAMD64CodeEmitter::GenerateCode(FunctionDefinition *function_definition) {
                 std::vector<uint8_t> header;
-                auto ins_push_rbp = Encoder::PushRegister(REG_RBP);
+                auto ins_push_rbp = Encoder::PUSH(X86_REG_RBP);
                 header.insert(header.end(), ins_push_rbp.begin(),
                         ins_push_rbp.end());
 
-                auto ins_mov_rsp_rbp = Encoder::MoveReg64toReg64(REG_RSP, REG_RBP);
+                auto ins_mov_rsp_rbp = Encoder::MOV(X86_REG_RSP, X86_REG_RBP);
                 header.insert(header.end(), ins_mov_rsp_rbp.begin(),
                         ins_mov_rsp_rbp.end());
                 return nullptr;

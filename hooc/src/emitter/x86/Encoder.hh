@@ -21,14 +21,15 @@
 
 #include <cstdint>
 #include <vector>
+#include "X86RegisterTypes.hh"
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
             class Encoder {
             public:
-                static std::vector<uint8_t> PushRegister(uint8_t reg);
-                static std::vector<uint8_t> MoveReg64toReg64(uint8_t reg64_from, uint8_t reg64_to);
+                static std::vector<uint8_t> PUSH(X86RegisterType reg);
+                static std::vector<uint8_t> MOV(X86RegisterType reg64_from, X86RegisterType reg64_to);
             };
         }
     }

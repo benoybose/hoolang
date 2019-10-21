@@ -101,7 +101,7 @@ SET(hooc_source_files
 		src/emitter/Emitter.cpp
 		src/emitter/EmitterFactory.cpp
 		src/emitter/EmitterArchTypes.hh
-		src/emitter/Code.cpp src/emitter/x86/WindowsAmd64CodeEmitter.cpp src/emitter/x86/WindowsAmd64CodeEmitter.hh src/emitter/CodeType.hh src/emitter/x86/AMDRegisters.hh src/emitter/x86/OpcodePrefixes.hh src/emitter/x86/Encoder.cpp src/emitter/x86/Encoder.hh)
+		src/emitter/Code.cpp src/emitter/x86/WindowsAmd64CodeEmitter.cpp src/emitter/x86/WindowsAmd64CodeEmitter.hh src/emitter/CodeType.hh src/emitter/x86/X86RegisterTypes.hh src/emitter/x86/OpcodePrefixes.hh src/emitter/x86/Encoder.cpp src/emitter/x86/Encoder.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
