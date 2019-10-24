@@ -55,7 +55,14 @@ SET(hooc_header_files
 		src/emitter/Emitter.hh
 		src/emitter/EmitterFactory.hh
 		src/emitter/EmitterOSTypes.hh
-		src/emitter/Code.hh)
+		src/emitter/Code.hh
+        src/emitter/EmitterArchTypes.hh
+        src/emitter/x86/WindowsX64Emitter.hh
+        src/emitter/CodeType.hh
+        src/emitter/x86/EncoderX64.hh
+        src/emitter/x86/Encoder.hh
+        src/emitter/x86/X86Definitions.hh
+        src/emitter/x86/X86Instruction.hh)
 
 SET(hooc_source_files
 		${ANTLR4_SRC_FILES_HooANTLR4}
@@ -100,8 +107,11 @@ SET(hooc_source_files
 		src/ast/Position.hh
 		src/emitter/Emitter.cpp
 		src/emitter/EmitterFactory.cpp
-		src/emitter/EmitterArchTypes.hh
-		src/emitter/Code.cpp src/emitter/x86/WindowsX64Emitter.cpp src/emitter/x86/WindowsX64Emitter.hh src/emitter/CodeType.hh src/emitter/x86/X86RegisterTypes.hh src/emitter/x86/OpcodePrefixes.hh src/emitter/x86/EncoderX64.cpp src/emitter/x86/EncoderX64.hh src/emitter/x86/Encoder.cpp src/emitter/x86/Encoder.hh src/emitter/x86/X86Definitions.hh)
+		src/emitter/Code.cpp
+		src/emitter/x86/WindowsX64Emitter.cpp
+		src/emitter/x86/EncoderX64.cpp
+		src/emitter/x86/Encoder.cpp
+		src/emitter/x86/X86Instruction.cpp src/misc/Utility.cpp src/misc/Utility.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
@@ -114,13 +124,14 @@ ADD_EXECUTABLE(
 		tests/DecimalLiteral.cpp
 		tests/CharacterLiteral.cpp
 		tests/BooleanLiteral.cpp
-		tests/StringLiteral.cpp tests/PrimaryExpression.cpp
+		tests/StringLiteral.cpp
+		tests/PrimaryExpression.cpp
 		tests/InvocationExpression.cpp
 		tests/BinaryExpression.cpp
 		tests/HoocTestHelper.hh
 		tests/ReturnStatement.cpp
 		tests/Function001.cpp
-		tests/FunctionDeclaration.cpp)
+		tests/FunctionDeclaration.cpp tests/UtilityTest.cpp)
 
 ADD_DEPENDENCIES(hooc_test antlr4_static)
 TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_static)
