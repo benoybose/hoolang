@@ -19,10 +19,17 @@
 #ifndef HOOLANG_X86DEFINITIONS_HH
 #define HOOLANG_X86DEFINITIONS_HH
 
+#include <cstdint>
+#include <vector>
+
 namespace hooc {
     namespace emitter {
         namespace x86 {
+            typedef std::uint8_t byte;
+            typedef std::vector<byte> byte_vector;
+
             typedef enum {
+                PREFIX_INVALID = 0x00,
                 PREFIX_G1_LOCK = 0xF0,
                 PREFIX_G1_REPN = 0xF2, // REPNE, REPNZ
                 PREFIX_G1_REP = 0xF3, // REP, REPE, REPZ
@@ -39,6 +46,7 @@ namespace hooc {
             } X86OpcodePrefix;
 
             typedef enum {
+                PREFIX_REX_INVALID = 0x00,
                 PREFIX_REX_W = 0x48, // When 1, a 64-bit operand size is used. Otherwise, when 0, the default operand size is used
                 PREFIX_REX_R = 0x44, // This 1-bit value is an extension to the MODRM.reg field
                 PREFIX_REX_X = 0x42, // This 1-bit value is an extension to the SIB.index field
@@ -46,6 +54,7 @@ namespace hooc {
             } X86RexPrefix;
 
             typedef enum {
+                X86_REG_INVALID = -1,
                 X86_REG_RAX = 0,
                 X86_REG_RCX = 1,
                 X86_REG_RBX = 3,
@@ -67,6 +76,13 @@ namespace hooc {
                 X86_REG_CH = 5,
                 X86_REG_DH = 6
             } X86RegisterType;
+
+            typedef enum {
+                X86_MOD_EFFECTIVE = 0x00,
+                X86_MOD_EFFECTIVE_DISP8 = 0x40,
+                X86_MOD_EFFECTIVE_DISP32 = 0x80,
+                X86_MOD_DIRECT = 0xC0
+            } X86InstructionMode;
         }
     }
 }

@@ -27,8 +27,6 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            typedef std::uint8_t byte;
-            typedef std::vector<byte> byte_vector;
             class Encoder {
                 virtual byte_vector PUSH(X86RegisterType reg) = 0;
                 virtual byte_vector MOV(X86RegisterType reg64_from, X86RegisterType reg64_to) = 0;

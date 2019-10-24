@@ -22,6 +22,7 @@
 #include <emitter/x86/X86Definitions.hh>
 
 #include <cstdint>
+#include "Encoder.hh"
 
 namespace hooc {
     namespace emitter {
@@ -36,8 +37,13 @@ namespace hooc {
                 uint32_t _displacement;
                 uint32_t _immediate;
             public:
+                X86Instruction();
+                X86Instruction(X86RexPrefix rex_prefix, uint32_t opcode);
+                X86Instruction(X86OpcodePrefix prefix, uint32_t opcode);
+                explicit X86Instruction(uint32_t opcode);
                 X86Instruction(X86OpcodePrefix prefix, X86RexPrefix rex_prefix, uint32_t opcode);
 
+            public:
                 X86OpcodePrefix GetPrefix() const;
 
                 X86RexPrefix GetRexPrefix() const;
@@ -51,6 +57,16 @@ namespace hooc {
                 uint32_t GetDisplacement() const;
 
                 uint32_t GetImmediate() const;
+
+            public:
+                void AddRegister(X86RegisterType reg);
+                void SetOperands(X86RegisterType reg);
+                void SetOperands(X86RegisterType reg, uint8_t displacement);
+                void SetOperands(X86RegisterType reg, uint32_t displacement);
+                void SetOperands(X86RegisterType reg1, X86RegisterType reg2);
+
+            public:
+                byte_vector Encode();
             };
         }
     }
