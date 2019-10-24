@@ -16,10 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_OPCODEPREFIXES_HH
-#define HOOLANG_OPCODEPREFIXES_HH
-
-#include <cstdint>
+#ifndef HOOLANG_X86DEFINITIONS_HH
+#define HOOLANG_X86DEFINITIONS_HH
 
 namespace hooc {
     namespace emitter {
@@ -42,9 +40,32 @@ namespace hooc {
                 PREFIX_REX_R = 0x44, // This 1-bit value is an extension to the MODRM.reg field
                 PREFIX_REX_X = 0x42, // This 1-bit value is an extension to the SIB.index field
                 PREFIX_REX_B = 0x41  // This 1-bit value is an extension to the MODRM.rm field or the SIB.base field
-            } OpcodePrefix;
+            } X86OpcodePrefix;
+
+            typedef enum {
+                X86_REG_RAX = 0,
+                X86_REG_RCX = 1,
+                X86_REG_RBX = 3,
+                X86_REG_RDX = 2,
+                X86_REG_RSP = 4,
+                X86_REG_RBP = 5,
+                X86_REG_RSI = 6,
+                X86_REG_RDI = 7,
+                X86_REG_R8 = 8,
+                X86_REG_R9 = 9,
+                X86_REG_R10 = 10,
+                X86_REG_R11 = 11,
+                X86_REG_R12 = 12,
+                X86_REG_R13 = 13,
+                X86_REG_R14 = 14,
+                X86_REG_R15 = 15,
+                X86_REG_AH = 4,
+                X86_REG_BH = 7,
+                X86_REG_CH = 5,
+                X86_REG_DH = 6
+            } X86RegisterType;
         }
     }
 }
 
-#endif //HOOLANG_OPCODEPREFIXES_HH
+#endif //HOOLANG_X86DEFINITIONS_HH

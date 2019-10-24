@@ -19,9 +19,10 @@
 #ifndef HOOLANG_ENCODER_HH
 #define HOOLANG_ENCODER_HH
 
+#include <emitter/x86/X86Definitions.hh>
+
 #include <cstdint>
 #include <vector>
-#include "X86RegisterTypes.hh"
 
 namespace hooc {
     namespace emitter {

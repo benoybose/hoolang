@@ -22,7 +22,6 @@
 
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
-#include <emitter/x86/X86RegisterTypes.hh>
 
 namespace hooc {
     namespace emitter {

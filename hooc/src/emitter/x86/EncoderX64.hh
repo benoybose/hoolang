@@ -19,10 +19,10 @@
 #ifndef HOOLANG_ENCODERX64_HH
 #define HOOLANG_ENCODERX64_HH
 
+#include <emitter/x86/X86Definitions.hh>
+#include <emitter/x86/Encoder.hh>
 #include <cstdint>
 #include <vector>
-
-#include "Encoder.hh"
 
 namespace hooc {
     namespace emitter {

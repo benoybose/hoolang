@@ -17,7 +17,6 @@
  */
 
 #include "EncoderX64.hh"
-#include "X86RegisterTypes.hh"
 
 namespace hooc {
     namespace emitter {
