@@ -24,24 +24,21 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            const uint8_t PREFIX_LOCK = 0xF0;
-            const uint8_t PREFIX_REPNE = 0xF2;
-            const uint8_t PREFIX_REPNZ = 0xF2;
-            const uint8_t PREFIX_REP = 0xF3;
-            const uint8_t PREFIX_REPE = 0xF3;
-            const uint8_t PREFIX_REPZ = 0xF3;
-
-            const uint8_t PREFIX_SEGMENT_CS = 0x2E;
-            const uint8_t PREFIX_SEGMENT_SS = 0x36;
-            const uint8_t PREFIX_SEGMENT_DS = 0x3E;
-            const uint8_t PREFIX_SEGMENT_ES = 0x26;
-            const uint8_t PREFIX_SEGMENT_FS = 0x64;
-            const uint8_t PREFIX_SEGMENT_GS = 0x65;
-            const uint8_t PREFIX_BRANCH_NOT_TAKEN = 0x2E;
-            const uint8_t PREFIX_BRANCH_TAKEN = 0x3E;
-
-            const uint8_t PREFIX_OPERAND_SIZE_OVERRIDE = 0x66;
-            const uint8_t PREFIX_ADDRESS_SIZE_OVERRIDE = 0x67;
+            typedef enum {
+                PREFIX_G1_LOCK = 0xF0,
+                PREFIX_G1_REPN = 0xF2, // REPNE, REPNZ
+                PREFIX_G1_REP = 0xF3, // REP, REPE, REPZ
+                PREFIX_G2_SEGMENT_CS = 0x2E,
+                PREFIX_G2_SEGMENT_SS = 0x36,
+                PREFIX_G2_SEGMENT_DS = 0x3E,
+                PREFIX_G2_SEGMENT_ES = 0x26,
+                PREFIX_G2_SEGMENT_FS = 0x64,
+                PREFIX_G2_SEGMENT_GS = 0x65,
+                PREFIX_G2_BRANCH_NOT_TAKEN = 0x2E,
+                PREFIX_G2_BRANCH_TAKEN = 0x3E,
+                PREFIX_G3_OPERAND_SIZE_OVERRIDE = 0x66,
+                PREFIX_G4_ADDRESS_SIZE_OVERRIDE = 0x67
+            } OpcodePrefix;
         }
     }
 }
