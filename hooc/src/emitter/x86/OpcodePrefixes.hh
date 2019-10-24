@@ -37,7 +37,11 @@ namespace hooc {
                 PREFIX_G2_BRANCH_NOT_TAKEN = 0x2E,
                 PREFIX_G2_BRANCH_TAKEN = 0x3E,
                 PREFIX_G3_OPERAND_SIZE_OVERRIDE = 0x66,
-                PREFIX_G4_ADDRESS_SIZE_OVERRIDE = 0x67
+                PREFIX_G4_ADDRESS_SIZE_OVERRIDE = 0x67,
+                PREFIX_REX_W = 0x48, // When 1, a 64-bit operand size is used. Otherwise, when 0, the default operand size is used
+                PREFIX_REX_R = 0x44, // This 1-bit value is an extension to the MODRM.reg field
+                PREFIX_REX_X = 0x42, // This 1-bit value is an extension to the SIB.index field
+                PREFIX_REX_B = 0x41  // This 1-bit value is an extension to the MODRM.rm field or the SIB.base field
             } OpcodePrefix;
         }
     }
