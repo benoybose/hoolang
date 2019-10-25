@@ -27,6 +27,7 @@ namespace hooc {
 
             const uint64_t X86_OPCODE_PUSH_REGISTER = 0x50;
             const uint64_t X86_OPCODE_PUSH_REGISTER_RBP = 0x55;
+            const uint64_t X86_OPCODE_MOV_REGMEM64_REG64 = 0x89;
 
             X86Instruction::X86Instruction() :
                     _prefix(X86_PREFIX_INVALID),
@@ -124,7 +125,7 @@ namespace hooc {
 
             void X86Instruction::SetOperands(X86RegisterType reg1,
                     X86RegisterType reg2) {
-                this->_mod_r_m = X86_MOD_EFFECTIVE_DISP32;
+                this->_mod_r_m = X86_MOD_DIRECT;
                 this->_mod_r_m |= reg1 << 3;
                 this->_mod_r_m |= reg2;
             }

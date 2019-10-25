@@ -16,6 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "HoocTestHelper.hh"
+
 #include <emitter/x86/X86Instruction.hh>
 #include <emitter/x86/X86Definitions.hh>
 #include <boost/test/unit_test.hpp>
@@ -35,6 +37,9 @@ BOOST_AUTO_TEST_SUITE(X86Instruction001)
         BOOST_CHECK_EQUAL(0, push.GetImmediate());
         push.AddRegister(X86_REG_RBP);
         BOOST_CHECK_EQUAL(0x55, push.GetOpcode());
+        auto encoded = push.Encode();
+        uint8_t expected[1] = { 0x55 };
+        VerifyByteVector(encoded, expected, 1);
     }
 
     BOOST_AUTO_TEST_CASE(TEST02) {
@@ -46,6 +51,25 @@ BOOST_AUTO_TEST_SUITE(X86Instruction001)
         BOOST_CHECK_EQUAL(0, push.GetSIB());
         BOOST_CHECK_EQUAL(0, push.GetDisplacement());
         BOOST_CHECK_EQUAL(0, push.GetImmediate());
+        auto encoded = push.Encode();
+        uint8_t expected[1] = { 0x55 };
+        VerifyByteVector(encoded, expected, 1);
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST03) {
+        X86Instruction mov(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
+        BOOST_CHECK_EQUAL(X86_PREFIX_INVALID, mov.GetPrefix());
+        BOOST_CHECK_EQUAL(X86_PREFIX_REX_W, mov.GetRexPrefix());
+        BOOST_CHECK_EQUAL(X86_OPCODE_MOV_REGMEM64_REG64, mov.GetOpcode());
+        BOOST_CHECK_EQUAL(0, mov.GetModRM());
+        BOOST_CHECK_EQUAL(0, mov.GetSIB());
+        BOOST_CHECK_EQUAL(0, mov.GetDisplacement());
+        BOOST_CHECK_EQUAL(0, mov.GetImmediate());
+        mov.SetOperands(X86_REG_RSP, X86_REG_RBP);
+        BOOST_CHECK_EQUAL(0xE5, mov.GetModRM());
+        auto encoded = mov.Encode();
+        uint8_t expected[3] = { 0x48, 0x89, 0xE5 };
+        VerifyByteVector(encoded, expected, 3);
     }
 
 BOOST_AUTO_TEST_SUITE_END()
