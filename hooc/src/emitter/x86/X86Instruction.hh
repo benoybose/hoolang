@@ -27,6 +27,9 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
+            extern const uint64_t X86_OPCODE_PUSH_REGISTER;
+            extern const uint64_t X86_OPCODE_PUSH_REGISTER_RBP;
+
             class X86Instruction {
             private:
                 X86OpcodePrefix _prefix;

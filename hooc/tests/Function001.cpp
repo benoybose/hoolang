@@ -24,7 +24,6 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/filesystem.hpp>
-#include <ast/ExpressionStatement.hh>
 #include <ast/FunctionDefinition.hh>
 #include <ast/BasicDataTypeSpecification.hh>
 #include <ast/CompoundStatement.hh>

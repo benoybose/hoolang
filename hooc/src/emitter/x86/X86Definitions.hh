@@ -29,28 +29,28 @@ namespace hooc {
             typedef std::vector<byte> byte_vector;
 
             typedef enum {
-                PREFIX_INVALID = 0x00,
-                PREFIX_G1_LOCK = 0xF0,
-                PREFIX_G1_REPN = 0xF2, // REPNE, REPNZ
-                PREFIX_G1_REP = 0xF3, // REP, REPE, REPZ
-                PREFIX_G2_SEGMENT_CS = 0x2E,
-                PREFIX_G2_SEGMENT_SS = 0x36,
-                PREFIX_G2_SEGMENT_DS = 0x3E,
-                PREFIX_G2_SEGMENT_ES = 0x26,
-                PREFIX_G2_SEGMENT_FS = 0x64,
-                PREFIX_G2_SEGMENT_GS = 0x65,
-                PREFIX_G2_BRANCH_NOT_TAKEN = 0x2E,
-                PREFIX_G2_BRANCH_TAKEN = 0x3E,
-                PREFIX_G3_OPERAND_SIZE_OVERRIDE = 0x66,
-                PREFIX_G4_ADDRESS_SIZE_OVERRIDE = 0x67
+                X86_PREFIX_INVALID = 0x00,
+                X86_PREFIX_G1_LOCK = 0xF0,
+                X86_PREFIX_G1_REPN = 0xF2, // REPNE, REPNZ
+                X86_PREFIX_G1_REP = 0xF3, // REP, REPE, REPZ
+                X86_PREFIX_G2_SEGMENT_CS = 0x2E,
+                X86_PREFIX_G2_SEGMENT_SS = 0x36,
+                X86_PREFIX_G2_SEGMENT_DS = 0x3E,
+                X86_PREFIX_G2_SEGMENT_ES = 0x26,
+                X86_PREFIX_G2_SEGMENT_FS = 0x64,
+                X86_PREFIX_G2_SEGMENT_GS = 0x65,
+                X86_PREFIX_G2_BRANCH_NOT_TAKEN = 0x2E,
+                X86_PREFIX_G2_BRANCH_TAKEN = 0x3E,
+                X86_PREFIX_G3_OPERAND_SIZE_OVERRIDE = 0x66,
+                X86_PREFIX_G4_ADDRESS_SIZE_OVERRIDE = 0x67
             } X86OpcodePrefix;
 
             typedef enum {
-                PREFIX_REX_INVALID = 0x00,
-                PREFIX_REX_W = 0x48, // When 1, a 64-bit operand size is used. Otherwise, when 0, the default operand size is used
-                PREFIX_REX_R = 0x44, // This 1-bit value is an extension to the MODRM.reg field
-                PREFIX_REX_X = 0x42, // This 1-bit value is an extension to the SIB.index field
-                PREFIX_REX_B = 0x41  // This 1-bit value is an extension to the MODRM.rm field or the SIB.base field
+                X86_PREFIX_REX_INVALID = 0x00,
+                X86_PREFIX_REX_W = 0x48, // When 1, a 64-bit operand size is used. Otherwise, when 0, the default operand size is used
+                X86_PREFIX_REX_R = 0x44, // This 1-bit value is an extension to the MODRM.reg field
+                X86_PREFIX_REX_X = 0x42, // This 1-bit value is an extension to the SIB.index field
+                X86_PREFIX_REX_B = 0x41  // This 1-bit value is an extension to the MODRM.rm field or the SIB.base field
             } X86RexPrefix;
 
             typedef enum {

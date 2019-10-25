@@ -25,9 +25,12 @@ namespace hooc {
     namespace emitter {
         namespace x86 {
 
+            const uint64_t X86_OPCODE_PUSH_REGISTER = 0x50;
+            const uint64_t X86_OPCODE_PUSH_REGISTER_RBP = 0x55;
+
             X86Instruction::X86Instruction() :
-                    _prefix(PREFIX_INVALID),
-                    _rex_prefix(PREFIX_REX_INVALID),
+                    _prefix(X86_PREFIX_INVALID),
+                    _rex_prefix(X86_PREFIX_REX_INVALID),
                     _opcode(0x90),
                     _mod_r_m(0),
                     _s_i_b(0),
