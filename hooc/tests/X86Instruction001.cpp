@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(X86Instruction001)
         BOOST_CHECK_EQUAL(0x55, push.GetOpcode());
         auto encoded = push.Encode();
         uint8_t expected[1] = { 0x55 };
-        VerifyByteVector(encoded, expected, 1);
+        BOOST_ASSERT(VerifyByteVector(encoded, expected, 1));
     }
 
     BOOST_AUTO_TEST_CASE(TEST02) {
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_SUITE(X86Instruction001)
         BOOST_CHECK_EQUAL(0, push.GetImmediate());
         auto encoded = push.Encode();
         uint8_t expected[1] = { 0x55 };
-        VerifyByteVector(encoded, expected, 1);
+        BOOST_ASSERT(VerifyByteVector(encoded, expected, 1));
     }
 
     BOOST_AUTO_TEST_CASE(TEST03) {
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_SUITE(X86Instruction001)
         BOOST_CHECK_EQUAL(0xE5, mov.GetModRM());
         auto encoded = mov.Encode();
         uint8_t expected[3] = { 0x48, 0x89, 0xE5 };
-        VerifyByteVector(encoded, expected, 3);
+        BOOST_ASSERT(VerifyByteVector(encoded, expected, 3));
     }
 
 BOOST_AUTO_TEST_SUITE_END()
