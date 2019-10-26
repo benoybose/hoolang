@@ -17,28 +17,32 @@
  */
 
 #include "EncoderX64.hh"
+#include "X86Instruction.hh"
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            std::vector<uint8_t> EncoderX64::PUSH(X86RegisterType reg) {
-                std::vector<uint8_t> ins;
-                uint8_t opcode = 0x50 + reg; // 50+rd
-                ins.push_back(opcode);
-                return ins;
+            byte_vector EncoderX64::PUSH(X86RegisterType reg) {
+                X86Instruction instruction(X86_OPCODE_PUSH_REGISTER);
+                instruction.AddRegister(reg);
+                byte_vector vector = instruction.Encode();
+                return vector;
             }
 
-            std::vector<uint8_t> EncoderX64::MOV(X86RegisterType reg64_from, X86RegisterType reg64_to) {
-                std::vector<uint8_t> ins;
-                ins.push_back(0x48); // REX prefix for 64 bit operands
-                ins.push_back(0x89); // Opcode for MOV
+            byte_vector EncoderX64::MOV(X86RegisterType reg_from,
+                    X86RegisterType reg_to) {
+                X86Instruction instruction(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
+                instruction.SetOperands(reg_from, reg_to);
+                byte_vector vector = instruction.Encode();
+                return vector;
+            }
 
-                uint8_t mod_r_m = 0x03;
-                mod_r_m <<= 6; // ModR/M register direct addressing model. Bits 7, 6
-                mod_r_m += (reg64_from << 3); // Setting source register to reg bit field. Bits 5, 4, 3
-                mod_r_m += reg64_to; // Setting destination register to rm bit field. Bits 2, 1, 0
-                ins.push_back(mod_r_m);
-                return ins;
+            byte_vector EncoderX64::MOV(X86RegisterType reg_from,
+                    X86RegisterType reg_to, uint8_t displacement) {
+                X86Instruction instruction(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
+                instruction.SetOperands(reg_from, reg_to, displacement);
+                byte_vector vector = instruction.Encode();
+                return vector;
             }
         }
     }

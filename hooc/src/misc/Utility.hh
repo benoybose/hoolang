@@ -27,6 +27,7 @@ namespace hooc {
         class Utility {
         public:
             static std::vector<std::uint8_t> GetBytes(std::uint64_t value);
+            static void AppendTo(std::vector<std::uint8_t >& to, const std::vector<std::uint8_t >& from);
         };
     }
 }

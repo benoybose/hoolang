@@ -66,10 +66,9 @@ namespace hooc {
 
             public:
                 void AddRegister(X86RegisterType reg);
-                void SetOperands(X86RegisterType reg);
-                void SetOperands(X86RegisterType reg, uint8_t displacement);
-                void SetOperands(X86RegisterType reg, uint32_t displacement);
                 void SetOperands(X86RegisterType reg1, X86RegisterType reg2);
+                void SetOperands(X86RegisterType reg1,
+                        X86RegisterType reg2, uint8_t disp8);
 
             public:
                 byte_vector Encode();

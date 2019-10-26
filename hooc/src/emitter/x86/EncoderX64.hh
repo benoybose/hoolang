@@ -30,7 +30,10 @@ namespace hooc {
             class EncoderX64: public Encoder {
             public:
                 byte_vector PUSH(X86RegisterType reg) override;
-                byte_vector MOV(X86RegisterType reg64_from, X86RegisterType reg64_to) override;
+                byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to) override;
+                byte_vector MOV(X86RegisterType reg_from,
+                        X86RegisterType reg_to,
+                        uint8_t disp8_to) override;
             };
         }
     }

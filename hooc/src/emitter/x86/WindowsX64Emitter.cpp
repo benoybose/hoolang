@@ -17,11 +17,15 @@
  */
 
 
-#include "WindowsX64Emitter.hh"
-#include "EncoderX64.hh"
+#include <emitter/x86/WindowsX64Emitter.hh>
+#include <misc/Utility.hh>
+#include <ast/BasicDataTypes.hh>
 
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
+
+using namespace std;
+using namespace hooc::misc;
 
 namespace hooc {
     namespace emitter {
@@ -55,14 +59,26 @@ namespace hooc {
 
             Code *WindowsX64Emitter::GenerateCode(FunctionDefinition *function_definition) {
                 std::vector<uint8_t> header;
-                auto ins_push_rbp = this->_encoder.PUSH(X86_REG_RBP);
-                header.insert(header.end(), ins_push_rbp.begin(),
-                              ins_push_rbp.end());
+                auto declaration = function_definition->GetDeclaration();
+                if (!declaration->GetParamList().empty()) {
+                    auto params = declaration->GetParamList();
+                    auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
+                    Utility::AppendTo(header, push_rbp);
+                    auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
+                    Utility::AppendTo(header, mov_rsp_rbp);
 
-                auto ins_mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP,
-                                                          X86_REG_RBP);
-                header.insert(header.end(), ins_mov_rsp_rbp.begin(),
-                              ins_mov_rsp_rbp.end());
+                    auto arg1 = *(params.begin());
+                    if ((TYPE_SPEC_BASIC == arg1->GetDelcaredType()->GetType())
+                        && (NAME_DOUBLE == arg1->GetName())) {
+                        // todo: Implement double argument handling
+                    } else {
+                        auto mov_rcx_rbp_0x10 = this->_encoder.MOV(X86_REG_RCX,
+                                X86_REG_RBP,
+                                0x10);
+                        Utility::AppendTo(header, mov_rcx_rbp_0x10);
+                    }
+                }
+
                 return nullptr;
             }
         }

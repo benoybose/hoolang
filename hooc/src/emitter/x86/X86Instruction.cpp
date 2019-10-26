@@ -104,30 +104,18 @@ namespace hooc {
                 this->_opcode |= reg;
             }
 
-            void X86Instruction::SetOperands(X86RegisterType reg) {
-                this->_mod_r_m = X86_MOD_EFFECTIVE;
-                this->_mod_r_m |= (reg << 3);
-            }
-
-            void X86Instruction::SetOperands(X86RegisterType reg,
-                    uint8_t displacement) {
-                this->_mod_r_m = X86_MOD_EFFECTIVE_DISP8;
-                this->_mod_r_m |= reg << 3;
-                this->_displacement = displacement;
-            }
-
-            void X86Instruction::SetOperands(X86RegisterType reg,
-                    uint32_t displacement) {
-                this->_mod_r_m = X86_MOD_EFFECTIVE_DISP32;
-                this->_mod_r_m |= reg << 3;
-                this->_displacement = displacement;
-            }
-
             void X86Instruction::SetOperands(X86RegisterType reg1,
                     X86RegisterType reg2) {
                 this->_mod_r_m = X86_MOD_DIRECT;
                 this->_mod_r_m |= reg1 << 3;
                 this->_mod_r_m |= reg2;
+            }
+
+            void X86Instruction::SetOperands(X86RegisterType reg1, X86RegisterType reg2, uint8_t disp8) {
+                this->_mod_r_m = X86_MOD_EFFECTIVE_DISP8;
+                this->_mod_r_m |= reg1 << 3;
+                this->_mod_r_m |= reg2;
+                this->_displacement = disp8;
             }
 
             byte_vector X86Instruction::Encode() {

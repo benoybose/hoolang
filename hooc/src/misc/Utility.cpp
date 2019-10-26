@@ -48,5 +48,9 @@ namespace hooc {
             }
             return bytes;
         }
+
+        void Utility::AppendTo(std::vector<std::uint8_t> &to, const std::vector<std::uint8_t> &from) {
+            to.insert(to.end(), from.begin(), from.end());
+        }
     }
 }
