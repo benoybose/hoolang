@@ -119,20 +119,20 @@ SET(hooc_link_libraries hooc ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(
 		hooc_test tests/HoocTest.cpp
-		tests/VariableDeclaration.cpp
-		tests/IntegerLiteral.cpp
-		tests/DecimalLiteral.cpp
-		tests/CharacterLiteral.cpp
-		tests/BooleanLiteral.cpp
-		tests/StringLiteral.cpp
-		tests/PrimaryExpression.cpp
-		tests/InvocationExpression.cpp
-		tests/BinaryExpression.cpp
-		tests/ReturnStatement.cpp
-		tests/Function001.cpp
-		tests/FunctionDeclaration.cpp
+		tests/VariableDeclarationTest.cpp
+		tests/IntegerLiteralTest.cpp
+		tests/DecimalLiteralTest.cpp
+		tests/CharacterLiteralTest.cpp
+		tests/BooleanLiteralTest.cpp
+		tests/StringLiteralTest.cpp
+		tests/PrimaryExpressionTest.cpp
+		tests/InvocationExpressionTest.cpp
+		tests/BinaryExpressionTest.cpp
+		tests/ReturnStatementTest.cpp
+		tests/FunctionTest001.cpp
+		tests/FunctionDeclarationTest.cpp
 		tests/UtilityTest.cpp
-		tests/X86Instruction001.cpp
+		tests/X86InstructionTest001.cpp
 		tests/HoocTestHelper.hh
 		tests/HoocTestHelper.cpp)
 
