@@ -34,6 +34,7 @@ namespace hooc {
             extern const uint64_t X86_OPCODE_MOV_REGMEM64_REG64;
             extern const uint64_t X86_OPCODE_RET;
             extern const uint64_t X86_OPCODE_RET_INTER_SEGMENT;
+            extern const uint64_t X86_OPCODE_POP_REGISTER;
 
             class X86Instruction {
             private:

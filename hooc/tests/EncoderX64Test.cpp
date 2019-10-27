@@ -61,4 +61,18 @@ BOOST_AUTO_TEST_SUITE(Encoder64Test)
         BOOST_ASSERT(VerifyByteVector(bytes, expected, 1));
     }
 
+    BOOST_AUTO_TEST_CASE(TEST06) {
+        EncoderX64 encoder;
+        auto bytes = encoder.RET(false);
+        byte expected[1] = { 0xC3 };
+        BOOST_ASSERT(VerifyByteVector(bytes, expected, 1));
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST07) {
+        EncoderX64 encoder;
+        auto bytes = encoder.POP(X86_REG_RBP);
+        byte expected[1] = { 0x5D };
+        BOOST_ASSERT(VerifyByteVector(bytes, expected, 1));
+    }
+
 BOOST_AUTO_TEST_SUITE_END()

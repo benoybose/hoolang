@@ -32,7 +32,8 @@ namespace hooc {
                 virtual byte_vector PUSH(X86RegisterType reg) = 0;
                 virtual byte_vector MOV(X86RegisterType reg64_from, X86RegisterType reg64_to) = 0;
                 virtual byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to, uint8_t displacement) = 0;
-                virtual byte_vector RET(bool inter_segment = false) = 0;
+                virtual byte_vector RET(bool inter_segment) = 0;
+                virtual byte_vector POP(X86RegisterType reg) = 0;
             };
         }
     }

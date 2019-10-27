@@ -30,6 +30,7 @@ namespace hooc {
             const uint64_t X86_OPCODE_MOV_REGMEM64_REG64 = 0x89;
             const uint64_t X86_OPCODE_RET = 0xC3;
             const uint64_t X86_OPCODE_RET_INTER_SEGMENT = 0xCB;
+            const uint64_t X86_OPCODE_POP_REGISTER = 0x58;
 
             X86Instruction::X86Instruction() :
                     _prefix(X86_PREFIX_INVALID),

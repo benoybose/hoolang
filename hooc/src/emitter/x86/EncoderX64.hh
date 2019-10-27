@@ -35,6 +35,8 @@ namespace hooc {
                         X86RegisterType reg_to,
                         uint8_t disp8_to) override;
                 byte_vector RET(bool inter_segment) override;
+
+                byte_vector POP(X86RegisterType reg) override;
             };
         }
     }

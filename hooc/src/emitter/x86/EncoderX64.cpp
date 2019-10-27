@@ -54,6 +54,12 @@ namespace hooc {
                     return instruction.Encode();
                 }
             }
+
+            byte_vector EncoderX64::POP(X86RegisterType reg) {
+                X86Instruction instruction(X86_OPCODE_POP_REGISTER);
+                instruction.AddRegister(reg);
+                return instruction.Encode();
+            }
         }
     }
 }
