@@ -88,7 +88,14 @@ namespace hooc {
                         Utility::AppendTo(body, ins_nop);
                     }
                 }
-                return nullptr;
+
+                auto name = this->GetMangler()->Mangle(declaration);
+                byte_vector buffer;
+                Utility::AppendTo(buffer, header);
+                Utility::AppendTo(buffer, body);
+                Utility::AppendTo(buffer, footer);
+                auto code = new Code(CODE_TYPE_FUNCTION, name, buffer);
+                return code;
             }
 
             void WindowsX64Emitter::GenerateCode(std::list<VariableDeclaration *> arguments,

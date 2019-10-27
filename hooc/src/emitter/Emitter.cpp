@@ -17,15 +17,25 @@
  */
 
 #include "Emitter.hh"
+#include <emitter/NameMangler.hh>
 
 namespace hooc {
     namespace emitter {
         Emitter::Emitter(const Unit *unit) :
                 _unit(const_cast<Unit *>(unit)) {
+            this->_mangler = new NameMangler(unit);
+        }
+
+        Emitter::~Emitter() {
+            delete this->_mangler;
         }
 
         const Unit *Emitter::GetUnit() const {
             return this->_unit;
+        }
+
+        NameMangler *const Emitter::GetMangler() const {
+            return _mangler;
         }
     }
 }

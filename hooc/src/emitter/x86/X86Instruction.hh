@@ -29,6 +29,7 @@ using namespace std;
 namespace hooc {
     namespace emitter {
         namespace x86 {
+            extern const uint64_t X86_OPCODE_NOP;
             extern const uint64_t X86_OPCODE_PUSH_REGISTER;
             extern const uint64_t X86_OPCODE_PUSH_REGISTER_RBP;
             extern const uint64_t X86_OPCODE_MOV_REGMEM64_REG64;

@@ -16,14 +16,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "HoocTestHelper.hh"
+
 #include <boost/test/unit_test.hpp>
 #include <compiler/ParserDriver.hh>
 #include <ast/FunctionDefinition.hh>
 #include <emitter/x86/WindowsX64Emitter.hh>
+#include <emitter/CodeType.hh>
+#include <emitter/Code.hh>
+#include <emitter/x86/X86Instruction.hh>
 
 using namespace hooc::compiler;
 using namespace hooc::ast;
 using namespace hooc::emitter::x86;
+using namespace hooc::emitter;
 
 BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
 
@@ -37,6 +43,13 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
         WindowsX64Emitter emitter(unit);
         auto code = emitter.GenerateCode(func);
+        BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+        BOOST_CHECK_EQUAL("_Z3foov", code->GetName());
+        BOOST_CHECK_EQUAL(2, code->GetSize());
+        auto buffer = code->GetBuffer();
+        BOOST_CHECK_EQUAL(2, buffer.size());
+        byte expected[2] = { static_cast<byte>(X86_OPCODE_NOP), static_cast<byte>(X86_OPCODE_RET) };
+        BOOST_CHECK(VerifyByteVector(buffer, expected, 2));
     }
 
 BOOST_AUTO_TEST_SUITE_END()

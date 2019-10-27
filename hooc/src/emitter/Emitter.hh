@@ -20,6 +20,7 @@
 #define HOOLANG_EMITTER_HH
 
 #include <emitter/Code.hh>
+#include <emitter/NameMangler.hh>
 #include <ast/Unit.hh>
 
 #include <list>
@@ -31,15 +32,19 @@ namespace hooc {
         class Emitter {
         private:
             Unit* _unit;
+            NameMangler* _mangler;
 
         public:
             explicit Emitter(const Unit *unit);
 
         public:
             const Unit* GetUnit() const;
+            NameMangler *const GetMangler() const;
 
         public:
             virtual std::list<Code*> GenerateCode() = 0;
+
+            virtual ~Emitter();
         };
     }
 }

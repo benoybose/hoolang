@@ -24,7 +24,7 @@ using namespace hooc::misc;
 namespace hooc {
     namespace emitter {
         namespace x86 {
-
+            const uint64_t X86_OPCODE_NOP = 0x90;
             const uint64_t X86_OPCODE_PUSH_REGISTER = 0x50;
             const uint64_t X86_OPCODE_PUSH_REGISTER_RBP = 0x55;
             const uint64_t X86_OPCODE_MOV_REGMEM64_REG64 = 0x89;
@@ -35,7 +35,7 @@ namespace hooc {
             X86Instruction::X86Instruction() :
                     _prefix(X86_PREFIX_INVALID),
                     _rex_prefix(X86_PREFIX_REX_INVALID),
-                    _opcode(0x90),
+                    _opcode(X86_OPCODE_NOP),
                     _mod_r_m(0),
                     _s_i_b(0),
                     _displacement(0),
@@ -59,7 +59,7 @@ namespace hooc {
                     X86Instruction() {
                 this->_opcode = opcode;
                 if(0 == this->_opcode) {
-                    this->_opcode = 0x90;
+                    this->_opcode = X86_OPCODE_NOP;
                 }
             }
 
