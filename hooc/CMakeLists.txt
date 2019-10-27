@@ -134,7 +134,8 @@ ADD_EXECUTABLE(
 		tests/UtilityTest.cpp
 		tests/X86InstructionTest001.cpp
 		tests/HoocTestHelper.hh
-		tests/HoocTestHelper.cpp)
+		tests/HoocTestHelper.cpp
+		tests/Encoder64Test.cpp)
 
 ADD_DEPENDENCIES(hooc_test antlr4_static)
 TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_static)

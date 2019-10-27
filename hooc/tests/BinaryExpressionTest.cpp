@@ -36,7 +36,7 @@ using namespace hooc::ast;
 
 BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression1) {
+    BOOST_AUTO_TEST_CASE(TEST01) {
         const std::string source = "2 + 3;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_ADD, opr->GetOperatorType());
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression2) {
+    BOOST_AUTO_TEST_CASE(TEST02) {
         const std::string source = "a - b;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_SUB, opr->GetOperatorType());
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression3) {
+    BOOST_AUTO_TEST_CASE(TEST03) {
         const std::string source = "2 / 3 * 4;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -113,7 +113,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_MUL, opr->GetOperatorType());
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression4) {
+    BOOST_AUTO_TEST_CASE(TEST04) {
         const std::string source = "a / b * c % d;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_DIV, opr->GetOperatorType());
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression5) {
+    BOOST_AUTO_TEST_CASE(TEST05) {
         const std::string source = "(a / b) * (c % d);";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_EQUAL(OPERATOR_MOD, opr->GetOperatorType());
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression6) {
+    BOOST_AUTO_TEST_CASE(TEST06) {
         const std::string source = "a[0] == b[1];";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -224,7 +224,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_LITERAL_EXPRESSION(index1, LITERAL_INTEGER, "1");
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression7) {
+    BOOST_AUTO_TEST_CASE(TEST07) {
         const std::string source = "a == b && c != d;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -257,7 +257,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_REFERENCE_EXPRESSION(expr4, "d");
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression8) {
+    BOOST_AUTO_TEST_CASE(TEST08) {
         const std::string source = "a | b + c ~ d;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -293,7 +293,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
                           ((BinaryExpression *) right)->GetOperator()->GetOperatorType());
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression9) {
+    BOOST_AUTO_TEST_CASE(TEST09) {
         const std::string source = "a * b == c / d;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
                           ((BinaryExpression *) right)->GetOperator()->GetOperatorType());
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression10) {
+    BOOST_AUTO_TEST_CASE(TEST10) {
         const std::string source = "a = b;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -350,7 +350,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
         BOOST_CHECK_REFERENCE_EXPRESSION(binary_expr->GetRightExpression(), "b");
     }
 
-    BOOST_AUTO_TEST_CASE(BinaryExpression11) {
+    BOOST_AUTO_TEST_CASE(TEST11) {
     const std::string source = "a = b + d;";
     ParserDriver driver(source, "test.hoo");
     auto module = driver.BuildModule();
@@ -377,7 +377,7 @@ BOOST_AUTO_TEST_SUITE(BinaryExpressionTest)
     BOOST_CHECK_REFERENCE_EXPRESSION(expr2, "d");
 }
 
-BOOST_AUTO_TEST_CASE(BinaryExpression12) {
+BOOST_AUTO_TEST_CASE(TEST12) {
     const std::string source = "a += 3.14;";
     ParserDriver driver(source, "test.hoo");
     auto module = driver.BuildModule();
