@@ -28,9 +28,9 @@
 using namespace hooc::compiler;
 using namespace hooc::ast;
 
-BOOST_AUTO_TEST_SUITE(BooleanLiteral)
+BOOST_AUTO_TEST_SUITE(BooleanLiteralTest)
 
-    BOOST_AUTO_TEST_CASE(BooleanLiteral_1) {
+    BOOST_AUTO_TEST_CASE(TEST01) {
         auto source = "true;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_SUITE(BooleanLiteral)
         delete module;
     }
 
-    BOOST_AUTO_TEST_CASE(BooleanLiteral_2) {
+    BOOST_AUTO_TEST_CASE(TEST02) {
         auto source = "false;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_SUITE(BooleanLiteral)
         BOOST_CHECK("false" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(BooleanLiteral_3) {
+    BOOST_AUTO_TEST_CASE(TEST03) {
         auto source = "False;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();

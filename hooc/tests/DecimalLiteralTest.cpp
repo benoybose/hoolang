@@ -27,9 +27,9 @@
 using namespace hooc::compiler;
 using namespace hooc::ast;
 
-BOOST_AUTO_TEST_SUITE(DecimalLiteral)
+BOOST_AUTO_TEST_SUITE(DecimalLiteralTest)
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_1) {
+    BOOST_AUTO_TEST_CASE(TEST01) {
         auto source = "2.0;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("2.0" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_2) {
+    BOOST_AUTO_TEST_CASE(TEST02) {
         auto source = "3.14;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("3.14" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_3) {
+    BOOST_AUTO_TEST_CASE(TEST03) {
         auto source = "314.;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("314." == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_4) {
+    BOOST_AUTO_TEST_CASE(TEST04) {
         auto source = ".314;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK(".314" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_5) {
+    BOOST_AUTO_TEST_CASE(TEST05) {
         auto source = "+2.0;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("+2.0" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_6) {
+    BOOST_AUTO_TEST_CASE(TEST06) {
         auto source = "+3.14;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -137,7 +137,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("+3.14" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_7) {
+    BOOST_AUTO_TEST_CASE(TEST07) {
         auto source = "+314.;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -155,7 +155,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("+314." == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_8) {
+    BOOST_AUTO_TEST_CASE(TEST08) {
         auto source = "+.314;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("+.314" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_9) {
+    BOOST_AUTO_TEST_CASE(TEST09) {
         auto source = "-2.0;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("-2.0" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_10) {
+    BOOST_AUTO_TEST_CASE(TEST10) {
         auto source = "-3.14;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("-3.14" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_11) {
+    BOOST_AUTO_TEST_CASE(TEST11) {
         auto source = "-314.;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("-314." == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_12) {
+    BOOST_AUTO_TEST_CASE(TEST12) {
         auto source = "-.314;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -245,7 +245,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("-.314" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_13) {
+    BOOST_AUTO_TEST_CASE(TEST13) {
         auto source = "3.6e34;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -263,7 +263,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("3.6e34" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_14) {
+    BOOST_AUTO_TEST_CASE(TEST14) {
         auto source = "3.6E34;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -281,7 +281,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("3.6E34" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_15) {
+    BOOST_AUTO_TEST_CASE(TEST15) {
         auto source = "3.6e-34;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -299,7 +299,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("3.6e-34" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_16) {
+    BOOST_AUTO_TEST_CASE(TEST16) {
         auto source = "3.6E+34;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("3.6E+34" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa1) {
+    BOOST_AUTO_TEST_CASE(TEST17) {
         auto source = "0XAB089.AB089P0;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -335,7 +335,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("0XAB089.AB089P0" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa2) {
+    BOOST_AUTO_TEST_CASE(TEST18) {
         auto source = "0XAB089.P0;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -353,7 +353,7 @@ BOOST_AUTO_TEST_SUITE(DecimalLiteral)
         BOOST_CHECK("0XAB089.P0" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(DecimalLiteral_Hexa3) {
+    BOOST_AUTO_TEST_CASE(TEST19) {
         auto source = "0x.AB089P0;";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();

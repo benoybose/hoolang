@@ -28,9 +28,9 @@
 using namespace hooc::compiler;
 using namespace hooc::ast;
 
-BOOST_AUTO_TEST_SUITE(IntegerLiteral)
+BOOST_AUTO_TEST_SUITE(CharacterLiteralTest)
 
-    BOOST_AUTO_TEST_CASE(CharacterLiteral_1) {
+    BOOST_AUTO_TEST_CASE(TEST01) {
         auto source = "'a';";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         BOOST_CHECK("'a'" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(CharacterLiteral_2) {
+    BOOST_AUTO_TEST_CASE(TEST02) {
         auto source = "'Z';";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         BOOST_CHECK("'Z'" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(CharacterLiteral_3) {
+    BOOST_AUTO_TEST_CASE(TEST03) {
         auto source = "'\\r';";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         BOOST_CHECK("'\\r'" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(CharacterLiteral_4) {
+    BOOST_AUTO_TEST_CASE(TEST04) {
         auto source = "'\\n';";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         BOOST_CHECK("'\\n'" == expression->GetValue());
     }
 
-    BOOST_AUTO_TEST_CASE(CharacterLiteral_5) {
+    BOOST_AUTO_TEST_CASE(TEST05) {
         auto source = "'\n';";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         BOOST_CHECK(unit->GetItems().empty());
     }
 
-    BOOST_AUTO_TEST_CASE(CharacterLiteral_6) {
+    BOOST_AUTO_TEST_CASE(TEST06) {
         auto source = "'\r';";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_SUITE(IntegerLiteral)
         BOOST_CHECK(unit->GetItems().empty());
     }
 
-    BOOST_AUTO_TEST_CASE(CharacterLiteral_7) {
+    BOOST_AUTO_TEST_CASE(TEST07) {
         auto source = "'$';";
         ParserDriver driver(source, "test.hoo");
         auto module = driver.BuildModule();
