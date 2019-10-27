@@ -40,8 +40,6 @@ namespace hooc {
 
             public:
                 std::list<Code *> GenerateCode() override;
-
-            private:
                 Code *GenerateCode(FunctionDefinition *function_definition);
                 void GenerateCode(std::list<VariableDeclaration*> arguments,
                                   byte_vector& header,

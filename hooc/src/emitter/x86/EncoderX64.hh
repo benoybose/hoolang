@@ -34,6 +34,7 @@ namespace hooc {
                 byte_vector MOV(X86RegisterType reg_from,
                         X86RegisterType reg_to,
                         uint8_t disp8_to) override;
+                byte_vector RET(bool inter_segment) override;
             };
         }
     }

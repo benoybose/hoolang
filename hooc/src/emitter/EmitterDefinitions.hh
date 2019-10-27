@@ -16,28 +16,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_HOOCTESTHELPER_HH
-#define HOOLANG_HOOCTESTHELPER_HH
+#ifndef HOOLANG_EMITTERDEFINITIONS_HH
+#define HOOLANG_EMITTERDEFINITIONS_HH
 
-#include <emitter/EmitterDefinitions.hh>
-#include <emitter/x86/X86Definitions.hh>
+#include <cstdint>
+#include <vector>
 
-#include <boost/test/unit_test.hpp>
-#include "ast/LiteralExpression.hh"
+using namespace std;
 
-using namespace hooc::emitter;
-using namespace hooc::emitter::x86;
+namespace hooc {
+    namespace emitter {
+        typedef std::uint8_t byte;
+        typedef std::vector<byte> byte_vector;
+    }
+}
 
-extern bool VerifyByteVector(const byte_vector& vector, byte* bytes, size_t size);
-
-#define BOOST_CHECK_LITERAL_EXPRESSION(expr, type, value)\
-    BOOST_CHECK_EQUAL(EXPRESSION_LITERAL, expr->GetExpressionType());\
-    BOOST_CHECK_EQUAL(type, ((LiteralExpression*) expr)->GetLiteralType());\
-    BOOST_CHECK_EQUAL(value, ((LiteralExpression*) expr)->GetValue())
-
-#define BOOST_CHECK_REFERENCE_EXPRESSION(expr, value)\
-    BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, expr->GetExpressionType());\
-    BOOST_CHECK_EQUAL(value, ((ReferenceExpression*) expr)->GetName());\
-    BOOST_CHECK_EQUAL(nullptr, ((ReferenceExpression*) expr)->GetParent())
-
-#endif //HOOLANG_HOOCTESTHELPER_HH
+#endif //HOOLANG_EMITTERDEFINITIONS_HH

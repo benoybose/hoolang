@@ -111,7 +111,7 @@ SET(hooc_source_files
 		src/emitter/x86/WindowsX64Emitter.cpp
 		src/emitter/x86/EncoderX64.cpp
 		src/emitter/x86/Encoder.cpp
-		src/emitter/x86/X86Instruction.cpp src/misc/Utility.cpp src/misc/Utility.hh)
+		src/emitter/x86/X86Instruction.cpp src/misc/Utility.cpp src/misc/Utility.hh src/emitter/EmitterDefinitions.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
@@ -135,7 +135,7 @@ ADD_EXECUTABLE(
 		tests/X86InstructionTest001.cpp
 		tests/HoocTestHelper.hh
 		tests/HoocTestHelper.cpp
-        tests/EncoderX64Test.cpp)
+        tests/EncoderX64Test.cpp tests/WindowsX64EmitterTest.cpp)
 
 ADD_DEPENDENCIES(hooc_test antlr4_static)
 TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_static)

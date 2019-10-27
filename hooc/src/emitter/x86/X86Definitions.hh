@@ -19,14 +19,14 @@
 #ifndef HOOLANG_X86DEFINITIONS_HH
 #define HOOLANG_X86DEFINITIONS_HH
 
+#include <emitter/EmitterDefinitions.hh>
+
 #include <cstdint>
 #include <vector>
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            typedef std::uint8_t byte;
-            typedef std::vector<byte> byte_vector;
 
             typedef enum {
                 X86_PREFIX_INVALID = 0x00,

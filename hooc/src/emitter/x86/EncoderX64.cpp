@@ -30,7 +30,7 @@ namespace hooc {
             }
 
             byte_vector EncoderX64::MOV(X86RegisterType reg_from,
-                    X86RegisterType reg_to) {
+                                        X86RegisterType reg_to) {
                 X86Instruction instruction(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
                 instruction.SetOperands(reg_from, reg_to);
                 byte_vector vector = instruction.Encode();
@@ -38,11 +38,21 @@ namespace hooc {
             }
 
             byte_vector EncoderX64::MOV(X86RegisterType reg_from,
-                    X86RegisterType reg_to, uint8_t displacement) {
+                                        X86RegisterType reg_to, uint8_t displacement) {
                 X86Instruction instruction(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
                 instruction.SetOperands(reg_from, reg_to, displacement);
                 byte_vector vector = instruction.Encode();
                 return vector;
+            }
+
+            byte_vector EncoderX64::RET(bool inter_segment) {
+                if (inter_segment) {
+                    X86Instruction instruction(X86_OPCODE_RET_INTER_SEGMENT);
+                    return instruction.Encode();
+                } else {
+                    X86Instruction instruction(X86_OPCODE_RET);
+                    return instruction.Encode();
+                }
             }
         }
     }

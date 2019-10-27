@@ -85,16 +85,5 @@ BOOST_AUTO_TEST_SUITE(Function001)
         BOOST_CHECK_REFERENCE_EXPRESSION(right, "b");
     }
 
-    BOOST_AUTO_TEST_CASE(F2) {
-        std::string source = "func:int add(a:int, b:int) { return a + b; }";
-        ParserDriver driver(source, "test.hoo");
-        auto module = driver.BuildModule();
-        BOOST_CHECK(module->Success());
-        auto unit = module->GetUnit();
-        auto emitter = EmitterFactory::GetEmitter(EMITTER_OS_WINDOWS,
-                EMITTER_ARCH_AMD64, unit);
-        auto codes = emitter->GenerateCode();
-    }
-
 BOOST_AUTO_TEST_SUITE_END()
 

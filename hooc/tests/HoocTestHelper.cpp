@@ -18,18 +18,21 @@
 
 #include "HoocTestHelper.hh"
 
+#include <boost/test/unit_test.hpp>
+
 bool VerifyByteVector(const byte_vector& vector, byte* bytes, size_t size)
 {
+    BOOST_CHECK(vector.size() == size);
     if (vector.size() != size) {
         return false;
     }
 
     for(size_t index = 0; index < size; index++) {
+        BOOST_CHECK(vector[index] == bytes[index]);
         if(vector[index] != bytes[index]) {
             return false;
         }
     }
-
     return true;
 }
 

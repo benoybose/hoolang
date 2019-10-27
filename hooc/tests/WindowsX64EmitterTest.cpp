@@ -16,28 +16,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_HOOCTESTHELPER_HH
-#define HOOLANG_HOOCTESTHELPER_HH
-
-#include <emitter/EmitterDefinitions.hh>
-#include <emitter/x86/X86Definitions.hh>
-
 #include <boost/test/unit_test.hpp>
-#include "ast/LiteralExpression.hh"
+#include <compiler/ParserDriver.hh>
+#include <ast/FunctionDefinition.hh>
+#include <emitter/x86/WindowsX64Emitter.hh>
 
-using namespace hooc::emitter;
+using namespace hooc::compiler;
+using namespace hooc::ast;
 using namespace hooc::emitter::x86;
 
-extern bool VerifyByteVector(const byte_vector& vector, byte* bytes, size_t size);
+BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
 
-#define BOOST_CHECK_LITERAL_EXPRESSION(expr, type, value)\
-    BOOST_CHECK_EQUAL(EXPRESSION_LITERAL, expr->GetExpressionType());\
-    BOOST_CHECK_EQUAL(type, ((LiteralExpression*) expr)->GetLiteralType());\
-    BOOST_CHECK_EQUAL(value, ((LiteralExpression*) expr)->GetValue())
+    BOOST_AUTO_TEST_CASE(TEST01) {
+        const std::string source = "func foo() {}";
+        ParserDriver driver(source, "foo.hoo");
+        auto module = driver.BuildModule();
+        BOOST_ASSERT(module->Success());
+        auto unit = module->GetUnit();
+        auto func = (FunctionDefinition*) (*unit->GetItems().begin());
+        BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+        WindowsX64Emitter emitter(unit);
+        auto code = emitter.GenerateCode(func);
+    }
 
-#define BOOST_CHECK_REFERENCE_EXPRESSION(expr, value)\
-    BOOST_CHECK_EQUAL(EXPRESSION_REFERENCE, expr->GetExpressionType());\
-    BOOST_CHECK_EQUAL(value, ((ReferenceExpression*) expr)->GetName());\
-    BOOST_CHECK_EQUAL(nullptr, ((ReferenceExpression*) expr)->GetParent())
-
-#endif //HOOLANG_HOOCTESTHELPER_HH
+BOOST_AUTO_TEST_SUITE_END()

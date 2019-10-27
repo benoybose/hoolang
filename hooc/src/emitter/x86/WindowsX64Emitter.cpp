@@ -67,10 +67,12 @@ namespace hooc {
 
             Code *WindowsX64Emitter::GenerateCode(FunctionDefinition *function_definition) {
                 byte_vector header;
+                byte_vector body;
                 byte_vector footer;
 
                 auto declaration = function_definition->GetDeclaration();
                 const auto& arguments = declaration->GetParamList();
+
                 GenerateCode(arguments, header, footer);
                 return nullptr;
             }
