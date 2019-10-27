@@ -25,6 +25,14 @@ using namespace std;
 
 namespace hooc {
     namespace misc {
+
+        const char UTILITY_HEX_DIGITS[16] = {
+                '0', '1', '2', '3',
+                '4', '5', '6', '7',
+                '8', '9', 'A', 'B',
+                'C', 'D', 'E', 'F' };
+        const char UTILITY_HEX_BASE = 16;
+
         vector<uint8_t> Utility::GetBytes(std::uint64_t value) {
             vector<uint8_t> bytes;
             bool started = false;
@@ -51,6 +59,28 @@ namespace hooc {
 
         void Utility::AppendTo(std::vector<std::uint8_t> &to, const std::vector<std::uint8_t> &from) {
             to.insert(to.end(), from.begin(), from.end());
+        }
+
+        std::string Utility::ToHex(std::uint8_t byte) {
+            std::string result;
+            uint8_t quotient = byte;
+            uint8_t reminder = 0;
+
+            while(0 != quotient) {
+                reminder = quotient % UTILITY_HEX_BASE;
+                result.insert(result.begin(), UTILITY_HEX_DIGITS[reminder]);
+                quotient = quotient / UTILITY_HEX_BASE;
+            }
+
+            if(result.empty()) {
+                result = "00";
+            } else if(1 == result.length()) {
+                result.insert(result.begin(), '0');
+            }
+
+            result.insert(result.begin(), 'x');
+            result.insert(result.begin(), '0');
+            return result;
         }
     }
 }

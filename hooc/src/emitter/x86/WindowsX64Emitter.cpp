@@ -17,10 +17,10 @@
  */
 
 
+#include <emitter/x86/X86Definitions.hh>
 #include <emitter/x86/WindowsX64Emitter.hh>
 #include <misc/Utility.hh>
 #include <ast/BasicDataTypes.hh>
-
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
 
@@ -30,6 +30,14 @@ using namespace hooc::misc;
 namespace hooc {
     namespace emitter {
         namespace x86 {
+
+            const X86RegisterType WIN_X86_ARG_REGISTERS[4] = {
+                    X86_REG_RCX,
+                    X86_REG_RDX,
+                    X86_REG_R8,
+                    X86_REG_R9
+            };
+
             WindowsX64Emitter::WindowsX64Emitter(const Unit *unit) :
                     Emitter(unit) {
             }
@@ -58,28 +66,47 @@ namespace hooc {
             }
 
             Code *WindowsX64Emitter::GenerateCode(FunctionDefinition *function_definition) {
-                std::vector<uint8_t> header;
+                byte_vector header;
+                byte_vector footer;
+
                 auto declaration = function_definition->GetDeclaration();
-                if (!declaration->GetParamList().empty()) {
-                    auto params = declaration->GetParamList();
-                    auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
-                    Utility::AppendTo(header, push_rbp);
-                    auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
-                    Utility::AppendTo(header, mov_rsp_rbp);
-
-                    auto arg1 = *(params.begin());
-                    if ((TYPE_SPEC_BASIC == arg1->GetDelcaredType()->GetType())
-                        && (NAME_DOUBLE == arg1->GetName())) {
-                        // todo: Implement double argument handling
-                    } else {
-                        auto mov_rcx_rbp_0x10 = this->_encoder.MOV(X86_REG_RCX,
-                                X86_REG_RBP,
-                                0x10);
-                        Utility::AppendTo(header, mov_rcx_rbp_0x10);
-                    }
-                }
-
+                const auto& arguments = declaration->GetParamList();
+                GenerateCode(arguments, header, footer);
                 return nullptr;
+            }
+
+            void WindowsX64Emitter::GenerateCode(std::list<VariableDeclaration *> arguments,
+                                                 byte_vector &header,
+                                                 byte_vector &footer) {
+                auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
+                Utility::AppendTo(header, push_rbp);
+                auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
+                Utility::AppendTo(header, mov_rsp_rbp);
+
+                auto iterator = arguments.begin();
+                uint8_t offset = 0x10;
+
+                for (auto reg : WIN_X86_ARG_REGISTERS) {
+                    if (iterator == arguments.end()) {
+                        break;
+                    }
+                    auto arg = *(iterator);
+                    if (IsDouble(arg)) {
+                        // todo: Process double argument
+                    } else {
+                        auto ins_arg = this->_encoder.MOV(reg,
+                                                          X86_REG_RBP,
+                                                          offset);
+                    }
+
+                    iterator ++;
+                    offset += 0x08;
+                }
+            }
+
+            bool WindowsX64Emitter::IsDouble(VariableDeclaration *arg1) {
+                return ((TYPE_SPEC_BASIC == arg1->GetDelcaredType()->GetType())
+                        && (NAME_DOUBLE == arg1->GetName()));
             }
         }
     }

@@ -23,6 +23,9 @@
 #include <ast/FunctionDefinition.hh>
 #include <emitter/Emitter.hh>
 #include <emitter/x86/EncoderX64.hh>
+#include <ast/VariableDeclaration.hh>
+
+#include <list>
 
 using namespace hooc::ast;
 
@@ -40,6 +43,11 @@ namespace hooc {
 
             private:
                 Code *GenerateCode(FunctionDefinition *function_definition);
+                void GenerateCode(std::list<VariableDeclaration*> arguments,
+                                  byte_vector& header,
+                                  byte_vector& footer);
+            private:
+                static bool IsDouble(VariableDeclaration* arg1);
             };
         }
     }

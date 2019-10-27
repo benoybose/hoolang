@@ -62,5 +62,30 @@ BOOST_AUTO_TEST_SUITE(UtilityTest)
         BOOST_CHECK_EQUAL(0x01, bytes[0]);
     }
 
+    BOOST_AUTO_TEST_CASE(Hex1) {
+        auto result = Utility::ToHex(0x2F);
+        BOOST_ASSERT("0x2F" == result);
+    }
+
+    BOOST_AUTO_TEST_CASE(Hex2) {
+        auto result = Utility::ToHex(0x10);
+        BOOST_ASSERT("0x10" == result);
+    }
+
+    BOOST_AUTO_TEST_CASE(Hex3) {
+        auto result = Utility::ToHex(0x0);
+        BOOST_ASSERT("0x00" == result);
+    }
+
+    BOOST_AUTO_TEST_CASE(Hex4) {
+        auto result = Utility::ToHex(0x1);
+        BOOST_ASSERT("0x01" == result);
+    }
+
+    BOOST_AUTO_TEST_CASE(Hex5) {
+        auto result = Utility::ToHex(0xFF);
+        BOOST_ASSERT("0xFF" == result);
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
 

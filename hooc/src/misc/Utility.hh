@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
 
 namespace hooc {
     namespace misc {
@@ -28,6 +29,7 @@ namespace hooc {
         public:
             static std::vector<std::uint8_t> GetBytes(std::uint64_t value);
             static void AppendTo(std::vector<std::uint8_t >& to, const std::vector<std::uint8_t >& from);
+            static std::string ToHex(std::uint8_t byte);
         };
     }
 }
