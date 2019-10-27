@@ -17,3 +17,15 @@
  */
 
 #include "Encoder.hh"
+#include <emitter/x86/X86Instruction.hh>
+
+namespace hooc {
+    namespace emitter {
+        namespace x86 {
+            byte_vector Encoder::NOP() {
+                X86Instruction instruction;
+                return instruction.Encode();
+            }
+        }
+    }
+}

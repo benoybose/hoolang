@@ -23,6 +23,7 @@
 #include <ast/BasicDataTypes.hh>
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
+#include <ast/CompoundStatement.hh>
 
 using namespace std;
 using namespace hooc::misc;
@@ -70,10 +71,23 @@ namespace hooc {
                 byte_vector body;
                 byte_vector footer;
 
+                auto ins_return = this->_encoder.RET(false);
+                Utility::AppendTo(footer, ins_return);
+
                 auto declaration = function_definition->GetDeclaration();
                 const auto& arguments = declaration->GetParamList();
+                if(!arguments.empty()) {
+                    GenerateCode(arguments, header, footer);
+                }
 
-                GenerateCode(arguments, header, footer);
+                auto statement = function_definition->GetBody();
+                if(STMT_COMPOUND == statement->GetStatementType()) {
+                    auto compound_statement = (CompoundStatement*) statement;
+                    if(compound_statement->GetStatements().empty()) {
+                        auto ins_nop = this->_encoder.NOP();
+                        Utility::AppendTo(body, ins_nop);
+                    }
+                }
                 return nullptr;
             }
 

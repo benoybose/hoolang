@@ -16,26 +16,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <utility>
+
 #include "Code.hh"
 
 namespace hooc {
     namespace emitter {
-
-        Code::Code(CodeType type, const std::string &name) :
+        Code::Code(CodeType type, string name, byte_vector buffer) :
                 _type(type),
-                _name(name) {
-
+                _name(std::move(name)),
+                _buffer(std::move(buffer)) {
         }
 
         CodeType Code::GetType() const {
-            return _type;
+            return this->_type;
         }
 
         const std::string &Code::GetName() const {
-            return _name;
+            return this->_name;
         }
 
-        const uint8_t *Code::GetBytes() const {
+        const byte *Code::GetBytes() const {
             return this->_buffer.data();
         }
 
@@ -43,9 +44,8 @@ namespace hooc {
             return this->_buffer.size();
         }
 
-        size_t Code::Add(uint8_t byte) {
-            this->_buffer.push_back(byte);
-            return this->_buffer.size();
+        const byte_vector &Code::GetBuffer() const {
+            return _buffer;
         }
     }
 }

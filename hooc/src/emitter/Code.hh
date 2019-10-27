@@ -20,6 +20,7 @@
 #define HOOLANG_CODE_HH
 
 #include <emitter/CodeType.hh>
+#include <emitter/EmitterDefinitions.hh>
 
 #include <string>
 #include <vector>
@@ -31,20 +32,21 @@ namespace hooc {
         private:
             CodeType _type;
             std::string _name;
-            std::vector<uint8_t> _buffer;
+            byte_vector _buffer;
 
         public:
-            Code(CodeType type, const std::string &name);
-
-            const uint8_t * GetBytes() const;
-            size_t GetSize() const;
+            Code(CodeType type, std::string name, byte_vector buffer);
 
         public:
-            size_t Add(uint8_t byte);
-
             CodeType GetType() const;
 
             const std::string &GetName() const;
+
+            const byte *GetBytes() const;
+
+            size_t GetSize() const;
+
+            const byte_vector &GetBuffer() const;
         };
     }
 }

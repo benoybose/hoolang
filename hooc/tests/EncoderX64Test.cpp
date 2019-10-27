@@ -75,4 +75,11 @@ BOOST_AUTO_TEST_SUITE(Encoder64Test)
         BOOST_ASSERT(VerifyByteVector(bytes, expected, 1));
     }
 
+    BOOST_AUTO_TEST_CASE(TEST08) {
+        EncoderX64 encoder;
+        auto bytes = encoder.NOP();
+        byte expected[1] = { 0x90 };
+        BOOST_ASSERT(VerifyByteVector(bytes, expected, 1));
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
