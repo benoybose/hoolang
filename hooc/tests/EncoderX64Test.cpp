@@ -89,4 +89,11 @@ BOOST_AUTO_TEST_SUITE(Encoder64Test)
         BOOST_CHECK(VerifyByteVector(bytes, expected, 4));
     }
 
+    BOOST_AUTO_TEST_CASE(TEST11) {
+        EncoderX64 encoder;
+        auto bytes = encoder.MOVSD(X86_REG_XMM0, X86_REG_RBP, 0x10);
+        byte expected[5] = { 0xf2, 0x0f, 0x11, 0x45, 0x10 };
+        BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
+    }
+
 BOOST_AUTO_TEST_SUITE_END()

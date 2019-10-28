@@ -31,7 +31,7 @@ namespace hooc {
             const uint64_t X86_OPCODE_RET = 0xC3;
             const uint64_t X86_OPCODE_RET_INTER_SEGMENT = 0xCB;
             const uint64_t X86_OPCODE_POP_REGISTER = 0x58;
-            constexpr uint64_t X86_OPCODE_MOVSD_XMMMEM64_MEM64 = Utility::EncodeToUInt64(0xF2, 0x0F, 0x11);
+            constexpr uint64_t X86_OPCODE_MOVSD_XMM1MEM64_XMM2 = Utility::EncodeToUInt64(0xF2, 0x0F, 0x11);
 
             X86Instruction::X86Instruction() :
                     _prefix(X86_PREFIX_INVALID),
@@ -107,29 +107,30 @@ namespace hooc {
                 this->_opcode |= static_cast<uint8_t >(reg);
             }
 
-            void X86Instruction::SetOperands(X86RegisterType reg1,
-                                             X86RegisterType reg2) {
-                if (IsRegFieldExtendedInModRM(reg1)) {
+            void X86Instruction::SetOperands(X86RegisterType reg_from,
+                                             X86RegisterType reg_to) {
+                if (IsRegFieldExtendedInModRM(reg_from)) {
                     // Setting REX.R for using extended reg field in ModRM
                     this->_rex_prefix = this->_rex_prefix | X86_PREFIX_REX_R;
                 }
 
-                auto r1 = static_cast<uint8_t>(reg1);
-                auto r2 = static_cast<uint8_t>(reg2);
+                auto r1 = static_cast<uint8_t>(reg_from);
+                auto r2 = static_cast<uint8_t>(reg_to);
 
                 this->_mod_r_m = X86_MOD_DIRECT;
                 this->_mod_r_m |= static_cast<uint8_t >(r1 << (uint8_t) 3);
                 this->_mod_r_m |= r2;
             }
 
-            void X86Instruction::SetOperands(X86RegisterType reg1, X86RegisterType reg2, uint8_t disp8) {
-                if (IsRegFieldExtendedInModRM(reg1)) {
+            void X86Instruction::SetOperands(X86RegisterType reg_from,
+                    X86RegisterType reg_to, uint8_t disp8) {
+                if (IsRegFieldExtendedInModRM(reg_from)) {
                     // Setting REX.R for using extended reg field in ModRM
                     this->_rex_prefix = this->_rex_prefix | X86_PREFIX_REX_R;
                 }
 
-                auto r1 = static_cast<uint8_t>(reg1);
-                auto r2 = static_cast<uint8_t>(reg2);
+                auto r1 = static_cast<uint8_t>(reg_from);
+                auto r2 = static_cast<uint8_t>(reg_to);
 
                 this->_mod_r_m = X86_MOD_EFFECTIVE_DISP8;
                 this->_mod_r_m |= static_cast<uint8_t >(r1 << (uint8_t) 3);

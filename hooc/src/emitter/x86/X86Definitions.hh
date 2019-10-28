@@ -74,7 +74,15 @@ namespace hooc {
                 X86_REG_AH = 4,
                 X86_REG_BH = 7,
                 X86_REG_CH = 5,
-                X86_REG_DH = 6
+                X86_REG_DH = 6,
+                X86_REG_XMM0 = 0,
+                X86_REG_XMM1 = 1,
+                X86_REG_XMM2 = 2,
+                X86_REG_XMM3 = 3,
+                X86_REG_XMM4 = 4,
+                X86_REG_XMM5 = 5,
+                X86_REG_XMM6 = 6,
+                X86_REG_XMM7 = 7
             } X86RegisterType;
 
             typedef enum {

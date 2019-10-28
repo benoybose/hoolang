@@ -37,7 +37,11 @@ namespace hooc {
             extern const uint64_t X86_OPCODE_RET;
             extern const uint64_t X86_OPCODE_RET_INTER_SEGMENT;
             extern const uint64_t X86_OPCODE_POP_REGISTER;
-            extern const uint64_t X86_OPCODE_MOVSD_XMMMEM64_MEM64;
+
+            /**
+             * Move scalar double-precision floating-point value from xmm2 register to xmm1/m64.
+             */
+            extern const uint64_t X86_OPCODE_MOVSD_XMM1MEM64_XMM2;
 
             class X86Instruction {
             private:
@@ -72,9 +76,9 @@ namespace hooc {
 
             public:
                 void AddRegister(X86RegisterType reg);
-                void SetOperands(X86RegisterType reg1, X86RegisterType reg2);
-                void SetOperands(X86RegisterType reg1,
-                        X86RegisterType reg2, uint8_t disp8);
+                void SetOperands(X86RegisterType reg_from, X86RegisterType reg_to);
+                void SetOperands(X86RegisterType reg_from,
+                                 X86RegisterType reg_to, uint8_t disp8);
 
             public:
                 byte_vector Encode();

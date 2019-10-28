@@ -23,6 +23,7 @@
 #include <emitter/x86/Encoder.hh>
 #include <cstdint>
 #include <vector>
+#include <stdint-gcc.h>
 
 namespace hooc {
     namespace emitter {
@@ -33,10 +34,12 @@ namespace hooc {
                 byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to) override;
                 byte_vector MOV(X86RegisterType reg_from,
                         X86RegisterType reg_to,
-                        uint8_t disp8_to) override;
+                        uint8_t disp8) override;
                 byte_vector RET(bool inter_segment) override;
 
                 byte_vector POP(X86RegisterType reg) override;
+
+                byte_vector MOVSD(X86RegisterType reg_from, X86RegisterType reg_to, uint8_t disp8) override;
             };
         }
     }
