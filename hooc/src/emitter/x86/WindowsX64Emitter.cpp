@@ -71,9 +71,6 @@ namespace hooc {
                 byte_vector body;
                 byte_vector footer;
 
-                auto ins_return = this->_encoder.RET(false);
-                Utility::AppendTo(footer, ins_return);
-
                 auto declaration = function_definition->GetDeclaration();
                 const auto& arguments = declaration->GetParamList();
                 if(!arguments.empty()) {
@@ -88,6 +85,9 @@ namespace hooc {
                         Utility::AppendTo(body, ins_nop);
                     }
                 }
+
+                auto ins_return = this->_encoder.RET(false);
+                Utility::AppendTo(footer, ins_return);
 
                 auto name = this->GetMangler()->Mangle(declaration);
                 byte_vector buffer;
@@ -120,11 +120,15 @@ namespace hooc {
                         auto ins_arg = this->_encoder.MOV(reg,
                                                           X86_REG_RBP,
                                                           offset);
+                        Utility::AppendTo(header, ins_arg);
                     }
 
                     iterator ++;
                     offset += 0x08;
                 }
+
+                auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
+                Utility::AppendTo(footer, pop_rbp);
             }
 
             bool WindowsX64Emitter::IsDouble(VariableDeclaration *arg1) {

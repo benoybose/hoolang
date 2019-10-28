@@ -39,17 +39,42 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto module = driver.BuildModule();
         BOOST_ASSERT(module->Success());
         auto unit = module->GetUnit();
-        auto func = (FunctionDefinition*) (*unit->GetItems().begin());
+        auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
         WindowsX64Emitter emitter(unit);
         auto code = emitter.GenerateCode(func);
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3foov", code->GetName());
         BOOST_CHECK_EQUAL(2, code->GetSize());
-        auto buffer = code->GetBuffer();
+        const auto &buffer = code->GetBuffer();
         BOOST_CHECK_EQUAL(2, buffer.size());
-        byte expected[2] = { static_cast<byte>(X86_OPCODE_NOP), static_cast<byte>(X86_OPCODE_RET) };
+        byte expected[2] = {static_cast<byte>(X86_OPCODE_NOP), static_cast<byte>(X86_OPCODE_RET)};
         BOOST_CHECK(VerifyByteVector(buffer, expected, 2));
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST02) {
+        const std::string source = "func foo(a:int) {}";
+        ParserDriver driver(source, "foo.hoo");
+        auto module = driver.BuildModule();
+        BOOST_ASSERT(module->Success());
+        auto unit = module->GetUnit();
+        auto func = (FunctionDefinition *) (*unit->GetItems().begin());
+        BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+        WindowsX64Emitter emitter(unit);
+        auto code = emitter.GenerateCode(func);
+        BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+        BOOST_CHECK_EQUAL("_Z3foox", code->GetName());
+        BOOST_CHECK_EQUAL(11, code->GetSize());
+        const auto &buffer = code->GetBuffer();
+        BOOST_CHECK_EQUAL(11, buffer.size());
+        byte expected[11] = {
+                0x55,
+                0x48, 0x89, 0xe5,
+                0x48, 0x89, 0x4d, 0x10,
+                0x90,
+                0x5d,
+                0xc3};
+        BOOST_CHECK(VerifyByteVector(buffer, expected, 11));
     }
 
 BOOST_AUTO_TEST_SUITE_END()
