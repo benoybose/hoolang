@@ -118,16 +118,16 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         BOOST_CHECK_EQUAL(19, code->GetSize());
         const auto &buffer = code->GetBuffer();
         BOOST_CHECK_EQUAL(19, buffer.size());
-//        byte expected[19] = {
-//                0x55,
-//                0x48, 0x89, 0xe5,
-//                0x48, 0x89, 0x4d, 0x10,
-//                0x48, 0x89, 0x55, 0x18,
-//                0x4c, 0x89, 0x45, 0x20,
-//                0x90,
-//                0x5d,
-//                0xc3};
-//        BOOST_CHECK(VerifyByteVector(buffer, expected, 19));
+        byte expected[19] = {
+                0x55,
+                0x48, 0x89, 0xe5,
+                0x48, 0x89, 0x4d, 0x10,
+                0x48, 0x89, 0x55, 0x18,
+                0x4c, 0x89, 0x45, 0x20,
+                0x90,
+                0x5d,
+                0xc3};
+        BOOST_CHECK(VerifyByteVector(buffer, expected, 19));
     }
 
 BOOST_AUTO_TEST_SUITE_END()
