@@ -87,5 +87,20 @@ BOOST_AUTO_TEST_SUITE(UtilityTest)
         BOOST_ASSERT("0xFF" == result);
     }
 
+    BOOST_AUTO_TEST_CASE(TEST006) {
+        auto result = Utility::EncodeToUInt64(0x34, 0xC5);
+        BOOST_CHECK_EQUAL(0xC534, result);
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST007) {
+        auto result = Utility::EncodeToUInt64(0x34, 0xC5, 0x01);
+        BOOST_CHECK_EQUAL(0x01C534, result);
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST008) {
+        auto result = Utility::EncodeToUInt64(0x34, 0xC5, 0x01, 0xFF);
+        BOOST_CHECK_EQUAL(0xFF01C534, result);
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
 

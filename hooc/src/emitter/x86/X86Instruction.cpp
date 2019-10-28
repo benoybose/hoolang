@@ -31,6 +31,7 @@ namespace hooc {
             const uint64_t X86_OPCODE_RET = 0xC3;
             const uint64_t X86_OPCODE_RET_INTER_SEGMENT = 0xCB;
             const uint64_t X86_OPCODE_POP_REGISTER = 0x58;
+            constexpr uint64_t X86_OPCODE_MOVSD_XMMMEM64_MEM64 = Utility::EncodeToUInt64(0xF2, 0x0F, 0x11);
 
             X86Instruction::X86Instruction() :
                     _prefix(X86_PREFIX_INVALID),
