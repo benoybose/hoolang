@@ -22,6 +22,7 @@
 #include <emitter/x86/X86Definitions.hh>
 
 #include <cstdint>
+#include <stdint-gcc.h>
 #include "Encoder.hh"
 
 using namespace std;
@@ -39,8 +40,8 @@ namespace hooc {
 
             class X86Instruction {
             private:
-                X86OpcodePrefix _prefix;
-                X86RexPrefix _rex_prefix;
+                uint8_t _prefix;
+                uint8_t _rex_prefix;
                 uint32_t _opcode;
                 uint8_t _mod_r_m;
                 uint8_t _s_i_b;
@@ -54,9 +55,9 @@ namespace hooc {
                 X86Instruction(X86OpcodePrefix prefix, X86RexPrefix rex_prefix, uint32_t opcode);
 
             public:
-                X86OpcodePrefix GetPrefix() const;
+                uint8_t GetPrefix() const;
 
-                X86RexPrefix GetRexPrefix() const;
+                uint8_t GetRexPrefix() const;
 
                 uint32_t GetOpcode() const;
 
@@ -76,6 +77,9 @@ namespace hooc {
 
             public:
                 byte_vector Encode();
+
+            public:
+                static bool IsRegFieldExtendedInModRM(X86RegisterType reg);
             };
         }
     }

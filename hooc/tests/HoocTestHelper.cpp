@@ -19,6 +19,9 @@
 #include "HoocTestHelper.hh"
 
 #include <boost/test/unit_test.hpp>
+#include <misc/Utility.hh>
+
+using namespace hooc::misc;
 
 bool VerifyByteVector(const byte_vector& vector, byte* bytes, size_t size)
 {
@@ -28,7 +31,8 @@ bool VerifyByteVector(const byte_vector& vector, byte* bytes, size_t size)
     }
 
     for(size_t index = 0; index < size; index++) {
-        BOOST_CHECK(vector[index] == bytes[index]);
+        BOOST_CHECK_MESSAGE(vector[index] == bytes[index],
+                "[" << index << "] (" << Utility::ToHex(vector[index]) << " == " << Utility::ToHex(bytes[index]) << ")");
         if(vector[index] != bytes[index]) {
             return false;
         }

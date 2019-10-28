@@ -45,20 +45,20 @@ namespace hooc {
 
             X86Instruction::X86Instruction(X86RexPrefix rex_prefix, uint32_t opcode) :
                     X86Instruction() {
-                this->_rex_prefix = rex_prefix;
+                this->_rex_prefix = static_cast<uint8_t >(rex_prefix);
                 this->_opcode = opcode;
             }
 
             X86Instruction::X86Instruction(X86OpcodePrefix prefix, uint32_t opcode) :
                     X86Instruction() {
-                this->_prefix = prefix;
+                this->_prefix = static_cast<uint8_t >(prefix);
                 this->_opcode = opcode;
             }
 
             X86Instruction::X86Instruction(uint32_t opcode) :
                     X86Instruction() {
                 this->_opcode = opcode;
-                if(0 == this->_opcode) {
+                if (0 == this->_opcode) {
                     this->_opcode = X86_OPCODE_NOP;
                 }
             }
@@ -71,11 +71,11 @@ namespace hooc {
                 this->_opcode = opcode;
             }
 
-            X86OpcodePrefix X86Instruction::GetPrefix() const {
+            uint8_t X86Instruction::GetPrefix() const {
                 return _prefix;
             }
 
-            X86RexPrefix X86Instruction::GetRexPrefix() const {
+            uint8_t X86Instruction::GetRexPrefix() const {
                 return _rex_prefix;
             }
 
@@ -100,24 +100,39 @@ namespace hooc {
             }
 
             void X86Instruction::AddRegister(X86RegisterType reg) {
-                if(X86_REG_INVALID == reg) {
+                if (X86_REG_INVALID == reg) {
                     return;
                 }
-
-                this->_opcode |= reg;
+                this->_opcode |= static_cast<uint8_t >(reg);
             }
 
             void X86Instruction::SetOperands(X86RegisterType reg1,
-                    X86RegisterType reg2) {
+                                             X86RegisterType reg2) {
+                if (IsRegFieldExtendedInModRM(reg1)) {
+                    // Setting REX.R for using extended reg field in ModRM
+                    this->_rex_prefix = this->_rex_prefix | X86_PREFIX_REX_R;
+                }
+
+                auto r1 = static_cast<uint8_t>(reg1);
+                auto r2 = static_cast<uint8_t>(reg2);
+
                 this->_mod_r_m = X86_MOD_DIRECT;
-                this->_mod_r_m |= reg1 << 3;
-                this->_mod_r_m |= reg2;
+                this->_mod_r_m |= static_cast<uint8_t >(r1 << (uint8_t) 3);
+                this->_mod_r_m |= r2;
             }
 
             void X86Instruction::SetOperands(X86RegisterType reg1, X86RegisterType reg2, uint8_t disp8) {
+                if (IsRegFieldExtendedInModRM(reg1)) {
+                    // Setting REX.R for using extended reg field in ModRM
+                    this->_rex_prefix = this->_rex_prefix | X86_PREFIX_REX_R;
+                }
+
+                auto r1 = static_cast<uint8_t>(reg1);
+                auto r2 = static_cast<uint8_t>(reg2);
+
                 this->_mod_r_m = X86_MOD_EFFECTIVE_DISP8;
-                this->_mod_r_m |= reg1 << 3;
-                this->_mod_r_m |= reg2;
+                this->_mod_r_m |= static_cast<uint8_t >(r1 << (uint8_t) 3);
+                this->_mod_r_m |= r2;
                 this->_displacement = disp8;
             }
 
@@ -160,6 +175,22 @@ namespace hooc {
                     data.insert(data.end(), bytes.begin(), bytes.end());
                 }
                 return data;
+            }
+        }
+
+        bool x86::X86Instruction::IsRegFieldExtendedInModRM(x86::X86RegisterType reg) {
+            switch (reg) {
+                case X86_REG_R8:
+                case X86_REG_R9:
+                case X86_REG_R10:
+                case X86_REG_R11:
+                case X86_REG_R12:
+                case X86_REG_R13:
+                case X86_REG_R14:
+                case X86_REG_R15:
+                    return true;
+                default:
+                    return false;
             }
         }
     }
