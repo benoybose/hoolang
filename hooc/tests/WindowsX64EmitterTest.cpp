@@ -25,11 +25,13 @@
 #include <emitter/CodeType.hh>
 #include <emitter/Code.hh>
 #include <emitter/x86/X86Instruction.hh>
+#include <misc/Utility.hh>
 
 using namespace hooc::compiler;
 using namespace hooc::ast;
 using namespace hooc::emitter::x86;
 using namespace hooc::emitter;
+using namespace hooc::misc;
 
 BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
 
@@ -156,6 +158,29 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
                 0x5d,
                 0xc3};
         BOOST_CHECK(VerifyByteVector(buffer, expected, 23));
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST06) {
+        const std::string source = "func foo(a: double) {}";
+        ParserDriver driver(source, "foo.hoo");
+        auto module = driver.BuildModule();
+        BOOST_ASSERT(module->Success());
+        auto unit = module->GetUnit();
+        auto func = (FunctionDefinition *) (*unit->GetItems().begin());
+        BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+        WindowsX64Emitter emitter(unit);
+        auto code = emitter.GenerateCode(func);
+        BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+        BOOST_CHECK_EQUAL("_Z3food", code->GetName());
+        const auto &buffer = code->GetBuffer();
+        byte expected[12] = {
+                0x55,
+                0x48, 0x89, 0xe5,
+                0xf2, 0x0f, 0x11, 0x45, 0x10,
+                0x90,
+                0x5d,
+                0xc3};
+        BOOST_CHECK(VerifyByteVector(buffer, expected, 12));
     }
 
 BOOST_AUTO_TEST_SUITE_END()

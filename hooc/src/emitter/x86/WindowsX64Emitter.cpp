@@ -24,6 +24,7 @@
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
 #include <ast/CompoundStatement.hh>
+#include <ast/BasicDataTypeSpecification.hh>
 
 using namespace std;
 using namespace hooc::misc;
@@ -32,7 +33,14 @@ namespace hooc {
     namespace emitter {
         namespace x86 {
 
-            const X86RegisterType WIN_X86_ARG_REGISTERS[4] = {
+            const size_t WIN_X64_REG_COUNT = 4;
+            const X86RegisterType WIN_X86_ARG_DOUBLE_REGS[WIN_X64_REG_COUNT] = {
+                    X86_REG_XMM0,
+                    X86_REG_XMM1,
+                    X86_REG_XMM2,
+                    X86_REG_XMM3
+            };
+            const X86RegisterType WIN_X86_ARG_INT_REGS[WIN_X64_REG_COUNT] = {
                     X86_REG_RCX,
                     X86_REG_RDX,
                     X86_REG_R8,
@@ -72,15 +80,15 @@ namespace hooc {
                 byte_vector footer;
 
                 auto declaration = function_definition->GetDeclaration();
-                const auto& arguments = declaration->GetParamList();
-                if(!arguments.empty()) {
+                const auto &arguments = declaration->GetParamList();
+                if (!arguments.empty()) {
                     GenerateCode(arguments, header, footer);
                 }
 
                 auto statement = function_definition->GetBody();
-                if(STMT_COMPOUND == statement->GetStatementType()) {
-                    auto compound_statement = (CompoundStatement*) statement;
-                    if(compound_statement->GetStatements().empty()) {
+                if (STMT_COMPOUND == statement->GetStatementType()) {
+                    auto compound_statement = (CompoundStatement *) statement;
+                    if (compound_statement->GetStatements().empty()) {
                         auto ins_nop = this->_encoder.NOP();
                         Utility::AppendTo(body, ins_nop);
                     }
@@ -109,21 +117,26 @@ namespace hooc {
                 auto iterator = arguments.begin();
                 uint8_t offset = 0x10;
 
-                for (auto reg : WIN_X86_ARG_REGISTERS) {
+                for (size_t index = 0; index < WIN_X64_REG_COUNT; index++) {
                     if (iterator == arguments.end()) {
                         break;
                     }
                     auto arg = *(iterator);
                     if (IsDouble(arg)) {
-                        // todo: Process double argument
+                        auto reg = WIN_X86_ARG_DOUBLE_REGS[index];
+                        auto ins_arg = this->_encoder.MOVSD(reg,
+                                                            X86_REG_RBP,
+                                                            offset);
+                        Utility::AppendTo(header, ins_arg);
                     } else {
+                        auto reg = WIN_X86_ARG_INT_REGS[index];
                         auto ins_arg = this->_encoder.MOV(reg,
                                                           X86_REG_RBP,
                                                           offset);
                         Utility::AppendTo(header, ins_arg);
                     }
 
-                    iterator ++;
+                    iterator++;
                     offset += 0x08;
                 }
 
@@ -132,8 +145,12 @@ namespace hooc {
             }
 
             bool WindowsX64Emitter::IsDouble(VariableDeclaration *arg1) {
-                return ((TYPE_SPEC_BASIC == arg1->GetDelcaredType()->GetType())
-                        && (NAME_DOUBLE == arg1->GetName()));
+                auto type = arg1->GetDelcaredType();
+                if(TYPE_SPEC_BASIC != type->GetType()) {
+                    return false;
+                }
+                auto basic_data_type = (BasicDataTypeSpecification*) type;
+                return !(BASIC_DATA_TYPE_DOUBLE != basic_data_type->GetDataType());
             }
         }
     }

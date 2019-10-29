@@ -29,7 +29,7 @@
 grammar Terminals;
 
 BasicDataType
-    : ('int' | 'char' | 'string' | 'bool' | 'byte')
+    : ('int' | 'char' | 'string' | 'bool' | 'byte' | 'double')
     ;
 
 ByteContant
