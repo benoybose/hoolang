@@ -96,4 +96,25 @@ BOOST_AUTO_TEST_SUITE(Encoder64Test)
         BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
     }
 
+    BOOST_AUTO_TEST_CASE(TEST12) {
+        EncoderX64 encoder;
+        auto bytes = encoder.MOVSD(X86_REG_XMM1, X86_REG_RBP, 0x18);
+        byte expected[5] = { 0xf2, 0x0f, 0x11, 0x4d, 0x18 };
+        BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST13) {
+        EncoderX64 encoder;
+        auto bytes = encoder.MOVSD(X86_REG_XMM2, X86_REG_RBP, 0x20);
+        byte expected[5] = { 0xf2, 0x0f, 0x11, 0x55, 0x20 };
+        BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST14) {
+        EncoderX64 encoder;
+        auto bytes = encoder.MOVSD(X86_REG_XMM3, X86_REG_RBP, 0x28);
+        byte expected[5] = { 0xf2, 0x0f, 0x11, 0x5d, 0x28 };
+        BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
