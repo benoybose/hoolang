@@ -258,4 +258,56 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         BOOST_CHECK(VerifyByteVector(buffer, expected, 27));
     }
 
+    BOOST_AUTO_TEST_CASE(TEST10) {
+        const std::string source = "func foo(a: int, b: double, c: int, d:double) {}";
+        ParserDriver driver(source, "foo.hoo");
+        auto module = driver.BuildModule();
+        BOOST_ASSERT(module->Success());
+        auto unit = module->GetUnit();
+        auto func = (FunctionDefinition *) (*unit->GetItems().begin());
+        BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+        WindowsX64Emitter emitter(unit);
+        auto code = emitter.GenerateCode(func);
+        BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+        BOOST_CHECK_EQUAL("_Z3fooxdxd", code->GetName());
+        const auto &buffer = code->GetBuffer();
+        byte expected[25] = {
+                0x55,
+                0x48, 0x89, 0xe5,
+                0x48, 0x89, 0x4d, 0x10,
+                0xf2, 0x0f, 0x11, 0x4d, 0x18,
+                0x4c, 0x89, 0x45, 0x20,
+                0xf2, 0x0f, 0x11, 0x5d, 0x28,
+                0x90,
+                0x5d,
+                0xc3};
+        BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
+    }
+
+    BOOST_AUTO_TEST_CASE(TEST11) {
+        const std::string source = "func foo(a: double, b: int, c: double, d:int) {}";
+        ParserDriver driver(source, "foo.hoo");
+        auto module = driver.BuildModule();
+        BOOST_ASSERT(module->Success());
+        auto unit = module->GetUnit();
+        auto func = (FunctionDefinition *) (*unit->GetItems().begin());
+        BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+        WindowsX64Emitter emitter(unit);
+        auto code = emitter.GenerateCode(func);
+        BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+        BOOST_CHECK_EQUAL("_Z3foodxdx", code->GetName());
+        const auto &buffer = code->GetBuffer();
+        byte expected[25] = {
+                0x55,
+                0x48, 0x89, 0xe5,
+                0xf2, 0x0f, 0x11, 0x45, 0x10,
+                0x48, 0x89, 0x55, 0x18,
+                0xf2, 0x0f, 0x11, 0x55, 0x20,
+                0x4c, 0x89, 0x4d, 0x28,
+                0x90,
+                0x5d,
+                0xc3};
+        BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
+    }
+
 BOOST_AUTO_TEST_SUITE_END()
