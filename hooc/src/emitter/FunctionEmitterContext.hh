@@ -1,0 +1,14 @@
+//
+// Created by Benoy on 10/30/2019.
+//
+
+#ifndef HOOLANG_FUNCTIONEMITTERCONTEXT_HH
+#define HOOLANG_FUNCTIONEMITTERCONTEXT_HH
+
+
+class FunctionEmitterContext {
+
+};
+
+
+#endif //HOOLANG_FUNCTIONEMITTERCONTEXT_HH

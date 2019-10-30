@@ -62,7 +62,15 @@ SET(hooc_header_files
         src/emitter/x86/EncoderX64.hh
         src/emitter/x86/Encoder.hh
         src/emitter/x86/X86Definitions.hh
-        src/emitter/x86/X86Instruction.hh)
+        src/emitter/x86/X86Instruction.hh
+		src/ast/Position.hh
+		src/ast/BasicDataTypeSpecification.hh
+		src/misc/Utility.hh
+		src/emitter/EmitterDefinitions.hh
+		src/emitter/NameMangler.hh
+		src/emitter/FunctionEmitter.hh
+		src/emitter/FunctionEmitterContext.hh
+		src/emitter/StackContext.hh)
 
 SET(hooc_source_files
 		${ANTLR4_SRC_FILES_HooANTLR4}
@@ -96,7 +104,6 @@ SET(hooc_source_files
 		src/ast/Declaration.cpp
 		src/ast/FunctionDeclaration.cpp
 		src/ast/BasicDataTypeSpecification.cpp
-		src/ast/BasicDataTypeSpecification.hh
 		src/ast/BasicDataTypes.cpp
 		src/ast/ReferenceDataTypeSpecification.cpp
 		src/ast/ArrayDataTypeSpecification.cpp
@@ -104,14 +111,18 @@ SET(hooc_source_files
 		src/compiler/ParseError.cpp
 		src/ast/Node.cpp
 		src/ast/Position.cpp
-		src/ast/Position.hh
 		src/emitter/Emitter.cpp
 		src/emitter/EmitterFactory.cpp
 		src/emitter/Code.cpp
 		src/emitter/x86/WindowsX64Emitter.cpp
 		src/emitter/x86/EncoderX64.cpp
 		src/emitter/x86/Encoder.cpp
-		src/emitter/x86/X86Instruction.cpp src/misc/Utility.cpp src/misc/Utility.hh src/emitter/EmitterDefinitions.hh src/emitter/NameMangler.cpp src/emitter/NameMangler.hh)
+		src/emitter/x86/X86Instruction.cpp
+		src/misc/Utility.cpp
+		src/emitter/NameMangler.cpp
+		src/emitter/FunctionEmitter.cpp
+		src/emitter/FunctionEmitterContext.cpp
+		src/emitter/StackContext.cpp)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 
@@ -135,7 +146,9 @@ ADD_EXECUTABLE(
 		tests/X86InstructionTest001.cpp
 		tests/HoocTestHelper.hh
 		tests/HoocTestHelper.cpp
-        tests/EncoderX64Test.cpp tests/WindowsX64EmitterTest.cpp tests/NameManglerTest.cpp)
+        tests/EncoderX64Test.cpp
+		tests/WindowsX64EmitterTest.cpp
+		tests/NameManglerTest.cpp)
 
 ADD_DEPENDENCIES(hooc_test antlr4_static)
 TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_static)
