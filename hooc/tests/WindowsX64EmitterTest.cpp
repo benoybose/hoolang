@@ -21,9 +21,8 @@
 #include <boost/test/unit_test.hpp>
 #include <compiler/ParserDriver.hh>
 #include <ast/FunctionDefinition.hh>
-#include <emitter/x86/WindowsX64Emitter.hh>
+#include <emitter/x86/win/WindowsX64Emitter.hh>
 #include <emitter/CodeType.hh>
-#include <emitter/Code.hh>
 #include <emitter/x86/X86Instruction.hh>
 #include <misc/Utility.hh>
 
@@ -32,6 +31,7 @@ using namespace hooc::ast;
 using namespace hooc::emitter::x86;
 using namespace hooc::emitter;
 using namespace hooc::misc;
+using namespace hooc::emitter::x86::win;
 
 BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
 

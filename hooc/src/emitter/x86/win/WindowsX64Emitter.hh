@@ -32,21 +32,23 @@ using namespace hooc::ast;
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            class WindowsX64Emitter : public Emitter {
-            private:
-                EncoderX64 _encoder;
-            public:
-                explicit WindowsX64Emitter(const Unit *unit);
+            namespace win {
+                class WindowsX64Emitter : public Emitter {
+                private:
+                    EncoderX64 _encoder;
+                public:
+                    explicit WindowsX64Emitter(const Unit *unit);
 
-            public:
-                std::list<Code *> GenerateCode() override;
-                Code *GenerateCode(FunctionDefinition *function_definition);
-                void GenerateCode(std::list<VariableDeclaration*> arguments,
-                                  byte_vector& header,
-                                  byte_vector& footer);
-            private:
-                static bool IsDouble(VariableDeclaration* arg1);
-            };
+                public:
+                    std::list<Code *> GenerateCode() override;
+                    Code *GenerateCode(FunctionDefinition *function_definition);
+                    void GenerateCode(std::list<VariableDeclaration*> arguments,
+                                      byte_vector& header,
+                                      byte_vector& footer);
+                private:
+                    static bool IsDouble(VariableDeclaration* arg1);
+                };
+            }
         }
     }
 }

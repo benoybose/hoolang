@@ -17,9 +17,10 @@
  */
 
 #include "EmitterFactory.hh"
-#include <emitter/x86/WindowsX64Emitter.hh>
+#include <emitter/x86/win/WindowsX64Emitter.hh>
 
 using namespace hooc::emitter::x86;
+using namespace hooc::emitter::x86::win;
 
 namespace hooc {
     namespace emitter {
