@@ -17,8 +17,8 @@
  */
 
 
-#ifndef HOOLANG_WINDOWSX64EMITTER_HH
-#define HOOLANG_WINDOWSX64EMITTER_HH
+#ifndef HOOLANG_X64EMITTER_HH
+#define HOOLANG_X64EMITTER_HH
 
 #include <ast/FunctionDefinition.hh>
 #include <emitter/Emitter.hh>
@@ -33,11 +33,11 @@ namespace hooc {
     namespace emitter {
         namespace x86 {
             namespace win {
-                class WindowsX64Emitter : public Emitter {
+                class X64Emitter : public Emitter {
                 private:
                     EncoderX64 _encoder;
                 public:
-                    explicit WindowsX64Emitter(const Unit *unit);
+                    explicit X64Emitter(const Unit *unit);
 
                 public:
                     std::list<Code *> GenerateCode() override;
@@ -53,4 +53,4 @@ namespace hooc {
     }
 }
 
-#endif //HOOLANG_WINDOWSX64EMITTER_HH
+#endif //HOOLANG_X64EMITTER_HH

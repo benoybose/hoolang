@@ -18,7 +18,7 @@
 
 
 #include <emitter/x86/X86Definitions.hh>
-#include <emitter/x86/win/WindowsX64Emitter.hh>
+#include <emitter/x86/win/X64Emitter.hh>
 #include <misc/Utility.hh>
 #include <ast/BasicDataTypes.hh>
 #include <ast/Definition.hh>
@@ -48,11 +48,11 @@ namespace hooc {
                         X86_REG_R9
                 };
 
-                WindowsX64Emitter::WindowsX64Emitter(const Unit *unit) :
+                X64Emitter::X64Emitter(const Unit *unit) :
                         Emitter(unit) {
                 }
 
-                std::list<Code *> WindowsX64Emitter::GenerateCode() {
+                std::list<Code *> X64Emitter::GenerateCode() {
                     std::list<Code *> codes;
                     auto unit_items = this->GetUnit()
                             ->GetItems();
@@ -75,7 +75,7 @@ namespace hooc {
                     return codes;
                 }
 
-                Code *WindowsX64Emitter::GenerateCode(FunctionDefinition *function_definition) {
+                Code *X64Emitter::GenerateCode(FunctionDefinition *function_definition) {
                     byte_vector header;
                     byte_vector body;
                     byte_vector footer;
@@ -107,9 +107,9 @@ namespace hooc {
                     return code;
                 }
 
-                void WindowsX64Emitter::GenerateCode(std::list<VariableDeclaration *> arguments,
-                                                     byte_vector &header,
-                                                     byte_vector &footer) {
+                void X64Emitter::GenerateCode(std::list<VariableDeclaration *> arguments,
+                                              byte_vector &header,
+                                              byte_vector &footer) {
                     auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
                     Utility::AppendTo(header, push_rbp);
                     auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
@@ -145,7 +145,7 @@ namespace hooc {
                     Utility::AppendTo(footer, pop_rbp);
                 }
 
-                bool WindowsX64Emitter::IsDouble(VariableDeclaration *arg1) {
+                bool X64Emitter::IsDouble(VariableDeclaration *arg1) {
                     auto type = arg1->GetDelcaredType();
                     if (TYPE_SPEC_BASIC != type->GetType()) {
                         return false;

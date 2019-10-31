@@ -17,7 +17,7 @@
  */
 
 #include "EmitterFactory.hh"
-#include <emitter/x86/win/WindowsX64Emitter.hh>
+#include <emitter/x86/win/X64Emitter.hh>
 
 using namespace hooc::emitter::x86;
 using namespace hooc::emitter::x86::win;
@@ -27,7 +27,7 @@ namespace hooc {
         Emitter *EmitterFactory::GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit) {
             Emitter* emitter = nullptr;
             if((EMITTER_OS_WINDOWS == os) && (EMITTER_ARCH_AMD64 == arch)) {
-                emitter = new WindowsX64Emitter(unit);
+                emitter = new X64Emitter(unit);
             }
             return emitter;
         }
