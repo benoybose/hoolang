@@ -24,15 +24,10 @@
 
 namespace hooc {
     namespace emitter {
-        NameMangler::NameMangler(const Unit *unit) :
-                _unit(const_cast<Unit *>(unit)) {
+        NameMangler::NameMangler(){
         }
 
-        Unit *NameMangler::GetUnit() const {
-            return _unit;
-        }
-
-        std::string NameMangler::Mangle(FunctionDeclaration *decl) {
+        std::string NameMangler::Mangle(FunctionDeclaration *decl) const {
             std::string mangled = "_Z";
             auto name = decl->GetName();
             auto length = name.length();

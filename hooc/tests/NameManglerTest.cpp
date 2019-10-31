@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_SUITE(NameManglerTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition*) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        NameMangler name_mangler(unit);
+        NameMangler name_mangler;
         auto mangled = name_mangler.Mangle(func->GetDeclaration());
         BOOST_CHECK("_Z3foov");
     }

@@ -16,38 +16,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "StackContext.hh"
+#ifndef HOOLANG_STACKITEM_HH
+#define HOOLANG_STACKITEM_HH
+
+#include <string>
+#include <set>
+
+using namespace std;
 
 namespace hooc {
     namespace emitter {
-        StackContext::StackContext(size_t depth) : _depth(depth) {
-        }
+        class StackItem {
+        public:
+            StackItem(string name, int64_t position);
 
-        size_t StackContext::GetDepth() const {
-            return _depth;
-        }
+            const string &GetName() const;
 
-        list<StackContext *> StackContext::GetChildren() const {
-            return this->_children;
-        }
+            int64_t GetPosition() const;
 
-        size_t StackContext::AddChild(StackContext *child) {
-            this->_children.push_back(child);
-            return this->_children.size();
-        }
+        private:
+            string _name;
+            int64_t _position;
+        };
 
-        size_t StackContext::AddItem(const StackItem& item) {
-            this->_items.insert(item);
-            return this->_items.size();
-        }
+        class StackItemComparer {
+        public:
+            bool operator() (const StackItem& a, const StackItem& b) const;
+        };
 
-        StackContext::~StackContext() {
-            auto iterator = this->_children.begin();
-            while(iterator != this->_children.end()) {
-                auto child = *(iterator);
-                delete child;
-                iterator ++;
-            }
-        }
+        typedef std::set<StackItem, StackItemComparer> StackItemSet;
     }
 }
+
+#endif //HOOLANG_STACKITEM_HH

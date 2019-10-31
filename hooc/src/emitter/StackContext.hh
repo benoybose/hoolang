@@ -19,6 +19,8 @@
 #ifndef HOOLANG_STACKCONTEXT_HH
 #define HOOLANG_STACKCONTEXT_HH
 
+#include <emitter/StackItem.hh>
+
 #include <cstddef>
 #include <list>
 
@@ -30,6 +32,7 @@ namespace hooc {
         private:
             size_t _depth;
             std::list<StackContext*> _children;
+            StackItemSet _items;
 
         protected:
             explicit StackContext(size_t depth);
@@ -40,9 +43,10 @@ namespace hooc {
 
         public:
             size_t AddChild(StackContext* child);
+            size_t AddItem(const StackItem &item);
 
         public:
-            virtual ~StackContext();
+           virtual ~StackContext();
         };
     }
 }

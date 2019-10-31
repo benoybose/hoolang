@@ -29,16 +29,11 @@ using namespace hooc::ast;
 namespace hooc {
     namespace emitter {
         class NameMangler {
-        private:
-            Unit* _unit;
         public:
-            NameMangler(const Unit *unit);
+            NameMangler();
 
         public:
-            Unit *GetUnit() const;
-
-        public:
-            std::string Mangle(FunctionDeclaration* decl);
+            std::string Mangle(FunctionDeclaration* decl) const;
         };
     }
 }

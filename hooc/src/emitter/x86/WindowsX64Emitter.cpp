@@ -97,7 +97,7 @@ namespace hooc {
                 auto ins_return = this->_encoder.RET(false);
                 Utility::AppendTo(footer, ins_return);
 
-                auto name = this->GetMangler()->Mangle(declaration);
+                auto name = this->GetMangler().Mangle(declaration);
                 byte_vector buffer;
                 Utility::AppendTo(buffer, header);
                 Utility::AppendTo(buffer, body);

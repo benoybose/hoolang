@@ -122,7 +122,7 @@ SET(hooc_source_files
 		src/emitter/NameMangler.cpp
 		src/emitter/FunctionEmitter.cpp
 		src/emitter/FunctionEmitterContext.cpp
-		src/emitter/StackContext.cpp)
+		src/emitter/StackContext.cpp src/emitter/StackItem.cpp src/emitter/StackItem.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 

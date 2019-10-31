@@ -16,38 +16,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "StackContext.hh"
+#include <utility>
+
+#include "StackItem.hh"
 
 namespace hooc {
     namespace emitter {
-        StackContext::StackContext(size_t depth) : _depth(depth) {
+        StackItem::StackItem(string name, int64_t position) : _name(std::move(name)), _position(position) {}
+
+        const string &StackItem::GetName() const {
+            return _name;
         }
 
-        size_t StackContext::GetDepth() const {
-            return _depth;
+        int64_t StackItem::GetPosition() const {
+            return _position;
         }
 
-        list<StackContext *> StackContext::GetChildren() const {
-            return this->_children;
-        }
-
-        size_t StackContext::AddChild(StackContext *child) {
-            this->_children.push_back(child);
-            return this->_children.size();
-        }
-
-        size_t StackContext::AddItem(const StackItem& item) {
-            this->_items.insert(item);
-            return this->_items.size();
-        }
-
-        StackContext::~StackContext() {
-            auto iterator = this->_children.begin();
-            while(iterator != this->_children.end()) {
-                auto child = *(iterator);
-                delete child;
-                iterator ++;
+        bool StackItemComparer::operator()(const StackItem &a, const StackItem &b) const {
+            if (a.GetName() != b.GetName()) {
+                return false;
             }
+
+            return a.GetPosition() == b.GetPosition();
         }
     }
 }
