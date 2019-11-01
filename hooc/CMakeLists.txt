@@ -70,7 +70,9 @@ SET(hooc_header_files
 		src/emitter/NameMangler.hh
 		src/emitter/FunctionEmitter.hh
 		src/emitter/FunctionEmitterContext.hh
-		src/emitter/StackContext.hh)
+		src/emitter/StackContext.hh
+		src/emitter/x86/win/X64FunctionEmitter.hh
+		src/emitter/StackItem.hh)
 
 SET(hooc_source_files
 		${ANTLR4_SRC_FILES_HooANTLR4}
@@ -122,7 +124,9 @@ SET(hooc_source_files
 		src/emitter/NameMangler.cpp
 		src/emitter/FunctionEmitter.cpp
 		src/emitter/FunctionEmitterContext.cpp
-		src/emitter/StackContext.cpp src/emitter/StackItem.cpp src/emitter/StackItem.hh)
+		src/emitter/StackContext.cpp
+		src/emitter/StackItem.cpp
+		src/emitter/x86/win/X64FunctionEmitter.cpp src/NotImplementedException.cpp src/NotImplementedException.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 

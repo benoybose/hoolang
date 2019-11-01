@@ -16,40 +16,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_X64EMITTER_HH
-#define HOOLANG_X64EMITTER_HH
+#include <stdexcept>
 
-#include <ast/FunctionDefinition.hh>
-#include <emitter/Emitter.hh>
-#include <emitter/x86/EncoderX64.hh>
-#include <ast/VariableDeclaration.hh>
-
-#include <list>
-
-using namespace hooc::ast;
+#ifndef HOOLANG_NOTIMPLEMENTEDEXCEPTION_HH
+#define HOOLANG_NOTIMPLEMENTEDEXCEPTION_HH
 
 namespace hooc {
-    namespace emitter {
-        namespace x86 {
-            namespace win {
-                class X64Emitter : public Emitter {
-                private:
-                    EncoderX64 _encoder;
-                public:
-                    explicit X64Emitter(const Unit *unit);
-
-                public:
-                    std::list<Code *> GenerateCode() override;
-                    Code *GenerateCode(FunctionDefinition *function_definition);
-                    void GenerateCode(std::list<VariableDeclaration*> arguments,
-                                      byte_vector& header,
-                                      byte_vector& footer);
-                private:
-                    static bool IsDouble(VariableDeclaration* arg1);
-                };
-            }
-        }
-    }
+    class NotImplementedException : public std::runtime_error {
+    public:
+        NotImplementedException();
+        explicit NotImplementedException(const std::string &arg);
+    };
 }
 
-#endif //HOOLANG_X64EMITTER_HH
+#endif //HOOLANG_NOTIMPLEMENTEDEXCEPTION_HH
