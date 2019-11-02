@@ -33,3 +33,5 @@ hooc/grammar/output/
 packages/**/*.zip
 downloads
 venv
+packages/libs/
+packages/tools/
