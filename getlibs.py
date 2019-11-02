@@ -3,6 +3,7 @@ from urllib import request
 from urllib.error import URLError
 from os import path
 from os import mkdir
+from os import unlink
 from zipfile import ZipFile
 
 packages = {
@@ -45,11 +46,14 @@ if __name__ == '__main__':
             print('Pulling %s' % pkg_url)
             result = request.urlretrieve(pkg_url, pkg_file)
             with ZipFile(pkg_file) as pkg_zip:
-                print('Extracting to %s' % pkg_name)
+                print('Extracting \'%s\'' % pkg_name)
                 pkg_zip.extractall(pkg_path)
+            unlink(pkg_file)
         except URLError as e:
-            print('Failed to download %s.' % pkg_file)
             print(e)
+            unlink(pkg_path)
+            unlink(pkg_file)
         except Exception as e:
-            print('Failed to download %s.' % pkg_file)
             print(e)
+            unlink(pkg_path)
+            unlink(pkg_file)
