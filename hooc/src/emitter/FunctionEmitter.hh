@@ -28,15 +28,21 @@ namespace hooc {
     namespace emitter {
         class FunctionEmitter {
         private:
-            FunctionDefinition* _definition;
-            FunctionEmitterContext* _function_context;
+            FunctionDefinition *_definition;
+            FunctionEmitterContext *_function_context;
 
         protected:
             explicit FunctionEmitter(FunctionDefinition *definition);
 
         protected:
             FunctionDefinition *GetDefinition() const;
+
             FunctionEmitterContext *GetFunctionContext() const;
+
+            virtual FunctionEmitterContext *CreateFunctionEmitterContext();
+
+        public:
+            virtual ~FunctionEmitter();
         };
     }
 }

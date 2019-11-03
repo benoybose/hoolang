@@ -20,15 +20,19 @@
 #define HOOLANG_X64FUNCTIONEMITTER_HH
 
 #include <emitter/FunctionEmitter.hh>
+#include <emitter/FunctionEmitterContext.hh>
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
             namespace win {
                 class X64FunctionEmitter: public FunctionEmitter {
-                public:
-                    X64FunctionEmitter(FunctionDefinition *definition);
 
+                public:
+                    explicit X64FunctionEmitter(FunctionDefinition *definition);
+
+                protected:
+                    FunctionEmitterContext *CreateFunctionEmitterContext() override;
                 };
             }
         }

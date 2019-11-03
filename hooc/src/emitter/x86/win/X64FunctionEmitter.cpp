@@ -17,13 +17,75 @@
  */
 
 #include "X64FunctionEmitter.hh"
+#include <emitter/FunctionEmitterContext.hh>
+#include <emitter/NameMangler.hh>
+#include <ast/CompoundStatement.hh>
+#include <ast/Statement.hh>
+#include <ast/DeclarationStatement.hh>
+#include <ast/Declaration.hh>
+#include <ast/VariableDeclaration.hh>
+
+using namespace hooc::ast;
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
             namespace win {
-                X64FunctionEmitter::X64FunctionEmitter(FunctionDefinition *definition) : FunctionEmitter(definition) {
+                X64FunctionEmitter::X64FunctionEmitter(FunctionDefinition *definition)
+                        : FunctionEmitter(definition) {
+                }
 
+                FunctionEmitterContext *X64FunctionEmitter::CreateFunctionEmitterContext() {
+                    FunctionEmitterContext* context = nullptr;
+                    NameMangler mangler;
+
+                    auto function_declaration = this->GetDefinition()
+                            ->GetDeclaration();
+                    auto args = function_declaration->GetParamList();
+                    StackItemSet stack_items;
+                    std::int64_t position = 0x10;
+                    for(auto arg: args) {
+                        StackItem stack_item(arg->GetName(),
+                                       position,
+                                       arg->GetDelcaredType());
+                        stack_items.insert(stack_item);
+                        position += 0x08;
+                    }
+
+                    auto body = this->GetDefinition()
+                            ->GetBody();
+
+                    position = -8;
+                    size_t depth = 0;
+                    if(STMT_COMPOUND == body->GetStatementType()) {
+                        auto compound_statement = (CompoundStatement*) body;
+                        auto statements = compound_statement->GetStatements();
+                        for(Statement* statement: statements) {
+                            if(STMT_DECLARATION == statement->GetStatementType()) {
+                                auto declaration_statement = (DeclarationStatement*) statement;
+                                auto declaration =  declaration_statement->GetDeclaration();
+                                if(DECLARATION_VARIABLE == declaration->GetDeclarationType()) {
+                                    auto variable = (VariableDeclaration*) declaration;
+                                     StackItem stack_item(variable->GetName(),
+                                             position, variable->GetDelcaredType());
+                                     stack_items.insert(stack_item);
+                                     position -= 8;
+                                     depth +=8;
+                                }
+                            }
+                        }
+                    }
+
+                    if(8 == depth % 16) {
+                        depth += 8;
+                    }
+
+                    auto name = mangler.Mangle(function_declaration);
+                    context = new FunctionEmitterContext(depth, name);
+                    for(auto stack_item: stack_items) {
+                        context->AddItem(stack_item);
+                    }
+                    return context;
                 }
             }
         }

@@ -19,29 +19,35 @@
 #ifndef HOOLANG_STACKITEM_HH
 #define HOOLANG_STACKITEM_HH
 
+#include <ast/TypeSpecification.hh>
 #include <string>
 #include <set>
 
 using namespace std;
+using namespace hooc::ast;
 
 namespace hooc {
     namespace emitter {
         class StackItem {
         public:
-            StackItem(string name, int64_t position);
+            StackItem(string name, int64_t position,
+                      const TypeSpecification *type_specification);
 
             const string &GetName() const;
 
             int64_t GetPosition() const;
 
+            const TypeSpecification *GetTypeSpecification() const;
+
         private:
             string _name;
             int64_t _position;
+            const TypeSpecification *_type_specification;
         };
 
         class StackItemComparer {
         public:
-            bool operator() (const StackItem& a, const StackItem& b) const;
+            bool operator()(const StackItem &a, const StackItem &b) const;
         };
 
         typedef std::set<StackItem, StackItemComparer> StackItemSet;

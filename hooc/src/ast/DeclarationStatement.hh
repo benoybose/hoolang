@@ -29,7 +29,7 @@ namespace hooc {
             Declaration *_declaration;
 
         public:
-            DeclarationStatement(Declaration *declaration);
+            explicit DeclarationStatement(Declaration *declaration);
 
         public:
             const Declaration *GetDeclaration() const;

@@ -17,12 +17,15 @@
  */
 
 #include "FunctionEmitter.hh"
+#include <emitter/StackItem.hh>
 
 namespace hooc {
     namespace emitter {
         FunctionEmitter::FunctionEmitter(FunctionDefinition *definition) :
         _definition(definition),
-        _function_context(nullptr) {}
+        _function_context(nullptr) {
+            this->_function_context = this->CreateFunctionEmitterContext();
+        }
 
         FunctionDefinition *FunctionEmitter::GetDefinition() const {
             return _definition;
@@ -30,6 +33,14 @@ namespace hooc {
 
         FunctionEmitterContext *FunctionEmitter::GetFunctionContext() const {
             return _function_context;
+        }
+
+        FunctionEmitterContext *FunctionEmitter::CreateFunctionEmitterContext() {
+            return nullptr;
+        }
+
+        FunctionEmitter::~FunctionEmitter() {
+            delete this->_function_context;
         }
     }
 }

@@ -22,7 +22,12 @@
 
 namespace hooc {
     namespace emitter {
-        StackItem::StackItem(string name, int64_t position) : _name(std::move(name)), _position(position) {}
+        StackItem::StackItem(string name, int64_t position,
+                             const TypeSpecification *type_specification)
+                : _name(std::move(name)),
+                  _position(position),
+                  _type_specification(type_specification) {
+        }
 
         const string &StackItem::GetName() const {
             return _name;
@@ -30,6 +35,10 @@ namespace hooc {
 
         int64_t StackItem::GetPosition() const {
             return _position;
+        }
+
+        const TypeSpecification *StackItem::GetTypeSpecification() const {
+            return _type_specification;
         }
 
         bool StackItemComparer::operator()(const StackItem &a, const StackItem &b) const {
