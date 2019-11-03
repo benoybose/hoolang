@@ -23,7 +23,7 @@
 #include <emitter/x86/Encoder.hh>
 #include <cstdint>
 #include <vector>
-#include <stdint-gcc.h>
+#include <cstdint>
 
 namespace hooc {
     namespace emitter {

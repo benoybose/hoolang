@@ -20,7 +20,7 @@
 
 #include <cstdint>
 #include <vector>
-#include <stdint-gcc.h>
+#include <cstdint>
 
 using namespace std;
 

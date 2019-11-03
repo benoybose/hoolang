@@ -14,9 +14,13 @@ SET(ANTLR4_JAR_LOCATION "${CMAKE_HOME_DIRECTORY}/packages/tools/antlr4/antlr-4.7
 IF (${CMAKE_HOST_SYSTEM_NAME} STREQUAL Windows)
 
     IF (${MSVC})
-        SET(ENV{BOOST_ROOT} "${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-win")
-        INCLUDE_DIRECTORIES("${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-win/include/boost-1_70")
+        ADD_DEFINITIONS(-DBOOST_AUTO_LINK_SYSTEM)
+        INCLUDE_DIRECTORIES("${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-win/include")
         LINK_DIRECTORIES("${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-win/lib")
+        LIST(APPEND Boost_LIBRARIES
+                libboost_filesystem.lib
+                libboost_regex.lib)
+
         IF (${MSVC})
             IF (${BPKG_64BIT})
                 IF (${BPKG_DEBUG})
@@ -37,7 +41,7 @@ IF (${CMAKE_HOST_SYSTEM_NAME} STREQUAL Windows)
             ENDIF ()
         ENDIF ()
     ELSEIF (${MINGW})
-        SET(ENV{BOOST_ROOT} "${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-mingw")
+        #        SET(ENV{BOOST_ROOT} "${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-mingw")
         INCLUDE_DIRECTORIES("${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-mingw/include")
         LINK_DIRECTORIES("${CMAKE_HOME_DIRECTORY}/packages/libs/boost-1.70.0-mingw/lib")
         LIST(APPEND Boost_LIBRARIES libboost_filesystem.a

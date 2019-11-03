@@ -22,8 +22,7 @@
 #include <emitter/x86/X86Definitions.hh>
 
 #include <cstdint>
-#include <stdint-gcc.h>
-#include "Encoder.hh"
+#include <emitter/x86/Encoder.hh>
 
 using namespace std;
 
@@ -37,10 +36,6 @@ namespace hooc {
             extern const uint64_t X86_OPCODE_RET;
             extern const uint64_t X86_OPCODE_RET_INTER_SEGMENT;
             extern const uint64_t X86_OPCODE_POP_REGISTER;
-
-            /**
-             * Move scalar double-precision floating-point value from xmm2 register to xmm1/m64.
-             */
             extern const uint64_t X86_OPCODE_MOVSD_XMM1MEM64_XMM2;
 
             class X86Instruction {

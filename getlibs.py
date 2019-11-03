@@ -27,6 +27,11 @@ packages = {
             'name': 'antlr4-tool-java.zip',
             'url': 'https://bitbucket.org/benoybose/hoolang/downloads/antlr4-tool-java.zip',
             'path': ['packages', 'tools']
+        },
+        {
+            'name': 'boost-1.70.0-win.zip',
+            'url': 'https://bitbucket.org/benoybose/hoolang/downloads/boost-1.70.0-win.zip',
+            'path': ['packages', 'libs']
         }
     ]
 }

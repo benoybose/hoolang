@@ -19,6 +19,7 @@
 #ifndef HCOPERATOR_H
 #define HCOPERATOR_H
 
+#include <string>
 #include <memory>
 
 namespace hooc {

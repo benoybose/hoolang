@@ -22,7 +22,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
-#include <stdint-gcc.h>
+#include <cstdint>
 
 #define UTILITY_OFFSET8 8
 #define UTILITY_OFFSET16 16
