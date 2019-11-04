@@ -21,6 +21,8 @@
 
 #include <cstdint>
 
+using namespace std;
+
 namespace hooc {
     namespace ast {
         class Position {

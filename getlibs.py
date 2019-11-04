@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 from urllib import request
 from urllib.error import URLError
@@ -33,6 +34,23 @@ packages = {
             'url': 'https://bitbucket.org/benoybose/hoolang/downloads/boost-1.70.0-win.zip',
             'path': ['packages', 'libs']
         }
+    ],
+    'linux': [
+        {
+            'name': 'antlr4-runtime-cpp-4.7.2-linux.zip',
+            'url': 'https://bitbucket.org/benoybose/hoolang/downloads/antlr4-runtime-cpp-4.7.2-linux.zip',
+            'path': ['packages', 'libs']
+        },
+        {
+            'name': 'boost-1.70.0-linux.zip',
+            'url': 'https://bitbucket.org/benoybose/hoolang/downloads/boost-1.70.0-linux.zip',
+            'path': ['packages', 'libs']
+        },
+        {
+            'name': 'antlr4-tool-java.zip',
+            'url': 'https://bitbucket.org/benoybose/hoolang/downloads/antlr4-tool-java.zip',
+            'path': ['packages', 'tools']
+        },
     ]
 }
 
