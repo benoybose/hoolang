@@ -21,6 +21,8 @@
 
 #include <ast/FunctionDefinition.hh>
 #include <emitter/FunctionEmitterContext.hh>
+#include <emitter/Code.hh>
+#include <emitter/NameMangler.hh>
 
 using namespace hooc::ast;
 
@@ -30,6 +32,7 @@ namespace hooc {
         private:
             FunctionDefinition *_definition;
             FunctionEmitterContext *_function_context;
+            NameMangler _mangler;
 
         protected:
             explicit FunctionEmitter(FunctionDefinition *definition);
@@ -39,7 +42,13 @@ namespace hooc {
 
             FunctionEmitterContext *GetFunctionContext() const;
 
+            const NameMangler& GetMangler() const;
+
+        protected:
             virtual FunctionEmitterContext *CreateFunctionEmitterContext();
+
+        public:
+            virtual Code* GenerateCode() = 0;
 
         public:
             virtual ~FunctionEmitter();

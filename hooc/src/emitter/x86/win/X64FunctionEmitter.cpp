@@ -24,13 +24,32 @@
 #include <ast/DeclarationStatement.hh>
 #include <ast/Declaration.hh>
 #include <ast/VariableDeclaration.hh>
+#include <misc/Utility.hh>
+#include <ast/BasicDataTypes.hh>
+#include <ast/BasicDataTypeSpecification.hh>
 
 using namespace hooc::ast;
+using namespace hooc::misc;
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
             namespace win {
+
+                const size_t WIN_X64_REG_COUNT = 4;
+                const X86RegisterType WIN_X86_ARG_DOUBLE_REGS[WIN_X64_REG_COUNT] = {
+                        X86_REG_XMM0,
+                        X86_REG_XMM1,
+                        X86_REG_XMM2,
+                        X86_REG_XMM3
+                };
+                const X86RegisterType WIN_X86_ARG_INT_REGS[WIN_X64_REG_COUNT] = {
+                        X86_REG_RCX,
+                        X86_REG_RDX,
+                        X86_REG_R8,
+                        X86_REG_R9
+                };
+
                 X64FunctionEmitter::X64FunctionEmitter(FunctionDefinition *definition)
                         : FunctionEmitter(definition) {
                 }
@@ -82,10 +101,89 @@ namespace hooc {
 
                     auto name = mangler.Mangle(function_declaration);
                     context = new FunctionEmitterContext(depth, name);
-                    for(auto stack_item: stack_items) {
+                    for(const auto& stack_item: stack_items) {
                         context->AddItem(stack_item);
                     }
                     return context;
+                }
+
+                Code *X64FunctionEmitter::GenerateCode() {
+                    byte_vector header;
+                    byte_vector body;
+                    byte_vector footer;
+
+                    auto function_definition = this->GetDefinition();
+                    auto declaration = function_definition->GetDeclaration();
+                    const auto &arguments = declaration->GetParamList();
+                    if (!arguments.empty()) {
+                        ProcessArguments(arguments, header, footer);
+                    }
+
+                    auto statement = function_definition->GetBody();
+                    if (STMT_COMPOUND == statement->GetStatementType()) {
+                        auto compound_statement = (CompoundStatement *) statement;
+                        if (compound_statement->GetStatements().empty()) {
+                            auto ins_nop = this->_encoder.NOP();
+                            Utility::AppendTo(body, ins_nop);
+                        }
+                    }
+
+                    auto ins_return = this->_encoder.RET(false);
+                    Utility::AppendTo(footer, ins_return);
+
+                    auto name = this->GetMangler().Mangle(declaration);
+                    byte_vector buffer;
+                    Utility::AppendTo(buffer, header);
+                    Utility::AppendTo(buffer, body);
+                    Utility::AppendTo(buffer, footer);
+                    auto code = new Code(CODE_TYPE_FUNCTION, name, buffer);
+                    return code;
+                }
+
+                void X64FunctionEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
+                                                          byte_vector &header, byte_vector &footer) {
+                    auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
+                    Utility::AppendTo(header, push_rbp);
+                    auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
+                    Utility::AppendTo(header, mov_rsp_rbp);
+
+                    auto iterator = arguments.begin();
+                    uint8_t offset = 0x10;
+
+                    for (size_t index = 0; index < WIN_X64_REG_COUNT; index++) {
+                        if (iterator == arguments.end()) {
+                            break;
+                        }
+                        auto arg = *(iterator);
+                        if (IsDouble(arg)) {
+                            auto reg = WIN_X86_ARG_DOUBLE_REGS[index];
+                            auto ins_arg = this->_encoder.MOVSD(reg,
+                                                                X86_REG_RBP,
+                                                                offset);
+                            Utility::AppendTo(header, ins_arg);
+                        } else {
+                            auto reg = WIN_X86_ARG_INT_REGS[index];
+                            auto ins_arg = this->_encoder.MOV(reg,
+                                                              X86_REG_RBP,
+                                                              offset);
+                            Utility::AppendTo(header, ins_arg);
+                        }
+
+                        iterator++;
+                        offset += 0x08;
+                    }
+
+                    auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
+                    Utility::AppendTo(footer, pop_rbp);
+                }
+
+                bool X64FunctionEmitter::IsDouble(VariableDeclaration *arg1) {
+                    auto type = arg1->GetDelcaredType();
+                    if (TYPE_SPEC_BASIC != type->GetType()) {
+                        return false;
+                    }
+                    auto basic_data_type = (BasicDataTypeSpecification *) type;
+                    return !(BASIC_DATA_TYPE_DOUBLE != basic_data_type->GetDataType());
                 }
             }
         }

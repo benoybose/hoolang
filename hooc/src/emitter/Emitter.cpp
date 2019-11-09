@@ -31,9 +31,5 @@ namespace hooc {
         const Unit *Emitter::GetUnit() const {
             return this->_unit;
         }
-
-        const NameMangler &Emitter::GetMangler() const {
-            return _mangler;
-        }
     }
 }

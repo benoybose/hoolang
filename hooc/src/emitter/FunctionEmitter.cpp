@@ -35,6 +35,10 @@ namespace hooc {
             return _function_context;
         }
 
+        const NameMangler &FunctionEmitter::GetMangler() const {
+            return  this->_mangler;
+        }
+
         FunctionEmitterContext *FunctionEmitter::CreateFunctionEmitterContext() {
             return nullptr;
         }

@@ -21,28 +21,32 @@
 
 #include <emitter/FunctionEmitter.hh>
 #include <emitter/FunctionEmitterContext.hh>
+#include <emitter/x86/EncoderX64.hh>
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
             namespace win {
-                class X64FunctionEmitter: public FunctionEmitter {
+                class X64FunctionEmitter : public FunctionEmitter {
+                private:
+                    EncoderX64 _encoder;
 
                 public:
                     explicit X64FunctionEmitter(FunctionDefinition *definition);
 
+                    Code *GenerateCode() override;
+
                 protected:
                     FunctionEmitterContext *CreateFunctionEmitterContext() override;
+
+                private:
+                    void ProcessArguments(const std::list<VariableDeclaration *>& arguments, byte_vector &header,
+                                                         byte_vector &footer);
+                    bool IsDouble(VariableDeclaration *arg1);
                 };
             }
         }
     }
 }
-
-
-class X64FunctionEmitter {
-
-};
-
 
 #endif //HOOLANG_X64FUNCTIONEMITTER_HH

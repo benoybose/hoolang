@@ -40,12 +40,6 @@ namespace hooc {
 
                 public:
                     std::list<Code *> GenerateCode() override;
-                    Code *GenerateCode(FunctionDefinition *function_definition);
-                    void GenerateCode(std::list<VariableDeclaration*> arguments,
-                                      byte_vector& header,
-                                      byte_vector& footer);
-                private:
-                    static bool IsDouble(VariableDeclaration* arg1);
                 };
             }
         }

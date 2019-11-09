@@ -31,25 +31,22 @@ namespace hooc {
     namespace emitter {
         class Emitter {
         private:
-            Unit* _unit;
-            NameMangler _mangler;
+            Unit *_unit;
 
         public:
             explicit Emitter(const Unit *unit);
 
         public:
-            const Unit* GetUnit() const;
+            const Unit *GetUnit() const;
 
         public:
-            virtual std::list<Code*> GenerateCode() = 0;
+            virtual std::list<Code *> GenerateCode() = 0;
 
+        public:
             virtual ~Emitter();
-
-            const NameMangler &GetMangler() const;
         };
     }
 }
-
 
 
 #endif //HOOLANG_EMITTER_HH
