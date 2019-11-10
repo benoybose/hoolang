@@ -25,13 +25,14 @@
 #include <emitter/x86/X86Instruction.hh>
 #include <misc/Utility.hh>
 #include <emitter/x86/win/X64FunctionEmitter.hh>
+#include <emitter/x86/win/X64Emitter.hh>
 
+using namespace hooc::emitter::x86::win;
+using namespace hooc::emitter::x86;
 using namespace hooc::compiler;
 using namespace hooc::ast;
-using namespace hooc::emitter::x86;
 using namespace hooc::emitter;
 using namespace hooc::misc;
-using namespace hooc::emitter::x86::win;
 
 BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
 
@@ -52,6 +53,8 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         BOOST_CHECK_EQUAL(2, buffer.size());
         byte expected[2] = {static_cast<byte>(X86_OPCODE_NOP), static_cast<byte>(X86_OPCODE_RET)};
         BOOST_CHECK(VerifyByteVector(buffer, expected, 2));
+        delete module;
+        delete code;
     }
 
     BOOST_AUTO_TEST_CASE(TEST02) {

@@ -40,15 +40,13 @@ namespace hooc {
         protected:
             FunctionDefinition *GetDefinition() const;
 
-            FunctionEmitterContext *GetFunctionContext() const;
-
-            const NameMangler& GetMangler() const;
+            const NameMangler &GetMangler() const;
 
         protected:
             virtual FunctionEmitterContext *CreateFunctionEmitterContext();
 
         public:
-            virtual Code* GenerateCode() = 0;
+            virtual Code *GenerateCode() = 0;
 
         public:
             virtual ~FunctionEmitter();

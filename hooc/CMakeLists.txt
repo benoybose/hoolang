@@ -59,7 +59,7 @@ SET(hooc_header_files
         src/emitter/EmitterArchTypes.hh
         src/emitter/x86/win/X64Emitter.hh
         src/emitter/CodeType.hh
-        src/emitter/x86/EncoderX64.hh
+		src/emitter/x86/X64Encoder.hh
         src/emitter/x86/Encoder.hh
         src/emitter/x86/X86Definitions.hh
         src/emitter/x86/X86Instruction.hh
@@ -117,7 +117,7 @@ SET(hooc_source_files
 		src/emitter/EmitterFactory.cpp
 		src/emitter/Code.cpp
         src/emitter/x86/win/X64Emitter.cpp
-		src/emitter/x86/EncoderX64.cpp
+		src/emitter/x86/X64Encoder.cpp
 		src/emitter/x86/Encoder.cpp
 		src/emitter/x86/X86Instruction.cpp
 		src/misc/Utility.cpp

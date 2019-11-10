@@ -21,7 +21,7 @@
 
 #include <ast/FunctionDefinition.hh>
 #include <emitter/Emitter.hh>
-#include <emitter/x86/EncoderX64.hh>
+#include <emitter/x86/X64Encoder.hh>
 #include <ast/VariableDeclaration.hh>
 
 #include <list>
@@ -34,7 +34,7 @@ namespace hooc {
             namespace win {
                 class X64Emitter : public Emitter {
                 private:
-                    EncoderX64 _encoder;
+                    X64Encoder _encoder;
                 public:
                     explicit X64Emitter(const Unit *unit);
 

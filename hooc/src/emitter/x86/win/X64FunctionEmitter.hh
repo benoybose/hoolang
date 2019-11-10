@@ -21,7 +21,7 @@
 
 #include <emitter/FunctionEmitter.hh>
 #include <emitter/FunctionEmitterContext.hh>
-#include <emitter/x86/EncoderX64.hh>
+#include <emitter/x86/X64Encoder.hh>
 
 namespace hooc {
     namespace emitter {
@@ -29,7 +29,7 @@ namespace hooc {
             namespace win {
                 class X64FunctionEmitter : public FunctionEmitter {
                 private:
-                    EncoderX64 _encoder;
+                    X64Encoder _encoder;
 
                 public:
                     explicit X64FunctionEmitter(FunctionDefinition *definition);

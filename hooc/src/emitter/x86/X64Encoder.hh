@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_ENCODERX64_HH
-#define HOOLANG_ENCODERX64_HH
+#ifndef HOOLANG_X64ENCODER_HH
+#define HOOLANG_X64ENCODER_HH
 
 #include <emitter/x86/X86Definitions.hh>
 #include <emitter/x86/Encoder.hh>
@@ -28,7 +28,7 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            class EncoderX64: public Encoder {
+            class X64Encoder: public Encoder {
             public:
                 byte_vector PUSH(X86RegisterType reg) override;
                 byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to) override;
@@ -46,4 +46,4 @@ namespace hooc {
 }
 
 
-#endif //HOOLANG_ENCODERX64_HH
+#endif //HOOLANG_X64ENCODER_HH

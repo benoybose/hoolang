@@ -20,98 +20,98 @@
 
 #include <boost/test/unit_test.hpp>
 #include <emitter/x86/X86Definitions.hh>
-#include <emitter/x86/EncoderX64.hh>
+#include <emitter/x86/X64Encoder.hh>
 
 using namespace hooc::emitter::x86;
 
 BOOST_AUTO_TEST_SUITE(Encoder64Test)
 
     BOOST_AUTO_TEST_CASE(TEST01) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.PUSH(X86_REG_RBP);
         byte expected[1] = {0x55};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 1));
     }
 
     BOOST_AUTO_TEST_CASE(TEST02) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOV(X86_REG_RSP, X86_REG_RBP);
         byte expected[3] = {0x48, 0x89, 0xE5};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 3));
     }
 
     BOOST_AUTO_TEST_CASE(TEST03) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOV(X86_REG_RCX, X86_REG_RBP, 0x10);
         byte expected[4] = {0x48, 0x89, 0x4d, 0x10};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 4));
     }
 
     BOOST_AUTO_TEST_CASE(TEST04) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOV(X86_REG_RDX, X86_REG_RBP, 0x18);
         byte expected[4] = {0x48, 0x89, 0x55, 0x18};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 4));
     }
 
     BOOST_AUTO_TEST_CASE(TEST05) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.RET(true);
         byte expected[1] = {0xCB};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 1));
     }
 
     BOOST_AUTO_TEST_CASE(TEST06) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.RET(false);
         byte expected[1] = {0xC3};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 1));
     }
 
     BOOST_AUTO_TEST_CASE(TEST07) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.POP(X86_REG_RBP);
         byte expected[1] = {0x5D};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 1));
     }
 
     BOOST_AUTO_TEST_CASE(TEST08) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.NOP();
         byte expected[1] = {0x90};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 1));
     }
 
     BOOST_AUTO_TEST_CASE(TEST09) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOV(X86_REG_R8, X86_REG_RBP, 0x20);
         byte expected[4] = {0x4c, 0x89, 0x45, 0x20};
         BOOST_CHECK(VerifyByteVector(bytes, expected, 4));
     }
 
     BOOST_AUTO_TEST_CASE(TEST11) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOVSD(X86_REG_XMM0, X86_REG_RBP, 0x10);
         byte expected[5] = { 0xf2, 0x0f, 0x11, 0x45, 0x10 };
         BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
     }
 
     BOOST_AUTO_TEST_CASE(TEST12) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOVSD(X86_REG_XMM1, X86_REG_RBP, 0x18);
         byte expected[5] = { 0xf2, 0x0f, 0x11, 0x4d, 0x18 };
         BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
     }
 
     BOOST_AUTO_TEST_CASE(TEST13) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOVSD(X86_REG_XMM2, X86_REG_RBP, 0x20);
         byte expected[5] = { 0xf2, 0x0f, 0x11, 0x55, 0x20 };
         BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
     }
 
     BOOST_AUTO_TEST_CASE(TEST14) {
-        EncoderX64 encoder;
+        X64Encoder encoder;
         auto bytes = encoder.MOVSD(X86_REG_XMM3, X86_REG_RBP, 0x28);
         byte expected[5] = { 0xf2, 0x0f, 0x11, 0x5d, 0x28 };
         BOOST_CHECK(VerifyByteVector(bytes, expected, 5));
