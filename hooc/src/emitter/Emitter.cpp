@@ -21,15 +21,27 @@
 
 namespace hooc {
     namespace emitter {
-        Emitter::Emitter(const Unit *unit) :
-                _unit(const_cast<Unit *>(unit)) {
+        Emitter::Emitter(const Unit *unit,
+                         EmitterArchType arch,
+                         EmitterOSType os) :
+                _unit(const_cast<Unit *>(unit)),
+                _arch(arch),
+                _os(os) {
         }
 
-        Emitter::~Emitter() {
+        EmitterArchType Emitter::GetArch() const {
+            return _arch;
+        }
+
+        EmitterOSType Emitter::GetOS() const {
+            return _os;
         }
 
         const Unit *Emitter::GetUnit() const {
             return this->_unit;
+        }
+
+        Emitter::~Emitter() {
         }
     }
 }

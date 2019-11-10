@@ -27,7 +27,6 @@
 #include <emitter/x86/win/X64FunctionEmitter.hh>
 #include <emitter/x86/win/X64Emitter.hh>
 
-using namespace hooc::emitter::x86::win;
 using namespace hooc::emitter::x86;
 using namespace hooc::compiler;
 using namespace hooc::ast;

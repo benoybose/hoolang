@@ -26,25 +26,23 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            namespace win {
-                class X64FunctionEmitter : public FunctionEmitter {
-                private:
-                    X64Encoder _encoder;
+            class X64FunctionEmitter : public FunctionEmitter {
+            private:
+                X64Encoder _encoder;
 
-                public:
-                    explicit X64FunctionEmitter(FunctionDefinition *definition);
+            public:
+                explicit X64FunctionEmitter(FunctionDefinition *definition);
 
-                    Code *GenerateCode() override;
+                Code *GenerateCode() override;
 
-                protected:
-                    FunctionEmitterContext *CreateFunctionEmitterContext() override;
+            protected:
+                FunctionEmitterContext *CreateFunctionEmitterContext() override;
 
-                private:
-                    void ProcessArguments(const std::list<VariableDeclaration *>& arguments, byte_vector &header,
-                                                         byte_vector &footer);
-                    bool IsDouble(VariableDeclaration *arg1);
-                };
-            }
+            private:
+                void ProcessArguments(const std::list<VariableDeclaration *>& arguments, byte_vector &header,
+                                      byte_vector &footer);
+                bool IsDouble(VariableDeclaration *arg1);
+            };
         }
     }
 }

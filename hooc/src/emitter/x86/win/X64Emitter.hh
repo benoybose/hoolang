@@ -23,6 +23,8 @@
 #include <emitter/Emitter.hh>
 #include <emitter/x86/X64Encoder.hh>
 #include <ast/VariableDeclaration.hh>
+#include <emitter/EmitterArchTypes.hh>
+#include <emitter/EmitterOSTypes.hh>
 
 #include <list>
 
@@ -31,17 +33,15 @@ using namespace hooc::ast;
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            namespace win {
-                class X64Emitter : public Emitter {
-                private:
-                    X64Encoder _encoder;
-                public:
-                    explicit X64Emitter(const Unit *unit);
+            class X64Emitter : public Emitter {
+            private:
+                X64Encoder _encoder;
+            public:
+                X64Emitter(const Unit *unit, EmitterArchType arch, EmitterOSType os);
 
-                public:
-                    std::list<Code *> GenerateCode() override;
-                };
-            }
+            public:
+                std::list<Code *> GenerateCode() override;
+            };
         }
     }
 }

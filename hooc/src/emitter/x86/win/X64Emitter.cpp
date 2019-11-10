@@ -33,35 +33,34 @@ using namespace hooc::misc;
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            namespace win {
+            X64Emitter::X64Emitter(const Unit *unit,
+                    EmitterArchType arch,
+                    EmitterOSType os):
+                    Emitter(unit, arch, os) {
+            }
 
-                X64Emitter::X64Emitter(const Unit *unit) :
-                        Emitter(unit) {
-                }
-
-                std::list<Code *> X64Emitter::GenerateCode() {
-                    std::list<Code *> codes;
-                    auto unit_items = this->GetUnit()
-                            ->GetItems();
-                    for (auto unit_item: unit_items) {
-                        try {
-                            if (unit_item->GetUnitItemType() == UNIT_ITEM_DEFINITION) {
-                                auto definition = (Definition *) unit_item;
-                                if (DEFINITION_FUNCTION == definition->GetDefinitionType()) {
-                                    auto function_definition = (FunctionDefinition *) definition;
-                                    X64FunctionEmitter function_emitter(function_definition);
-                                    auto code = function_emitter.GenerateCode();
-                                    if (nullptr != code) {
-                                        codes.push_back(code);
-                                    }
+            std::list<Code *> X64Emitter::GenerateCode() {
+                std::list<Code *> codes;
+                auto unit_items = this->GetUnit()
+                        ->GetItems();
+                for (auto unit_item: unit_items) {
+                    try {
+                        if (unit_item->GetUnitItemType() == UNIT_ITEM_DEFINITION) {
+                            auto definition = (Definition *) unit_item;
+                            if (DEFINITION_FUNCTION == definition->GetDefinitionType()) {
+                                auto function_definition = (FunctionDefinition *) definition;
+                                X64FunctionEmitter function_emitter(function_definition);
+                                auto code = function_emitter.GenerateCode();
+                                if (nullptr != code) {
+                                    codes.push_back(code);
                                 }
                             }
-                        } catch (const std::exception &ex) {
-                            // todo: Handle exception
                         }
+                    } catch (const std::exception &ex) {
+                        // todo: Handle exception
                     }
-                    return codes;
                 }
+                return codes;
             }
         }
     }

@@ -22,6 +22,8 @@
 #include <emitter/Code.hh>
 #include <emitter/NameMangler.hh>
 #include <ast/Unit.hh>
+#include <emitter/EmitterArchTypes.hh>
+#include <emitter/EmitterOSTypes.hh>
 
 #include <list>
 
@@ -32,9 +34,11 @@ namespace hooc {
         class Emitter {
         private:
             Unit *_unit;
+            EmitterArchType _arch;
+            EmitterOSType _os;
 
         public:
-            explicit Emitter(const Unit *unit);
+            explicit Emitter(const Unit *unit, EmitterArchType arch, EmitterOSType os);
 
         public:
             const Unit *GetUnit() const;
@@ -44,6 +48,10 @@ namespace hooc {
 
         public:
             virtual ~Emitter();
+
+            EmitterArchType GetArch() const;
+
+            EmitterOSType GetOS() const;
         };
     }
 }
