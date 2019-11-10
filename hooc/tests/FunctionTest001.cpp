@@ -29,7 +29,7 @@
 #include <ast/CompoundStatement.hh>
 #include <ast/ReturnStatement.hh>
 #include <ast/BinaryExpression.hh>
-#include <emitter/Emitter.hh>
+#include <emitter/EmitterBase.hh>
 #include <emitter/EmitterFactory.hh>
 
 using namespace std;

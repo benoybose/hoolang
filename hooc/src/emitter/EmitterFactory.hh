@@ -21,13 +21,13 @@
 
 #include <emitter/EmitterOSTypes.hh>
 #include <emitter/EmitterArchTypes.hh>
-#include <emitter/Emitter.hh>
+#include <emitter/EmitterBase.hh>
 
 namespace hooc {
     namespace emitter {
         class EmitterFactory {
         public:
-            static Emitter *GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit);
+            static EmitterBase *GetEmitter(EmitterOSType os, EmitterArchType arch, const Unit *unit);
         };
     }
 }

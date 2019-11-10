@@ -20,7 +20,7 @@
 #define HOOLANG_X64EMITTER_HH
 
 #include <ast/FunctionDefinition.hh>
-#include <emitter/Emitter.hh>
+#include <emitter/EmitterBase.hh>
 #include <emitter/x86/X64Encoder.hh>
 #include <ast/VariableDeclaration.hh>
 #include <emitter/EmitterArchTypes.hh>
@@ -33,7 +33,7 @@ using namespace hooc::ast;
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            class X64Emitter : public Emitter {
+            class X64Emitter : public EmitterBase {
             private:
                 X64Encoder _encoder;
             public:

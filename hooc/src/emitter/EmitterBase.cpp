@@ -16,32 +16,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Emitter.hh"
+#include "EmitterBase.hh"
 #include <emitter/NameMangler.hh>
 
 namespace hooc {
     namespace emitter {
-        Emitter::Emitter(const Unit *unit,
-                         EmitterArchType arch,
-                         EmitterOSType os) :
+        EmitterBase::EmitterBase(const Unit *unit,
+                                 EmitterArchType arch,
+                                 EmitterOSType os) :
                 _unit(const_cast<Unit *>(unit)),
                 _arch(arch),
                 _os(os) {
         }
 
-        EmitterArchType Emitter::GetArch() const {
+        EmitterArchType EmitterBase::GetArch() const {
             return _arch;
         }
 
-        EmitterOSType Emitter::GetOS() const {
+        EmitterOSType EmitterBase::GetOS() const {
             return _os;
         }
 
-        const Unit *Emitter::GetUnit() const {
+        const Unit *EmitterBase::GetUnit() const {
             return this->_unit;
         }
 
-        Emitter::~Emitter() {
+        EmitterBase::~EmitterBase() {
         }
     }
 }

@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_EMITTER_HH
-#define HOOLANG_EMITTER_HH
+#ifndef HOOLANG_EMITTERBASE_HH
+#define HOOLANG_EMITTERBASE_HH
 
 #include <emitter/Code.hh>
 #include <emitter/NameMangler.hh>
@@ -31,14 +31,14 @@ using namespace hooc::ast;
 
 namespace hooc {
     namespace emitter {
-        class Emitter {
+        class EmitterBase {
         private:
             Unit *_unit;
             EmitterArchType _arch;
             EmitterOSType _os;
 
         public:
-            explicit Emitter(const Unit *unit, EmitterArchType arch, EmitterOSType os);
+            explicit EmitterBase(const Unit *unit, EmitterArchType arch, EmitterOSType os);
 
         public:
             const Unit *GetUnit() const;
@@ -47,7 +47,7 @@ namespace hooc {
             virtual std::list<Code *> GenerateCode() = 0;
 
         public:
-            virtual ~Emitter();
+            virtual ~EmitterBase();
 
             EmitterArchType GetArch() const;
 
@@ -57,4 +57,4 @@ namespace hooc {
 }
 
 
-#endif //HOOLANG_EMITTER_HH
+#endif //HOOLANG_EMITTERBASE_HH

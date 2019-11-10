@@ -52,7 +52,7 @@ SET(hooc_header_files
 		src/compiler/BaseError.hh
 		src/compiler/ParseError.hh
 		src/ast/Node.hh
-		src/emitter/Emitter.hh
+        src/emitter/EmitterBase.hh
 		src/emitter/EmitterFactory.hh
 		src/emitter/EmitterOSTypes.hh
 		src/emitter/Code.hh
@@ -113,7 +113,7 @@ SET(hooc_source_files
 		src/compiler/ParseError.cpp
 		src/ast/Node.cpp
 		src/ast/Position.cpp
-		src/emitter/Emitter.cpp
+        src/emitter/EmitterBase.cpp
 		src/emitter/EmitterFactory.cpp
 		src/emitter/Code.cpp
         src/emitter/x86/win/X64Emitter.cpp

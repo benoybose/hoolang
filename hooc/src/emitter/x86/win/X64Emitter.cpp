@@ -36,7 +36,7 @@ namespace hooc {
             X64Emitter::X64Emitter(const Unit *unit,
                     EmitterArchType arch,
                     EmitterOSType os):
-                    Emitter(unit, arch, os) {
+                    EmitterBase(unit, arch, os) {
             }
 
             std::list<Code *> X64Emitter::GenerateCode() {
