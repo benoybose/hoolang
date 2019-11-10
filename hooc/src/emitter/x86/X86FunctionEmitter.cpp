@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "X64FunctionEmitter.hh"
+#include "X86FunctionEmitter.hh"
 #include <emitter/FunctionEmitterContext.hh>
 #include <emitter/NameMangler.hh>
 #include <ast/CompoundStatement.hh>
@@ -48,11 +48,11 @@ namespace hooc {
                     X86_REG_R9
             };
 
-            X64FunctionEmitter::X64FunctionEmitter(FunctionDefinition *definition)
+            X86FunctionEmitter::X86FunctionEmitter(FunctionDefinition *definition)
                     : FunctionEmitter(definition) {
             }
 
-            FunctionEmitterContext *X64FunctionEmitter::CreateFunctionEmitterContext() {
+            FunctionEmitterContext *X86FunctionEmitter::CreateFunctionEmitterContext() {
                 FunctionEmitterContext* context = nullptr;
                 NameMangler mangler;
 
@@ -105,7 +105,7 @@ namespace hooc {
                 return context;
             }
 
-            Code *X64FunctionEmitter::GenerateCode() {
+            Code *X86FunctionEmitter::GenerateCode() {
                 byte_vector header;
                 byte_vector body;
                 byte_vector footer;
@@ -138,7 +138,7 @@ namespace hooc {
                 return code;
             }
 
-            void X64FunctionEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
+            void X86FunctionEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
                                                       byte_vector &header, byte_vector &footer) {
                 auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
                 Utility::AppendTo(header, push_rbp);
@@ -175,7 +175,7 @@ namespace hooc {
                 Utility::AppendTo(footer, pop_rbp);
             }
 
-            bool X64FunctionEmitter::IsDouble(VariableDeclaration *arg1) {
+            bool X86FunctionEmitter::IsDouble(VariableDeclaration *arg1) {
                 auto type = arg1->GetDelcaredType();
                 if (TYPE_SPEC_BASIC != type->GetType()) {
                     return false;

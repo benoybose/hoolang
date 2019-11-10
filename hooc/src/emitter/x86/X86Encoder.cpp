@@ -16,20 +16,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "X64Encoder.hh"
+#include "X86Encoder.hh"
 #include "X86Instruction.hh"
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            byte_vector X64Encoder::PUSH(X86RegisterType reg) {
+            byte_vector X86Encoder::PUSH(X86RegisterType reg) {
                 X86Instruction instruction(X86_OPCODE_PUSH_REGISTER);
                 instruction.AddRegister(reg);
                 byte_vector vector = instruction.Encode();
                 return vector;
             }
 
-            byte_vector X64Encoder::MOV(X86RegisterType reg_from,
+            byte_vector X86Encoder::MOV(X86RegisterType reg_from,
                                         X86RegisterType reg_to) {
                 X86Instruction instruction(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
                 instruction.SetOperands(reg_from, reg_to);
@@ -37,7 +37,7 @@ namespace hooc {
                 return vector;
             }
 
-            byte_vector X64Encoder::MOV(X86RegisterType reg_from,
+            byte_vector X86Encoder::MOV(X86RegisterType reg_from,
                                         X86RegisterType reg_to, uint8_t disp8) {
                 X86Instruction instruction(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
                 instruction.SetOperands(reg_from, reg_to, disp8);
@@ -45,7 +45,7 @@ namespace hooc {
                 return vector;
             }
 
-            byte_vector X64Encoder::RET(bool inter_segment) {
+            byte_vector X86Encoder::RET(bool inter_segment) {
                 if (inter_segment) {
                     X86Instruction instruction(X86_OPCODE_RET_INTER_SEGMENT);
                     return instruction.Encode();
@@ -55,13 +55,13 @@ namespace hooc {
                 }
             }
 
-            byte_vector X64Encoder::POP(X86RegisterType reg) {
+            byte_vector X86Encoder::POP(X86RegisterType reg) {
                 X86Instruction instruction(X86_OPCODE_POP_REGISTER);
                 instruction.AddRegister(reg);
                 return instruction.Encode();
             }
 
-            byte_vector X64Encoder::MOVSD(X86RegisterType reg_from,
+            byte_vector X86Encoder::MOVSD(X86RegisterType reg_from,
                                           X86RegisterType reg_to,
                                           uint8_t disp8) {
                 X86Instruction instruction(X86_OPCODE_MOVSD_XMM1MEM64_XMM2);
@@ -69,7 +69,7 @@ namespace hooc {
                 return instruction.Encode();
             }
 
-            byte_vector X64Encoder::NOP() {
+            byte_vector X86Encoder::NOP() {
                 X86Instruction instruction;
                 return instruction.Encode();
             }

@@ -16,35 +16,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_X64FUNCTIONEMITTER_HH
-#define HOOLANG_X64FUNCTIONEMITTER_HH
+#ifndef HOOLANG_X86ENCODER_HH
+#define HOOLANG_X86ENCODER_HH
 
-#include <emitter/FunctionEmitter.hh>
-#include <emitter/FunctionEmitterContext.hh>
-#include <emitter/x86/X64Encoder.hh>
+#include <emitter/x86/X86Definitions.hh>
+#include <cstdint>
+#include <vector>
+#include <cstdint>
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            class X64FunctionEmitter : public FunctionEmitter {
-            private:
-                X64Encoder _encoder;
-
+            class X86Encoder {
             public:
-                explicit X64FunctionEmitter(FunctionDefinition *definition);
+                byte_vector PUSH(X86RegisterType reg);
 
-                Code *GenerateCode() override;
+                byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to);
 
-            protected:
-                FunctionEmitterContext *CreateFunctionEmitterContext() override;
+                byte_vector MOV(X86RegisterType reg_from,
+                                X86RegisterType reg_to,
+                                uint8_t disp8);
 
-            private:
-                void ProcessArguments(const std::list<VariableDeclaration *>& arguments, byte_vector &header,
-                                      byte_vector &footer);
-                bool IsDouble(VariableDeclaration *arg1);
+                byte_vector RET(bool inter_segment);
+
+                byte_vector POP(X86RegisterType reg);
+
+                byte_vector MOVSD(X86RegisterType reg_from, X86RegisterType reg_to, uint8_t disp8);
+
+                byte_vector NOP();
             };
         }
     }
 }
 
-#endif //HOOLANG_X64FUNCTIONEMITTER_HH
+
+#endif //HOOLANG_X86ENCODER_HH

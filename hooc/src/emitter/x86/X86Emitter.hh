@@ -16,12 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_X64EMITTER_HH
-#define HOOLANG_X64EMITTER_HH
+#ifndef HOOLANG_X86EMITTER_HH
+#define HOOLANG_X86EMITTER_HH
 
 #include <ast/FunctionDefinition.hh>
 #include <emitter/EmitterBase.hh>
-#include <emitter/x86/X64Encoder.hh>
+#include <emitter/x86/X86Encoder.hh>
 #include <ast/VariableDeclaration.hh>
 #include <emitter/EmitterArchTypes.hh>
 #include <emitter/EmitterOSTypes.hh>
@@ -33,11 +33,11 @@ using namespace hooc::ast;
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            class X64Emitter : public EmitterBase {
+            class X86Emitter : public EmitterBase {
             private:
-                X64Encoder _encoder;
+                X86Encoder _encoder;
             public:
-                X64Emitter(const Unit *unit, EmitterArchType arch, EmitterOSType os);
+                X86Emitter(const Unit *unit, EmitterArchType arch, EmitterOSType os);
 
             public:
                 std::list<Code *> GenerateCode() override;
@@ -46,4 +46,4 @@ namespace hooc {
     }
 }
 
-#endif //HOOLANG_X64EMITTER_HH
+#endif //HOOLANG_X86EMITTER_HH
