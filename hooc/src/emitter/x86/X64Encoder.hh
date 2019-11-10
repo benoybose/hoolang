@@ -20,7 +20,6 @@
 #define HOOLANG_X64ENCODER_HH
 
 #include <emitter/x86/X86Definitions.hh>
-#include <emitter/x86/Encoder.hh>
 #include <cstdint>
 #include <vector>
 #include <cstdint>
@@ -28,18 +27,23 @@
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            class X64Encoder: public Encoder {
+            class X64Encoder {
             public:
-                byte_vector PUSH(X86RegisterType reg) override;
-                byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to) override;
+                byte_vector PUSH(X86RegisterType reg);
+
+                byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to);
+
                 byte_vector MOV(X86RegisterType reg_from,
-                        X86RegisterType reg_to,
-                        uint8_t disp8) override;
-                byte_vector RET(bool inter_segment) override;
+                                X86RegisterType reg_to,
+                                uint8_t disp8);
 
-                byte_vector POP(X86RegisterType reg) override;
+                byte_vector RET(bool inter_segment);
 
-                byte_vector MOVSD(X86RegisterType reg_from, X86RegisterType reg_to, uint8_t disp8) override;
+                byte_vector POP(X86RegisterType reg);
+
+                byte_vector MOVSD(X86RegisterType reg_from, X86RegisterType reg_to, uint8_t disp8);
+
+                byte_vector NOP();
             };
         }
     }

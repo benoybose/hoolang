@@ -17,7 +17,7 @@
  */
 
 #include "EmitterFactory.hh"
-#include <emitter/x86/win/X64Emitter.hh>
+#include <emitter/x86/X64Emitter.hh>
 
 using namespace hooc::emitter::x86;
 

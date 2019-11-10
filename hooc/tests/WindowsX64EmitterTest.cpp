@@ -24,8 +24,8 @@
 #include <emitter/CodeType.hh>
 #include <emitter/x86/X86Instruction.hh>
 #include <misc/Utility.hh>
-#include <emitter/x86/win/X64FunctionEmitter.hh>
-#include <emitter/x86/win/X64Emitter.hh>
+#include <emitter/x86/X64FunctionEmitter.hh>
+#include <emitter/x86/X64Emitter.hh>
 
 using namespace hooc::emitter::x86;
 using namespace hooc::compiler;

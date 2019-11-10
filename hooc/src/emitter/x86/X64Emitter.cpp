@@ -18,14 +18,14 @@
 
 
 #include <emitter/x86/X86Definitions.hh>
-#include <emitter/x86/win/X64Emitter.hh>
+#include <emitter/x86/X64Emitter.hh>
 #include <misc/Utility.hh>
 #include <ast/BasicDataTypes.hh>
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
 #include <ast/CompoundStatement.hh>
 #include <ast/BasicDataTypeSpecification.hh>
-#include <emitter/x86/win/X64FunctionEmitter.hh>
+#include <emitter/x86/X64FunctionEmitter.hh>
 
 using namespace std;
 using namespace hooc::misc;

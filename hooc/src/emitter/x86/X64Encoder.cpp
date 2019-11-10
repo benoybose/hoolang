@@ -68,6 +68,11 @@ namespace hooc {
                 instruction.SetOperands(reg_from, reg_to, disp8);
                 return instruction.Encode();
             }
+
+            byte_vector X64Encoder::NOP() {
+                X86Instruction instruction;
+                return instruction.Encode();
+            }
         }
     }
 }

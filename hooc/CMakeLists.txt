@@ -57,10 +57,9 @@ SET(hooc_header_files
 		src/emitter/EmitterOSTypes.hh
 		src/emitter/Code.hh
         src/emitter/EmitterArchTypes.hh
-        src/emitter/x86/win/X64Emitter.hh
+		src/emitter/x86/X64Emitter.hh
         src/emitter/CodeType.hh
 		src/emitter/x86/X64Encoder.hh
-        src/emitter/x86/Encoder.hh
         src/emitter/x86/X86Definitions.hh
         src/emitter/x86/X86Instruction.hh
 		src/ast/Position.hh
@@ -71,7 +70,7 @@ SET(hooc_header_files
 		src/emitter/FunctionEmitter.hh
 		src/emitter/FunctionEmitterContext.hh
 		src/emitter/StackContext.hh
-		src/emitter/x86/win/X64FunctionEmitter.hh
+		src/emitter/x86/X64FunctionEmitter.hh
 		src/emitter/StackItem.hh)
 
 SET(hooc_source_files
@@ -116,17 +115,16 @@ SET(hooc_source_files
         src/emitter/EmitterBase.cpp
 		src/emitter/EmitterFactory.cpp
 		src/emitter/Code.cpp
-        src/emitter/x86/win/X64Emitter.cpp
+		src/emitter/x86/X64Emitter.cpp
 		src/emitter/x86/X64Encoder.cpp
-		src/emitter/x86/Encoder.cpp
-		src/emitter/x86/X86Instruction.cpp
+        src/emitter/x86/X86Instruction.cpp
 		src/misc/Utility.cpp
 		src/emitter/NameMangler.cpp
 		src/emitter/FunctionEmitter.cpp
 		src/emitter/FunctionEmitterContext.cpp
 		src/emitter/StackContext.cpp
 		src/emitter/StackItem.cpp
-		src/emitter/x86/win/X64FunctionEmitter.cpp src/NotImplementedException.cpp src/NotImplementedException.hh)
+		src/emitter/x86/X64FunctionEmitter.cpp src/NotImplementedException.cpp src/NotImplementedException.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 

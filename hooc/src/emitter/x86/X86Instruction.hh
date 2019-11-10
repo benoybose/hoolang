@@ -22,7 +22,6 @@
 #include <emitter/x86/X86Definitions.hh>
 
 #include <cstdint>
-#include <emitter/x86/Encoder.hh>
 
 using namespace std;
 
