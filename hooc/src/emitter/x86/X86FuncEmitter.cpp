@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "X86FunctionEmitter.hh"
-#include <emitter/FunctionEmitterContext.hh>
+#include "X86FuncEmitter.hh"
+#include <emitter/FuncEmitterContext.hh>
 #include <emitter/NameMangler.hh>
 #include <ast/CompoundStatement.hh>
 #include <ast/Statement.hh>
@@ -48,12 +48,12 @@ namespace hooc {
                     X86_REG_R9
             };
 
-            X86FunctionEmitter::X86FunctionEmitter(FunctionDefinition *definition)
-                    : FunctionEmitter(definition) {
+            X86FuncEmitter::X86FuncEmitter(FunctionDefinition *definition)
+                    : FuncEmitter(definition) {
             }
 
-            FunctionEmitterContext *X86FunctionEmitter::CreateFunctionEmitterContext() {
-                FunctionEmitterContext* context = nullptr;
+            FuncEmitterContext *X86FuncEmitter::CreateFunctionEmitterContext() {
+                FuncEmitterContext* context = nullptr;
                 NameMangler mangler;
 
                 auto function_declaration = this->GetDefinition()
@@ -98,14 +98,14 @@ namespace hooc {
                 }
 
                 auto name = mangler.Mangle(function_declaration);
-                context = new FunctionEmitterContext(depth, name);
+                context = new FuncEmitterContext(depth, name);
                 for(const auto& stack_item: stack_items) {
                     context->AddItem(stack_item);
                 }
                 return context;
             }
 
-            Code *X86FunctionEmitter::GenerateCode() {
+            Code *X86FuncEmitter::GenerateCode() {
                 byte_vector header;
                 byte_vector body;
                 byte_vector footer;
@@ -138,8 +138,8 @@ namespace hooc {
                 return code;
             }
 
-            void X86FunctionEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
-                                                      byte_vector &header, byte_vector &footer) {
+            void X86FuncEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
+                                                  byte_vector &header, byte_vector &footer) {
                 auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
                 Utility::AppendTo(header, push_rbp);
                 auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
@@ -175,7 +175,7 @@ namespace hooc {
                 Utility::AppendTo(footer, pop_rbp);
             }
 
-            bool X86FunctionEmitter::IsDouble(VariableDeclaration *arg1) {
+            bool X86FuncEmitter::IsDouble(VariableDeclaration *arg1) {
                 auto type = arg1->GetDelcaredType();
                 if (TYPE_SPEC_BASIC != type->GetType()) {
                     return false;

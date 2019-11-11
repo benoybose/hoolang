@@ -16,25 +16,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "EmitterBase.hh"
-#include <emitter/NameMangler.hh>
+#include "FuncEmitter.hh"
+#include <emitter/StackItem.hh>
 
 namespace hooc {
     namespace emitter {
-        EmitterBase::EmitterBase(const Unit *unit, const EmitterConfig& config) :
-                _unit(const_cast<Unit *>(unit)),
-                _config(config) {
+        FuncEmitter::FuncEmitter(FunctionDefinition *definition) :
+        _definition(definition),
+        _function_context(nullptr) {
+            this->_function_context = this->CreateFunctionEmitterContext();
         }
 
-        const EmitterConfig &EmitterBase::GetConfig() const {
-            return _config;
+        FunctionDefinition *FuncEmitter::GetDefinition() const {
+            return _definition;
         }
 
-        const Unit *EmitterBase::GetUnit() const {
-            return this->_unit;
+        const NameMangler &FuncEmitter::GetMangler() const {
+            return  this->_mangler;
         }
 
-        EmitterBase::~EmitterBase() {
+        FuncEmitterContext *FuncEmitter::CreateFunctionEmitterContext() {
+            return nullptr;
+        }
+
+        FuncEmitter::~FuncEmitter() {
+            delete this->_function_context;
         }
     }
 }

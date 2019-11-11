@@ -16,23 +16,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <utility>
+#ifndef HOOLANG_EMITTERCONFIG_HH
+#define HOOLANG_EMITTERCONFIG_HH
 
-#include "FunctionEmitterContext.hh"
+#include <emitter/EmitterOSTypes.hh>
+#include <emitter/EmitterArchTypes.hh>
 
 namespace hooc {
     namespace emitter {
-        FunctionEmitterContext::FunctionEmitterContext(size_t depth, string name) :
-                StackContext(depth),
-                _name(std::move(name)) {
-        }
+        class EmitterConfig {
+        public:
+            EmitterConfig(EmitterOSType os, EmitterArchType arch);
+            EmitterConfig(const EmitterConfig& source);
 
-        const string &FunctionEmitterContext::GetName() const {
-            return _name;
-        }
+            EmitterOSType GetOS() const;
 
-        const string &FunctionEmitterContext::GetMangledName() const {
-            return _mangled_name;
-        }
+            EmitterArchType GetArch() const;
+
+            bool operator==(const EmitterConfig &rhs) const;
+
+            bool operator!=(const EmitterConfig &rhs) const;
+
+        private:
+            EmitterOSType _os;
+            EmitterArchType _arch;
+
+        public:
+
+        };
+
+        extern const EmitterConfig& EMITTER_WIN64;
+        extern const EmitterConfig& EMITTER_LINUX64;
     }
 }
+
+#endif //HOOLANG_EMITTERCONFIG_HH

@@ -16,35 +16,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_X86FUNCTIONEMITTER_HH
-#define HOOLANG_X86FUNCTIONEMITTER_HH
+#ifndef HOOLANG_FUNCEMITTERCONTEXT_HH
+#define HOOLANG_FUNCEMITTERCONTEXT_HH
 
-#include <emitter/FunctionEmitter.hh>
-#include <emitter/FunctionEmitterContext.hh>
-#include <emitter/x86/X86Encoder.hh>
+#include <emitter/StackContext.hh>
+
+#include <string>
+
+using namespace std;
 
 namespace hooc {
     namespace emitter {
-        namespace x86 {
-            class X86FunctionEmitter : public FunctionEmitter {
-            private:
-                X86Encoder _encoder;
+        class FuncEmitterContext: public StackContext {
+        public:
+            FuncEmitterContext(size_t depth, string name);
 
-            public:
-                explicit X86FunctionEmitter(FunctionDefinition *definition);
+            const string &GetName() const;
 
-                Code *GenerateCode() override;
+            const string &GetMangledName() const;
 
-            protected:
-                FunctionEmitterContext *CreateFunctionEmitterContext() override;
-
-            private:
-                void ProcessArguments(const std::list<VariableDeclaration *>& arguments, byte_vector &header,
-                                      byte_vector &footer);
-                bool IsDouble(VariableDeclaration *arg1);
-            };
-        }
+        private:
+            string _name;
+            string _mangled_name;
+        };
     }
 }
 
-#endif //HOOLANG_X86FUNCTIONEMITTER_HH
+#endif //HOOLANG_FUNCEMITTERCONTEXT_HH

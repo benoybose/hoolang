@@ -67,10 +67,10 @@ SET(hooc_header_files
 		src/misc/Utility.hh
 		src/emitter/EmitterDefinitions.hh
 		src/emitter/NameMangler.hh
-		src/emitter/FunctionEmitter.hh
-		src/emitter/FunctionEmitterContext.hh
+		src/emitter/FuncEmitter.hh
+		src/emitter/FuncEmitterContext.hh
 		src/emitter/StackContext.hh
-		src/emitter/x86/X86FunctionEmitter.hh
+        src/emitter/x86/X86FuncEmitter.hh
 		src/emitter/StackItem.hh)
 
 SET(hooc_source_files
@@ -120,11 +120,11 @@ SET(hooc_source_files
         src/emitter/x86/X86Instruction.cpp
 		src/misc/Utility.cpp
 		src/emitter/NameMangler.cpp
-		src/emitter/FunctionEmitter.cpp
-		src/emitter/FunctionEmitterContext.cpp
+		src/emitter/FuncEmitter.cpp
+		src/emitter/FuncEmitterContext.cpp
 		src/emitter/StackContext.cpp
 		src/emitter/StackItem.cpp
-		src/emitter/x86/X86FunctionEmitter.cpp src/NotImplementedException.cpp src/NotImplementedException.hh)
+        src/emitter/x86/X86FuncEmitter.cpp src/NotImplementedException.cpp src/NotImplementedException.hh src/emitter/EmitterConfig.cpp src/emitter/EmitterConfig.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
 

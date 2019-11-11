@@ -16,42 +16,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_FUNCTIONEMITTER_HH
-#define HOOLANG_FUNCTIONEMITTER_HH
+#include <utility>
 
-#include <ast/FunctionDefinition.hh>
-#include <emitter/FunctionEmitterContext.hh>
-#include <emitter/Code.hh>
-#include <emitter/NameMangler.hh>
-
-using namespace hooc::ast;
+#include "FuncEmitterContext.hh"
 
 namespace hooc {
     namespace emitter {
-        class FunctionEmitter {
-        private:
-            FunctionDefinition *_definition;
-            FunctionEmitterContext *_function_context;
-            NameMangler _mangler;
+        FuncEmitterContext::FuncEmitterContext(size_t depth, string name) :
+                StackContext(depth),
+                _name(std::move(name)) {
+        }
 
-        protected:
-            explicit FunctionEmitter(FunctionDefinition *definition);
+        const string &FuncEmitterContext::GetName() const {
+            return _name;
+        }
 
-        protected:
-            FunctionDefinition *GetDefinition() const;
-
-            const NameMangler &GetMangler() const;
-
-        protected:
-            virtual FunctionEmitterContext *CreateFunctionEmitterContext();
-
-        public:
-            virtual Code *GenerateCode() = 0;
-
-        public:
-            virtual ~FunctionEmitter();
-        };
+        const string &FuncEmitterContext::GetMangledName() const {
+            return _mangled_name;
+        }
     }
 }
-
-#endif //HOOLANG_FUNCTIONEMITTER_HH

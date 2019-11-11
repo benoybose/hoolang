@@ -37,7 +37,7 @@ namespace hooc {
             private:
                 X86Encoder _encoder;
             public:
-                X86Emitter(const Unit *unit, EmitterArchType arch, EmitterOSType os);
+                X86Emitter(const Unit *unit, const EmitterConfig &config);
 
             public:
                 std::list<Code *> GenerateCode() override;

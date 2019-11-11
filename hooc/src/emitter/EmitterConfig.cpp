@@ -16,30 +16,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_FUNCTIONEMITTERCONTEXT_HH
-#define HOOLANG_FUNCTIONEMITTERCONTEXT_HH
-
-#include <emitter/StackContext.hh>
-
-#include <string>
-
-using namespace std;
+#include "EmitterConfig.hh"
 
 namespace hooc {
     namespace emitter {
-        class FunctionEmitterContext: public StackContext {
-        public:
-            FunctionEmitterContext(size_t depth, string name);
 
-            const string &GetName() const;
+        const EmitterConfig& EMITTER_WIN64 = EmitterConfig(EMITTER_OS_WINDOWS, EMITTER_ARCH_AMD64);
+        const EmitterConfig& EMITTER_LINUX64 = EmitterConfig(EMITTER_OS_LINUX, EMITTER_ARCH_AMD64);
 
-            const string &GetMangledName() const;
+        EmitterConfig::EmitterConfig(EmitterOSType os, EmitterArchType arch) : _os(os), _arch(arch) {
 
-        private:
-            string _name;
-            string _mangled_name;
-        };
+        }
+
+        EmitterConfig::EmitterConfig(const EmitterConfig &source) {
+            this->_os = source.GetOS();
+            this->_arch = source.GetArch();
+        }
+
+        EmitterOSType EmitterConfig::GetOS() const {
+            return _os;
+        }
+
+        EmitterArchType EmitterConfig::GetArch() const {
+            return _arch;
+        }
+
+        bool EmitterConfig::operator==(const EmitterConfig &rhs) const {
+            return _os == rhs._os &&
+                   _arch == rhs._arch;
+        }
+
+        bool EmitterConfig::operator!=(const EmitterConfig &rhs) const {
+            return !(rhs == *this);
+        }
     }
 }
-
-#endif //HOOLANG_FUNCTIONEMITTERCONTEXT_HH

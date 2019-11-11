@@ -19,24 +19,18 @@
 
 #include <emitter/x86/X86Definitions.hh>
 #include <emitter/x86/X86Emitter.hh>
-#include <misc/Utility.hh>
-#include <ast/BasicDataTypes.hh>
 #include <ast/Definition.hh>
 #include <ast/FunctionDefinition.hh>
-#include <ast/CompoundStatement.hh>
 #include <ast/BasicDataTypeSpecification.hh>
-#include <emitter/x86/X86FunctionEmitter.hh>
+#include <emitter/x86/X86FuncEmitter.hh>
 
 using namespace std;
-using namespace hooc::misc;
 
 namespace hooc {
     namespace emitter {
         namespace x86 {
-            X86Emitter::X86Emitter(const Unit *unit,
-                                   EmitterArchType arch,
-                                   EmitterOSType os):
-                    EmitterBase(unit, arch, os) {
+            X86Emitter::X86Emitter(const Unit *unit, const EmitterConfig &config) :
+                    EmitterBase(unit, config) {
             }
 
             std::list<Code *> X86Emitter::GenerateCode() {
@@ -49,7 +43,7 @@ namespace hooc {
                             auto definition = (Definition *) unit_item;
                             if (DEFINITION_FUNCTION == definition->GetDefinitionType()) {
                                 auto function_definition = (FunctionDefinition *) definition;
-                                X86FunctionEmitter function_emitter(function_definition);
+                                X86FuncEmitter function_emitter(function_definition);
                                 auto code = function_emitter.GenerateCode();
                                 if (nullptr != code) {
                                     codes.push_back(code);

@@ -22,9 +22,7 @@
 #include <emitter/Code.hh>
 #include <emitter/NameMangler.hh>
 #include <ast/Unit.hh>
-#include <emitter/EmitterArchTypes.hh>
-#include <emitter/EmitterOSTypes.hh>
-
+#include <emitter/EmitterConfig.hh>
 #include <list>
 
 using namespace hooc::ast;
@@ -34,11 +32,10 @@ namespace hooc {
         class EmitterBase {
         private:
             Unit *_unit;
-            EmitterArchType _arch;
-            EmitterOSType _os;
+            EmitterConfig _config;
 
         public:
-            explicit EmitterBase(const Unit *unit, EmitterArchType arch, EmitterOSType os);
+            EmitterBase(const Unit *unit, const EmitterConfig& config);
 
         public:
             const Unit *GetUnit() const;
@@ -49,9 +46,7 @@ namespace hooc {
         public:
             virtual ~EmitterBase();
 
-            EmitterArchType GetArch() const;
-
-            EmitterOSType GetOS() const;
+            const EmitterConfig &GetConfig() const;
         };
     }
 }

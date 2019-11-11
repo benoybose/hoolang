@@ -16,31 +16,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "FunctionEmitter.hh"
-#include <emitter/StackItem.hh>
+#ifndef HOOLANG_X86FUNCEMITTER_HH
+#define HOOLANG_X86FUNCEMITTER_HH
+
+#include <emitter/FuncEmitter.hh>
+#include <emitter/FuncEmitterContext.hh>
+#include <emitter/x86/X86Encoder.hh>
 
 namespace hooc {
     namespace emitter {
-        FunctionEmitter::FunctionEmitter(FunctionDefinition *definition) :
-        _definition(definition),
-        _function_context(nullptr) {
-            this->_function_context = this->CreateFunctionEmitterContext();
-        }
+        namespace x86 {
+            class X86FuncEmitter : public FuncEmitter {
+            private:
+                X86Encoder _encoder;
 
-        FunctionDefinition *FunctionEmitter::GetDefinition() const {
-            return _definition;
-        }
+            public:
+                explicit X86FuncEmitter(FunctionDefinition *definition);
 
-        const NameMangler &FunctionEmitter::GetMangler() const {
-            return  this->_mangler;
-        }
+                Code *GenerateCode() override;
 
-        FunctionEmitterContext *FunctionEmitter::CreateFunctionEmitterContext() {
-            return nullptr;
-        }
+            protected:
+                FuncEmitterContext *CreateFunctionEmitterContext() override;
 
-        FunctionEmitter::~FunctionEmitter() {
-            delete this->_function_context;
+            private:
+                void ProcessArguments(const std::list<VariableDeclaration *>& arguments, byte_vector &header,
+                                      byte_vector &footer);
+                bool IsDouble(VariableDeclaration *arg1);
+            };
         }
     }
 }
+
+#endif //HOOLANG_X86FUNCEMITTER_HH
