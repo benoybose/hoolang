@@ -17,6 +17,7 @@
  */
 
 #include "HoocTestHelper.hh"
+#include "helpers/ModuleTestHelper.hh"
 
 #include <boost/test/unit_test.hpp>
 #include <compiler/ParserDriver.hh>
@@ -25,7 +26,8 @@
 #include <emitter/x86/X86Instruction.hh>
 #include <misc/Utility.hh>
 #include <emitter/x86/X86FuncEmitter.hh>
-#include <emitter/x86/X86Emitter.hh>
+#include <emitter/EmitterConfig.hh>
+#include <ast/BasicDataTypes.hh>
 
 using namespace hooc::emitter::x86;
 using namespace hooc::compiler;
@@ -33,27 +35,30 @@ using namespace hooc::ast;
 using namespace hooc::emitter;
 using namespace hooc::misc;
 
-BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
+BOOST_AUTO_TEST_SUITE(X86EmitterTest)
 
     BOOST_AUTO_TEST_CASE(TEST01) {
         const std::string source = "func foo() {}";
-        ParserDriver driver(source, "foo.hoo");
-        auto module = driver.BuildModule();
-        BOOST_ASSERT(module->Success());
-        auto unit = module->GetUnit();
-        auto func = (FunctionDefinition *) (*unit->GetItems().begin());
-        BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
-        auto code = emitter.GenerateCode();
-        BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-        BOOST_CHECK_EQUAL("_Z3foov", code->GetName());
-        BOOST_CHECK_EQUAL(2, code->GetSize());
-        const auto &buffer = code->GetBuffer();
-        BOOST_CHECK_EQUAL(2, buffer.size());
-        byte expected[2] = {static_cast<byte>(X86_OPCODE_NOP), static_cast<byte>(X86_OPCODE_RET)};
-        BOOST_CHECK(VerifyByteVector(buffer, expected, 2));
-        delete module;
-        delete code;
+        ModuleTestHelper helper(source, "foo.hoo");
+        auto unit = helper.GetUnit();
+
+//        auto func = (FunctionDefinition *) (*unit->GetItems().begin());
+        auto func_helper = helper.GetFunctionTestHelper(0);
+        func_helper.TestName("foo");
+        func_helper.TestMangledName("_Z3foov");
+        byte expected_win64[2] = {
+                static_cast<byte>(X86_OPCODE_NOP),
+                static_cast<byte>(X86_OPCODE_RET)};
+        func_helper.TestCodeWin64(expected_win64, 2);
+                byte expected_linux[7] = {
+                0x55,
+                0x48, 0x89, 0xE5,
+                0x90,
+                0x5D,
+                0xC3
+        };
+        func_helper.TestCodeLinux64(expected_linux, 7);
+        func_helper.TestStack(0, 0);
     }
 
     BOOST_AUTO_TEST_CASE(TEST02) {
@@ -64,21 +69,25 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
-        auto code = emitter.GenerateCode();
-        BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-        BOOST_CHECK_EQUAL("_Z3foox", code->GetName());
-        BOOST_CHECK_EQUAL(11, code->GetSize());
-        const auto &buffer = code->GetBuffer();
-        BOOST_CHECK_EQUAL(11, buffer.size());
-        byte expected[11] = {
+        X86FuncEmitter emitter_win64(func, EMITTER_WIN64);
+        auto code_win64 = emitter_win64.GenerateCode();
+        byte expected_win64[11] = {
                 0x55,
                 0x48, 0x89, 0xe5,
                 0x48, 0x89, 0x4d, 0x10,
                 0x90,
                 0x5d,
                 0xc3};
-        BOOST_CHECK(VerifyByteVector(buffer, expected, 11));
+        BOOST_CHECK(VerifyFuncCode(code_win64, "_Z3foox", expected_win64, 11));
+        auto context_win64 = emitter_win64.GetFunctionContext();
+        const auto &context_items_win64 = context_win64->GetItems();
+        BOOST_CHECK_EQUAL(0, context_win64->GetDepth());
+        BOOST_CHECK_EQUAL(1, context_items_win64.size());
+        auto a_win64 = *context_items_win64.begin();
+        BOOST_CHECK_EQUAL("a", a_win64.GetName());
+        auto a_type_win64 = a_win64.GetTypeSpecification();
+        BOOST_CHECK_EQUAL(a_type_win64->GetType(), TYPE_SPEC_BASIC);
+        BOOST_CHECK_EQUAL(a_type_win64->GetName(), NAME_INT);
     }
 
     BOOST_AUTO_TEST_CASE(TEST03) {
@@ -89,7 +98,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3fooxx", code->GetName());
@@ -115,7 +124,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3fooxxx", code->GetName());
@@ -142,7 +151,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3fooxxxx", code->GetName());
@@ -170,7 +179,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3food", code->GetName());
@@ -193,7 +202,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3foodd", code->GetName());
@@ -217,7 +226,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3fooddd", code->GetName());
@@ -242,7 +251,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3foodddd", code->GetName());
@@ -268,7 +277,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3fooxdxd", code->GetName());
@@ -294,7 +303,7 @@ BOOST_AUTO_TEST_SUITE(WindowsX644EmitterTest)
         auto unit = module->GetUnit();
         auto func = (FunctionDefinition *) (*unit->GetItems().begin());
         BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-        X86FuncEmitter emitter(func);
+        X86FuncEmitter emitter(func, EMITTER_WIN64);
         auto code = emitter.GenerateCode();
         BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
         BOOST_CHECK_EQUAL("_Z3foodxdx", code->GetName());

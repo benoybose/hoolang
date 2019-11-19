@@ -23,20 +23,33 @@
 
 using namespace hooc::misc;
 
-bool VerifyByteVector(const byte_vector& vector, byte* bytes, size_t size)
-{
+bool VerifyByteVector(const byte_vector &vector, byte *bytes, size_t size) {
     BOOST_CHECK(vector.size() == size);
     if (vector.size() != size) {
         return false;
     }
 
-    for(size_t index = 0; index < size; index++) {
+    for (size_t index = 0; index < size; index++) {
         BOOST_CHECK_MESSAGE(vector[index] == bytes[index],
-                "[" << index << "] (" << Utility::ToHex(vector[index]) << " == " << Utility::ToHex(bytes[index]) << ")");
-        if(vector[index] != bytes[index]) {
+                            "[" << index << "] (" << Utility::ToHex(vector[index]) << " == "
+                                << Utility::ToHex(bytes[index]) << ")");
+        if (vector[index] != bytes[index]) {
             return false;
         }
     }
     return true;
 }
 
+bool VerifyFuncCode(Code *code, const std::string &name, byte *expected_buffer, size_t size) {
+    if(CODE_TYPE_FUNCTION != code->GetType()) {
+        return false;
+    }
+    if (name != code->GetName()) {
+        return false;
+    }
+    const auto &buffer = code->GetBuffer();
+    if (size != buffer.size()) {
+        return false;
+    }
+    return VerifyByteVector(buffer, expected_buffer, size);
+}

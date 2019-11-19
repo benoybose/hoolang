@@ -48,12 +48,14 @@ namespace hooc {
                     X86_REG_R9
             };
 
-            X86FuncEmitter::X86FuncEmitter(FunctionDefinition *definition)
-                    : FuncEmitter(definition) {
+            X86FuncEmitter::X86FuncEmitter(FunctionDefinition *definition, const EmitterConfig &config)
+                    : FuncEmitter(definition, config) {
+                auto context = this->CreateFunctionEmitterContext();
+                this->SetFunctionContext(context);
             }
 
             FuncEmitterContext *X86FuncEmitter::CreateFunctionEmitterContext() {
-                FuncEmitterContext* context = nullptr;
+                FuncEmitterContext *context = nullptr;
                 NameMangler mangler;
 
                 auto function_declaration = this->GetDefinition()
@@ -61,7 +63,7 @@ namespace hooc {
                 auto args = function_declaration->GetParamList();
                 StackItemSet stack_items;
                 std::int64_t position = 0x10;
-                for(auto arg: args) {
+                for (auto arg: args) {
                     StackItem stack_item(arg->GetName(),
                                          position,
                                          arg->GetDelcaredType());
@@ -74,32 +76,32 @@ namespace hooc {
 
                 position = -8;
                 size_t depth = 0;
-                if(STMT_COMPOUND == body->GetStatementType()) {
-                    auto compound_statement = (CompoundStatement*) body;
+                if (STMT_COMPOUND == body->GetStatementType()) {
+                    auto compound_statement = (CompoundStatement *) body;
                     auto statements = compound_statement->GetStatements();
-                    for(Statement* statement: statements) {
-                        if(STMT_DECLARATION == statement->GetStatementType()) {
-                            auto declaration_statement = (DeclarationStatement*) statement;
-                            auto declaration =  declaration_statement->GetDeclaration();
-                            if(DECLARATION_VARIABLE == declaration->GetDeclarationType()) {
-                                auto variable = (VariableDeclaration*) declaration;
+                    for (Statement *statement: statements) {
+                        if (STMT_DECLARATION == statement->GetStatementType()) {
+                            auto declaration_statement = (DeclarationStatement *) statement;
+                            auto declaration = declaration_statement->GetDeclaration();
+                            if (DECLARATION_VARIABLE == declaration->GetDeclarationType()) {
+                                auto variable = (VariableDeclaration *) declaration;
                                 StackItem stack_item(variable->GetName(),
                                                      position, variable->GetDelcaredType());
                                 stack_items.insert(stack_item);
                                 position -= 8;
-                                depth +=8;
+                                depth += 8;
                             }
                         }
                     }
                 }
 
-                if(8 == depth % 16) {
+                if (8 == depth % 16) {
                     depth += 8;
                 }
 
                 auto name = mangler.Mangle(function_declaration);
                 context = new FuncEmitterContext(depth, name);
-                for(const auto& stack_item: stack_items) {
+                for (const auto &stack_item: stack_items) {
                     context->AddItem(stack_item);
                 }
                 return context;
@@ -113,9 +115,7 @@ namespace hooc {
                 auto function_definition = this->GetDefinition();
                 auto declaration = function_definition->GetDeclaration();
                 const auto &arguments = declaration->GetParamList();
-                if (!arguments.empty()) {
-                    ProcessArguments(arguments, header, footer);
-                }
+                ProcessArguments(arguments, header, footer);
 
                 auto statement = function_definition->GetBody();
                 if (STMT_COMPOUND == statement->GetStatementType()) {
@@ -140,10 +140,17 @@ namespace hooc {
 
             void X86FuncEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
                                                   byte_vector &header, byte_vector &footer) {
-                auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
-                Utility::AppendTo(header, push_rbp);
-                auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
-                Utility::AppendTo(header, mov_rsp_rbp);
+                auto config = this->GetConfig();
+                if ((config == EMITTER_LINUX64) ||
+                    ((config == EMITTER_WIN64) && (!arguments.empty()))) {
+                    auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
+                    Utility::AppendTo(header, push_rbp);
+                    auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
+                    Utility::AppendTo(header, mov_rsp_rbp);
+
+                    auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
+                    Utility::AppendTo(footer, pop_rbp);
+                }
 
                 auto iterator = arguments.begin();
                 uint8_t offset = 0x10;
@@ -170,9 +177,6 @@ namespace hooc {
                     iterator++;
                     offset += 0x08;
                 }
-
-                auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
-                Utility::AppendTo(footer, pop_rbp);
             }
 
             bool X86FuncEmitter::IsDouble(VariableDeclaration *arg1) {

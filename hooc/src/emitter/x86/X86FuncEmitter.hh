@@ -31,16 +31,18 @@ namespace hooc {
                 X86Encoder _encoder;
 
             public:
-                explicit X86FuncEmitter(FunctionDefinition *definition);
+                X86FuncEmitter(FunctionDefinition *definition, const EmitterConfig &config);
 
+            public:
                 Code *GenerateCode() override;
 
             protected:
-                FuncEmitterContext *CreateFunctionEmitterContext() override;
+                FuncEmitterContext *CreateFunctionEmitterContext();
 
             private:
-                void ProcessArguments(const std::list<VariableDeclaration *>& arguments, byte_vector &header,
+                void ProcessArguments(const std::list<VariableDeclaration *> &arguments, byte_vector &header,
                                       byte_vector &footer);
+
                 bool IsDouble(VariableDeclaration *arg1);
             };
         }

@@ -27,6 +27,10 @@ namespace hooc {
             return _depth;
         }
 
+        const StackItemSet &StackContext::GetItems() const {
+            return _items;
+        }
+
         list<StackContext *> StackContext::GetChildren() const {
             return this->_children;
         }

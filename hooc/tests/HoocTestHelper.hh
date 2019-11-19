@@ -21,6 +21,7 @@
 
 #include <emitter/EmitterDefinitions.hh>
 #include <emitter/x86/X86Definitions.hh>
+#include <emitter/Code.hh>
 
 #include <boost/test/unit_test.hpp>
 #include "ast/LiteralExpression.hh"
@@ -28,7 +29,9 @@
 using namespace hooc::emitter;
 using namespace hooc::emitter::x86;
 
-extern bool VerifyByteVector(const byte_vector& vector, byte* bytes, size_t size);
+extern bool VerifyByteVector(const byte_vector &vector, byte *bytes, size_t size);
+
+extern bool VerifyFuncCode(Code *code, const std::string &name, byte *expected_buffer, size_t size);
 
 #define BOOST_CHECK_LITERAL_EXPRESSION(expr, type, value)\
     BOOST_CHECK_EQUAL(EXPRESSION_LITERAL, expr->GetExpressionType());\

@@ -16,42 +16,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_STACKCONTEXT_HH
-#define HOOLANG_STACKCONTEXT_HH
+#ifndef HOOLANG_FUNCTIONTESTHELPER_HH
+#define HOOLANG_FUNCTIONTESTHELPER_HH
 
-#include <emitter/StackItem.hh>
+#include <ast/FunctionDefinition.hh>
+#include <emitter/NameMangler.hh>
+#include <emitter/x86/X86FuncEmitter.hh>
+#include <emitter/EmitterDefinitions.hh>
+#include <cstdint>
 
-#include <cstddef>
-#include <list>
-
+using namespace hooc::ast;
+using namespace hooc::emitter;
+using namespace hooc::emitter::x86;
 using namespace std;
 
-namespace hooc {
-    namespace emitter {
-        class StackContext {
-        private:
-            size_t _depth;
-            std::list<StackContext*> _children;
-            StackItemSet _items;
+class FunctionTestHelper {
+public:
+    explicit FunctionTestHelper(FunctionDefinition *func);
 
-        protected:
-            explicit StackContext(size_t depth);
+private:
+    FunctionDefinition *_func;
+    NameMangler _mangler;
+    X86FuncEmitter _emitter_win64;
+    X86FuncEmitter _emitter_linux64;
+    Code *_code_win64;
+    Code *_code_linux64;
 
-        public:
-            size_t GetDepth() const;
-            list<StackContext *> GetChildren() const;
+public:
+    void TestName(const std::string &name);
 
-        public:
-            size_t AddChild(StackContext* child);
-            size_t AddItem(const StackItem &item);
+    void TestMangledName(const std::string &mangled_name);
 
-        public:
-           virtual ~StackContext();
+    void TestCodeWin64(byte *code, size_t size);
 
-            const StackItemSet &GetItems() const;
-        };
-    }
-}
+    void TestCodeLinux64(byte *code, size_t size);
+
+    void TestStack(size_t depth, size_t count);
+
+public:
+    static void TestCode(Code *code, byte *buffer, size_t size);
+
+public:
+    virtual ~FunctionTestHelper();
+
+public:
+
+};
 
 
-#endif //HOOLANG_STACKCONTEXT_HH
+#endif //HOOLANG_FUNCTIONTESTHELPER_HH

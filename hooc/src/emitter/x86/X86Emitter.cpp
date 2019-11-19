@@ -24,6 +24,8 @@
 #include <ast/BasicDataTypeSpecification.hh>
 #include <emitter/x86/X86FuncEmitter.hh>
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
 using namespace std;
 
 namespace hooc {
@@ -43,7 +45,8 @@ namespace hooc {
                             auto definition = (Definition *) unit_item;
                             if (DEFINITION_FUNCTION == definition->GetDefinitionType()) {
                                 auto function_definition = (FunctionDefinition *) definition;
-                                X86FuncEmitter function_emitter(function_definition);
+                                X86FuncEmitter function_emitter(function_definition,
+                                                                this->GetConfig());
                                 auto code = function_emitter.GenerateCode();
                                 if (nullptr != code) {
                                     codes.push_back(code);
@@ -60,3 +63,5 @@ namespace hooc {
     }
 }
 
+
+#pragma clang diagnostic pop

@@ -21,10 +21,10 @@
 
 namespace hooc {
     namespace emitter {
-        FuncEmitter::FuncEmitter(FunctionDefinition *definition) :
-        _definition(definition),
-        _function_context(nullptr) {
-            this->_function_context = this->CreateFunctionEmitterContext();
+        FuncEmitter::FuncEmitter(FunctionDefinition *definition, EmitterConfig config) :
+                _definition(definition),
+                _function_context(nullptr),
+                _config(config) {
         }
 
         FunctionDefinition *FuncEmitter::GetDefinition() const {
@@ -32,11 +32,19 @@ namespace hooc {
         }
 
         const NameMangler &FuncEmitter::GetMangler() const {
-            return  this->_mangler;
+            return this->_mangler;
         }
 
-        FuncEmitterContext *FuncEmitter::CreateFunctionEmitterContext() {
-            return nullptr;
+        void FuncEmitter::SetFunctionContext(FuncEmitterContext *context) {
+            this->_function_context = context;
+        }
+
+        const EmitterConfig &FuncEmitter::GetConfig() const {
+            return _config;
+        }
+
+        FuncEmitterContext *FuncEmitter::GetFunctionContext() const {
+            return _function_context;
         }
 
         FuncEmitter::~FuncEmitter() {

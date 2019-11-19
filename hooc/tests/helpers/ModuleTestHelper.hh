@@ -16,42 +16,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_STACKCONTEXT_HH
-#define HOOLANG_STACKCONTEXT_HH
+#ifndef HOOLANG_MODULETESTHELPER_HH
+#define HOOLANG_MODULETESTHELPER_HH
 
-#include <emitter/StackItem.hh>
+#include "FunctionTestHelper.hh"
 
-#include <cstddef>
-#include <list>
+#include <compiler/ParserDriver.hh>
+#include <ast/UnitItem.hh>
+#include <vector>
+#include <ast/Definition.hh>
+#include <ast/FunctionDefinition.hh>
 
-using namespace std;
+using namespace hooc::compiler;
+using namespace hooc::ast;
 
-namespace hooc {
-    namespace emitter {
-        class StackContext {
-        private:
-            size_t _depth;
-            std::list<StackContext*> _children;
-            StackItemSet _items;
+class ModuleTestHelper {
+public:
+    ModuleTestHelper(const std::string &source, const std::string &source_file);
 
-        protected:
-            explicit StackContext(size_t depth);
+private:
+    ParserDriver _driver;
+    Module *_module;
+    const Unit *_unit;
+    std::vector<UnitItem*> _items;
 
-        public:
-            size_t GetDepth() const;
-            list<StackContext *> GetChildren() const;
-
-        public:
-            size_t AddChild(StackContext* child);
-            size_t AddItem(const StackItem &item);
-
-        public:
-           virtual ~StackContext();
-
-            const StackItemSet &GetItems() const;
-        };
-    }
-}
+public:
+    const Unit *GetUnit() const;
+    size_t GetUnitItemsCount() const;
+    UnitItem* GetUnitItem(size_t index);
+    Definition* GetDefinition(size_t index);
+    FunctionDefinition* GetFunctionDefinition(size_t index);
+    FunctionTestHelper GetFunctionTestHelper(size_t index);
 
 
-#endif //HOOLANG_STACKCONTEXT_HH
+public:
+    virtual ~ModuleTestHelper();
+
+
+};
+
+
+#endif //HOOLANG_MODULETESTHELPER_HH

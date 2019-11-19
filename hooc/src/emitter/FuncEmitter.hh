@@ -23,6 +23,7 @@
 #include <emitter/FuncEmitterContext.hh>
 #include <emitter/Code.hh>
 #include <emitter/NameMangler.hh>
+#include <emitter/EmitterConfig.hh>
 
 using namespace hooc::ast;
 
@@ -33,17 +34,23 @@ namespace hooc {
             FunctionDefinition *_definition;
             FuncEmitterContext *_function_context;
             NameMangler _mangler;
+            EmitterConfig _config;
 
         protected:
-            explicit FuncEmitter(FunctionDefinition *definition);
+            FuncEmitter(FunctionDefinition *definition,
+                        EmitterConfig config);
 
         protected:
             FunctionDefinition *GetDefinition() const;
 
             const NameMangler &GetMangler() const;
 
-        protected:
-            virtual FuncEmitterContext *CreateFunctionEmitterContext();
+            void SetFunctionContext(FuncEmitterContext* context);
+
+        public:
+            const EmitterConfig &GetConfig() const;
+
+            FuncEmitterContext *GetFunctionContext() const;
 
         public:
             virtual Code *GenerateCode() = 0;
