@@ -141,16 +141,13 @@ namespace hooc {
             void X86FuncEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
                                                   byte_vector &header, byte_vector &footer) {
                 auto config = this->GetConfig();
-                if ((config == EMITTER_LINUX64) ||
-                    ((config == EMITTER_WIN64) && (!arguments.empty()))) {
-                    auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
-                    Utility::AppendTo(header, push_rbp);
-                    auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
-                    Utility::AppendTo(header, mov_rsp_rbp);
+                auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
+                Utility::AppendTo(header, push_rbp);
+                auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
+                Utility::AppendTo(header, mov_rsp_rbp);
 
-                    auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
-                    Utility::AppendTo(footer, pop_rbp);
-                }
+                auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
+                Utility::AppendTo(footer, pop_rbp);
 
                 auto iterator = arguments.begin();
                 uint8_t offset = 0x10;
