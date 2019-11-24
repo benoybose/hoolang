@@ -24,6 +24,7 @@
 #include <emitter/x86/X86FuncEmitter.hh>
 #include <emitter/EmitterDefinitions.hh>
 #include <cstdint>
+#include <string>
 
 using namespace hooc::ast;
 using namespace hooc::emitter;
@@ -52,6 +53,8 @@ public:
     bool TestCodeLinux64(byte *code, size_t size);
 
     bool TestStack(size_t depth, size_t count);
+
+    bool TestStackItem(size_t index, const std::string& name);
 
 public:
     static bool TestCode(Code *code, byte *buffer, size_t size);

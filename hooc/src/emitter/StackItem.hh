@@ -22,6 +22,7 @@
 #include <ast/TypeSpecification.hh>
 #include <string>
 #include <set>
+#include <cstdint>
 
 using namespace std;
 using namespace hooc::ast;
@@ -58,6 +59,8 @@ namespace hooc {
         };
 
         typedef std::set<StackItem, StackItemComparer> StackItemSet;
+
+        extern const StackItem& GetStackItem(const StackItemSet& items, size_t index);
     }
 }
 

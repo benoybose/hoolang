@@ -50,5 +50,17 @@ namespace hooc {
 
             return a.GetPosition() == b.GetPosition();
         }
+
+        const StackItem& GetStackItem(const StackItemSet& items, size_t index) {
+            auto iterator = items.begin();
+            auto item_index = 0;
+            while(item_index < index) {
+                item_index ++;
+                iterator ++;
+            }
+
+            const StackItem& item = *(iterator);
+            return item;
+        }
     }
 }

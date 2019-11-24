@@ -75,8 +75,17 @@ bool FunctionTestHelper::TestCode(Code *code, byte *buffer, size_t size) {
 }
 
 bool FunctionTestHelper::TestStack(size_t depth, size_t count) {
-    BOOST_CHECK_MESSAGE(nullptr != _func, "Function definition must not be null.");
+    BOOST_CHECK_MESSAGE(nullptr != this->_func, "Function definition must not be null.");
+    if(nullptr == this->_func) {
+        return false;
+    }
+
     auto context = this->_emitter_win64.GetFunctionContext();
+    BOOST_CHECK_MESSAGE(nullptr != context, "Context is null.");
+    if(nullptr == context) {
+        return false;
+    }
+
     BOOST_CHECK_MESSAGE(depth == context->GetDepth(), "Invalid stack depth for Win64");
     if(depth != context->GetDepth()) {
         return false;
@@ -95,6 +104,34 @@ bool FunctionTestHelper::TestStack(size_t depth, size_t count) {
     if(count != context->GetItems().size()) {
         return false;
     }
+    return true;
+}
+
+bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name) {
+    BOOST_CHECK_MESSAGE(nullptr != this->_func, "Function definition must not be null.");
+    if(nullptr == this->_func) {
+        return false;
+    }
+
+    auto context = this->_emitter_win64.GetFunctionContext();
+    BOOST_CHECK_MESSAGE(nullptr != context, "Context must not be null.");
+    if(nullptr == context) {
+        return false;
+    }
+
+    const auto &items = context->GetItems();
+    BOOST_CHECK_MESSAGE(index < items.size(), "No item available at given index.");
+    if(index >= items.size()) {
+        return false;
+    }
+
+    auto item = GetStackItem(items, 0);
+    const std::string& item_name = item.GetName();
+    BOOST_CHECK_MESSAGE(name == item_name, "Invalid name of the stack item.");
+    if(name != item_name) {
+        return false;
+    }
+
     return true;
 }
 
