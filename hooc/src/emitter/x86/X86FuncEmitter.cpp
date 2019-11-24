@@ -55,52 +55,19 @@ namespace hooc {
             }
 
             FuncEmitterContext *X86FuncEmitter::CreateFunctionEmitterContext() {
-                FuncEmitterContext *context = nullptr;
-                NameMangler mangler;
-
-                auto function_declaration = this->GetDefinition()
-                        ->GetDeclaration();
-                auto args = function_declaration->GetParamList();
+                auto function_declaration = this->GetDefinition()->GetDeclaration();                
                 StackItemSet stack_items;
-                std::int64_t position = 0x10;
-                for (auto arg: args) {
-                    StackItem stack_item(arg->GetName(),
-                                         position,
-                                         arg->GetDelcaredType());
-                    stack_items.insert(stack_item);
-                    position += 0x08;
-                }
 
-                auto body = this->GetDefinition()
-                        ->GetBody();
+                auto args = function_declaration->GetParamList();
+                this->MapArgsToStack(stack_items, args);
 
-                position = -8;
-                size_t depth = 0;
-                if (STMT_COMPOUND == body->GetStatementType()) {
-                    auto compound_statement = (CompoundStatement *) body;
-                    auto statements = compound_statement->GetStatements();
-                    for (Statement *statement: statements) {
-                        if (STMT_DECLARATION == statement->GetStatementType()) {
-                            auto declaration_statement = (DeclarationStatement *) statement;
-                            auto declaration = declaration_statement->GetDeclaration();
-                            if (DECLARATION_VARIABLE == declaration->GetDeclarationType()) {
-                                auto variable = (VariableDeclaration *) declaration;
-                                StackItem stack_item(variable->GetName(),
-                                                     position, variable->GetDelcaredType());
-                                stack_items.insert(stack_item);
-                                position -= 8;
-                                depth += 8;
-                            }
-                        }
-                    }
-                }
+                auto body = this->GetDefinition()->GetBody();
+                auto depth = this->MapVarsToStack(stack_items, body);
 
-                if (8 == depth % 16) {
-                    depth += 8;
-                }
-
+                NameMangler mangler;
                 auto name = mangler.Mangle(function_declaration);
-                context = new FuncEmitterContext(depth, name);
+
+                auto context = new FuncEmitterContext(depth, name);
                 for (const auto &stack_item: stack_items) {
                     context->AddItem(stack_item);
                 }
@@ -140,7 +107,7 @@ namespace hooc {
 
             void X86FuncEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
                                                   byte_vector &header, byte_vector &footer) {
-                auto config = this->GetConfig();
+                // auto config = this->GetConfig();
                 auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
                 Utility::AppendTo(header, push_rbp);
                 auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
@@ -175,6 +142,72 @@ namespace hooc {
                     offset += 0x08;
                 }
             }
+
+            void X86FuncEmitter::MapArgsToStack(StackItemSet &stack_items, 
+                                        const std::list<VariableDeclaration *> &args) {
+                const auto &config = this->GetConfig();
+                if(config == EMITTER_WIN64) {
+                    this->MapArgsToStack(stack_items, args, 16, 8);
+                } else if(config == EMITTER_LINUX64) {
+                    this->MapArgsToStack(stack_items, args, -8, -8);
+                }
+            }
+
+            void X86FuncEmitter::MapArgsToStack(StackItemSet &stack_items, 
+                                        const std::list<VariableDeclaration *> &args, 
+                                        int8_t position, 
+                                        int8_t offset) {
+                for (auto arg: args) {
+                    StackItem stack_item(arg->GetName(),
+                                         STACK_ITEM_ARGUMENT,
+                                         position,
+                                         arg->GetDelcaredType());
+                    stack_items.insert(stack_item);
+                    position += offset;
+                }
+            }
+
+            size_t X86FuncEmitter::MapVarsToStack(StackItemSet &stack_items, const Statement* body, 
+                                        int8_t position,
+                                        int8_t offset, 
+                                        int8_t depth_offset,
+                                        int8_t align_by) {
+                size_t depth = 0;
+                if (STMT_COMPOUND == body->GetStatementType()) {
+                    auto compound_statement = (CompoundStatement *) body;
+                    auto statements = compound_statement->GetStatements();
+                    for (Statement *statement: statements) {
+                        if (STMT_DECLARATION == statement->GetStatementType()) {
+                            auto declaration_statement = (DeclarationStatement *) statement;
+                            auto declaration = declaration_statement->GetDeclaration();
+                            if (DECLARATION_VARIABLE == declaration->GetDeclarationType()) {
+                                auto variable = (VariableDeclaration *) declaration;
+                                StackItem stack_item(variable->GetName(),
+                                                     STACK_ITEM_VARIABLE,
+                                                     position, variable->GetDelcaredType());
+                                stack_items.insert(stack_item);
+                                position += offset;
+                                depth += depth_offset;
+                            }
+                        }
+                    }
+
+                    auto reminder = depth % (depth_offset * 2);
+                    depth += reminder;
+                }
+                return depth;
+            }
+
+            size_t X86FuncEmitter::MapVarsToStack(StackItemSet &stack_items, const Statement* body) {
+                const auto &config = this->GetConfig();
+                if(EMITTER_WIN64 == config) {
+                    return this->MapVarsToStack(stack_items, body, 
+                        -8, -8, 8, 2);
+                } else {
+                    return 0;
+                }
+            }
+
 
             bool X86FuncEmitter::IsDouble(VariableDeclaration *arg1) {
                 auto type = arg1->GetDelcaredType();

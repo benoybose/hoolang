@@ -22,9 +22,11 @@
 
 namespace hooc {
     namespace emitter {
-        StackItem::StackItem(string name, int64_t position,
-                             const TypeSpecification *type_specification)
+        StackItem::StackItem(string name, StackItemType stack_item_type,
+                            int64_t position,
+                            const TypeSpecification *type_specification)
                 : _name(std::move(name)),
+                  _stack_item_type(stack_item_type),
                   _position(position),
                   _type_specification(type_specification) {
         }

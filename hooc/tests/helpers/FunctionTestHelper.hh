@@ -47,14 +47,14 @@ public:
 
     void TestMangledName(const std::string &mangled_name);
 
-    void TestCodeWin64(byte *code, size_t size);
+    bool TestCodeWin64(byte *code, size_t size);
 
-    void TestCodeLinux64(byte *code, size_t size);
+    bool TestCodeLinux64(byte *code, size_t size);
 
-    void TestStack(size_t depth, size_t count);
+    bool TestStack(size_t depth, size_t count);
 
 public:
-    static void TestCode(Code *code, byte *buffer, size_t size);
+    static bool TestCode(Code *code, byte *buffer, size_t size);
 
 public:
     virtual ~FunctionTestHelper();

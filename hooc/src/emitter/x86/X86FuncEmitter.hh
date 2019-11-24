@@ -19,9 +19,14 @@
 #ifndef HOOLANG_X86FUNCEMITTER_HH
 #define HOOLANG_X86FUNCEMITTER_HH
 
+#include <ast/Statement.hh>
+#include <emitter/StackItem.hh>
 #include <emitter/FuncEmitter.hh>
 #include <emitter/FuncEmitterContext.hh>
 #include <emitter/x86/X86Encoder.hh>
+#include <cstdint>
+
+using namespace std;
 
 namespace hooc {
     namespace emitter {
@@ -40,9 +45,21 @@ namespace hooc {
                 FuncEmitterContext *CreateFunctionEmitterContext();
 
             private:
-                void ProcessArguments(const std::list<VariableDeclaration *> &arguments, byte_vector &header,
+                void ProcessArguments(const std::list<VariableDeclaration *> &arguments, 
+                                      byte_vector &header,
                                       byte_vector &footer);
-
+                void MapArgsToStack(StackItemSet &stack_items, 
+                                        const std::list<VariableDeclaration *> &args);
+                void MapArgsToStack(StackItemSet &stack_items,
+                                        const std::list<VariableDeclaration *> &args, 
+                                        int8_t start,
+                                        int8_t offset);
+                size_t MapVarsToStack(StackItemSet &stack_items, const Statement* body, 
+                                        int8_t position,
+                                        int8_t offset, 
+                                        int8_t depth_offset,
+                                        int8_t align_by);
+                size_t MapVarsToStack(StackItemSet &stack_items, const Statement* body);
                 bool IsDouble(VariableDeclaration *arg1);
             };
         }

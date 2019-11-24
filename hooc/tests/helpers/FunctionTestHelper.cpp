@@ -47,32 +47,55 @@ void FunctionTestHelper::TestMangledName(const std::string &mangled_name) {
     }
 }
 
-void FunctionTestHelper::TestCodeWin64(byte *code, size_t size) {
-    TestCode(this->_code_win64, code, size);
+bool FunctionTestHelper::TestCodeWin64(byte *code, size_t size) {
+    return TestCode(this->_code_win64, code, size);
 }
 
-void FunctionTestHelper::TestCodeLinux64(byte *code, size_t size) {
-    TestCode(this->_code_linux64, code, size);
+bool FunctionTestHelper::TestCodeLinux64(byte *code, size_t size) {
+    return TestCode(this->_code_linux64, code, size);
 }
 
-void FunctionTestHelper::TestCode(Code *code, byte *buffer, size_t size) {
+bool FunctionTestHelper::TestCode(Code *code, byte *buffer, size_t size) {
     BOOST_CHECK_MESSAGE(code->GetSize() == size, "Size of generated code doesn't match.");
+    if(size != code->GetSize()) {
+        return false;
+    }
+
     if (size == code->GetSize()) {
         auto code_buffer = code->GetBytes();
         for (size_t index = 0; index < size; index++) {
             BOOST_CHECK_MESSAGE(code_buffer[index] == buffer[index], "Byte at " << index << "doesn't match.");
+            if(code_buffer[index] != buffer[index]) {
+                return false;
+            }
         }
     }
+
+    return true;
 }
 
-void FunctionTestHelper::TestStack(size_t depth, size_t count) {
+bool FunctionTestHelper::TestStack(size_t depth, size_t count) {
     BOOST_CHECK_MESSAGE(nullptr != _func, "Function definition must not be null.");
     auto context = this->_emitter_win64.GetFunctionContext();
     BOOST_CHECK_MESSAGE(depth == context->GetDepth(), "Invalid stack depth for Win64");
+    if(depth != context->GetDepth()) {
+        return false;
+    }
     BOOST_CHECK_MESSAGE(count == context->GetItems().size(), "Invalid stack item count for Win64");
+    if(count != context->GetItems().size()) {
+        return false;
+    }
+
     context = this->_emitter_linux64.GetFunctionContext();
     BOOST_CHECK_MESSAGE(depth == context->GetDepth(), "Invalid stack depth for Linux64");
+    if(depth != context->GetDepth()) {
+        return false;
+    }
     BOOST_CHECK_MESSAGE(count == context->GetItems().size(), "Invalid stack item count for Linux64");
+    if(count != context->GetItems().size()) {
+        return false;
+    }
+    return true;
 }
 
 FunctionTestHelper::~FunctionTestHelper() {
