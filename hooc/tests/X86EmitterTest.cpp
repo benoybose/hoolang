@@ -76,6 +76,7 @@ BOOST_AUTO_TEST_CASE(TEST02)
         0xc3};
     BOOST_CHECK(func.TestCodeWin64(expected_win64, 11));
     BOOST_CHECK(func.TestStack(0, 1));
+    BOOST_CHECK(func.TestStackItem(0, "a", STACK_ITEM_ARGUMENT));
 
     // ParserDriver driver(source, "foo.hoo");
     // auto module = driver.BuildModule();

@@ -51,6 +51,8 @@ namespace hooc {
             int64_t GetPosition() const;
 
             const TypeSpecification *GetTypeSpecification() const;
+
+            const StackItemType GetStakcItemType() const;
         };
 
         class StackItemComparer {

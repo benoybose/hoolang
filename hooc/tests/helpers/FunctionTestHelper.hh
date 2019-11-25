@@ -54,10 +54,15 @@ public:
 
     bool TestStack(size_t depth, size_t count);
 
-    bool TestStackItem(size_t index, const std::string& name);
+    bool TestStackItem(size_t index, const std::string& name, const StackItemType stack_item_type);
 
 public:
     static bool TestCode(Code *code, byte *buffer, size_t size);
+    
+    static bool TestStackItem(const FuncEmitterContext* context_win64, 
+                                size_t index, const std::string& name,
+                                int64_t position,
+                                const StackItemType stack_item_type);
 
 public:
     virtual ~FunctionTestHelper();

@@ -43,6 +43,10 @@ namespace hooc {
             return _type_specification;
         }
 
+        const StackItemType StackItem::GetStakcItemType() const {
+            return _stack_item_type;
+        }
+
         bool StackItemComparer::operator()(const StackItem &a, const StackItem &b) const {
             if (a.GetName() != b.GetName()) {
                 return false;

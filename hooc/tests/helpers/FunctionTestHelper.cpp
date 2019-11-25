@@ -107,19 +107,37 @@ bool FunctionTestHelper::TestStack(size_t depth, size_t count) {
     return true;
 }
 
-bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name) {
+bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name, 
+                                        const StackItemType stack_item_type) {
     BOOST_CHECK_MESSAGE(nullptr != this->_func, "Function definition must not be null.");
     if(nullptr == this->_func) {
         return false;
     }
 
     auto context_win64 = this->_emitter_win64.GetFunctionContext();
-    BOOST_CHECK_MESSAGE(nullptr != context_win64, "Context must not be null.");
-    if(nullptr == context_win64) {
+    const auto position_win64 = 16 + (index * 8);
+    if(!TestStackItem(context_win64, index, name, position_win64, stack_item_type)) {
+        return false;
+    }
+    auto context_linux64 = this->_emitter_linux64.GetFunctionContext();
+    const auto position_linux64 = -8 + (index * -8);
+    if(!TestStackItem(context_linux64, index, name, position_linux64, stack_item_type)) {
         return false;
     }
 
-    const auto &items = context_win64->GetItems();
+    return true;
+}
+
+bool FunctionTestHelper::TestStackItem(const FuncEmitterContext* context, 
+                                size_t index, const std::string& name, 
+                                int64_t position, 
+                                const StackItemType stack_item_type) {
+    BOOST_CHECK_MESSAGE(nullptr != context, "Context must not be null.");
+    if(nullptr == context) {
+        return false;
+    }
+
+    const auto &items = context->GetItems();
     BOOST_CHECK_MESSAGE(index < items.size(), "No item available at given index.");
     if(index >= items.size()) {
         return false;
@@ -132,13 +150,18 @@ bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name) {
         return false;
     }
 
-    const auto position = 16 + (index * 8);
     const auto item_position = item.GetPosition();
-    BOOST_CHECK_MESSAGE(position == item_position, "Invalid positionof the stack item.");
+    BOOST_CHECK_MESSAGE(position == item_position, 
+        "Invalid position of the stack item. (position=" << position << ")");
     if(position != item_position) {
         return false;
     }
 
+    const auto item_stack_item_type = item.GetStakcItemType();
+    BOOST_CHECK_MESSAGE(stack_item_type == item_stack_item_type, "Stack item type doesn't match.");
+    if(stack_item_type != item_stack_item_type) {
+        return false;
+    }
     return true;
 }
 
