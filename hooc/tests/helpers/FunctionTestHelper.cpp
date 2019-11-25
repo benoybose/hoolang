@@ -113,13 +113,13 @@ bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name) {
         return false;
     }
 
-    auto context = this->_emitter_win64.GetFunctionContext();
-    BOOST_CHECK_MESSAGE(nullptr != context, "Context must not be null.");
-    if(nullptr == context) {
+    auto context_win64 = this->_emitter_win64.GetFunctionContext();
+    BOOST_CHECK_MESSAGE(nullptr != context_win64, "Context must not be null.");
+    if(nullptr == context_win64) {
         return false;
     }
 
-    const auto &items = context->GetItems();
+    const auto &items = context_win64->GetItems();
     BOOST_CHECK_MESSAGE(index < items.size(), "No item available at given index.");
     if(index >= items.size()) {
         return false;
@@ -129,6 +129,13 @@ bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name) {
     const std::string& item_name = item.GetName();
     BOOST_CHECK_MESSAGE(name == item_name, "Invalid name of the stack item.");
     if(name != item_name) {
+        return false;
+    }
+
+    const auto position = 16 + (index * 8);
+    const auto item_position = item.GetPosition();
+    BOOST_CHECK_MESSAGE(position == item_position, "Invalid positionof the stack item.");
+    if(position != item_position) {
         return false;
     }
 
