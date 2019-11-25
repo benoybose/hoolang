@@ -20,6 +20,7 @@
 #define HOOLANG_FUNCTIONTESTHELPER_HH
 
 #include <ast/FunctionDefinition.hh>
+#include <ast/TypeSpecification.hh>
 #include <emitter/NameMangler.hh>
 #include <emitter/x86/X86FuncEmitter.hh>
 #include <emitter/EmitterDefinitions.hh>
@@ -54,15 +55,20 @@ public:
 
     bool TestStack(size_t depth, size_t count);
 
-    bool TestStackItem(size_t index, const std::string& name, const StackItemType stack_item_type);
+    bool TestStackItem(size_t index, const std::string &name,
+                       const StackItemType stack_item_type,
+                       const TypeSpecificationType type_specification_type,
+                       const std::string& type_name);
 
 public:
     static bool TestCode(Code *code, byte *buffer, size_t size);
-    
-    static bool TestStackItem(const FuncEmitterContext* context_win64, 
-                                size_t index, const std::string& name,
-                                int64_t position,
-                                const StackItemType stack_item_type);
+
+    static bool TestStackItem(const FuncEmitterContext *context_win64,
+                              size_t index, const std::string &name,
+                              int64_t position,
+                              const StackItemType stack_item_type,
+                              const TypeSpecificationType type_specification_type,
+                              const std::string &type_name);
 
 public:
     virtual ~FunctionTestHelper();

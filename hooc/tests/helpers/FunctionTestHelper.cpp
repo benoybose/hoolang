@@ -108,7 +108,9 @@ bool FunctionTestHelper::TestStack(size_t depth, size_t count) {
 }
 
 bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name, 
-                                        const StackItemType stack_item_type) {
+                                        const StackItemType stack_item_type, 
+                                        const TypeSpecificationType type_specification_type,
+                                        const std::string &type_name) {
     BOOST_CHECK_MESSAGE(nullptr != this->_func, "Function definition must not be null.");
     if(nullptr == this->_func) {
         return false;
@@ -116,12 +118,16 @@ bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name,
 
     auto context_win64 = this->_emitter_win64.GetFunctionContext();
     const auto position_win64 = 16 + (index * 8);
-    if(!TestStackItem(context_win64, index, name, position_win64, stack_item_type)) {
+    if (!TestStackItem(context_win64, index, name, position_win64, stack_item_type,
+                       type_specification_type, 
+                       type_name)) {
         return false;
     }
     auto context_linux64 = this->_emitter_linux64.GetFunctionContext();
     const auto position_linux64 = -8 + (index * -8);
-    if(!TestStackItem(context_linux64, index, name, position_linux64, stack_item_type)) {
+    if (!TestStackItem(context_linux64, index, name, position_linux64, stack_item_type,
+                       type_specification_type,
+                       type_name)) {
         return false;
     }
 
@@ -131,7 +137,9 @@ bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name,
 bool FunctionTestHelper::TestStackItem(const FuncEmitterContext* context, 
                                 size_t index, const std::string& name, 
                                 int64_t position, 
-                                const StackItemType stack_item_type) {
+                                const StackItemType stack_item_type,
+                                const TypeSpecificationType type_specification_type,
+                                const std::string &type_name) {
     BOOST_CHECK_MESSAGE(nullptr != context, "Context must not be null.");
     if(nullptr == context) {
         return false;
@@ -162,6 +170,19 @@ bool FunctionTestHelper::TestStackItem(const FuncEmitterContext* context,
     if(stack_item_type != item_stack_item_type) {
         return false;
     }
+
+    const auto item_type_Specification_type = item.GetTypeSpecification()->GetType();
+    BOOST_CHECK_MESSAGE(type_specification_type == item_type_Specification_type, "Type specific type doesn't match.");
+    if(type_specification_type != item_type_Specification_type) {
+        return false;
+    }
+
+    const auto &item_type_name = item.GetTypeSpecification()->GetName();
+    BOOST_CHECK_MESSAGE(type_name == item_type_name, "Type name doesn't match.");
+    if(type_name != item_type_name) {
+        return false;
+    }
+
     return true;
 }
 
