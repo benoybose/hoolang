@@ -38,7 +38,8 @@ namespace hooc {
             }
 
             byte_vector X86Encoder::MOV(X86RegisterType reg_from,
-                                        X86RegisterType reg_to, uint8_t disp8) {
+                                        X86RegisterType reg_to,
+                                        int8_t disp8) {
                 X86Instruction instruction(X86_PREFIX_REX_W, X86_OPCODE_MOV_REGMEM64_REG64);
                 instruction.SetOperands(reg_from, reg_to, disp8);
                 byte_vector vector = instruction.Encode();
@@ -63,7 +64,7 @@ namespace hooc {
 
             byte_vector X86Encoder::MOVSD(X86RegisterType reg_from,
                                           X86RegisterType reg_to,
-                                          uint8_t disp8) {
+                                          int8_t disp8) {
                 X86Instruction instruction(X86_OPCODE_MOVSD_XMM1MEM64_XMM2);
                 instruction.SetOperands(reg_from, reg_to, disp8);
                 return instruction.Encode();

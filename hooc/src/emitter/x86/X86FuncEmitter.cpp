@@ -35,13 +35,13 @@ namespace hooc {
     namespace emitter {
         namespace x86 {
             const size_t WIN_X64_REG_COUNT = 4;
-            const X86RegisterType WIN_X86_ARG_DOUBLE_REGS[WIN_X64_REG_COUNT] = {
+            const X86RegisterType WIN_X64_ARG_DOUBLE_REGS[WIN_X64_REG_COUNT] = {
                     X86_REG_XMM0,
                     X86_REG_XMM1,
                     X86_REG_XMM2,
                     X86_REG_XMM3
             };
-            const X86RegisterType WIN_X86_ARG_INT_REGS[WIN_X64_REG_COUNT] = {
+            const X86RegisterType WIN_X64_ARG_INT_REGS[WIN_X64_REG_COUNT] = {
                     X86_REG_RCX,
                     X86_REG_RDX,
                     X86_REG_R8,
@@ -107,7 +107,7 @@ namespace hooc {
 
             void X86FuncEmitter::ProcessArguments(const std::list<VariableDeclaration *> &arguments,
                                                   byte_vector &header, byte_vector &footer) {
-                // auto config = this->GetConfig();
+                auto config = this->GetConfig();
                 auto push_rbp = this->_encoder.PUSH(X86_REG_RBP);
                 Utility::AppendTo(header, push_rbp);
                 auto mov_rsp_rbp = this->_encoder.MOV(X86_REG_RSP, X86_REG_RBP);
@@ -116,30 +116,10 @@ namespace hooc {
                 auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
                 Utility::AppendTo(footer, pop_rbp);
 
-                auto iterator = arguments.begin();
-                uint8_t offset = 0x10;
-
-                for (size_t index = 0; index < WIN_X64_REG_COUNT; index++) {
-                    if (iterator == arguments.end()) {
-                        break;
-                    }
-                    auto arg = *(iterator);
-                    if (IsDouble(arg)) {
-                        auto reg = WIN_X86_ARG_DOUBLE_REGS[index];
-                        auto ins_arg = this->_encoder.MOVSD(reg,
-                                                            X86_REG_RBP,
-                                                            offset);
-                        Utility::AppendTo(header, ins_arg);
-                    } else {
-                        auto reg = WIN_X86_ARG_INT_REGS[index];
-                        auto ins_arg = this->_encoder.MOV(reg,
-                                                          X86_REG_RBP,
-                                                          offset);
-                        Utility::AppendTo(header, ins_arg);
-                    }
-
-                    iterator++;
-                    offset += 0x08;
+                if (config == EMITTER_WIN64)
+                {
+                    SaveArguments(arguments, WIN_X64_ARG_INT_REGS,
+                                  WIN_X64_ARG_DOUBLE_REGS, WIN_X64_REG_COUNT, 16, 8, header);
                 }
             }
 
@@ -208,6 +188,37 @@ namespace hooc {
                 }
             }
 
+            void X86FuncEmitter::SaveArguments(const std::list<VariableDeclaration *> &arguments,
+                               const X86RegisterType *registers,
+                               const X86RegisterType *registers_float,
+                               const size_t register_count,
+                               const int8_t start,
+                               const int8_t offset,
+                               byte_vector &header) {
+                auto iterator = arguments.begin();
+                int8_t position = start;
+
+                for (size_t index = 0; index < register_count; index++) {
+                    if (iterator == arguments.end()) {
+                        break;
+                    }
+                    auto arg = *(iterator);
+                    if (IsDouble(arg)) {
+                        auto reg = registers_float[index];
+                        auto ins_arg = this->_encoder.MOVSD(reg, X86_REG_RBP,
+                                                            position);
+                        Utility::AppendTo(header, ins_arg);
+                    } else {
+                        auto reg = registers[index];
+                        auto ins_arg = this->_encoder.MOV(reg, X86_REG_RBP,
+                                                          position);
+                        Utility::AppendTo(header, ins_arg);
+                    }
+
+                    iterator++;
+                    position += offset;
+                }
+            }
 
             bool X86FuncEmitter::IsDouble(VariableDeclaration *arg1) {
                 auto type = arg1->GetDelcaredType();

@@ -31,17 +31,20 @@ namespace hooc {
             public:
                 byte_vector PUSH(X86RegisterType reg);
 
-                byte_vector MOV(X86RegisterType reg_from, X86RegisterType reg_to);
+                byte_vector MOV(X86RegisterType reg_from,
+                                X86RegisterType reg_to);
 
                 byte_vector MOV(X86RegisterType reg_from,
                                 X86RegisterType reg_to,
-                                uint8_t disp8);
+                                int8_t disp8);
 
                 byte_vector RET(bool inter_segment);
 
                 byte_vector POP(X86RegisterType reg);
 
-                byte_vector MOVSD(X86RegisterType reg_from, X86RegisterType reg_to, uint8_t disp8);
+                byte_vector MOVSD(X86RegisterType reg_from, 
+                                    X86RegisterType reg_to, 
+                                    int8_t disp8);
 
                 byte_vector NOP();
             };
