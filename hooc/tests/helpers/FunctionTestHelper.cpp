@@ -19,6 +19,9 @@
 #include "FunctionTestHelper.hh"
 
 #include <boost/test/unit_test.hpp>
+#include <misc/Utility.hh>
+
+using namespace hooc::misc;
 
 FunctionTestHelper::FunctionTestHelper(FunctionDefinition *func) :
         _func(func),
@@ -64,7 +67,10 @@ bool FunctionTestHelper::TestCode(Code *code, byte *buffer, size_t size) {
     if (size == code->GetSize()) {
         auto code_buffer = code->GetBytes();
         for (size_t index = 0; index < size; index++) {
-            BOOST_CHECK_MESSAGE(code_buffer[index] == buffer[index], "Byte at " << index << "doesn't match.");
+            BOOST_CHECK_MESSAGE(code_buffer[index] == buffer[index],
+                                "Byte at (" << index << ") doesn't match. ("
+                                            << Utility::ToHex(code_buffer[index]) << " != " 
+                                            << Utility::ToHex(buffer[index]) << ")");
             if(code_buffer[index] != buffer[index]) {
                 return false;
             }

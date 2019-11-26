@@ -74,7 +74,14 @@ BOOST_AUTO_TEST_CASE(TEST02)
         0x90,
         0x5d,
         0xc3};
+    byte expected_linux64[11] = {0x55,
+                                 0x48, 0x89, 0xe5,
+                                 0x48, 0x89, 0x7d, 0xf8,
+                                 0x90,
+                                 0x5d,
+                                 0xc3};
     BOOST_CHECK(func.TestCodeWin64(expected_win64, 11));
+    BOOST_CHECK(func.TestCodeLinux64(expected_linux64, 11));
     BOOST_CHECK(func.TestStack(0, 1));
     BOOST_CHECK(func.TestStackItem(0, "a", STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT));
 

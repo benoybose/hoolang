@@ -139,6 +139,8 @@ namespace hooc {
 
                 if (config == EMITTER_WIN64) {
                     SaveArgumentsWin64(arguments, header);
+                } else if(config == EMITTER_LINUX64) {
+                    SaveArgumentsLinux64(arguments, header);
                 }
             }
 
