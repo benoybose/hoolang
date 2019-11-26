@@ -47,6 +47,27 @@ namespace hooc {
                     X86_REG_R8,
                     X86_REG_R9
             };
+            const size_t LINUX_X64_REG_COUNT = 6;
+            const size_t LINUX_X64_FLOAT_REG_COUNT = 8;
+            const X86RegisterType LINUX_X64_ARG_DOUBLE_REGS[LINUX_X64_FLOAT_REG_COUNT] = {
+                X86_REG_XMM0,
+                X86_REG_XMM1,
+                X86_REG_XMM2,
+                X86_REG_XMM3,
+                X86_REG_XMM4,
+                X86_REG_XMM5,
+                X86_REG_XMM6,
+                X86_REG_XMM7
+            };
+            const X86RegisterType LINUX_X64_ARG_INT_REGS[LINUX_X64_REG_COUNT] = {
+                X86_REG_RDI,
+                X86_REG_RSI,
+                X86_REG_RDX,
+                X86_REG_RCX,
+                X86_REG_R8,
+                X86_REG_R9
+            };
+
 
             X86FuncEmitter::X86FuncEmitter(FunctionDefinition *definition, const EmitterConfig &config)
                     : FuncEmitter(definition, config) {
@@ -116,10 +137,8 @@ namespace hooc {
                 auto pop_rbp = this->_encoder.POP(X86_REG_RBP);
                 Utility::AppendTo(footer, pop_rbp);
 
-                if (config == EMITTER_WIN64)
-                {
-                    SaveArguments(arguments, WIN_X64_ARG_INT_REGS,
-                                  WIN_X64_ARG_DOUBLE_REGS, WIN_X64_REG_COUNT, 16, 8, header);
+                if (config == EMITTER_WIN64) {
+                    SaveArgumentsWin64(arguments, header);
                 }
             }
 
@@ -188,35 +207,62 @@ namespace hooc {
                 }
             }
 
-            void X86FuncEmitter::SaveArguments(const std::list<VariableDeclaration *> &arguments,
-                               const X86RegisterType *registers,
-                               const X86RegisterType *registers_float,
-                               const size_t register_count,
-                               const int8_t start,
-                               const int8_t offset,
-                               byte_vector &header) {
+            void X86FuncEmitter::SaveArgumentsWin64(const std::list<VariableDeclaration *> &arguments,
+                                                    byte_vector &header) {
                 auto iterator = arguments.begin();
-                int8_t position = start;
+                int8_t position = 16;
 
-                for (size_t index = 0; index < register_count; index++) {
+                for (size_t index = 0; index < WIN_X64_REG_COUNT; index++) {
                     if (iterator == arguments.end()) {
                         break;
                     }
                     auto arg = *(iterator);
                     if (IsDouble(arg)) {
-                        auto reg = registers_float[index];
-                        auto ins_arg = this->_encoder.MOVSD(reg, X86_REG_RBP,
-                                                            position);
+                        auto reg = WIN_X64_ARG_DOUBLE_REGS[index];
+                        auto ins_arg = this->_encoder.MOVSD(reg, X86_REG_RBP, position);
                         Utility::AppendTo(header, ins_arg);
                     } else {
-                        auto reg = registers[index];
-                        auto ins_arg = this->_encoder.MOV(reg, X86_REG_RBP,
-                                                          position);
+                        auto reg = WIN_X64_ARG_INT_REGS[index];
+                        auto ins_arg = this->_encoder.MOV(reg, X86_REG_RBP, position);
                         Utility::AppendTo(header, ins_arg);
                     }
 
                     iterator++;
-                    position += offset;
+                    position += 8;
+                }
+            }
+
+            void X86FuncEmitter::SaveArgumentsLinux64(const std::list<VariableDeclaration *> &arguments,
+                                                      byte_vector &header) {
+                size_t param_index = 0;
+                size_t float_index = 0;
+                size_t other_index = 0;
+                int8_t position = -8;                
+                for(auto arg: arguments) {
+                    if((param_index >= LINUX_X64_FLOAT_REG_COUNT) && (param_index >= LINUX_X64_REG_COUNT)) {
+                        continue;
+                    }
+
+                    if(IsDouble(arg)) {
+                        if(float_index >= LINUX_X64_FLOAT_REG_COUNT) {
+                            continue;
+                        }
+                        auto reg = LINUX_X64_ARG_DOUBLE_REGS[float_index];
+                        auto ins_arg = this->_encoder.MOVSD(reg, X86_REG_RBP, position);
+                        Utility::AppendTo(header, ins_arg);
+                        float_index ++;
+                    } else {
+                        if(float_index >= LINUX_X64_REG_COUNT) {
+                            continue;
+                        }
+                        auto reg = LINUX_X64_ARG_INT_REGS[other_index];
+                        auto ins_arg = this->_encoder.MOV(reg, X86_REG_RBP, position);
+                        Utility::AppendTo(header, ins_arg);
+                        other_index ++;
+                    }
+
+                    position -= 8;
+                    param_index ++;
                 }
             }
 

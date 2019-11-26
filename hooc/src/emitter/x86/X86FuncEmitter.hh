@@ -60,13 +60,10 @@ namespace hooc {
                                         int8_t depth_offset,
                                         int8_t align_by);
                 size_t MapVarsToStack(StackItemSet &stack_items, const Statement* body);
-                void SaveArguments(const std::list<VariableDeclaration *> &arguments,
-                                   const X86RegisterType* registers,
-                                   const X86RegisterType *registers_float,
-                                   const size_t register_count,
-                                   const int8_t start,
-                                   const int8_t offset,
-                                   byte_vector &header);
+                void SaveArgumentsWin64(const std::list<VariableDeclaration *> &arguments,
+                                        byte_vector &header);
+                void SaveArgumentsLinux64(const std::list<VariableDeclaration *> &arguments,
+                                        byte_vector &header);
                 bool IsDouble(VariableDeclaration *arg1);                
             };
         }
