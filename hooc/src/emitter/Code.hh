@@ -26,6 +26,8 @@
 #include <vector>
 #include <cstdint>
 
+using namespace std;
+
 namespace hooc {
     namespace emitter {
         class Code {
@@ -42,7 +44,7 @@ namespace hooc {
 
             const std::string &GetName() const;
 
-            const byte *GetBytes() const;
+            const uint8_t *GetBytes() const;
 
             size_t GetSize() const;
 

@@ -19,7 +19,10 @@
 #include <misc/Utility.hh>
 #include "X86Instruction.hh"
 
+#include <cstdint>
+
 using namespace hooc::misc;
+using namespace std;
 
 namespace hooc {
     namespace emitter {
@@ -141,7 +144,7 @@ namespace hooc {
             byte_vector X86Instruction::Encode() {
                 byte_vector data;
                 if (0 != this->_prefix) {
-                    auto prefix = (byte) this->_prefix;
+                    auto prefix = (uint8_t) this->_prefix;
                     data.push_back(prefix);
                 }
 

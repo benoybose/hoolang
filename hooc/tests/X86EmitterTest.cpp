@@ -87,242 +87,242 @@ BOOST_AUTO_TEST_CASE(TEST02)
 
 BOOST_AUTO_TEST_CASE(TEST03)
 {
-    const std::string source = "func foo(a:int, b:int) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3fooxx", code->GetName());
-    BOOST_CHECK_EQUAL(15, code->GetSize());
-    const auto &buffer = code->GetBuffer();
-    BOOST_CHECK_EQUAL(15, buffer.size());
-    byte expected[15] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0x48, 0x89, 0x4d, 0x10,
-        0x48, 0x89, 0x55, 0x18,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 15));
+    // const std::string source = "func foo(a:int, b:int) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3fooxx", code->GetName());
+    // BOOST_CHECK_EQUAL(15, code->GetSize());
+    // const auto &buffer = code->GetBuffer();
+    // BOOST_CHECK_EQUAL(15, buffer.size());
+    // byte expected[15] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0x48, 0x89, 0x4d, 0x10,
+    //     0x48, 0x89, 0x55, 0x18,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 15));
 }
 
 BOOST_AUTO_TEST_CASE(TEST04)
 {
-    const std::string source = "func foo(a:int, b:int, c:int) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3fooxxx", code->GetName());
-    BOOST_CHECK_EQUAL(19, code->GetSize());
-    const auto &buffer = code->GetBuffer();
-    BOOST_CHECK_EQUAL(19, buffer.size());
-    byte expected[19] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0x48, 0x89, 0x4d, 0x10,
-        0x48, 0x89, 0x55, 0x18,
-        0x4c, 0x89, 0x45, 0x20,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 19));
+    // const std::string source = "func foo(a:int, b:int, c:int) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3fooxxx", code->GetName());
+    // BOOST_CHECK_EQUAL(19, code->GetSize());
+    // const auto &buffer = code->GetBuffer();
+    // BOOST_CHECK_EQUAL(19, buffer.size());
+    // byte expected[19] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0x48, 0x89, 0x4d, 0x10,
+    //     0x48, 0x89, 0x55, 0x18,
+    //     0x4c, 0x89, 0x45, 0x20,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 19));
 }
 
 BOOST_AUTO_TEST_CASE(TEST05)
 {
-    const std::string source = "func foo(a:int, b:int, c:int, d:int) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3fooxxxx", code->GetName());
-    BOOST_CHECK_EQUAL(23, code->GetSize());
-    const auto &buffer = code->GetBuffer();
-    BOOST_CHECK_EQUAL(23, buffer.size());
-    byte expected[23] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0x48, 0x89, 0x4d, 0x10,
-        0x48, 0x89, 0x55, 0x18,
-        0x4c, 0x89, 0x45, 0x20,
-        0x4c, 0x89, 0x4d, 0x28,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 23));
+    // const std::string source = "func foo(a:int, b:int, c:int, d:int) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3fooxxxx", code->GetName());
+    // BOOST_CHECK_EQUAL(23, code->GetSize());
+    // const auto &buffer = code->GetBuffer();
+    // BOOST_CHECK_EQUAL(23, buffer.size());
+    // byte expected[23] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0x48, 0x89, 0x4d, 0x10,
+    //     0x48, 0x89, 0x55, 0x18,
+    //     0x4c, 0x89, 0x45, 0x20,
+    //     0x4c, 0x89, 0x4d, 0x28,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 23));
 }
 
 BOOST_AUTO_TEST_CASE(TEST06)
 {
-    const std::string source = "func foo(a: double) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3food", code->GetName());
-    const auto &buffer = code->GetBuffer();
-    byte expected[12] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0xf2, 0x0f, 0x11, 0x45, 0x10,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 12));
+    // const std::string source = "func foo(a: double) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3food", code->GetName());
+    // const auto &buffer = code->GetBuffer();
+    // byte expected[12] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 12));
 }
 
 BOOST_AUTO_TEST_CASE(TEST07)
 {
-    const std::string source = "func foo(a: double, b: double) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3foodd", code->GetName());
-    const auto &buffer = code->GetBuffer();
-    byte expected[17] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0xf2, 0x0f, 0x11, 0x45, 0x10,
-        0xf2, 0x0f, 0x11, 0x4d, 0x18,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 17));
+    // const std::string source = "func foo(a: double, b: double) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3foodd", code->GetName());
+    // const auto &buffer = code->GetBuffer();
+    // byte expected[17] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
+    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 17));
 }
 
 BOOST_AUTO_TEST_CASE(TEST08)
 {
-    const std::string source = "func foo(a: double, b: double, c: double) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3fooddd", code->GetName());
-    const auto &buffer = code->GetBuffer();
-    byte expected[22] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0xf2, 0x0f, 0x11, 0x45, 0x10,
-        0xf2, 0x0f, 0x11, 0x4d, 0x18,
-        0xf2, 0x0f, 0x11, 0x55, 0x20,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 22));
+    // const std::string source = "func foo(a: double, b: double, c: double) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3fooddd", code->GetName());
+    // const auto &buffer = code->GetBuffer();
+    // byte expected[22] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
+    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
+    //     0xf2, 0x0f, 0x11, 0x55, 0x20,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 22));
 }
 
 BOOST_AUTO_TEST_CASE(TEST09)
 {
-    const std::string source = "func foo(a: double, b: double, c: double, d:double) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3foodddd", code->GetName());
-    const auto &buffer = code->GetBuffer();
-    byte expected[27] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0xf2, 0x0f, 0x11, 0x45, 0x10,
-        0xf2, 0x0f, 0x11, 0x4d, 0x18,
-        0xf2, 0x0f, 0x11, 0x55, 0x20,
-        0xf2, 0x0f, 0x11, 0x5d, 0x28,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 27));
+    // const std::string source = "func foo(a: double, b: double, c: double, d:double) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3foodddd", code->GetName());
+    // const auto &buffer = code->GetBuffer();
+    // byte expected[27] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
+    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
+    //     0xf2, 0x0f, 0x11, 0x55, 0x20,
+    //     0xf2, 0x0f, 0x11, 0x5d, 0x28,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 27));
 }
 
 BOOST_AUTO_TEST_CASE(TEST10)
 {
-    const std::string source = "func foo(a: int, b: double, c: int, d:double) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3fooxdxd", code->GetName());
-    const auto &buffer = code->GetBuffer();
-    byte expected[25] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0x48, 0x89, 0x4d, 0x10,
-        0xf2, 0x0f, 0x11, 0x4d, 0x18,
-        0x4c, 0x89, 0x45, 0x20,
-        0xf2, 0x0f, 0x11, 0x5d, 0x28,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
+    // const std::string source = "func foo(a: int, b: double, c: int, d:double) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3fooxdxd", code->GetName());
+    // const auto &buffer = code->GetBuffer();
+    // byte expected[25] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0x48, 0x89, 0x4d, 0x10,
+    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
+    //     0x4c, 0x89, 0x45, 0x20,
+    //     0xf2, 0x0f, 0x11, 0x5d, 0x28,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
 }
 
 BOOST_AUTO_TEST_CASE(TEST11)
 {
-    const std::string source = "func foo(a: double, b: int, c: double, d:int) {}";
-    ParserDriver driver(source, "foo.hoo");
-    auto module = driver.BuildModule();
-    BOOST_ASSERT(module->Success());
-    auto unit = module->GetUnit();
-    auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    X86FuncEmitter emitter(func, EMITTER_WIN64);
-    auto code = emitter.GenerateCode();
-    BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    BOOST_CHECK_EQUAL("_Z3foodxdx", code->GetName());
-    const auto &buffer = code->GetBuffer();
-    byte expected[25] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0xf2, 0x0f, 0x11, 0x45, 0x10,
-        0x48, 0x89, 0x55, 0x18,
-        0xf2, 0x0f, 0x11, 0x55, 0x20,
-        0x4c, 0x89, 0x4d, 0x28,
-        0x90,
-        0x5d,
-        0xc3};
-    BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
+    // const std::string source = "func foo(a: double, b: int, c: double, d:int) {}";
+    // ParserDriver driver(source, "foo.hoo");
+    // auto module = driver.BuildModule();
+    // BOOST_ASSERT(module->Success());
+    // auto unit = module->GetUnit();
+    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
+    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
+    // X86FuncEmitter emitter(func, EMITTER_WIN64);
+    // auto code = emitter.GenerateCode();
+    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
+    // BOOST_CHECK_EQUAL("_Z3foodxdx", code->GetName());
+    // const auto &buffer = code->GetBuffer();
+    // byte expected[25] = {
+    //     0x55,
+    //     0x48, 0x89, 0xe5,
+    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
+    //     0x48, 0x89, 0x55, 0x18,
+    //     0xf2, 0x0f, 0x11, 0x55, 0x20,
+    //     0x4c, 0x89, 0x4d, 0x28,
+    //     0x90,
+    //     0x5d,
+    //     0xc3};
+    // BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

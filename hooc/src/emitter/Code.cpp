@@ -16,9 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "Code.hh"
 #include <utility>
 
-#include "Code.hh"
+#include <cstdint>
+
+using namespace std;
 
 namespace hooc {
     namespace emitter {
@@ -36,7 +39,7 @@ namespace hooc {
             return this->_name;
         }
 
-        const byte *Code::GetBytes() const {
+        const uint8_t *Code::GetBytes() const {
             return this->_buffer.data();
         }
 

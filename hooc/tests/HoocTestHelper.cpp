@@ -17,13 +17,15 @@
  */
 
 #include "HoocTestHelper.hh"
-
-#include <boost/test/unit_test.hpp>
 #include <misc/Utility.hh>
 
-using namespace hooc::misc;
+#include <boost/test/unit_test.hpp>
+#include <cstdint>
 
-bool VerifyByteVector(const byte_vector &vector, byte *bytes, size_t size) {
+using namespace hooc::misc;
+using namespace std;
+
+bool VerifyByteVector(const byte_vector &vector, uint8_t *bytes, size_t size) {
     BOOST_CHECK(vector.size() == size);
     if (vector.size() != size) {
         return false;
@@ -40,7 +42,7 @@ bool VerifyByteVector(const byte_vector &vector, byte *bytes, size_t size) {
     return true;
 }
 
-bool VerifyFuncCode(Code *code, const std::string &name, byte *expected_buffer, size_t size) {
+bool VerifyFuncCode(Code *code, const std::string &name, uint8_t *expected_buffer, size_t size) {
     if(CODE_TYPE_FUNCTION != code->GetType()) {
         return false;
     }

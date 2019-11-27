@@ -19,19 +19,21 @@
 #ifndef HOOLANG_HOOCTESTHELPER_HH
 #define HOOLANG_HOOCTESTHELPER_HH
 
+#include <ast/LiteralExpression.hh>
 #include <emitter/EmitterDefinitions.hh>
 #include <emitter/x86/X86Definitions.hh>
 #include <emitter/Code.hh>
 
 #include <boost/test/unit_test.hpp>
-#include "ast/LiteralExpression.hh"
+#include <cstdint>
 
 using namespace hooc::emitter;
 using namespace hooc::emitter::x86;
+using namespace std;
 
-extern bool VerifyByteVector(const byte_vector &vector, byte *bytes, size_t size);
+extern bool VerifyByteVector(const byte_vector &vector, uint8_t *bytes, size_t size);
 
-extern bool VerifyFuncCode(Code *code, const std::string &name, byte *expected_buffer, size_t size);
+extern bool VerifyFuncCode(Code *code, const std::string &name, uint8_t *expected_buffer, size_t size);
 
 #define BOOST_CHECK_LITERAL_EXPRESSION(expr, type, value)\
     BOOST_CHECK_EQUAL(EXPRESSION_LITERAL, expr->GetExpressionType());\

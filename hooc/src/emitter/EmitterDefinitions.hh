@@ -26,8 +26,7 @@ using namespace std;
 
 namespace hooc {
     namespace emitter {
-        typedef std::uint8_t byte;
-        typedef std::vector<byte> byte_vector;
+        typedef std::vector<uint8_t> byte_vector;
     }
 }
 
