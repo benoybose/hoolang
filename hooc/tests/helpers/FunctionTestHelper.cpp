@@ -37,17 +37,43 @@ FunctionTestHelper::FunctionTestHelper(FunctionDefinition *func) :
     }
 }
 
-void FunctionTestHelper::TestName(const std::string &name) {
-    BOOST_CHECK_MESSAGE(this->_func->GetDeclaration()->GetName() == name,
-                        "Name of the function doesn't match.");
+bool FunctionTestHelper::IsNamed(const std::string &name) {
+    auto name_original = this->_func->GetDeclaration()->GetName();
+    BOOST_CHECK_MESSAGE(name_original == name,
+                        "Name of the function doesn't match. (" << name_original << " != " << name << ")");
+    return (name_original == name);
 }
 
-void FunctionTestHelper::TestMangledName(const std::string &mangled_name) {
+bool FunctionTestHelper::IsMangled(const std::string &mangled_name) {
     BOOST_CHECK_MESSAGE(nullptr != _func, "Function definition must not be null.");
-    if (nullptr != this->_func) {
-        auto mangled = this->_mangler.Mangle(this->_func->GetDeclaration());
-        BOOST_CHECK_MESSAGE(mangled == mangled_name, "Mangled name doesn't match.");
+    if (nullptr == _func){
+        return false;
     }
+
+    auto mangled = this->_mangler.Mangle(this->_func->GetDeclaration());
+    BOOST_CHECK_MESSAGE(mangled == mangled_name,
+                        "Mangled name doesn't match. (" << mangled << "!=" << mangled_name << ")");
+    BOOST_CHECK_MESSAGE(nullptr != this->_code_win64,
+                        "Win64 code must not be null.");
+    if (nullptr == this->_code_win64){
+        return false;
+    }
+    BOOST_CHECK_MESSAGE(this->_code_win64->GetName() == mangled,
+                        "Mangled name doesn't match for Win64.");
+    if (this->_code_win64->GetName() != mangled){
+        return false;
+    }
+    BOOST_CHECK_MESSAGE(nullptr != this->_code_linux64,
+                        "Linux64 code must not be null.");
+    if (nullptr == this->_code_linux64){
+        return false;
+    }
+    BOOST_CHECK_MESSAGE(this->_code_linux64->GetName() == mangled,
+                        "Mangled name doesn't match for Linux64.");
+    if (this->_code_linux64->GetName() != mangled){
+        return false;
+    }
+    return true;
 }
 
 bool FunctionTestHelper::TestCodeWin64(byte_vector expected_win64) {
@@ -93,11 +119,13 @@ bool FunctionTestHelper::TestStack(size_t depth, size_t count) {
         return false;
     }
 
-    BOOST_CHECK_MESSAGE(depth == context->GetDepth(), "Invalid stack depth for Win64");
+    BOOST_CHECK_MESSAGE(depth == context->GetDepth(),
+                        "Invalid stack depth for Win64. (" << depth << "!=" << context->GetDepth() << ")");
     if(depth != context->GetDepth()) {
         return false;
     }
-    BOOST_CHECK_MESSAGE(count == context->GetItems().size(), "Invalid stack item count for Win64");
+    BOOST_CHECK_MESSAGE(count == context->GetItems().size(), 
+                        "Invalid stack item count for Win64. (" << count << "!=" << context->GetItems().size() << ")");
     if(count != context->GetItems().size()) {
         return false;
     }
@@ -158,7 +186,7 @@ bool FunctionTestHelper::TestStackItem(const FuncEmitterContext* context,
         return false;
     }
 
-    auto item = GetStackItem(items, 0);
+    auto item = GetStackItem(items, index);
     const std::string& item_name = item.GetName();
     BOOST_CHECK_MESSAGE(name == item_name, "Invalid name of the stack item.");
     if(name != item_name) {

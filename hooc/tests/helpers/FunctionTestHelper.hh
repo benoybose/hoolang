@@ -45,9 +45,9 @@ private:
     Code *_code_linux64;
 
 public:
-    void TestName(const std::string &name);
+    bool IsNamed(const std::string &name);
 
-    void TestMangledName(const std::string &mangled_name);
+    bool IsMangled(const std::string &mangled_name);
 
     bool TestCodeWin64(byte_vector expected_win64);
 

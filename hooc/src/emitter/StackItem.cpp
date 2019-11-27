@@ -48,11 +48,17 @@ namespace hooc {
         }
 
         bool StackItemComparer::operator()(const StackItem &a, const StackItem &b) const {
-            if (a.GetName() != b.GetName()) {
-                return false;
+            auto name_a = a.GetName();
+            auto name_b = b.GetName();
+            if(name_a != name_b) {
+                return true;
             }
-
-            return a.GetPosition() == b.GetPosition();
+            auto pos_a = a.GetPosition();
+            auto pos_b = b.GetPosition();
+            if(pos_a != pos_b) {
+                return true;
+            }
+            return false;
         }
 
         const StackItem& GetStackItem(const StackItemSet& items, size_t index) {

@@ -42,21 +42,21 @@ BOOST_AUTO_TEST_CASE(TEST01)
     const std::string source = "func foo() {}";
     ModuleTestHelper helper(source, "foo.hoo");
     auto func = helper.GetFunctionTestHelper(0);
-    func.TestName("foo");
-    func.TestMangledName("_Z3foov");
+    BOOST_CHECK(func.IsNamed("foo"));
+    BOOST_CHECK(func.IsMangled("_Z3foov"));
+    BOOST_CHECK(func.TestStack(0, 0));
     byte_vector expected_win64{0x55,
                                0x48, 0x89, 0xe5,
                                0x90,
                                0x5d,
                                0xc3};
-    func.TestCodeWin64(expected_win64);
+    BOOST_CHECK(func.TestCodeWin64(expected_win64));
     byte_vector expected_linux{0x55,
                                0x48, 0x89, 0xE5,
                                0x90,
                                0x5D,
                                0xC3};
-    func.TestCodeLinux64(expected_linux);
-    func.TestStack(0, 0);
+    BOOST_CHECK(func.TestCodeLinux64(expected_linux));
 }
 
 BOOST_AUTO_TEST_CASE(TEST02)
@@ -64,8 +64,10 @@ BOOST_AUTO_TEST_CASE(TEST02)
     const std::string source = "func foo(a:int) {}";
     ModuleTestHelper helper(source, "foo.hoo");
     auto func = helper.GetFunctionTestHelper(0);
-    func.TestName("foo");
-    func.TestMangledName("_Z3foox");
+    BOOST_CHECK(func.IsNamed("foo"));
+    BOOST_CHECK(func.IsMangled("_Z3foox"));
+    BOOST_CHECK(func.TestStack(0, 1));
+    BOOST_CHECK(func.TestStackItem(0, "a", STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT));
     byte_vector expected_win64{0x55,
                                0x48, 0x89, 0xe5,
                                0x48, 0x89, 0x4d, 0x10,
@@ -80,36 +82,32 @@ BOOST_AUTO_TEST_CASE(TEST02)
                                  0x5d,
                                  0xc3};
     BOOST_CHECK(func.TestCodeLinux64(expected_linux64));
-    BOOST_CHECK(func.TestStack(0, 1));
-    BOOST_CHECK(func.TestStackItem(0, "a",
-                                   STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT));
 }
 
 BOOST_AUTO_TEST_CASE(TEST03)
 {
-    // const std::string source = "func foo(a:int, b:int) {}";
-    // ParserDriver driver(source, "foo.hoo");
-    // auto module = driver.BuildModule();
-    // BOOST_ASSERT(module->Success());
-    // auto unit = module->GetUnit();
-    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    // X86FuncEmitter emitter(func, EMITTER_WIN64);
-    // auto code = emitter.GenerateCode();
-    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    // BOOST_CHECK_EQUAL("_Z3fooxx", code->GetName());
-    // BOOST_CHECK_EQUAL(15, code->GetSize());
-    // const auto &buffer = code->GetBuffer();
-    // BOOST_CHECK_EQUAL(15, buffer.size());
-    // byte expected[15] = {
-    //     0x55,
-    //     0x48, 0x89, 0xe5,
-    //     0x48, 0x89, 0x4d, 0x10,
-    //     0x48, 0x89, 0x55, 0x18,
-    //     0x90,
-    //     0x5d,
-    //     0xc3};
-    // BOOST_CHECK(VerifyByteVector(buffer, expected, 15));
+    const std::string source = "func foo(a:int, b:int) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.IsNamed("foo"));
+    BOOST_CHECK(foo.IsMangled("_Z3fooxx"));
+    BOOST_CHECK(foo.TestStack(0, 2));
+    BOOST_CHECK(foo.TestStackItem(0, "a", STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT));
+    BOOST_CHECK(foo.TestStackItem(1, "b", STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT));
+    foo.TestCodeWin64({0x55,
+                       0x48, 0x89, 0xe5,
+                       0x48, 0x89, 0x4d, 0x10,
+                       0x48, 0x89, 0x55, 0x18,
+                       0x90,
+                       0x5d,
+                       0xc3});
+    foo.TestCodeLinux64({0x55,
+                         0x48, 0x89, 0xe5,
+                         0x48, 0x89, 0x7d, 0xf8,
+                         0x48, 0x89, 0x75, 0xf0,
+                         0x90,
+                         0x5d,
+                         0xc3});
 }
 
 BOOST_AUTO_TEST_CASE(TEST04)
