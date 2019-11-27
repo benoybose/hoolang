@@ -24,8 +24,11 @@
 #include <emitter/NameMangler.hh>
 #include <emitter/x86/X86FuncEmitter.hh>
 #include <emitter/EmitterDefinitions.hh>
+#include <ast/BasicDataTypes.hh>
+
 #include <cstdint>
 #include <string>
+
 
 using namespace hooc::ast;
 using namespace hooc::emitter;
@@ -45,6 +48,8 @@ private:
     Code *_code_linux64;
 
 public:
+    bool HasNames(const std::string& name, const std::string& mangled_name);
+
     bool IsNamed(const std::string &name);
 
     bool IsMangled(const std::string &mangled_name);
@@ -59,6 +64,12 @@ public:
                        const StackItemType stack_item_type,
                        const TypeSpecificationType type_specification_type,
                        const std::string& type_name);
+
+    bool TestIntArg(size_t index, const std::string &name);
+
+    bool TestDoubleArg(size_t index, const std::string &name);
+
+    bool TestCode(byte_vector expected_win64, byte_vector expected_linux64);
 
 public:
     static bool TestCode(Code *code, byte_vector buffer);

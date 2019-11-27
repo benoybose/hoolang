@@ -17,9 +17,10 @@
  */
 
 #include "FunctionTestHelper.hh"
+#include <misc/Utility.hh>
+#include <ast/BasicDataTypes.hh>
 
 #include <boost/test/unit_test.hpp>
-#include <misc/Utility.hh>
 
 using namespace hooc::misc;
 
@@ -35,6 +36,18 @@ FunctionTestHelper::FunctionTestHelper(FunctionDefinition *func) :
         this->_code_win64 = this->_emitter_win64.GenerateCode();
         this->_code_linux64 = this->_emitter_linux64.GenerateCode();
     }
+}
+
+bool FunctionTestHelper::HasNames(const std::string& name, const std::string& mangled_name) {
+    BOOST_CHECK(IsNamed(name));
+    if(!IsNamed(name)) {
+        return false;
+    }
+    BOOST_CHECK(IsMangled(mangled_name));
+    if(!IsMangled(mangled_name)) {
+        return false;
+    }
+    return true;
 }
 
 bool FunctionTestHelper::IsNamed(const std::string &name) {
@@ -86,7 +99,8 @@ bool FunctionTestHelper::TestCodeLinux64(byte_vector expected_linux64) {
 
 bool FunctionTestHelper::TestCode(Code *code, byte_vector buffer) {
     auto size = buffer.size();
-    BOOST_CHECK_MESSAGE(code->GetSize() == size, "Size of generated code doesn't match.");
+    BOOST_CHECK_MESSAGE(code->GetSize() == size,
+                        "Size of generated code doesn't match. (" << code->GetSize() << "!=" << size << ")");
     if(size != code->GetSize()) {
         return false;
     }
@@ -218,6 +232,26 @@ bool FunctionTestHelper::TestStackItem(const FuncEmitterContext* context,
         return false;
     }
 
+    return true;
+}
+
+bool FunctionTestHelper::TestIntArg(size_t index, const std::string &name) {
+    return TestStackItem(index, name, STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT);
+}
+
+bool FunctionTestHelper::TestDoubleArg(size_t index, const std::string &name) {
+    return TestStackItem(index, name, STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_DOUBLE);
+}
+
+bool FunctionTestHelper::TestCode(byte_vector expected_win64, byte_vector expected_linux64) {
+    if(!TestCodeWin64(expected_win64)) {
+        BOOST_CHECK_MESSAGE(false, "Windows 64 code doesn't match.");
+        return false;
+    }
+    if(!TestCodeLinux64(expected_linux64)) {
+        BOOST_CHECK_MESSAGE(false, "Linux 64 code doesn't match.");
+        return false;
+    }
     return true;
 }
 
