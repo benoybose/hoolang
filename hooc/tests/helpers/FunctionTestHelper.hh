@@ -49,9 +49,9 @@ public:
 
     void TestMangledName(const std::string &mangled_name);
 
-    bool TestCodeWin64(byte *code, size_t size);
+    bool TestCodeWin64(byte_vector expected_win64);
 
-    bool TestCodeLinux64(byte *code, size_t size);
+    bool TestCodeLinux64(byte_vector expected_linux64);
 
     bool TestStack(size_t depth, size_t count);
 
@@ -61,7 +61,7 @@ public:
                        const std::string& type_name);
 
 public:
-    static bool TestCode(Code *code, byte *buffer, size_t size);
+    static bool TestCode(Code *code, byte_vector buffer);
 
     static bool TestStackItem(const FuncEmitterContext *context_win64,
                               size_t index, const std::string &name,

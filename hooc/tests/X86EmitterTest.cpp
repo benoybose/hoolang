@@ -44,19 +44,18 @@ BOOST_AUTO_TEST_CASE(TEST01)
     auto func = helper.GetFunctionTestHelper(0);
     func.TestName("foo");
     func.TestMangledName("_Z3foov");
-    byte expected_win64[7] = {0x55,
-                              0x48, 0x89, 0xe5,
-                              0x90,
-                              0x5d,
-                              0xc3};
-    func.TestCodeWin64(expected_win64, 7);
-    byte expected_linux[7] = {
-        0x55,
-        0x48, 0x89, 0xE5,
-        0x90,
-        0x5D,
-        0xC3};
-    func.TestCodeLinux64(expected_linux, 7);
+    byte_vector expected_win64{0x55,
+                               0x48, 0x89, 0xe5,
+                               0x90,
+                               0x5d,
+                               0xc3};
+    func.TestCodeWin64(expected_win64);
+    byte_vector expected_linux{0x55,
+                               0x48, 0x89, 0xE5,
+                               0x90,
+                               0x5D,
+                               0xC3};
+    func.TestCodeLinux64(expected_linux);
     func.TestStack(0, 0);
 }
 
@@ -67,49 +66,23 @@ BOOST_AUTO_TEST_CASE(TEST02)
     auto func = helper.GetFunctionTestHelper(0);
     func.TestName("foo");
     func.TestMangledName("_Z3foox");
-    byte expected_win64[11] = {
-        0x55,
-        0x48, 0x89, 0xe5,
-        0x48, 0x89, 0x4d, 0x10,
-        0x90,
-        0x5d,
-        0xc3};
-    byte expected_linux64[11] = {0x55,
+    byte_vector expected_win64{0x55,
+                               0x48, 0x89, 0xe5,
+                               0x48, 0x89, 0x4d, 0x10,
+                               0x90,
+                               0x5d,
+                               0xc3};
+    BOOST_CHECK(func.TestCodeWin64(expected_win64));
+    byte_vector expected_linux64{0x55,
                                  0x48, 0x89, 0xe5,
                                  0x48, 0x89, 0x7d, 0xf8,
                                  0x90,
                                  0x5d,
                                  0xc3};
-    BOOST_CHECK(func.TestCodeWin64(expected_win64, 11));
-    BOOST_CHECK(func.TestCodeLinux64(expected_linux64, 11));
+    BOOST_CHECK(func.TestCodeLinux64(expected_linux64));
     BOOST_CHECK(func.TestStack(0, 1));
-    BOOST_CHECK(func.TestStackItem(0, "a", STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT));
-
-    // ParserDriver driver(source, "foo.hoo");
-    // auto module = driver.BuildModule();
-    // BOOST_ASSERT(module->Success());
-    // auto unit = module->GetUnit();
-    // auto func = (FunctionDefinition *) (*unit->GetItems().begin());
-    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    // X86FuncEmitter emitter_win64(func, EMITTER_WIN64);
-    // auto code_win64 = emitter_win64.GenerateCode();
-    // byte expected_win64[11] = {
-    //         0x55,
-    //         0x48, 0x89, 0xe5,
-    //         0x48, 0x89, 0x4d, 0x10,
-    //         0x90,
-    //         0x5d,
-    //         0xc3};
-    // BOOST_CHECK(VerifyFuncCode(code_win64, "_Z3foox", expected_win64, 11));
-    // auto context_win64 = emitter_win64.GetFunctionContext();
-    // const auto &context_items_win64 = context_win64->GetItems();
-    // BOOST_CHECK_EQUAL(0, context_win64->GetDepth());
-    // BOOST_CHECK_EQUAL(1, context_items_win64.size());
-    // auto a_win64 = *context_items_win64.begin();
-    // BOOST_CHECK_EQUAL("a", a_win64.GetName());
-    // auto a_type_win64 = a_win64.GetTypeSpecification();
-    // BOOST_CHECK_EQUAL(a_type_win64->GetType(), TYPE_SPEC_BASIC);
-    // BOOST_CHECK_EQUAL(a_type_win64->GetName(), NAME_INT);
+    BOOST_CHECK(func.TestStackItem(0, "a",
+                                   STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT));
 }
 
 BOOST_AUTO_TEST_CASE(TEST03)

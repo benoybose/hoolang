@@ -50,15 +50,16 @@ void FunctionTestHelper::TestMangledName(const std::string &mangled_name) {
     }
 }
 
-bool FunctionTestHelper::TestCodeWin64(byte *code, size_t size) {
-    return TestCode(this->_code_win64, code, size);
+bool FunctionTestHelper::TestCodeWin64(byte_vector expected_win64) {
+    return TestCode(this->_code_win64, expected_win64);
 }
 
-bool FunctionTestHelper::TestCodeLinux64(byte *code, size_t size) {
-    return TestCode(this->_code_linux64, code, size);
+bool FunctionTestHelper::TestCodeLinux64(byte_vector expected_linux64) {
+    return TestCode(this->_code_linux64, expected_linux64);
 }
 
-bool FunctionTestHelper::TestCode(Code *code, byte *buffer, size_t size) {
+bool FunctionTestHelper::TestCode(Code *code, byte_vector buffer) {
+    auto size = buffer.size();
     BOOST_CHECK_MESSAGE(code->GetSize() == size, "Size of generated code doesn't match.");
     if(size != code->GetSize()) {
         return false;
