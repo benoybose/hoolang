@@ -242,11 +242,12 @@ namespace hooc {
                 int8_t position = -8;                
                 for(auto arg: arguments) {
                     if((param_index >= LINUX_X64_FLOAT_REG_COUNT) && (param_index >= LINUX_X64_REG_COUNT)) {
-                        continue;
+                        break;
                     }
 
                     if(IsDouble(arg)) {
                         if(float_index >= LINUX_X64_FLOAT_REG_COUNT) {
+                            param_index ++;
                             continue;
                         }
                         auto reg = LINUX_X64_ARG_DOUBLE_REGS[float_index];
@@ -254,7 +255,8 @@ namespace hooc {
                         Utility::AppendTo(header, ins_arg);
                         float_index ++;
                     } else {
-                        if(float_index >= LINUX_X64_REG_COUNT) {
+                        if(other_index >= LINUX_X64_REG_COUNT) {
+                            param_index ++;
                             continue;
                         }
                         auto reg = LINUX_X64_ARG_INT_REGS[other_index];

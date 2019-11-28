@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/hooc/hooc_test.exe",
-            "args": [],
+            "args": ["--run_test=X86EmitterTest/TEST14"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
