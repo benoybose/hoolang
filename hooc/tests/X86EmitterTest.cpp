@@ -434,4 +434,79 @@ BOOST_AUTO_TEST_CASE(TEST14)
                               0xc3}));
 }
 
+BOOST_AUTO_TEST_CASE(TEST15)
+{
+    const std::string source = "func foo(a: int, b: int, c: int, d: int, e: int, f: int, g: int, h: int) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxxxxxxx"));
+    BOOST_CHECK(foo.TestStack(0, 8));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestIntArg(3, "d"));
+    BOOST_CHECK(foo.TestIntArg(4, "e"));
+    BOOST_CHECK(foo.TestIntArg(5, "f"));
+    BOOST_CHECK(foo.TestIntArg(6, "g"));
+    BOOST_CHECK(foo.TestIntArg(7, "h"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0x4c, 0x89, 0x4d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0x48, 0x89, 0x55, 0xe8,
+                              0x48, 0x89, 0x4d, 0xe0,
+                              0x4c, 0x89, 0x45, 0xd8,
+                              0x4c, 0x89, 0x4d, 0xd0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST16)
+{
+    const std::string source = "func foo(a: int, b: int, c: int, d: int, e: int, f: int, g: int, h: int, i: int) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxxxxxxxx"));
+    BOOST_CHECK(foo.TestStack(0, 9));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestIntArg(3, "d"));
+    BOOST_CHECK(foo.TestIntArg(4, "e"));
+    BOOST_CHECK(foo.TestIntArg(5, "f"));
+    BOOST_CHECK(foo.TestIntArg(6, "g"));
+    BOOST_CHECK(foo.TestIntArg(7, "h"));
+    BOOST_CHECK(foo.TestIntArg(8, "i"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0x4c, 0x89, 0x4d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0x48, 0x89, 0x55, 0xe8,
+                              0x48, 0x89, 0x4d, 0xe0,
+                              0x4c, 0x89, 0x45, 0xd8,
+                              0x4c, 0x89, 0x4d, 0xd0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
