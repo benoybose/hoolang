@@ -207,133 +207,127 @@ BOOST_AUTO_TEST_CASE(TEST07)
                               0x90,
                               0x5d,
                               0xc3}));
-    // ParserDriver driver(source, "foo.hoo");
-    // auto module = driver.BuildModule();
-    // BOOST_ASSERT(module->Success());
-    // auto unit = module->GetUnit();
-    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    // X86FuncEmitter emitter(func, EMITTER_WIN64);
-    // auto code = emitter.GenerateCode();
-    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    // BOOST_CHECK_EQUAL("_Z3foodd", code->GetName());
-    // const auto &buffer = code->GetBuffer();
-    // byte expected[17] = {
-    //     0x55,
-    //     0x48, 0x89, 0xe5,
-    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
-    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
-    //     0x90,
-    //     0x5d,
-    //     0xc3};
-    // BOOST_CHECK(VerifyByteVector(buffer, expected, 17));
 }
 
 BOOST_AUTO_TEST_CASE(TEST08)
 {
-    // const std::string source = "func foo(a: double, b: double, c: double) {}";
-    // ParserDriver driver(source, "foo.hoo");
-    // auto module = driver.BuildModule();
-    // BOOST_ASSERT(module->Success());
-    // auto unit = module->GetUnit();
-    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    // X86FuncEmitter emitter(func, EMITTER_WIN64);
-    // auto code = emitter.GenerateCode();
-    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    // BOOST_CHECK_EQUAL("_Z3fooddd", code->GetName());
-    // const auto &buffer = code->GetBuffer();
-    // byte expected[22] = {
-    //     0x55,
-    //     0x48, 0x89, 0xe5,
-    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
-    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
-    //     0xf2, 0x0f, 0x11, 0x55, 0x20,
-    //     0x90,
-    //     0x5d,
-    //     0xc3};
-    // BOOST_CHECK(VerifyByteVector(buffer, expected, 22));
+    const std::string source = "func foo(a: double, b: double, c: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooddd"));
+    BOOST_CHECK(foo.TestStack(0, 3));
+    BOOST_CHECK(foo.TestDoubleArg(0, "a"));
+    BOOST_CHECK(foo.TestDoubleArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0x10,
+                              0xf2, 0xf, 0x11, 0x4d, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0xf8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xf0,
+                              0xf2, 0xf, 0x11, 0x55, 0xe8,
+                              0x90,
+                              0x5d,
+                              0xc3}));
 }
 
 BOOST_AUTO_TEST_CASE(TEST09)
 {
-    // const std::string source = "func foo(a: double, b: double, c: double, d:double) {}";
-    // ParserDriver driver(source, "foo.hoo");
-    // auto module = driver.BuildModule();
-    // BOOST_ASSERT(module->Success());
-    // auto unit = module->GetUnit();
-    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    // X86FuncEmitter emitter(func, EMITTER_WIN64);
-    // auto code = emitter.GenerateCode();
-    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    // BOOST_CHECK_EQUAL("_Z3foodddd", code->GetName());
-    // const auto &buffer = code->GetBuffer();
-    // byte expected[27] = {
-    //     0x55,
-    //     0x48, 0x89, 0xe5,
-    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
-    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
-    //     0xf2, 0x0f, 0x11, 0x55, 0x20,
-    //     0xf2, 0x0f, 0x11, 0x5d, 0x28,
-    //     0x90,
-    //     0x5d,
-    //     0xc3};
-    // BOOST_CHECK(VerifyByteVector(buffer, expected, 27));
+    const std::string source = "func foo(a: double, b: double, c: double, d: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3foodddd"));
+    BOOST_CHECK(foo.TestStack(0, 4));
+    BOOST_CHECK(foo.TestDoubleArg(0, "a"));
+    BOOST_CHECK(foo.TestDoubleArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0x10,
+                              0xf2, 0xf, 0x11, 0x4d, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0xf8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xf0,
+                              0xf2, 0xf, 0x11, 0x55, 0xe8,
+                              0xf2, 0xf, 0x11, 0x5d, 0xe0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
 }
 
 BOOST_AUTO_TEST_CASE(TEST10)
 {
-    // const std::string source = "func foo(a: int, b: double, c: int, d:double) {}";
-    // ParserDriver driver(source, "foo.hoo");
-    // auto module = driver.BuildModule();
-    // BOOST_ASSERT(module->Success());
-    // auto unit = module->GetUnit();
-    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    // X86FuncEmitter emitter(func, EMITTER_WIN64);
-    // auto code = emitter.GenerateCode();
-    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    // BOOST_CHECK_EQUAL("_Z3fooxdxd", code->GetName());
-    // const auto &buffer = code->GetBuffer();
-    // byte expected[25] = {
-    //     0x55,
-    //     0x48, 0x89, 0xe5,
-    //     0x48, 0x89, 0x4d, 0x10,
-    //     0xf2, 0x0f, 0x11, 0x4d, 0x18,
-    //     0x4c, 0x89, 0x45, 0x20,
-    //     0xf2, 0x0f, 0x11, 0x5d, 0x28,
-    //     0x90,
-    //     0x5d,
-    //     0xc3};
-    // BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
+    const std::string source = "func foo(a: int, b: double, c: int, d:double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxdxd"));
+    BOOST_CHECK(foo.TestStack(0, 4));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestDoubleArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0xf2, 0xf, 0x11, 0x4d, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0xf2, 0xf, 0x11, 0x45, 0xf0,
+                              0x48, 0x89, 0x75, 0xe8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xe0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
 }
 
 BOOST_AUTO_TEST_CASE(TEST11)
 {
-    // const std::string source = "func foo(a: double, b: int, c: double, d:int) {}";
-    // ParserDriver driver(source, "foo.hoo");
-    // auto module = driver.BuildModule();
-    // BOOST_ASSERT(module->Success());
-    // auto unit = module->GetUnit();
-    // auto func = (FunctionDefinition *)(*unit->GetItems().begin());
-    // BOOST_ASSERT("foo" == func->GetDeclaration()->GetName());
-    // X86FuncEmitter emitter(func, EMITTER_WIN64);
-    // auto code = emitter.GenerateCode();
-    // BOOST_CHECK_EQUAL(CODE_TYPE_FUNCTION, code->GetType());
-    // BOOST_CHECK_EQUAL("_Z3foodxdx", code->GetName());
-    // const auto &buffer = code->GetBuffer();
-    // byte expected[25] = {
-    //     0x55,
-    //     0x48, 0x89, 0xe5,
-    //     0xf2, 0x0f, 0x11, 0x45, 0x10,
-    //     0x48, 0x89, 0x55, 0x18,
-    //     0xf2, 0x0f, 0x11, 0x55, 0x20,
-    //     0x4c, 0x89, 0x4d, 0x28,
-    //     0x90,
-    //     0x5d,
-    //     0xc3};
-    // BOOST_CHECK(VerifyByteVector(buffer, expected, 25));
+    const std::string source = "func foo(a: double, b: int, c: double, d:int) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3foodxdx"));
+    BOOST_CHECK(foo.TestStack(0, 4));
+    BOOST_CHECK(foo.TestDoubleArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestIntArg(3, "d"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0x4c, 0x89, 0x4d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0xf8,
+                              0x48, 0x89, 0x7d, 0xf0,
+                              0xf2, 0xf, 0x11, 0x4d, 0xe8,
+                              0x48, 0x89, 0x75, 0xe0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
