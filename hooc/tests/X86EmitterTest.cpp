@@ -615,4 +615,442 @@ BOOST_AUTO_TEST_CASE(TEST19)
                               0xc3}));
 }
 
+BOOST_AUTO_TEST_CASE(TEST20)
+{
+    const std::string source = "func foo(a: double, b: double, c: double, \
+                                d: double, e: double, f: double, g: double, h: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3foodddddddd"));
+    BOOST_CHECK(foo.TestStack(0, 8));
+    BOOST_CHECK(foo.TestDoubleArg(0, "a"));
+    BOOST_CHECK(foo.TestDoubleArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestDoubleArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0x10,
+                              0xf2, 0xf, 0x11, 0x4d, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0xf8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xf0,
+                              0xf2, 0xf, 0x11, 0x55, 0xe8,
+                              0xf2, 0xf, 0x11, 0x5d, 0xe0,
+                              0xf2, 0xf, 0x11, 0x65, 0xd8,
+                              0xf2, 0xf, 0x11, 0x6d, 0xd0,
+                              0xf2, 0xf, 0x11, 0x75, 0xc8,
+                              0xf2, 0xf, 0x11, 0x7d, 0xc0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST21)
+{
+    const std::string source = "func foo(a: double, b: double, c: double, \
+                                d: double, e: double, f: double, g: double, \
+                                h: double, i: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooddddddddd"));
+    BOOST_CHECK(foo.TestStack(0, 9));
+    BOOST_CHECK(foo.TestDoubleArg(0, "a"));
+    BOOST_CHECK(foo.TestDoubleArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestDoubleArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0x10,
+                              0xf2, 0xf, 0x11, 0x4d, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0xf8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xf0,
+                              0xf2, 0xf, 0x11, 0x55, 0xe8,
+                              0xf2, 0xf, 0x11, 0x5d, 0xe0,
+                              0xf2, 0xf, 0x11, 0x65, 0xd8,
+                              0xf2, 0xf, 0x11, 0x6d, 0xd0,
+                              0xf2, 0xf, 0x11, 0x75, 0xc8,
+                              0xf2, 0xf, 0x11, 0x7d, 0xc0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST22)
+{
+    const std::string source = "func foo(a: double, b: double, c: double, \
+                                d: double, e: double, f: double, g: double, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3foodddddddddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestDoubleArg(0, "a"));
+    BOOST_CHECK(foo.TestDoubleArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestDoubleArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0x10,
+                              0xf2, 0xf, 0x11, 0x4d, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0xf2, 0xf, 0x11, 0x45, 0xf8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xf0,
+                              0xf2, 0xf, 0x11, 0x55, 0xe8,
+                              0xf2, 0xf, 0x11, 0x5d, 0xe0,
+                              0xf2, 0xf, 0x11, 0x65, 0xd8,
+                              0xf2, 0xf, 0x11, 0x6d, 0xd0,
+                              0xf2, 0xf, 0x11, 0x75, 0xc8,
+                              0xf2, 0xf, 0x11, 0x7d, 0xc0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST23)
+{
+    const std::string source = "func foo(a: int, b: double, c: double, \
+                                d: double, e: double, f: double, g: double, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxddddddddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestDoubleArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestDoubleArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0xf2, 0xf, 0x11, 0x4d, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0xf2, 0xf, 0x11, 0x45, 0xf0,
+                              0xf2, 0xf, 0x11, 0x4d, 0xe8,
+                              0xf2, 0xf, 0x11, 0x55, 0xe0,
+                              0xf2, 0xf, 0x11, 0x5d, 0xd8,
+                              0xf2, 0xf, 0x11, 0x65, 0xd0,
+                              0xf2, 0xf, 0x11, 0x6d, 0xc8,
+                              0xf2, 0xf, 0x11, 0x75, 0xc0,
+                              0xf2, 0xf, 0x11, 0x7d, 0xb8,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST24)
+{
+    const std::string source = "func foo(a: int, b: int, c: double, \
+                                d: double, e: double, f: double, g: double, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxdddddddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestDoubleArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestDoubleArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0xf2, 0xf, 0x11, 0x55, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0xf2, 0xf, 0x11, 0x45, 0xe8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xe0,
+                              0xf2, 0xf, 0x11, 0x55, 0xd8,
+                              0xf2, 0xf, 0x11, 0x5d, 0xd0,
+                              0xf2, 0xf, 0x11, 0x65, 0xc8,
+                              0xf2, 0xf, 0x11, 0x6d, 0xc0,
+                              0xf2, 0xf, 0x11, 0x75, 0xb8,
+                              0xf2, 0xf, 0x11, 0x7d, 0xb0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST25)
+{
+    const std::string source = "func foo(a: int, b: int, c: int, \
+                                d: double, e: double, f: double, g: double, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxxddddddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestDoubleArg(3, "d"));
+    BOOST_CHECK(foo.TestDoubleArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0xf2, 0xf, 0x11, 0x5d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0x48, 0x89, 0x55, 0xe8,
+                              0xf2, 0xf, 0x11, 0x45, 0xe0,
+                              0xf2, 0xf, 0x11, 0x4d, 0xd8,
+                              0xf2, 0xf, 0x11, 0x55, 0xd0,
+                              0xf2, 0xf, 0x11, 0x5d, 0xc8,
+                              0xf2, 0xf, 0x11, 0x65, 0xc0,
+                              0xf2, 0xf, 0x11, 0x6d, 0xb8,
+                              0xf2, 0xf, 0x11, 0x75, 0xb0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST26)
+{
+    const std::string source = "func foo(a: int, b: int, c: int, \
+                                d: int, e: double, f: double, g: double, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxxxdddddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestIntArg(3, "d"));
+    BOOST_CHECK(foo.TestDoubleArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0x4c, 0x89, 0x4d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0x48, 0x89, 0x55, 0xe8,
+                              0x48, 0x89, 0x4d, 0xe0,
+                              0xf2, 0xf, 0x11, 0x45, 0xd8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xd0,
+                              0xf2, 0xf, 0x11, 0x55, 0xc8,
+                              0xf2, 0xf, 0x11, 0x5d, 0xc0,
+                              0xf2, 0xf, 0x11, 0x65, 0xb8,
+                              0xf2, 0xf, 0x11, 0x6d, 0xb0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST27)
+{
+    const std::string source = "func foo(a: int, b: int, c: int, \
+                                d: int, e: int, f: double, g: double, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxxxxddddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestIntArg(3, "d"));
+    BOOST_CHECK(foo.TestIntArg(4, "e"));
+    BOOST_CHECK(foo.TestDoubleArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0x4c, 0x89, 0x4d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0x48, 0x89, 0x55, 0xe8,
+                              0x48, 0x89, 0x4d, 0xe0,
+                              0x4c, 0x89, 0x45, 0xd8,
+                              0xf2, 0xf, 0x11, 0x45, 0xd0,
+                              0xf2, 0xf, 0x11, 0x4d, 0xc8,
+                              0xf2, 0xf, 0x11, 0x55, 0xc0,
+                              0xf2, 0xf, 0x11, 0x5d, 0xb8,
+                              0xf2, 0xf, 0x11, 0x65, 0xb0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST28)
+{
+    const std::string source = "func foo(a: int, b: int, c: int, \
+                                d: int, e: int, f: int, g: double, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxxxxxdddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestIntArg(3, "d"));
+    BOOST_CHECK(foo.TestIntArg(4, "e"));
+    BOOST_CHECK(foo.TestIntArg(5, "f"));
+    BOOST_CHECK(foo.TestDoubleArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0x4c, 0x89, 0x4d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0x48, 0x89, 0x55, 0xe8,
+                              0x48, 0x89, 0x4d, 0xe0,
+                              0x4c, 0x89, 0x45, 0xd8,
+                              0x4c, 0x89, 0x4d, 0xd0,
+                              0xf2, 0xf, 0x11, 0x45, 0xc8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xc0,
+                              0xf2, 0xf, 0x11, 0x55, 0xb8,
+                              0xf2, 0xf, 0x11, 0x5d, 0xb0,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
+BOOST_AUTO_TEST_CASE(TEST29)
+{
+    const std::string source = "func foo(a: int, b: int, c: int, \
+                                d: int, e: int, f: int, g: int, \
+                                h: double, i: double, j: double) {}";
+    ModuleTestHelper helper(source, "foo.hoo");
+    auto foo = helper.GetFunctionTestHelper(0);
+    BOOST_CHECK(foo.HasNames("foo", "_Z3fooxxxxxxxddd"));
+    BOOST_CHECK(foo.TestStack(0, 10));
+    BOOST_CHECK(foo.TestIntArg(0, "a"));
+    BOOST_CHECK(foo.TestIntArg(1, "b"));
+    BOOST_CHECK(foo.TestIntArg(2, "c"));
+    BOOST_CHECK(foo.TestIntArg(3, "d"));
+    BOOST_CHECK(foo.TestIntArg(4, "e"));
+    BOOST_CHECK(foo.TestIntArg(5, "f"));
+    BOOST_CHECK(foo.TestIntArg(6, "g"));
+    BOOST_CHECK(foo.TestDoubleArg(7, "h"));
+    BOOST_CHECK(foo.TestDoubleArg(8, "i"));
+    BOOST_CHECK(foo.TestDoubleArg(9, "j"));
+    BOOST_CHECK(foo.TestCode({0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x4d, 0x10,
+                              0x48, 0x89, 0x55, 0x18,
+                              0x4c, 0x89, 0x45, 0x20,
+                              0x4c, 0x89, 0x4d, 0x28,
+                              0x90,
+                              0x5d,
+                              0xc3},
+                             {0x55,
+                              0x48, 0x89, 0xe5,
+                              0x48, 0x89, 0x7d, 0xf8,
+                              0x48, 0x89, 0x75, 0xf0,
+                              0x48, 0x89, 0x55, 0xe8,
+                              0x48, 0x89, 0x4d, 0xe0,
+                              0x4c, 0x89, 0x45, 0xd8,
+                              0x4c, 0x89, 0x4d, 0xd0,
+                              0xf2, 0xf, 0x11, 0x45, 0xc8,
+                              0xf2, 0xf, 0x11, 0x4d, 0xc0,
+                              0xf2, 0xf, 0x11, 0x55, 0xb8,
+                              0x90,
+                              0x5d,
+                              0xc3}));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

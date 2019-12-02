@@ -236,18 +236,12 @@ namespace hooc {
 
             void X86FuncEmitter::SaveArgumentsLinux64(const std::list<VariableDeclaration *> &arguments,
                                                       byte_vector &header) {
-                size_t param_index = 0;
                 size_t float_index = 0;
                 size_t other_index = 0;
                 int8_t position = -8;                
                 for(auto arg: arguments) {
-                    if((param_index >= LINUX_X64_FLOAT_REG_COUNT) && (param_index >= LINUX_X64_REG_COUNT)) {
-                        break;
-                    }
-
                     if(IsDouble(arg)) {
                         if(float_index >= LINUX_X64_FLOAT_REG_COUNT) {
-                            param_index ++;
                             continue;
                         }
                         auto reg = LINUX_X64_ARG_DOUBLE_REGS[float_index];
@@ -256,7 +250,6 @@ namespace hooc {
                         float_index ++;
                     } else {
                         if(other_index >= LINUX_X64_REG_COUNT) {
-                            param_index ++;
                             continue;
                         }
                         auto reg = LINUX_X64_ARG_INT_REGS[other_index];
@@ -266,7 +259,6 @@ namespace hooc {
                     }
 
                     position -= 8;
-                    param_index ++;
                 }
             }
 
