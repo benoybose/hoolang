@@ -156,33 +156,6 @@ bool FunctionTestHelper::TestStack(size_t depth, size_t count) {
     return true;
 }
 
-bool FunctionTestHelper::TestStackItem(size_t index, const std::string& name, 
-                                        const StackItemType stack_item_type, 
-                                        const TypeSpecificationType type_specification_type,
-                                        const std::string &type_name) {
-    BOOST_CHECK_MESSAGE(nullptr != this->_func, "Function definition must not be null.");
-    if(nullptr == this->_func) {
-        return false;
-    }
-
-    auto context_win64 = this->_emitter_win64.GetFunctionContext();
-    const auto position_win64 = 16 + (index * 8);
-    if (!TestStackItem(context_win64, index, name, position_win64, stack_item_type,
-                       type_specification_type, 
-                       type_name)) {
-        return false;
-    }
-    auto context_linux64 = this->_emitter_linux64.GetFunctionContext();
-    const auto position_linux64 = -8 + (index * -8);
-    if (!TestStackItem(context_linux64, index, name, position_linux64, stack_item_type,
-                       type_specification_type,
-                       type_name)) {
-        return false;
-    }
-
-    return true;
-}
-
 bool FunctionTestHelper::TestStackItem(const FuncEmitterContext* context, 
                                 size_t index, const std::string& name, 
                                 int64_t position, 
@@ -235,12 +208,14 @@ bool FunctionTestHelper::TestStackItem(const FuncEmitterContext* context,
     return true;
 }
 
-bool FunctionTestHelper::TestIntArg(size_t index, const std::string &name) {
-    return TestStackItem(index, name, STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT);
+bool FunctionTestHelper::TestIntItem(size_t index, const std::string &name, const int offset) {
+    // return TestStackItem(index, name, STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_INT);
+    return false;
 }
 
-bool FunctionTestHelper::TestDoubleArg(size_t index, const std::string &name) {
-    return TestStackItem(index, name, STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_DOUBLE);
+bool FunctionTestHelper::TestDoubleItem(size_t index, const std::string &name, const int offset) {
+    // return TestStackItem(index, name, STACK_ITEM_ARGUMENT, TYPE_SPEC_BASIC, NAME_DOUBLE);
+    return false;
 }
 
 bool FunctionTestHelper::TestCode(byte_vector expected_win64, byte_vector expected_linux64) {

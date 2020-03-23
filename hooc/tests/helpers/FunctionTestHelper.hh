@@ -60,14 +60,9 @@ public:
 
     bool TestStack(size_t depth, size_t count);
 
-    bool TestStackItem(size_t index, const std::string &name,
-                       const StackItemType stack_item_type,
-                       const TypeSpecificationType type_specification_type,
-                       const std::string& type_name);
+    bool TestIntItem(size_t index, const std::string &name, const int offset);
 
-    bool TestIntArg(size_t index, const std::string &name);
-
-    bool TestDoubleArg(size_t index, const std::string &name);
+    bool TestDoubleItem(size_t index, const std::string &name, const int offset);
 
     bool TestCode(byte_vector expected_win64, byte_vector expected_linux64);
 
