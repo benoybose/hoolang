@@ -12,7 +12,7 @@ IF (${CMAKE_COMPILER_IS_GNUCC} MATCHES 1)
     SET(CMAKE_CXX_FLAGS "-static-libgcc -static-libstdc++")
 ENDIF ()
 
-INCLUDE("${CMAKE_HOME_DIRECTORY}/packages/packages.cmake")
+INCLUDE("${CMAKE_SOURCE_DIR}/packages/index.cmake")
 
 SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_MULTITHREADED ON)
