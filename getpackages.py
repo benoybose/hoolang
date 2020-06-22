@@ -4,6 +4,7 @@ import argparse
 import logging
 import tempfile
 import os
+import re
 
 from zipfile import ZipFile
 
@@ -15,6 +16,13 @@ libindex = {
             'compiler': 'msvc142',
             'arch': 'x64',
             'url': 'https://www.dropbox.com/s/eigwzfu8l45748e/antlr4-runtime-cpp-4.8-x64-windows-msvc142.zip?dl=1'
+        },
+        {
+            'name': 'boost',
+            'version': '1.73',
+            'compiler': 'msvc142',
+            'arch': 'x64',
+            'url': 'https://www.dropbox.com/s/m5ymgzp3kmuiqxr/boost-1.73.0-x64-windows-msvc142.zip?dl=1'
         }
     ],
     'linux': [
@@ -97,12 +105,20 @@ def main():
                 if pkgres.getcode() != 200:
                     logging.error("failed to download package from %s" % packageurl)
                     continue
+                contentlen = int(pkgres.getheader('Content-Length'))
+                filename = pkgres.getheader('Content-Disposition')
+                pattern = re.compile('(attachment\\; filename\\=\\")([\w\d\\-\\.]+)(\\")')
+                filename = pattern.match(filename).group(2)
 
+                downloadedlen = 0
                 with tempfile.NamedTemporaryFile('w+b', delete=False) as fp:
                     pkgfile = fp.name
                     buffer = pkgres.read(SIZE_ONE_MB)
                     while 0 < len(buffer):
+                        downloadedlen += len(buffer)
                         fp.write(buffer)
+                        percent = "{:3.2%}".format(downloadedlen / contentlen)
+                        print("[%s | %s]" % (filename, percent))
                         buffer = pkgres.read(SIZE_ONE_MB)
             print('download completed')
             print("extracting package '%s-%s-%s-%s'" % (package['name'], package['version'],
@@ -136,7 +152,6 @@ def main():
             with open(cmakefilepath, 'w') as cfp:
                 cfp.writelines(processedlines)
 
-            # INCLUDE("${CMAKE_SOURCE_DIR}/packages/antlr4-runtime-cpp/4.8/x64/msvc142/package.cmake")
             cmkinc = "INCLUDE(\"${CMAKE_SOURCE_DIR}/packages/%s/package.cmake\")" % pkgrelpath
             cmkindexpath = os.path.join(pkgroot, 'index.cmake')
             if not os.path.exists(cmkindexpath):
