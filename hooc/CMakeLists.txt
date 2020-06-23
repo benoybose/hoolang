@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.6)
 PROJECT(hooc CXX)
 
 LINK_DIRECTORIES(${HOO_DIST} ${Boost_LIBRARY_DIRS})
-ADD_DEFINITIONS(-DANTLR4CPP_STATIC)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src
         ${CMAKE_HOME_DIRECTORY}/hoo/include
@@ -127,7 +126,6 @@ SET(hooc_source_files
         src/emitter/x86/X86FuncEmitter.cpp src/NotImplementedException.cpp src/NotImplementedException.hh src/emitter/EmitterConfig.cpp src/emitter/EmitterConfig.hh)
 
 ADD_LIBRARY(hooc STATIC ${hooc_header_files} ${hooc_source_files})
-
 SET(hooc_link_libraries hooc ${Boost_LIBRARIES})
 
 ADD_EXECUTABLE(
@@ -153,5 +151,4 @@ ADD_EXECUTABLE(
 		tests/NameManglerTest.cpp tests/helpers/ModuleTestHelper.cpp tests/helpers/ModuleTestHelper.hh tests/helpers/FunctionTestHelper.cpp tests/helpers/FunctionTestHelper.hh)
 
 ADD_DEPENDENCIES(hooc_test antlr4_static)
-TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_static)
-
+TARGET_LINK_LIBRARIES(hooc_test ${hooc_link_libraries} antlr4_shared)
