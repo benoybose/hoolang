@@ -101,6 +101,7 @@ def main():
             packageurl = package['url']
             print("downloading package '%s'" % packageurl)
             pkgfile = None
+            filename = None
             with urllib.request.urlopen(packageurl) as pkgres:
                 if pkgres.getcode() != 200:
                     logging.error("failed to download package from %s" % packageurl)
@@ -121,8 +122,7 @@ def main():
                         print("[%s | %s]" % (filename, percent))
                         buffer = pkgres.read(SIZE_ONE_MB)
             print('download completed')
-            print("extracting package '%s-%s-%s-%s'" % (package['name'], package['version'],
-            package['arch'], package['compiler']))
+            print("extracting package '%s'" % filename)
             pkgdir = os.path.join(pkgroot, package['name'])
             pkgdir = os.path.join(pkgdir, package['version'])
             pkgdir = os.path.join(pkgdir, package['arch'])
@@ -156,16 +156,22 @@ def main():
             cmkindexpath = os.path.join(pkgroot, 'index.cmake')
             if not os.path.exists(cmkindexpath):
                 with open(cmkindexpath, 'w') as ifp:
-                    ifp.writelines([cmkinc])
+                    ifp.write('# index of all packages to be included\n')
+                    ifp.close()
+            includedlines = []
+            with open(cmkindexpath, 'r') as ifp:
+                includedlines = ifp.read().splitlines()
+                ifp.close()
+
+            if cmkinc in includedlines:
+                logging.warning("package is found already included in index")
             else:
-                lines = []
-                with open(cmkindexpath, 'r') as ifp:
-                    lines = ifp.readlines()
-                if cmkinc in lines:
-                    logging.warning("package is found already included in index")
-                else:
-                    with open(cmkindexpath, 'a') as ifp:
-                        ifp.writelines([cmkinc])
+                includedlines.append(cmkinc)
+                with open(cmkindexpath, 'w') as ifp:
+                    for includedline in includedlines:
+                        ifp.write(includedline)
+                        ifp.write('\n')
+                    ifp.close()
 
     except Exception as e:
         logging.error(e)
