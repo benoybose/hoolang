@@ -1,0 +1,95 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [{
+            "label": "Get Packages (x64)",
+            "type": "shell",
+            "command": "python3",
+            "args": ["getpackages.py", "--arch", "x64"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Get Packages (x86)",
+            "type": "shell",
+            "command": "python3",
+            "args": ["getpackages.py", "--arch", "x86"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Configure (Release)",
+            "type": "shell",
+            "command": "cmake",
+            "windows": {
+                "args": [
+                    "-G",
+                    "NMake Makefiles",
+                    "-B",
+                    "./Build/Release",
+                    "-DCMAKE_BUILD_TYPE=Release"
+                ],
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build (Release)",
+            "type": "shell",
+            "windows": {
+                "command": "nmake"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Build/Release"
+            },
+            "problemMatcher": "$vsls",
+            "dependsOn": ["Configure (Release)"]
+        },
+        {
+            "label": "Configure (Debug)",
+            "type": "shell",
+            "command": "cmake",
+            "windows": {
+                "args": [
+                    "-G",
+                    "NMake Makefiles",
+                    "-B",
+                    "./Build/Debug",
+                    "-DCMAKE_BUILD_TYPE=Debug"
+                ],
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build (Debug)",
+            "type": "shell",
+            "windows": {
+                "command": "nmake"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Build/Debug"
+            },
+            "problemMatcher": "$vsls",
+            "dependsOn": ["Configure (Debug)"]
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "windows": {
+                "command": "rmdir",
+                "args": ["/S/Q", "${workspaceFolder}\\Build"]
+            },
+            "problemMatcher": []
+        }
+    ]
+}
