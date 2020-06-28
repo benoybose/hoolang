@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.6)
+CMAKE_POLICY(SET CMP0074 NEW)
+PROJECT(hootest)
+
+SET(HOO_TEST_HEADERS TestUnit.hh TestResult.hh)
+SET(HOO_TEST_SOURCES TestUnit.cpp TestResult.cpp)
+
+ADD_LIBRARY(hootest STATIC ${HOO_TEST_HEADERS} ${HOO_TEST_SOURCES})
