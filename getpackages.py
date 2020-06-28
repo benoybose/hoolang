@@ -23,13 +23,6 @@ libindex = {
             'compiler': 'msvc142',
             'arch': 'x64',
             'url': 'https://www.dropbox.com/s/m5ymgzp3kmuiqxr/boost-1.73.0-x64-windows-msvc142.zip?dl=1'
-        },
-        {
-            'name': 'googletest',
-            'version': '1.10',
-            'compiler': 'msvc142',
-            'arch': 'x64',
-            'url': 'https://www.dropbox.com/s/m3q6e897lsw4cx8/googletest-1.10-x64-windows-msvc142.zip?dl=1'
         }
     ],
     'linux': [
