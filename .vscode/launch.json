@@ -5,15 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug",
+            "name": "Debug UtilityTest",
             "type": "cppvsdbg",
             "request": "launch",
             "windows": {
-                "program": "hooc_test.exe",
+                "program": "utlitytest.exe",
+                "cwd": "${workspaceFolder}\\Build\\Debug\\hoocommon\\",
             },
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/Build/Debug/hooc/",
             "environment": [],
             "externalConsole": false
         }

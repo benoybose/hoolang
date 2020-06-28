@@ -3,7 +3,7 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [{
-            "label": "Get Packages (x64)",
+            "label": "Hoo: Get Packages (x64)",
             "type": "shell",
             "command": "python3",
             "args": ["getpackages.py", "--arch", "x64"],
@@ -13,7 +13,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Get Packages (x86)",
+            "label": "Hoo: Get Packages (x86)",
             "type": "shell",
             "command": "python3",
             "args": ["getpackages.py", "--arch", "x86"],
@@ -23,7 +23,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Configure (Release)",
+            "label": "Hoo: Configure (Release)",
             "type": "shell",
             "command": "cmake",
             "windows": {
@@ -41,7 +41,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Build (Release)",
+            "label": "Hoo: Build (Release)",
             "type": "shell",
             "windows": {
                 "command": "nmake"
@@ -50,10 +50,10 @@
                 "cwd": "${workspaceFolder}/Build/Release"
             },
             "problemMatcher": "$vsls",
-            "dependsOn": ["Configure (Release)"]
+            "dependsOn": ["Hoo: Configure (Release)"]
         },
         {
-            "label": "Configure (Debug)",
+            "label": "Hoo: Configure (Debug)",
             "type": "shell",
             "command": "cmake",
             "windows": {
@@ -71,7 +71,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Build (Debug)",
+            "label": "Hoo: Build (Debug)",
             "type": "shell",
             "windows": {
                 "command": "nmake"
@@ -80,16 +80,53 @@
                 "cwd": "${workspaceFolder}/Build/Debug"
             },
             "problemMatcher": "$vsls",
-            "dependsOn": ["Configure (Debug)"]
+            "dependsOn": ["Hoo: Configure (Debug)"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
         },
         {
-            "label": "Clean",
+            "label": "Hoo: Clean",
             "type": "shell",
             "windows": {
                 "command": "rmdir",
                 "args": ["/S/Q", "${workspaceFolder}\\Build"]
             },
-            "problemMatcher": []
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "Hoo: Test (Debug)",
+            "type": "shell",
+            "windows": {
+                "command": "nmake",
+                "args": [ "test" ]
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/Build/Debug"
+            },
+            "problemMatcher": [],
+            "dependsOn": ["Hoo: Build (Debug)"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
         }
     ]
 }

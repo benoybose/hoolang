@@ -1,0 +1,23 @@
+cmake_minimum_required(VERSION 3.6)
+CMAKE_POLICY(SET CMP0074 NEW)
+PROJECT(hoocommon)
+
+SET(HOO_COMMON_HEADER 
+    Logger.hh
+    Utility.hh
+    NotImplementedException.hh)
+
+SET(HOO_COMMON_SOURCE
+    Logger.cpp
+    Utility.cpp
+    NotImplementedException.cpp)
+
+ADD_LIBRARY(hoocommon STATIC ${HOO_COMMON_HEADER} ${HOO_COMMON_SOURCE})
+TARGET_INCLUDE_DIRECTORIES(hoocommon PRIVATE ${Boost_INCLUDE_DIRS})
+
+ADD_EXECUTABLE(utlitytest ./test/UtilityTest.cpp)
+TARGET_INCLUDE_DIRECTORIES(utlitytest PRIVATE
+    ${CMAKE_SOURCE_DIR}/hootest
+    ${CMAKE_SOURCE_DIR}/hoocommon)
+TARGET_LINK_LIBRARIES(utlitytest hoocommon hootest)
+ADD_TEST(UtlityTest utlitytest)
