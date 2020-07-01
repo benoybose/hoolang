@@ -28,35 +28,48 @@
 #define UTILITY_OFFSET16 16
 #define UTILITY_OFFSET24 24
 
-namespace hoo {
-    namespace common {
-        class Utility {
+namespace hoo
+{
+    namespace common
+    {
+        class Utility
+        {
         public:
             static std::vector<std::uint8_t> GetBytes(std::uint64_t value);
-            static void AppendTo(std::vector<std::uint8_t >& to, const std::vector<std::uint8_t >& from);
+
+            template<typename T>
+            static void AppendTo(std::vector<T> &to, const std::vector<T> &from)
+            {
+                to.insert(to.end(), from.begin(), from.end());
+            }
+
             static std::string ToHex(std::uint8_t byte);
-            static constexpr std::uint64_t EncodeToUInt64(std::uint8_t b0, std::uint8_t b1) {
+
+            static constexpr std::uint64_t EncodeToUInt64(std::uint8_t b0, std::uint8_t b1)
+            {
                 std::uint64_t v0 = b0;
-                std::uint64_t v1 = (uint64_t) b1 << (uint8_t) UTILITY_OFFSET8;
+                std::uint64_t v1 = (uint64_t)b1 << (uint8_t)UTILITY_OFFSET8;
                 return v1 | v0;
             }
 
-            static constexpr std::uint64_t EncodeToUInt64(std::uint8_t b0, std::uint8_t b1, std::uint8_t b2) {
+            static constexpr std::uint64_t EncodeToUInt64(std::uint8_t b0, std::uint8_t b1, std::uint8_t b2)
+            {
                 std::uint64_t v0 = b0;
-                std::uint64_t v1 = (uint64_t) b1 << (uint8_t) UTILITY_OFFSET8;
-                std::uint64_t v2 = (uint64_t) b2 << (uint8_t) UTILITY_OFFSET16;
+                std::uint64_t v1 = (uint64_t)b1 << (uint8_t)UTILITY_OFFSET8;
+                std::uint64_t v2 = (uint64_t)b2 << (uint8_t)UTILITY_OFFSET16;
                 return v2 | v1 | v0;
             }
 
             static constexpr std::uint64_t EncodeToUInt64(std::uint8_t b0, std::uint8_t b1,
-                    std::uint8_t b2, std::uint8_t b3) {
+                                                          std::uint8_t b2, std::uint8_t b3)
+            {
                 std::uint64_t v0 = b0;
-                std::uint64_t v1 = (uint64_t) b1 << (uint8_t) UTILITY_OFFSET8;
-                std::uint64_t v2 = (uint64_t) b2 << (uint8_t) UTILITY_OFFSET16;
-                std::uint64_t v3 = (uint64_t) b3 << (uint8_t) UTILITY_OFFSET24;
+                std::uint64_t v1 = (uint64_t)b1 << (uint8_t)UTILITY_OFFSET8;
+                std::uint64_t v2 = (uint64_t)b2 << (uint8_t)UTILITY_OFFSET16;
+                std::uint64_t v3 = (uint64_t)b3 << (uint8_t)UTILITY_OFFSET24;
                 return v3 | v2 | v1 | v0;
             }
         };
-    }
-}
+    } // namespace common
+} // namespace hoo
 #endif //HOOLANG_UTILITY_HH

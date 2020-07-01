@@ -66,17 +66,21 @@ namespace hoo
             }
         }
 
-        void TestUnit::StringEqual(std::string s1, std::string s2, const std::string &message)
+        void TestUnit::StringEqual(std::string orignal, std::string expected, const std::string &message)
         {
             try
             {
                 this->_assert_count += 1;
-                if (0 != s1.compare(s2))
+                if (0 != orignal.compare(expected))
                 {
                     this->_failed_count += 1;
+                    Out() << "String equality failed. Actual = \""
+                        << orignal << "\". " << "Expected = \""
+                        << expected << "\"."
+                        << std::endl;
                     if (!message.empty())
                     {
-                        Out() << message;
+                        Out() << message << std::endl;                        
                     }
                 }
             }
