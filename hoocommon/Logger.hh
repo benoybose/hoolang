@@ -23,31 +23,36 @@
 #include <string>
 #include <mutex>
 
-namespace hooc {
-    class Logger {
-    public:
-        typedef enum {
-            info,
-            warning,
-            error
-        } LogLevel;
+namespace hoo
+{
+    namespace common
+    {
+        class Logger
+        {
+        public:
+            typedef enum
+            {
+                info,
+                warning,
+                error
+            } LogLevel;
 
-    private:
-        static std::ofstream* _stream;
-        static std::mutex _write_lock;
+        private:
+            static std::ofstream *_stream;
+            static std::mutex _write_lock;
 
-    public:
-        static void Init(std::string fileName);
-        static void Log(LogLevel logLevel, std::string message);
-        static void Info(std::string message);
-        static void Warning(std::string message);
-        static void Error(std::string message);
-        static void Close();
+        public:
+            static void Init(std::string fileName);
+            static void Log(LogLevel logLevel, std::string message);
+            static void Info(std::string message);
+            static void Warning(std::string message);
+            static void Error(std::string message);
+            static void Close();
 
-    private:
-        static const std::string GetLogLevelName(LogLevel logLevel);
-    };
-}
+        private:
+            static const std::string GetLogLevelName(LogLevel logLevel);
+        };
+    } // namespace common
+} // namespace hoo
 
 #endif /* HCLOGGER_H */
-

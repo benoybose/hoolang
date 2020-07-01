@@ -26,59 +26,82 @@
 #include <boost/format.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 
+namespace hoo
+{
+    namespace common
+    {
+        std::ofstream *Logger::_stream = nullptr;
+        std::mutex Logger::_write_lock;
 
-std::ofstream* hooc::Logger::_stream = nullptr;
-std::mutex hooc::Logger::_write_lock;
-namespace hooc {
-    void Logger::Init(std::string fileName) {
-        if(fileName.empty()) {
-            hooc::Logger::_stream = nullptr;
-        } else {
-            hooc::Logger::_stream = new std::ofstream(fileName, std::ios_base::out);
+        void Logger::Init(std::string fileName)
+        {
+            if (fileName.empty())
+            {
+                Logger::_stream = nullptr;
+            }
+            else
+            {
+                Logger::_stream = new std::ofstream(fileName, std::ios_base::out);
+            }
         }
-    }
 
-    void Logger::Close() {
-        if(nullptr != hooc::Logger::_stream) {
-            hooc::Logger::_stream->close();
-            delete hooc::Logger::_stream;
+        void Logger::Close()
+        {
+            if (nullptr != Logger::_stream)
+            {
+                Logger::_stream->close();
+                delete Logger::_stream;
+            }
         }
-    }
 
-    void Logger::Log(LogLevel logLevel, std::string message) {
-        std::lock_guard<std::mutex> guard(hooc::Logger::_write_lock);
-        std::ostringstream text;
-        auto local_time = boost::posix_time::second_clock::local_time();
-        text    << "[" << local_time << "] ["
-                << hooc::Logger::GetLogLevelName(logLevel)
-                << "] " << message << std::endl;
-        text.flush();
-        std::string content = text.str();
-        if(nullptr != hooc::Logger::_stream) {
-            *hooc::Logger::_stream << content;
-        } else {
-            std::cout << content;
+        void Logger::Log(LogLevel logLevel, std::string message)
+        {
+            std::lock_guard<std::mutex> guard(Logger::_write_lock);
+            std::ostringstream text;
+            auto local_time = boost::posix_time::second_clock::local_time();
+            text << "[" << local_time << "] ["
+                 << Logger::GetLogLevelName(logLevel)
+                 << "] " << message << std::endl;
+            text.flush();
+            std::string content = text.str();
+            if (nullptr != Logger::_stream)
+            {
+                *Logger::_stream << content;
+            }
+            else
+            {
+                std::cout << content;
+            }
         }
-    }
 
-    void Logger::Info(std::string message) {
-        Logger::Log(LogLevel::info, message);
-    }
-
-    void Logger::Warning(std::string message) {
-        Logger::Log(LogLevel::warning, message);
-    }
-
-    void Logger::Error(std::string message) {
-        Logger::Log(LogLevel::error, message);
-    }
-
-    const std::string Logger::GetLogLevelName(LogLevel logLevel) {
-        switch(logLevel)  {
-            case hooc::Logger::error: return std::string("Error");
-            case hooc::Logger::warning: return std::string("Warning");
-            case hooc::Logger::info: return std::string("Information");
-            default: return std::string("Verbose");
+        void Logger::Info(std::string message)
+        {
+            Logger::Log(LogLevel::info, message);
         }
-    }
-}
+
+        void Logger::Warning(std::string message)
+        {
+            Logger::Log(LogLevel::warning, message);
+        }
+
+        void Logger::Error(std::string message)
+        {
+            Logger::Log(LogLevel::error, message);
+        }
+
+        const std::string Logger::GetLogLevelName(LogLevel logLevel)
+        {
+            switch (logLevel)
+            {
+            case Logger::error:
+                return std::string("Error");
+            case Logger::warning:
+                return std::string("Warning");
+            case Logger::info:
+                return std::string("Information");
+            default:
+                return std::string("Verbose");
+            }
+        }
+    } // namespace common
+} // namespace hooc
