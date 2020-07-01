@@ -24,8 +24,8 @@
 
 using namespace std;
 
-namespace hooc {
-    namespace misc {
+namespace hoo {
+    namespace common {
 
         const char UTILITY_HEX_DIGITS[16] = {
                 '0', '1', '2', '3',
@@ -34,14 +34,25 @@ namespace hooc {
                 'C', 'D', 'E', 'F' };
         const char UTILITY_HEX_BASE = 16;
 
+        const uint64_t MASK[8] = {
+            0xFF00000000000000,
+            0x00FF000000000000,
+            0x0000FF0000000000,
+            0x000000FF00000000,
+            0x00000000FF000000,
+            0x0000000000FF0000,
+            0x000000000000FF00,
+            0x00000000000000FF
+        };
+
         vector<uint8_t> Utility::GetBytes(std::uint64_t value) {
             vector<uint8_t> bytes;
             bool started = false;
 
             for(size_t index = 0; index < 8; index++) {
-                uint8_t shift_offset = 8 * (8 - (index + 1));
-                uint64_t mask = 0x00000000000000FF << shift_offset; // NOLINT(hicpp-signed-bitwise)
+                uint64_t mask = MASK[index];
                 uint64_t masked_value = value & mask;
+                uint8_t shift_offset = 8 * (8 - (index + 1));
                 masked_value >>= shift_offset;
                 auto byte = (uint8_t) masked_value;
                 if (!started) {

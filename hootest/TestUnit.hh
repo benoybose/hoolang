@@ -196,7 +196,8 @@ namespace hoo
             void DoesNotThrowAny(std::function<void()> code, const std::string &message);
 
             template <typename T>
-            void Count(const std::vector<T> &items, size_t expected, const std::string &message)
+            void Count(const std::vector<T> &items, size_t expected,
+                       const std::string &message = "")
             {
                 try
                 {
@@ -210,8 +211,7 @@ namespace hoo
                               << std::endl;
                         if (!message.empty())
                         {
-                            Out() << message;
-                            Out() << std::endl;
+                            Out() << message << std::endl;
                         }
                     }
                 }
@@ -222,7 +222,8 @@ namespace hoo
             }
 
             template <typename T>
-            void Count(const std::list<T> &items, size_t expected, const std::string &message)
+            void Count(const std::list<T> &items, size_t expected,
+                       const std::string &message = "")
             {
                 try
                 {
@@ -232,10 +233,11 @@ namespace hoo
                         this->_failed_count += 1;
                         Out() << "Count test failed. Actual = \""
                               << std::to_string(items.size()) << "\". Expected = \""
-                              << std::to_string(expected) "\"";
+                              << std::to_string(expected) "\".";
+                              << std::endl;
                         if (!message.empty())
                         {
-                            Out() << message;
+                            Out() << message << std::endl;
                         }
                     }
                 }
@@ -246,7 +248,8 @@ namespace hoo
             }
 
             template <typename T>
-            void At(const std::vector<T> &items, size_t index, T expected, const std::string &message)
+            void At(const std::vector<T> &items, size_t index, T expected, 
+            const std::string &message = "")
             {
                 try
                 {
@@ -261,6 +264,13 @@ namespace hoo
                         if (original != expected)
                         {
                             this->_failed_count += 1;
+                            Out() << "Value at index " << index << " failed. "
+                                << ". Actual = \"" << std::to_string(original) << "\""
+                                << ". Expected = \"" << std::to_string(expected) << "\"."
+                                << std::endl;
+                            if (!message.empty()) {
+                                Out() << message << std::endl;
+                            }
                         }
                     }
                 }

@@ -18,12 +18,18 @@
 
 #include "NotImplementedException.hh"
 
-namespace hooc {
-    NotImplementedException::NotImplementedException() :
-            runtime_error("Feature not implemented.") {
-    }
+namespace hoo
+{
+        namespace common
+        {
+                NotImplementedException::NotImplementedException()
+                    : runtime_error("Feature not implemented.")
+                {
+                }
 
-    NotImplementedException::NotImplementedException(const std::string &arg) :
-            runtime_error(std::string("Feature '") + arg + std::string("' is not implemented.")) {
-    }
-}
+                NotImplementedException::NotImplementedException(const std::string &arg)
+                    : runtime_error(std::string("Feature '") + arg + std::string("' is not implemented."))
+                {
+                }
+        } // namespace common
+} // namespace hoo

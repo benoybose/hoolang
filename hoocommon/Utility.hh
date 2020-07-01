@@ -28,8 +28,8 @@
 #define UTILITY_OFFSET16 16
 #define UTILITY_OFFSET24 24
 
-namespace hooc {
-    namespace misc {
+namespace hoo {
+    namespace common {
         class Utility {
         public:
             static std::vector<std::uint8_t> GetBytes(std::uint64_t value);

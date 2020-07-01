@@ -21,12 +21,17 @@
 #ifndef HOOLANG_NOTIMPLEMENTEDEXCEPTION_HH
 #define HOOLANG_NOTIMPLEMENTEDEXCEPTION_HH
 
-namespace hooc {
-    class NotImplementedException : public std::runtime_error {
-    public:
-        NotImplementedException();
-        explicit NotImplementedException(const std::string &arg);
-    };
-}
+namespace hoo
+{
+    namespace common
+    {
+        class NotImplementedException : public std::runtime_error
+        {
+        public:
+            NotImplementedException();
+            explicit NotImplementedException(const std::string &arg);
+        };
+    } // namespace common
+} // namespace hoo
 
 #endif //HOOLANG_NOTIMPLEMENTEDEXCEPTION_HH
