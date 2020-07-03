@@ -21,8 +21,8 @@
 
 #include <string>
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         typedef enum {
             ERROR_HOOC_SYNTAX,
             ERROR_HOOC_PARSE,

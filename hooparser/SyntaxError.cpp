@@ -18,8 +18,8 @@
 
 #include "SyntaxError.hh"
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         SyntaxError::SyntaxError(size_t line_number,
                                  size_t character_position,
                                  std::string &message) :

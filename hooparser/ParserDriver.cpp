@@ -17,20 +17,20 @@
  */
 
 #include "ParserDriver.hh"
-#include "compiler/CompilationContext.hh"
-#include "compiler/ParseError.hh"
-#include "visitors/UnitVisitor.hh"
+#include "CompilationContext.hh"
+#include "ParseError.hh"
+#include "UnitVisitor.hh"
 
 #include <exception>
 #include <boost/filesystem.hpp>
 
-using namespace hooc;
-using namespace hooc::ast;
+using namespace hoo;
+using namespace hoo::ast;
 using namespace antlr4;
 using namespace antlr4::tree;
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
 
         ParserDriver::ParserDriver(const std::string &source_code, const std::string &file_path) :
                 _source_code(source_code) {

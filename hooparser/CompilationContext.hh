@@ -22,15 +22,15 @@
 #include "antlr4-runtime.h"
 #include "HooParser.h"
 #include "HooLexer.h"
-#include "compiler/Module.hh"
-#include "compiler/ErrorListener.hh"
-#include "compiler/BaseError.hh"
+#include "Module.hh"
+#include "ErrorListener.hh"
+#include "BaseError.hh"
 
 #include <string>
 #include <memory>
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         class CompilationContext {
         private:
             antlr4::ANTLRInputStream *stream = nullptr;

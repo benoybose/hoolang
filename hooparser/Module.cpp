@@ -23,8 +23,8 @@
 #include <utility>
 
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
 
         Module::Module(boost::filesystem::path compilation_root, boost::filesystem::path module_path,
                        ast::Unit *unit, std::list<BaseError *> errors)

@@ -19,18 +19,18 @@
 #ifndef PARSERDRIVER_HH
 #define PARSERDRIVER_HH
 
-#include "compiler/Module.hh"
+#include "Module.hh"
 #include "HooParser.h"
-#include "compiler/CompilationContext.hh"
-#include "compiler/Module.hh"
+#include "CompilationContext.hh"
+#include "Module.hh"
 
 #include <string>
 #include <list>
 #include <boost/filesystem.hpp>
 #include <memory>
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         class ParserDriver {
         private:
             std::string _source_code;

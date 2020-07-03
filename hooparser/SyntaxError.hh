@@ -24,8 +24,8 @@
 #include <string>
 #include <list>
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         class SyntaxError: public BaseError {
         private:
             size_t _line_number;

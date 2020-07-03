@@ -24,8 +24,8 @@
 
 using namespace antlr4;
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         void ErrorListener::syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line,
                                         size_t charPositionInLine, const std::string &msg,
                                         std::exception_ptr e) {

@@ -18,35 +18,35 @@
 
 #include "HooLexer.h"
 #include "UnitVisitor.hh"
-#include "ast/TypeSpecification.hh"
-#include "ast/VariableDeclaration.hh"
-#include "ast/FunctionDefinition.hh"
-#include "ast/ReferenceExpression.hh"
-#include "ast/LiteralExpression.hh"
-#include "ast/BinaryExpression.hh"
-#include "ast/ArrayAccessExpression.hh"
-#include "ast/InvokeExpression.hh"
-#include "ast/Statement.hh"
-#include "ast/NoopStatement.hh"
-#include "ast/ReturnStatement.hh"
-#include "ast/Unit.hh"
-#include "ast/FunctionDeclaration.hh"
-#include "ast/Declarator.hh"
-#include "ast/BasicDataTypes.hh"
-#include "ast/BasicDataTypeSpecification.hh"
-#include "ast/ReferenceDataTypeSpecification.hh"
-#include "ast/ArrayDataTypeSpecification.hh"
-#include "ast/CompoundStatement.hh"
+#include "hooast/TypeSpecification.hh"
+#include "hooast/VariableDeclaration.hh"
+#include "hooast/FunctionDefinition.hh"
+#include "hooast/ReferenceExpression.hh"
+#include "hooast/LiteralExpression.hh"
+#include "hooast/BinaryExpression.hh"
+#include "hooast/ArrayAccessExpression.hh"
+#include "hooast/InvokeExpression.hh"
+#include "hooast/Statement.hh"
+#include "hooast/NoopStatement.hh"
+#include "hooast/ReturnStatement.hh"
+#include "hooast/Unit.hh"
+#include "hooast/FunctionDeclaration.hh"
+#include "hooast/Declarator.hh"
+#include "hooast/BasicDataTypes.hh"
+#include "hooast/BasicDataTypeSpecification.hh"
+#include "hooast/ReferenceDataTypeSpecification.hh"
+#include "hooast/ArrayDataTypeSpecification.hh"
+#include "hooast/CompoundStatement.hh"
+#include "hooast/ClassDefinition.hh"
+#include "hooast/ExpressionStatement.hh"
+#include "hooast/DeclarationStatement.hh"
 
 #include <list>
 #include <string>
-#include <ast/ClassDefinition.hh>
-#include <ast/ExpressionStatement.hh>
-#include <ast/DeclarationStatement.hh>
 #include <boost/regex.hpp>
 #include <utility>
 
-using namespace hooc::ast;
+using namespace hoo::ast;
 using namespace antlrcpp;
 using namespace boost;
 

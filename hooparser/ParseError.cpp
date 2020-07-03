@@ -18,8 +18,8 @@
 
 #include "ParseError.hh"
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         ParseError::ParseError(ErrorCode code, const std::string &message) :
                 BaseError(ERROR_HOOC_PARSE, code, message) {
         }

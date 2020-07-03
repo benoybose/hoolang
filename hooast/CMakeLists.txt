@@ -61,5 +61,5 @@ SET (HOO_AST_SOURCES ArrayAccessExpression.cpp
     UnitItem.cpp
     VariableDeclaration.cpp)
 
-    ADD_LIBRARY(hooast STATIC ${HOO_AST_HEADERS} ${HOO_AST_SOURCES})
+ADD_LIBRARY(hooast STATIC ${HOO_AST_HEADERS} ${HOO_AST_SOURCES})
     

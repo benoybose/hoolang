@@ -20,7 +20,7 @@
 #define HOOC_COMPILATION_UNIT_H
 
 #include "BaseError.hh"
-#include "ast/Unit.hh"
+#include "hooast/Unit.hh"
 
 #include <string>
 #include <memory>
@@ -28,8 +28,8 @@
 #include <boost/filesystem.hpp>
 
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         class Module {
 
         public:

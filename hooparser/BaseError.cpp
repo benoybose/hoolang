@@ -18,10 +18,10 @@
 
 #include "BaseError.hh"
 
-namespace hooc {
-    namespace compiler {
-        BaseError::BaseError(compiler::ErrorType type,
-                             compiler::ErrorCode code,
+namespace hoo {
+    namespace parser {
+        BaseError::BaseError(ErrorType type,
+                             ErrorCode code,
                              const std::string &message) :
                 _type(type),
                 _code(code),

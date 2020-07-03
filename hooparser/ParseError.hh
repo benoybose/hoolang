@@ -21,8 +21,8 @@
 
 #include "BaseError.hh"
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         class ParseError: public BaseError {
         public:
             ParseError(ErrorCode code, const std::string& message);

@@ -18,8 +18,8 @@
 
 #include "CompilationContext.hh"
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         CompilationContext::CompilationContext(std::string source_code) {
             stream = new antlr4::ANTLRInputStream(source_code);
             lexer = new HooLexer(stream);

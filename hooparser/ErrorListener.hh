@@ -26,8 +26,8 @@
 
 using namespace antlr4;
 
-namespace hooc {
-    namespace compiler {
+namespace hoo {
+    namespace parser {
         class ErrorListener: public BaseErrorListener {
 
         public:

@@ -20,13 +20,13 @@
 #define PROJECT_UNITVISITOR_HH
 
 #include "HooBaseVisitor.h"
-#include "ast/Expression.hh"
-#include "ast/Operator.hh"
-#include "ast/Declarator.hh"
+#include "hooast/Expression.hh"
+#include "hooast/Operator.hh"
+#include "hooast/Declarator.hh"
 
 #include <string>
 
-using namespace hooc::ast;
+using namespace hoo::ast;
 
 class UnitVisitor : public HooBaseVisitor {
 private:
