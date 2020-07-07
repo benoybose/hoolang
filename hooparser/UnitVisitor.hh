@@ -29,11 +29,9 @@
 using namespace hoo::ast;
 
 class UnitVisitor : public HooBaseVisitor {
-private:
-    std::string _file_name;
 
 public:
-    explicit UnitVisitor(std::string  file_name);
+    explicit UnitVisitor();
 
 public:
     antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;

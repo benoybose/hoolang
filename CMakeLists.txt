@@ -20,9 +20,9 @@ ENDIF()
 INCLUDE("${CMAKE_SOURCE_DIR}/packages/index.cmake")
 SET(BOOST_ALL_DYN_LINK 1)
 
-FIND_PACKAGE(Boost REQUIRED COMPONENTS
-    filesystem 
-    regex)
+# FIND_PACKAGE(Boost REQUIRED COMPONENTS
+#     filesystem 
+#     regex)
 ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 
 FIND_PACKAGE(antlr4-runtime REQUIRED)

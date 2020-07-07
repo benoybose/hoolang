@@ -22,7 +22,6 @@
 #include "UnitVisitor.hh"
 
 #include <exception>
-#include <boost/filesystem.hpp>
 
 using namespace hoo;
 using namespace hoo::ast;
@@ -32,10 +31,8 @@ using namespace antlr4::tree;
 namespace hoo {
     namespace parser {
 
-        ParserDriver::ParserDriver(const std::string &source_code, const std::string &file_path) :
+        ParserDriver::ParserDriver(const std::string &source_code) :
                 _source_code(source_code) {
-            this->_file_path = boost::filesystem::relative(file_path,
-                                                           boost::filesystem::current_path());
         }
 
         Module* ParserDriver::BuildModule() {
@@ -49,7 +46,7 @@ namespace hoo {
                     throw std::runtime_error("Parsing failed because of unknown error.");
                 }
 
-                UnitVisitor visitor(this->_file_path.string());
+                UnitVisitor visitor;
                 unit = visitor.visit(unitContext).as<Unit *>();
             } catch (const std::bad_cast& ex) {
                 std::string message(ex.what());
@@ -62,8 +59,7 @@ namespace hoo {
             }
 
             auto errors = context.GetErrors();
-            module = new Module("", "",
-                                unit, errors);
+            module = new Module(unit, errors);
             return module;
         }
     }

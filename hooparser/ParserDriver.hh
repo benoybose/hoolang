@@ -26,7 +26,6 @@
 
 #include <string>
 #include <list>
-#include <boost/filesystem.hpp>
 #include <memory>
 
 namespace hoo {
@@ -34,11 +33,9 @@ namespace hoo {
         class ParserDriver {
         private:
             std::string _source_code;
-            boost::filesystem::path _file_path;
 
         public:
-            ParserDriver(const std::string &source_code,
-                         const std::string &file_path);
+            ParserDriver(const std::string &source_code);
 
         public:
             Module *BuildModule();

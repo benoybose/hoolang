@@ -19,51 +19,44 @@
 #include "Module.hh"
 
 #include <exception>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <utility>
 
+namespace hoo
+{
+    namespace parser
+    {
 
-namespace hoo {
-    namespace parser {
-
-        Module::Module(boost::filesystem::path compilation_root, boost::filesystem::path module_path,
-                       ast::Unit *unit, std::list<BaseError *> errors)
-                : _compilation_root(std::move(compilation_root)),
-                _module_path(std::move(module_path)),
-                _unit(unit),
-                _errors(std::move(errors)){
-
+        Module::Module(ast::Unit *unit, std::list<BaseError *> errors)
+            : _unit(unit),
+              _errors(std::move(errors))
+        {
         }
 
-        Module::~Module() {
+        Module::~Module()
+        {
             delete this->_unit;
-            while(this->_errors.begin() != this->_errors.end()) {
+            while (this->_errors.begin() != this->_errors.end())
+            {
                 auto error = *(this->_errors.begin());
                 this->_errors.remove(error);
                 delete error;
             }
         }
 
-        const boost::filesystem::path
-        &Module::GetCompilationRoot() const {
-            return this->_compilation_root;
-        }
-
-        const boost::filesystem::path
-        &Module::GetModulePath() const {
-            return this->_module_path;
-        }
-
-        const ast::Unit *Module::GetUnit() {
+        const ast::Unit *Module::GetUnit()
+        {
             return this->_unit;
         }
 
-        bool Module::Success() {
+        bool Module::Success()
+        {
             return this->_errors.empty();
         }
 
-        const std::list<BaseError *> & Module::GetErrors() const {
+        const std::list<BaseError *> &Module::GetErrors() const
+        {
             return this->_errors;
         }
-    }
-}
+    } // namespace parser
+} // namespace hoo

@@ -25,36 +25,30 @@
 #include <string>
 #include <memory>
 #include <list>
-#include <boost/filesystem.hpp>
 
-
-namespace hoo {
-    namespace parser {
-        class Module {
+namespace hoo
+{
+    namespace parser
+    {
+        class Module
+        {
 
         public:
-            Module(boost::filesystem::path compilation_root,
-                   boost::filesystem::path module_path,
-                   ast::Unit *unit,
+            Module(ast::Unit *unit,
                    std::list<BaseError *> errors);
 
         private:
-            boost::filesystem::path _compilation_root;
-            boost::filesystem::path _module_path;
-            ast::Unit* _unit;
-            std::list<BaseError*> _errors;
+            ast::Unit *_unit;
+            std::list<BaseError *> _errors;
 
         public:
-            const boost::filesystem::path& GetCompilationRoot() const;
-            const boost::filesystem::path& GetModulePath() const;
-            const ast::Unit* GetUnit();
+            const ast::Unit *GetUnit();
             bool Success();
-            const std::list<BaseError *> & GetErrors() const;
+            const std::list<BaseError *> &GetErrors() const;
 
             virtual ~Module();
         };
-    }
-}
+    } // namespace parser
+} // namespace hoo
 
 #endif
-

@@ -22,9 +22,8 @@
 #include <istream>
 #include <sstream>
 #include <mutex>
-
-#include <boost/format.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include <ctime>
+#include <iomanip>
 
 namespace hoo
 {
@@ -58,8 +57,9 @@ namespace hoo
         {
             std::lock_guard<std::mutex> guard(Logger::_write_lock);
             std::ostringstream text;
-            auto local_time = boost::posix_time::second_clock::local_time();
-            text << "[" << local_time << "] ["
+            
+            auto time = std::localtime(nullptr);
+            text << "[" << std::put_time(time, "%c %Z") << "] ["
                  << Logger::GetLogLevelName(logLevel)
                  << "] " << message << std::endl;
             text.flush();

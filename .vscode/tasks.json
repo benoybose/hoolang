@@ -3,20 +3,10 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [{
-            "label": "Hoo: Get Packages (x64)",
+            "label": "Hoo: Get Packages",
             "type": "shell",
             "command": "python3",
-            "args": ["getpackages.py", "--arch", "x64"],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Hoo: Get Packages (x86)",
-            "type": "shell",
-            "command": "python3",
-            "args": ["getpackages.py", "--arch", "x86"],
+            "args": ["getpackages.py"],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -32,11 +22,13 @@
                     "NMake Makefiles",
                     "-B",
                     "./Build/Release",
-                    "-DCMAKE_BUILD_TYPE=Release"
+                    "-DCMAKE_BUILD_TYPE=Release",
+                    "-DCMAKE_C_COMPILER=clang-cl",
+                    "-DCMAKE_CXX_COMPILER=clang-cl"
                 ],
             },
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
             },
             "problemMatcher": []
         },
@@ -62,7 +54,9 @@
                     "NMake Makefiles",
                     "-B",
                     "./Build/Debug",
-                    "-DCMAKE_BUILD_TYPE=Debug"
+                    "-DCMAKE_BUILD_TYPE=Debug",
+                    "-DCMAKE_C_COMPILER=clang-cl",
+                    "-DCMAKE_CXX_COMPILER=clang-cl"
                 ],
             },
             "options": {
