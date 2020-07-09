@@ -10,16 +10,16 @@ from zipfile import ZipFile
 
 libindex = {
     'win32': [
-        # {
-        #     'name': 'clang',
-        #     'version': '10.0.0',
-        #     'arch': 'x64',
-        #     'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
-        #     'defs': {
-        #         'CMAKE_C_COMPILER': '$$HOME$$/clang-cl.exe',
-        #         'CMAKE_CXX_COMPILER': '$$HOME$$/clang-cl.exe',
-        #     }
-        # },
+        {
+            'name': 'clang',
+            'version': '10.0.0',
+            'arch': 'x64',
+            'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
+            'defs': {
+                'CMAKE_C_COMPILER': '$$HOME$$/clang-cl.exe',
+                'CMAKE_CXX_COMPILER': '$$HOME$$/clang-cl.exe',
+            }
+        },
         {
             'name': 'antlr4-runtime-cpp',
             'version': '4.8',
@@ -72,6 +72,73 @@ def extractpkg(pkgzip, pkgdest, fname):
             progress = (extractedentries / totoalentries)
             percent = "{:3.2%}".format(progress)
             print("[extract %s %s]" % (fname, percent))
+
+def preparepkg(dir, relpath):
+    pkgdirvar = "\"${CMAKE_SOURCE_DIR}/packages/%s\"" % relpath
+    cmakefilepath = os.path.join(dir, 'package.cmake')
+
+    if not os.path.exists(cmakefilepath):
+        raise Exception("cmake include file '%s' does not exists." % cmakefilepath)
+    contents = []
+    processedlines = []
+    with open(cmakefilepath, 'r') as cfp:
+        contents = cfp.readlines()
+    for content in contents:
+        content = content.replace('$$PKGDIR$$', pkgdirvar)
+        processedlines.append(content)
+    with open(cmakefilepath, 'w') as cfp:
+        cfp.writelines(processedlines)
+
+def installpkg(root, relpath):
+    pkgcmakefile = "${CMAKE_SOURCE_DIR}/packages/%s/package.cmake" % relpath
+    cmkinc = "INCLUDE(\"%s\")" % pkgcmakefile
+
+    cmkindexpath = os.path.join(root, 'index.cmake')
+    if not os.path.exists(cmkindexpath):
+        with open(cmkindexpath, 'w') as ifp:
+            ifp.write('# index of all packages to be included\n')
+            ifp.close()
+    includedlines = []
+    with open(cmkindexpath, 'r') as ifp:
+        includedlines = ifp.read().splitlines()
+        ifp.close()
+
+    if cmkinc in includedlines:
+        logging.warning("package is found already included in index")
+    else:
+        includedlines.append(cmkinc)
+        with open(cmkindexpath, 'w') as ifp:
+            for includedline in includedlines:
+                ifp.write(includedline)
+                ifp.write('\n')
+            ifp.close()
+    print("[installed %s]" % pkgcmakefile)
+
+def encachepkg(root, url, home):
+    pkgindexfile = os.path.join(root, 'index.json')
+    if not os.path.exists(pkgindexfile):
+        with open(pkgindexfile, 'wt') as fp:
+            pkgentry = json.dumps({
+                url: {
+                    'dir': home,
+                    'modified_time': os.path.getmtime(home)
+                }
+            }, indent=4)
+            fp.write(pkgentry)
+            fp.close()
+    else:
+        pkgentries = None
+        with open(pkgindexfile, 'rt') as fp:
+            pkgentries = json.load(fp)
+            pkgentries[url] = {
+                'dir': home,
+                'modified_time': os.path.getmtime(home)
+            }
+            fp.close()
+        with open(pkgindexfile, 'wt') as fp:
+            json.dump(pkgentries, fp, indent=4)
+            fp.close()
+    print('[cached %s]' % home)
 
 def downloadpkg(packageurl):
     with urllib.request.urlopen(packageurl) as pkgres:
@@ -157,86 +224,28 @@ def main():
             packageurl = package['url']
             pkgdir = mkpkgdir(pkgroot, package)
             pkgrelpath = mkpkgrelpath(pkgdir, pkgroot)
+            pkghome = os.path.join(pkgroot, pkgrelpath)
+            pkghome = nomalizeSlash(pkghome)
 
-            print("checking whether package exists")
             if not chkpkgexists(pkgroot, packageurl):
-                print("downloading package '%s'" % packageurl)
                 pkgfile, filename, downloadok = downloadpkg(packageurl)
                 if not downloadok:
                     raise Exception('download failed for %s' % packageurl)
-                # print('download completed')
-                # print("extracting package '%s'" % filename)
-                extractpkg(pkgfile, pkgdir, filename)                
-                pkgdirvar = "\"${CMAKE_SOURCE_DIR}/packages/%s\"" % pkgrelpath
-                cmakefilepath = os.path.join(pkgdir, 'package.cmake')
-
-                if not os.path.exists(cmakefilepath):
-                    raise Exception("cmake include file '%s' does not exists." % cmakefilepath)
-                contents = []
-                processedlines = []
-                with open(cmakefilepath, 'r') as cfp:
-                    contents = cfp.readlines()
-                for content in contents:
-                    content = content.replace('$$PKGDIR$$', pkgdirvar)
-                    processedlines.append(content)
-                with open(cmakefilepath, 'w') as cfp:
-                    cfp.writelines(processedlines)
-
-                cmkinc = "INCLUDE(\"${CMAKE_SOURCE_DIR}/packages/%s/package.cmake\")" % pkgrelpath
-                cmkindexpath = os.path.join(pkgroot, 'index.cmake')
-                if not os.path.exists(cmkindexpath):
-                    with open(cmkindexpath, 'w') as ifp:
-                        ifp.write('# index of all packages to be included\n')
-                        ifp.close()
-                includedlines = []
-                with open(cmkindexpath, 'r') as ifp:
-                    includedlines = ifp.read().splitlines()
-                    ifp.close()
-
-                if cmkinc in includedlines:
-                    logging.warning("package is found already included in index")
-                else:
-                    includedlines.append(cmkinc)
-                    with open(cmkindexpath, 'w') as ifp:
-                        for includedline in includedlines:
-                            ifp.write(includedline)
-                            ifp.write('\n')
-                        ifp.close()
+                extractpkg(pkgfile, pkgdir, filename)
+                preparepkg(pkgdir, pkgrelpath)
+                installpkg(pkgroot, pkgrelpath)
+                encachepkg(pkgroot, packageurl, pkghome)
             else:
-                print('package %s already exists.' % packageurl)
+                print('[exists %s-%s]' % (package['name'], package['version']))
 
             defs = package.get('defs')
-            pkghome = os.path.join(pkgroot, pkgrelpath)
-            pkghome = nomalizeSlash(pkghome)
             if not defs is None:
                 for defkey in defs:
                     defval = defs[defkey]
                     defval = defval.replace('$$HOME$$', pkghome)
                     cmake_defs[defkey] = defval
 
-            pkgindexfile = os.path.join(pkgroot, 'index.json')
-            if not os.path.exists(pkgindexfile):
-                with open(pkgindexfile, 'wt') as fp:
-                    pkgentry = json.dumps({
-                        packageurl: {
-                            'dir': pkghome,
-                            'modified_time': os.path.getmtime(pkghome)
-                        }
-                    }, indent=4)
-                    fp.write(pkgentry)
-                    fp.close()
-            else:
-                pkgentries = None
-                with open(pkgindexfile, 'rt') as fp:
-                    pkgentries = json.load(fp)
-                    pkgentries[packageurl] = {
-                        'dir': pkghome,
-                        'modified_time': os.path.getmtime(pkghome)
-                    }
-                    fp.close()
-                with open(pkgindexfile, 'wt') as fp:
-                    json.dump(pkgentries, fp, indent=4)
-                    fp.close()
+           
 
         print(cmake_defs)
 
