@@ -10,16 +10,16 @@ from zipfile import ZipFile
 
 libindex = {
     'win32': [
-        {
-            'name': 'clang',
-            'version': '10.0.0',
-            'arch': 'x64',
-            'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
-            'defs': {
-                'CMAKE_C_COMPILER': '$$HOME$$/clang-cl.exe',
-                'CMAKE_CXX_COMPILER': '$$HOME$$/clang-cl.exe',
-            }
-        },
+        # {
+        #     'name': 'clang',
+        #     'version': '10.0.0',
+        #     'arch': 'x64',
+        #     'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
+        #     'defs': {
+        #         'CMAKE_C_COMPILER': '$$HOME$$/clang-cl.exe',
+        #         'CMAKE_CXX_COMPILER': '$$HOME$$/clang-cl.exe',
+        #     }
+        # },
         {
             'name': 'antlr4-runtime-cpp',
             'version': '4.8',
@@ -54,6 +54,25 @@ def mkpkgdir(root, package):
         os.makedirs(pkgdir)
     return pkgdir
 
+def extractpkg(pkgzip, pkgdest, fname):
+    with ZipFile(pkgzip, 'r') as zfp:
+        entries = zfp.infolist()
+        totoalentries = len(entries)
+        extractedentries = 0
+        for entry in entries:
+            zfp.extract(entry, pkgdest)
+            entrydest = os.path.join(pkgdest, entry.filename)
+            entrydest = nomalizeSlash(entrydest)
+            if entry.is_dir():
+                if not os.path.exists(entrydest):
+                    os.makedirs(entrydest)
+            else:
+                zfp.extract(entry, pkgdest)
+            extractedentries += 1
+            progress = (extractedentries / totoalentries)
+            percent = "{:3.2%}".format(progress)
+            print("[extract %s %s]" % (fname, percent))
+
 def downloadpkg(packageurl):
     with urllib.request.urlopen(packageurl) as pkgres:
         if pkgres.getcode() != 200:
@@ -73,7 +92,7 @@ def downloadpkg(packageurl):
                 downloadedlen += len(buffer)
                 fp.write(buffer)
                 percent = "{:3.2%}".format(downloadedlen / contentlen)
-                print("[%s  %s]" % (filename, percent))
+                print("[download %s  %s]" % (filename, percent))
                 buffer = pkgres.read(SIZE_ONE_MB)
         if contentlen == downloadedlen:
             return pkgfile, filename, True
@@ -145,13 +164,9 @@ def main():
                 pkgfile, filename, downloadok = downloadpkg(packageurl)
                 if not downloadok:
                     raise Exception('download failed for %s' % packageurl)
-                print('download completed')
-                print("extracting package '%s'" % filename)
-
-                with ZipFile(pkgfile, 'r') as zfp:
-                    zfp.extractall(pkgdir)
-                    print('extracted')
-                
+                # print('download completed')
+                # print("extracting package '%s'" % filename)
+                extractpkg(pkgfile, pkgdir, filename)                
                 pkgdirvar = "\"${CMAKE_SOURCE_DIR}/packages/%s\"" % pkgrelpath
                 cmakefilepath = os.path.join(pkgdir, 'package.cmake')
 
