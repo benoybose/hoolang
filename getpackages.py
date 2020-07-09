@@ -34,6 +34,18 @@ libindex = {
 
 SIZE_ONE_MB = 1048576
 
+def nomalizeSlash(p: str):
+    if sys.platform == 'win32':
+        p = p.replace('\\', '/')
+    return p
+
+def mkpkgrelpath(dir, root):
+    pkgrelpath = os.path.relpath(dir, root)
+    pkgrelpath = os.path.normpath(pkgrelpath)
+    pkgrelpath = os.path.normcase(pkgrelpath)
+    pkgrelpath = nomalizeSlash(pkgrelpath)
+    return pkgrelpath
+
 def mkpkgdir(root, package):
     pkgdir = os.path.join(root, package['name'])
     pkgdir = os.path.join(pkgdir, package['version'])
@@ -68,10 +80,31 @@ def downloadpkg(packageurl):
         else:
             return None, None, False
 
-def nomalizeSlash(p: str):
-    if sys.platform == 'win32':
-        p = p.replace('\\', '/')
-    return p
+def chkpkgexists(root, url):
+    indexfile = os.path.join(root, 'index.json')
+    if not os.path.exists(indexfile):
+        return False
+    else:
+        indexdata = {}
+        with open(indexfile, 'rt') as fp:
+            indexdata = json.load(fp)
+            fp.close()
+        if indexdata is None:
+            return False
+        entry = indexdata.get(url)
+        if entry is None:
+            return False
+        entrydir = entry.get('dir')
+        modifiedtime = entry.get('modified_time')
+
+        if entrydir is None or modifiedtime is None:
+            return False
+
+        if not os.path.exists(entrydir):
+            return False
+        
+        mtime = os.path.getmtime(entrydir)
+        return mtime == modifiedtime
 
 def main():
     try:
@@ -103,62 +136,63 @@ def main():
         cmake_defs = {}
         for package in packages:
             packageurl = package['url']
-            print("downloading package '%s'" % packageurl)
-            pkgfile, filename, downloadok = downloadpkg(packageurl)
-            if not downloadok:
-                raise Exception('download failed for %s' % packageurl)
-
-            print('download completed')
-            print("extracting package '%s'" % filename)
             pkgdir = mkpkgdir(pkgroot, package)
+            pkgrelpath = mkpkgrelpath(pkgdir, pkgroot)
 
-            pkgrelpath = os.path.relpath(pkgdir, pkgroot)
-            pkgrelpath = os.path.normpath(pkgrelpath)
-            pkgrelpath = os.path.normcase(pkgrelpath)
-            pkgrelpath = nomalizeSlash(pkgrelpath)
-            pkgdirvar = "\"${CMAKE_SOURCE_DIR}/packages/%s\"" % pkgrelpath
-            cmakefilepath = os.path.join(pkgdir, 'package.cmake')
+            print("checking whether package exists")
+            if not chkpkgexists(pkgroot, packageurl):
+                print("downloading package '%s'" % packageurl)
+                pkgfile, filename, downloadok = downloadpkg(packageurl)
+                if not downloadok:
+                    raise Exception('download failed for %s' % packageurl)
+                print('download completed')
+                print("extracting package '%s'" % filename)
 
-            with ZipFile(pkgfile, 'r') as zfp:
-                zfp.extractall(pkgdir)
-                print('extracted')
+                with ZipFile(pkgfile, 'r') as zfp:
+                    zfp.extractall(pkgdir)
+                    print('extracted')
+                
+                pkgdirvar = "\"${CMAKE_SOURCE_DIR}/packages/%s\"" % pkgrelpath
+                cmakefilepath = os.path.join(pkgdir, 'package.cmake')
 
-            if not os.path.exists(cmakefilepath):
-                raise Exception("cmake include file '%s' does not exists." % cmakefilepath)
-            contents = []
-            processedlines = []
-            with open(cmakefilepath, 'r') as cfp:
-                contents = cfp.readlines()
-            for content in contents:
-                content = content.replace('$$PKGDIR$$', pkgdirvar)
-                processedlines.append(content)
-            with open(cmakefilepath, 'w') as cfp:
-                cfp.writelines(processedlines)
+                if not os.path.exists(cmakefilepath):
+                    raise Exception("cmake include file '%s' does not exists." % cmakefilepath)
+                contents = []
+                processedlines = []
+                with open(cmakefilepath, 'r') as cfp:
+                    contents = cfp.readlines()
+                for content in contents:
+                    content = content.replace('$$PKGDIR$$', pkgdirvar)
+                    processedlines.append(content)
+                with open(cmakefilepath, 'w') as cfp:
+                    cfp.writelines(processedlines)
 
-            cmkinc = "INCLUDE(\"${CMAKE_SOURCE_DIR}/packages/%s/package.cmake\")" % pkgrelpath
-            cmkindexpath = os.path.join(pkgroot, 'index.cmake')
-            if not os.path.exists(cmkindexpath):
-                with open(cmkindexpath, 'w') as ifp:
-                    ifp.write('# index of all packages to be included\n')
+                cmkinc = "INCLUDE(\"${CMAKE_SOURCE_DIR}/packages/%s/package.cmake\")" % pkgrelpath
+                cmkindexpath = os.path.join(pkgroot, 'index.cmake')
+                if not os.path.exists(cmkindexpath):
+                    with open(cmkindexpath, 'w') as ifp:
+                        ifp.write('# index of all packages to be included\n')
+                        ifp.close()
+                includedlines = []
+                with open(cmkindexpath, 'r') as ifp:
+                    includedlines = ifp.read().splitlines()
                     ifp.close()
-            includedlines = []
-            with open(cmkindexpath, 'r') as ifp:
-                includedlines = ifp.read().splitlines()
-                ifp.close()
 
-            if cmkinc in includedlines:
-                logging.warning("package is found already included in index")
+                if cmkinc in includedlines:
+                    logging.warning("package is found already included in index")
+                else:
+                    includedlines.append(cmkinc)
+                    with open(cmkindexpath, 'w') as ifp:
+                        for includedline in includedlines:
+                            ifp.write(includedline)
+                            ifp.write('\n')
+                        ifp.close()
             else:
-                includedlines.append(cmkinc)
-                with open(cmkindexpath, 'w') as ifp:
-                    for includedline in includedlines:
-                        ifp.write(includedline)
-                        ifp.write('\n')
-                    ifp.close()
-            pkghome = os.path.join(pkgroot, pkgrelpath)
-            pkghome = nomalizeSlash(pkghome)
+                print('package %s already exists.' % packageurl)
 
             defs = package.get('defs')
+            pkghome = os.path.join(pkgroot, pkgrelpath)
+            pkghome = nomalizeSlash(pkghome)
             if not defs is None:
                 for defkey in defs:
                     defval = defs[defkey]
