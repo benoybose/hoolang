@@ -5,39 +5,43 @@ import tempfile
 import os
 import re
 import json
+import argparse
 
 from zipfile import ZipFile
 
 libindex = {
-    'win32': [
-        {
-            'name': 'clang',
-            'version': '10.0.0',
-            'arch': 'x64',
-            'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
-            'defs': {
-                'CMAKE_C_COMPILER': '$$HOME$$/clang-cl.exe',
-                'CMAKE_CXX_COMPILER': '$$HOME$$/clang-cl.exe',
-            }
-        },
-        {
-            'name': 'antlr4-runtime-cpp',
-            'version': '4.8',
-            'arch': 'x64',
-            'url': 'https://www.dropbox.com/s/ud09ta6eboe2kd2/antlr4-runtime-cpp-4.8-x64-windows-clang.zip?dl=1'
+    'win32': {
+        'debug': {
+            'x64': [
+                {
+                    'name': 'clang',
+                    'version': '10.0.0',
+                    'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
+                    'defs': {
+                        'CMAKE_C_COMPILER': '$$HOME$$/clang-cl.exe',
+                        'CMAKE_CXX_COMPILER': '$$HOME$$/clang-cl.exe',
+                    }
+                },
+                {
+                    'name': 'antlr4-runtime-cpp',
+                    'version': '4.8',
+                    'url': 'https://www.dropbox.com/s/ud09ta6eboe2kd2/antlr4-runtime-cpp-4.8-x64-windows-clang.zip?dl=1'
+                }
+            ]
         }
-    ],
+    },
     'linux': [
-
     ]
 }
 
 SIZE_ONE_MB = 1048576
 
+
 def nomalizeSlash(p: str):
     if sys.platform == 'win32':
         p = p.replace('\\', '/')
     return p
+
 
 def mkpkgrelpath(dir, root):
     pkgrelpath = os.path.relpath(dir, root)
@@ -46,13 +50,15 @@ def mkpkgrelpath(dir, root):
     pkgrelpath = nomalizeSlash(pkgrelpath)
     return pkgrelpath
 
-def mkpkgdir(root, package):
+
+def mkpkgdir(root, package, arch):
     pkgdir = os.path.join(root, package['name'])
     pkgdir = os.path.join(pkgdir, package['version'])
-    pkgdir = os.path.join(pkgdir, package['arch'])
+    pkgdir = os.path.join(pkgdir, arch)
     if not os.path.exists(pkgdir):
         os.makedirs(pkgdir)
     return pkgdir
+
 
 def extractpkg(pkgzip, pkgdest, fname):
     with ZipFile(pkgzip, 'r') as zfp:
@@ -73,12 +79,14 @@ def extractpkg(pkgzip, pkgdest, fname):
             percent = "{:3.2%}".format(progress)
             print("[extract %s %s]" % (fname, percent))
 
+
 def preparepkg(dir, relpath):
     pkgdirvar = "\"${CMAKE_SOURCE_DIR}/packages/%s\"" % relpath
     cmakefilepath = os.path.join(dir, 'package.cmake')
 
     if not os.path.exists(cmakefilepath):
-        raise Exception("cmake include file '%s' does not exists." % cmakefilepath)
+        raise Exception(
+            "cmake include file '%s' does not exists." % cmakefilepath)
     contents = []
     processedlines = []
     with open(cmakefilepath, 'r') as cfp:
@@ -89,9 +97,10 @@ def preparepkg(dir, relpath):
     with open(cmakefilepath, 'w') as cfp:
         cfp.writelines(processedlines)
 
+
 def installpkg(root, relpath):
-    pkgcmakefile = "${CMAKE_SOURCE_DIR}/packages/%s/package.cmake" % relpath
-    cmkinc = "INCLUDE(\"%s\")" % pkgcmakefile
+    pkgcmakefile = "packages/%s/package.cmake" % relpath
+    cmkinc = "INCLUDE(\"${CMAKE_SOURCE_DIR}/%s\")" % pkgcmakefile
 
     cmkindexpath = os.path.join(root, 'index.cmake')
     if not os.path.exists(cmkindexpath):
@@ -113,6 +122,7 @@ def installpkg(root, relpath):
                 ifp.write('\n')
             ifp.close()
     print("[installed %s]" % pkgcmakefile)
+
 
 def encachepkg(root, url, home):
     pkgindexfile = os.path.join(root, 'index.json')
@@ -140,6 +150,7 @@ def encachepkg(root, url, home):
             fp.close()
     print('[cached %s]' % home)
 
+
 def downloadpkg(packageurl):
     with urllib.request.urlopen(packageurl) as pkgres:
         if pkgres.getcode() != 200:
@@ -148,7 +159,8 @@ def downloadpkg(packageurl):
 
         contentlen = int(pkgres.getheader('Content-Length'))
         filename = pkgres.getheader('Content-Disposition')
-        pattern = re.compile('(attachment\\; filename\\=\\")([\w\d\\-\\.]+)(\\")')
+        pattern = re.compile(
+            '(attachment\\; filename\\=\\")([\w\d\\-\\.]+)(\\")')
         filename = pattern.match(filename).group(2)
 
         downloadedlen = 0
@@ -165,6 +177,7 @@ def downloadpkg(packageurl):
             return pkgfile, filename, True
         else:
             return None, None, False
+
 
 def chkpkgexists(root, url):
     indexfile = os.path.join(root, 'index.json')
@@ -188,24 +201,26 @@ def chkpkgexists(root, url):
 
         if not os.path.exists(entrydir):
             return False
-        
+
         mtime = os.path.getmtime(entrydir)
         return mtime == modifiedtime
 
+
 def main():
     try:
+        argparser = argparse.ArgumentParser()
+        argparser.add_argument('--build-type', default='debug', action='store',
+                               help='the build type could be either Debug or Release')
+        args = argparser.parse_args()
+        build_type = args.build_type.lower()
+
         rootdir = os.path.dirname(os.path.abspath(__file__))
         pkgroot = os.path.join(rootdir, 'packages')
         if not os.path.exists(pkgroot):
             os.makedirs(pkgroot)
-        
+
         platform = sys.platform
         arch = None
-
-        packages = libindex.get(platform)
-        if packages is None:
-            raise Exception("no packages found for platform '%s'" % platform)
-
         if sys.maxsize == (2**63 - 1):
             arch = 'x64'
         elif sys.maxsize == (2 ** 31 - 1):
@@ -213,8 +228,19 @@ def main():
         else:
             raise Exception("unsupported architecture '%s'" % arch)
 
-        packages = [p for p in packages if p['arch'] == arch]
-        
+        packages = libindex.get(platform)
+        if packages is None:
+            raise Exception("no packages found for platform '%s'" % platform)
+
+        packages = packages.get(build_type)
+        if packages is None:
+            raise Exception(
+                "no packages found for build type '%s'" % build_type)
+
+        packages = packages.get(arch)
+        if packages is None:
+            raise Exception("no packages found for arch '%s" % arch)
+
         if len(packages) == 0:
             logging.warning('no packages found.')
             sys.exit(1)
@@ -222,7 +248,7 @@ def main():
         cmake_defs = {}
         for package in packages:
             packageurl = package['url']
-            pkgdir = mkpkgdir(pkgroot, package)
+            pkgdir = mkpkgdir(pkgroot, package, arch)
             pkgrelpath = mkpkgrelpath(pkgdir, pkgroot)
             pkghome = os.path.join(pkgroot, pkgrelpath)
             pkghome = nomalizeSlash(pkghome)
@@ -245,14 +271,12 @@ def main():
                     defval = defval.replace('$$HOME$$', pkghome)
                     cmake_defs[defkey] = defval
 
-           
-
         print(cmake_defs)
-
 
     except Exception as e:
         logging.error(e)
         raise e
+
 
 if __name__ == "__main__":
     main()
