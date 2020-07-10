@@ -1,6 +1,7 @@
 nbproject/
 build/
 build-*/
+out/
 hc
 hc.exe
 hoo.exe

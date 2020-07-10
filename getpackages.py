@@ -18,8 +18,8 @@ libindex = {
                     'version': '10.0.0',
                     'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
                     'defs': {
-                        'CMAKE_C_COMPILER': '$$HOME$$/clang-cl.exe',
-                        'CMAKE_CXX_COMPILER': '$$HOME$$/clang-cl.exe',
+                        'CMAKE_C_COMPILER': '$$HOME$$/bin/clang-cl.exe',
+                        'CMAKE_CXX_COMPILER': '$$HOME$$/bin/clang-cl.exe',
                     }
                 },
                 {
@@ -208,18 +208,6 @@ def chkpkgexists(root, url):
 
 def main():
     try:
-        argparser = argparse.ArgumentParser()
-        argparser.add_argument('--build-type', default='debug', action='store',
-                               help='the build type could be either Debug or Release')
-        args = argparser.parse_args()
-        build_type = args.build_type.lower()
-
-        rootdir = os.path.dirname(os.path.abspath(__file__))
-        pkgroot = os.path.join(rootdir, 'packages')
-        if not os.path.exists(pkgroot):
-            os.makedirs(pkgroot)
-
-        platform = sys.platform
         arch = None
         if sys.maxsize == (2**63 - 1):
             arch = 'x64'
@@ -227,6 +215,24 @@ def main():
             arch = 'x86'
         else:
             raise Exception("unsupported architecture '%s'" % arch)
+        platform = sys.platform
+
+        argparser = argparse.ArgumentParser()
+        argparser.add_argument('--build-type', default='debug', action='store',
+                               help='build type could be either Debug or Release')
+        argparser.add_argument('--arch', default=arch, action='store',
+                               help='architecture could be x64 or x86')
+        argparser.add_argument('--platform', default=platform, action='store',
+                               help='platform could be win32 or linux')
+        args = argparser.parse_args()
+
+        build_type = args.build_type.lower()
+        arch = args.arch.lower()
+
+        rootdir = os.path.dirname(os.path.abspath(__file__))
+        pkgroot = os.path.join(rootdir, 'packages')
+        if not os.path.exists(pkgroot):
+            os.makedirs(pkgroot)
 
         packages = libindex.get(platform)
         if packages is None:
@@ -271,7 +277,27 @@ def main():
                     defval = defval.replace('$$HOME$$', pkghome)
                     cmake_defs[defkey] = defval
 
-        print(cmake_defs)
+        builddir = os.path.join(rootdir, "out")
+        builddir = os.path.join(builddir, arch)
+        builddir = os.path.join(builddir, build_type)
+        builddir = nomalizeSlash(builddir)
+        installdir = os.path.join(builddir, "dist")
+        installdir = nomalizeSlash(installdir)
+
+        cmkbuildType = "Debug"
+        if build_type == "release":
+            cmkbuildType = "Release"
+
+        configcmd = "cmake -G \"Ninja\" -B \"%s\" " % builddir
+        configcmd += "-DCMAKE_INSTALL_PREFIX=\"%s\" " % installdir
+        configcmd += "-DCMAKE_BUILD_TYPE=%s " % cmkbuildType
+        for cmakedef in cmake_defs:
+            configcmd += "-D%s=\"%s\" " % (cmakedef, cmake_defs[cmakedef])
+        configcmd = configcmd.strip()
+        configcmd += " %s" % nomalizeSlash(rootdir)
+        exitcode = os.system(configcmd)
+        if 0 != exitcode:
+            raise Exception("Error while trying to configure using '%s'" % configcmd)
 
     except Exception as e:
         logging.error(e)
