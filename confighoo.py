@@ -11,21 +11,30 @@ from zipfile import ZipFile
 
 libindex = {
     'win32': {
-        'debug': {
-            'x64': [
+        'x64': {
+            'generic': [
                 {
                     'name': 'clang',
                     'version': '10.0.0',
-                    'url': 'https://www.dropbox.com/s/2f7f1kgds3sygc8/clang-10.0.0-win.zip?dl=1',
+                    'url': 'https://www.dropbox.com/s/04oglvnci4x00fa/clang-10.0.0-x64-windows-release.zip?dl=1',
                     'defs': {
                         'CMAKE_C_COMPILER': '$$HOME$$/bin/clang-cl.exe',
                         'CMAKE_CXX_COMPILER': '$$HOME$$/bin/clang-cl.exe',
                     }
-                },
+                }
+            ],
+            'debug': [
                 {
                     'name': 'antlr4-runtime-cpp',
                     'version': '4.8',
-                    'url': 'https://www.dropbox.com/s/ud09ta6eboe2kd2/antlr4-runtime-cpp-4.8-x64-windows-clang.zip?dl=1'
+                    'url': 'https://www.dropbox.com/s/fkfcvxxoml9mzaa/antlr4-4.8-x64-windows-debug.zip?dl=1'
+                }
+            ],
+            'release': [
+                {
+                    'name': 'antlr4-runtime-cpp',
+                    'version': '4.8',
+                    'url': 'https://www.dropbox.com/s/c08fuwh63upe1ux/antlr4-4.8-x64-windows-release.zip?dl=1'
                 }
             ]
         }
@@ -238,14 +247,21 @@ def main():
         if packages is None:
             raise Exception("no packages found for platform '%s'" % platform)
 
+        packages = packages.get(arch)
+        if packages is None:
+            raise Exception("no packages found for arch '%s" % arch)
+
+        genericpkgs = packages.get('generic')
         packages = packages.get(build_type)
         if packages is None:
             raise Exception(
                 "no packages found for build type '%s'" % build_type)
 
-        packages = packages.get(arch)
-        if packages is None:
-            raise Exception("no packages found for arch '%s" % arch)
+        if not genericpkgs is None:
+            if len(genericpkgs) > 0:
+                for pkg in packages:
+                    genericpkgs.append(pkg)
+                packages = genericpkgs
 
         if len(packages) == 0:
             logging.warning('no packages found.')
@@ -284,6 +300,14 @@ def main():
         installdir = os.path.join(builddir, "dist")
         installdir = nomalizeSlash(installdir)
 
+        cmkcache = os.path.join(builddir, 'CMakeCache.txt')
+        if os.path.exists(cmkcache):
+            os.unlink(cmkcache)
+        else:
+            if os.path.exists(builddir):
+                print('Remove directory %s before proceed.' % builddir)
+                sys.exit()
+
         cmkbuildType = "Debug"
         if build_type == "release":
             cmkbuildType = "Release"
@@ -297,7 +321,8 @@ def main():
         configcmd += " %s" % nomalizeSlash(rootdir)
         exitcode = os.system(configcmd)
         if 0 != exitcode:
-            raise Exception("Error while trying to configure using '%s'" % configcmd)
+            raise Exception(
+                "Error while trying to configure using '%s'" % configcmd)
 
     except Exception as e:
         logging.error(e)
