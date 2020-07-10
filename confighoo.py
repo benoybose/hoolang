@@ -60,10 +60,14 @@ def mkpkgrelpath(dir, root):
     return pkgrelpath
 
 
-def mkpkgdir(root, package, arch):
+def mkpkgdir(root, package, arch, buildtype):
     pkgdir = os.path.join(root, package['name'])
     pkgdir = os.path.join(pkgdir, package['version'])
     pkgdir = os.path.join(pkgdir, arch)
+    if package['generic']:
+        pkgdir = os.path.join(pkgdir, 'generic')
+    else:
+        pkgdir = os.path.join(pkgdir, buildtype)
     if not os.path.exists(pkgdir):
         os.makedirs(pkgdir)
     return pkgdir
@@ -257,20 +261,23 @@ def main():
             raise Exception(
                 "no packages found for build type '%s'" % build_type)
 
-        if not genericpkgs is None:
-            if len(genericpkgs) > 0:
-                for pkg in packages:
-                    genericpkgs.append(pkg)
-                packages = genericpkgs
-
         if len(packages) == 0:
             logging.warning('no packages found.')
-            sys.exit(1)
+
+        if not genericpkgs is None:
+            if len(genericpkgs) > 0:
+                for gpkg in genericpkgs:
+                    gpkg['generic'] = True
+
+                for pkg in packages:
+                    pkg['generic'] = False
+                    genericpkgs.append(pkg)
+                packages = genericpkgs
 
         cmake_defs = {}
         for package in packages:
             packageurl = package['url']
-            pkgdir = mkpkgdir(pkgroot, package, arch)
+            pkgdir = mkpkgdir(pkgroot, package, arch, build_type)
             pkgrelpath = mkpkgrelpath(pkgdir, pkgroot)
             pkghome = os.path.join(pkgroot, pkgrelpath)
             pkghome = nomalizeSlash(pkghome)
