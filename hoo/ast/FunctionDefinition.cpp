@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "FunctionDefinition.hh"
+#include <hoo/ast/FunctionDefinition.hh>
 
 namespace hoo {
     namespace ast {

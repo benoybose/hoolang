@@ -19,7 +19,7 @@
 #ifndef HOOLANG_DECLARATION_HH
 #define HOOLANG_DECLARATION_HH
 
-#include "Declarator.hh"
+#include <hoo/ast/Declarator.hh>
 
 namespace hoo {
     namespace ast {

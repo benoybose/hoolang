@@ -19,7 +19,7 @@
 #ifndef HOOLANG_EXPRESSIONSTATEMENT_HH
 #define HOOLANG_EXPRESSIONSTATEMENT_HH
 
-#include "Statement.hh"
+#include <hoo/ast/Statement.hh>
 
 namespace hoo {
     namespace ast {

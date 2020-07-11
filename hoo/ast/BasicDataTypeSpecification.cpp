@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "BasicDataTypeSpecification.hh"
-#include "BasicDataTypes.hh"
+#include <hoo/ast/BasicDataTypeSpecification.hh>
+#include <hoo/ast/BasicDataTypes.hh>
 
 namespace hoo {
     namespace ast {

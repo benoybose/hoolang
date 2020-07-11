@@ -19,7 +19,7 @@
 #ifndef HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
 #define HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
 
-#include "TypeSpecification.hh"
+#include <hoo/ast/TypeSpecification.hh>
 
 #include <string>
 

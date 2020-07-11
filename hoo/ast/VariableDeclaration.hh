@@ -19,10 +19,10 @@
 #ifndef PROJECT_DECLARATION_HH
 #define PROJECT_DECLARATION_HH
 
-#include "Declaration.hh"
-#include "Declarator.hh"
-#include "TypeSpecification.hh"
-#include "Expression.hh"
+#include <hoo/ast/Declaration.hh>
+#include <hoo/ast/Declarator.hh>
+#include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/Expression.hh>
 
 #include <string>
 

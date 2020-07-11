@@ -18,7 +18,7 @@
 
 #include <utility>
 
-#include "InvokeExpression.hh"
+#include <hoo/ast/InvokeExpression.hh>
 
 namespace hoo {
     namespace ast {

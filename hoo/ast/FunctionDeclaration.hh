@@ -19,10 +19,10 @@
 #ifndef HOOLANG_FUNCTIONDECLARATION_HH
 #define HOOLANG_FUNCTIONDECLARATION_HH
 
-#include "Declaration.hh"
-#include "Declarator.hh"
-#include "TypeSpecification.hh"
-#include "VariableDeclaration.hh"
+#include <hoo/ast/Declaration.hh>
+#include <hoo/ast/Declarator.hh>
+#include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/VariableDeclaration.hh>
 
 #include <string>
 #include <list>

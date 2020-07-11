@@ -19,7 +19,7 @@
 #ifndef REFERENCEEXPRESSION_HH
 #define REFERENCEEXPRESSION_HH
 
-#include "Expression.hh"
+#include <hoo/ast/Expression.hh>
 
 #include <string>
 

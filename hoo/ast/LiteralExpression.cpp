@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "LiteralExpression.hh"
+#include <hoo/ast/LiteralExpression.hh>
 
 namespace hoo {
     namespace ast {

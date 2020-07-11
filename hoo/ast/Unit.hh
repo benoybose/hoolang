@@ -19,7 +19,7 @@
 #ifndef HC_UNIT_H
 #define HC_UNIT_H
 
-#include "UnitItem.hh"
+#include <hoo/ast/UnitItem.hh>
 
 #include <list>
 

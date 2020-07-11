@@ -19,7 +19,7 @@
 #ifndef _LITERALTYPEEXPR_H_
 #define _LITERALTYPEEXPR_H_
 
-#include "Expression.hh"
+#include <hoo/ast/Expression.hh>
 
 #include <cstdint>
 #include <cstdbool>

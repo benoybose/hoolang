@@ -19,7 +19,7 @@
 #ifndef HOOLANG_ARRAYDATATYPESPECIFICATION_HH
 #define HOOLANG_ARRAYDATATYPESPECIFICATION_HH
 
-#include "TypeSpecification.hh"
+#include <hoo/ast/TypeSpecification.hh>
 
 namespace hoo {
     namespace ast {

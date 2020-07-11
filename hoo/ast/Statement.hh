@@ -19,10 +19,10 @@
 #ifndef HC_STATEMENT_H
 #define HC_STATEMENT_H
 
-#include "Expression.hh"
-#include "VariableDeclaration.hh"
-#include "InvokeExpression.hh"
-#include "UnitItem.hh"
+#include <hoo/ast/Expression.hh>
+#include <hoo/ast/VariableDeclaration.hh>
+#include <hoo/ast/InvokeExpression.hh>
+#include <hoo/ast/UnitItem.hh>
 
 #include <memory>
 #include <string>

@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "ReturnStatement.hh"
+#include <hoo/ast/ReturnStatement.hh>
 
 namespace hoo {
     namespace ast {

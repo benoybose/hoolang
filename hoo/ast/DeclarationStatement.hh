@@ -19,8 +19,8 @@
 #ifndef HOOLANG_DECLARATIONSTATEMENT_HH
 #define HOOLANG_DECLARATIONSTATEMENT_HH
 
-#include "Declaration.hh"
-#include "Statement.hh"
+#include <hoo/ast/Declaration.hh>
+#include <hoo/ast/Statement.hh>
 
 namespace hoo {
     namespace ast {

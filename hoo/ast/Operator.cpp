@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Operator.hh"
+#include <hoo/ast/Operator.hh>
 
 #include <map>
 #include <string>

@@ -19,7 +19,7 @@
 #ifndef HOOLANG_NOOPSTATEMENT_HH
 #define HOOLANG_NOOPSTATEMENT_HH
 
-#include "Statement.hh"
+#include <hoo/ast/Statement.hh>
 
 namespace hoo {
     namespace ast {

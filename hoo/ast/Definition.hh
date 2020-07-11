@@ -19,7 +19,7 @@
 #ifndef HOOLANG_DEFINITION_HH
 #define HOOLANG_DEFINITION_HH
 
-#include "UnitItem.hh"
+#include <hoo/ast/UnitItem.hh>
 
 namespace hoo
 {

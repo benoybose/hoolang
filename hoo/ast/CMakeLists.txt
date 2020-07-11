@@ -62,4 +62,4 @@ SET (HOO_AST_SOURCES ArrayAccessExpression.cpp
     VariableDeclaration.cpp)
 
 ADD_LIBRARY(hooast STATIC ${HOO_AST_HEADERS} ${HOO_AST_SOURCES})
-    
+TARGET_INCLUDE_DIRECTORIES(hooast PRIVATE ${CMAKE_SOURCE_DIR})

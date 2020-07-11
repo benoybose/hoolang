@@ -18,9 +18,9 @@
 
 #include <cstdlib>
 
-#include "BinaryExpression.hh"
-#include "Expression.hh"
-#include "Operator.hh"
+#include <hoo/ast/BinaryExpression.hh>
+#include <hoo/ast/Expression.hh>
+#include <hoo/ast/Operator.hh>
 
 namespace hoo {
     namespace ast {

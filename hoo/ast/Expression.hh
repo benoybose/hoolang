@@ -22,7 +22,7 @@
 #include <memory>
 #include <string>
 
-#include "Node.hh"
+#include <hoo/ast/Node.hh>
 
 namespace hoo
 {

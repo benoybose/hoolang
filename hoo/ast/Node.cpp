@@ -18,7 +18,7 @@
 
 #include <utility>
 
-#include "Node.hh"
+#include <hoo/ast/Node.hh>
 
 namespace hoo
 {

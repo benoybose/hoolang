@@ -19,9 +19,9 @@
 #ifndef HC_FUNCTIONDEFINITION_HH
 #define HC_FUNCTIONDEFINITION_HH
 
-#include "Definition.hh"
-#include "FunctionDeclaration.hh"
-#include "Statement.hh"
+#include <hoo/ast/Definition.hh>
+#include <hoo/ast/FunctionDeclaration.hh>
+#include <hoo/ast/Statement.hh>
 
 #include <string>
 #include <list>

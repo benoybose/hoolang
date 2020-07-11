@@ -19,9 +19,9 @@
 #ifndef HOOLANG_NODE_HH
 #define HOOLANG_NODE_HH
 
-#include <string>
+#include <hoo/ast/Position.hh>
 
-#include "Position.hh"
+#include <string>
 
 namespace hoo
 {

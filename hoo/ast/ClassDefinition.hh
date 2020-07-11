@@ -19,7 +19,7 @@
 #ifndef HC_CLASS_DEFINITION_HH
 #define HC_CLASS_DEFINITION_HH
 
-#include "Definition.hh"
+#include <hoo/ast/Definition.hh>
 
 namespace hoo {
     namespace ast {

@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "TypeSpecification.hh"
+#include <hoo/ast/TypeSpecification.hh>
 
 #include <string>
 #include <list>

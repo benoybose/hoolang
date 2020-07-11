@@ -19,8 +19,8 @@
 #ifndef HOOLANG_RETURNSTATEMENT_HH
 #define HOOLANG_RETURNSTATEMENT_HH
 
-#include "Statement.hh"
-#include "Expression.hh"
+#include <hoo/ast/Statement.hh>
+#include <hoo/ast/Expression.hh>
 
 namespace hoo {
     namespace ast {

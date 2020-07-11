@@ -19,7 +19,7 @@
 #ifndef HC_INVOKEEXPRESSION_H
 #define HC_INVOKEEXPRESSION_H
 
-#include "Expression.hh"
+#include <hoo/ast/Expression.hh>
 #include <list>
 
 namespace hoo {

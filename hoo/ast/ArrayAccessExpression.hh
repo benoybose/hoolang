@@ -19,7 +19,7 @@
 #ifndef ARRAY_ACCESSEXPRESSION_HH
 #define ARRAY_ACCESSEXPRESSION_HH
 
-#include "Expression.hh"
+#include <hoo/ast/Expression.hh>
 
 namespace hoo
 {

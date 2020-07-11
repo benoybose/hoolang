@@ -19,8 +19,8 @@
 #ifndef HOOLANG_BASICDATATYPESPECIFICATION_HH
 #define HOOLANG_BASICDATATYPESPECIFICATION_HH
 
-#include "TypeSpecification.hh"
-#include "BasicDataTypes.hh"
+#include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/BasicDataTypes.hh>
 
 namespace hoo {
     namespace ast {

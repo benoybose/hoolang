@@ -18,7 +18,7 @@
 
 #include <utility>
 
-#include "FunctionDeclaration.hh"
+#include <hoo/ast/FunctionDeclaration.hh>
 
 namespace hoo {
     namespace ast {

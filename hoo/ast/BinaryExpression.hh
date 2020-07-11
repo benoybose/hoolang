@@ -19,8 +19,8 @@
 #ifndef HCBINARYEXP_H
 #define HCBINARYEXP_H
 
-#include "Expression.hh"
-#include "Operator.hh"
+#include <hoo/ast/Expression.hh>
+#include <hoo/ast/Operator.hh>
 
 namespace hoo {
     namespace ast {
