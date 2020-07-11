@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Module.hh"
+#include <hoo/parser/Module.hh>
 
 #include <exception>
 #include <filesystem>

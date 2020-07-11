@@ -20,7 +20,7 @@
 #define HC_COMPILATIONERRORLISTENER_HH
 
 #include "antlr4-runtime.h"
-#include "BaseError.hh"
+#include <hoo/parser/BaseError.hh>
 
 #include <list>
 

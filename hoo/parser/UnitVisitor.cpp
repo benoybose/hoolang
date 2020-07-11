@@ -17,38 +17,16 @@
  */
 
 #include "HooLexer.h"
-#include "UnitVisitor.hh"
-#include "hooast/TypeSpecification.hh"
-#include "hooast/VariableDeclaration.hh"
-#include "hooast/FunctionDefinition.hh"
-#include "hooast/ReferenceExpression.hh"
-#include "hooast/LiteralExpression.hh"
-#include "hooast/BinaryExpression.hh"
-#include "hooast/ArrayAccessExpression.hh"
-#include "hooast/InvokeExpression.hh"
-#include "hooast/Statement.hh"
-#include "hooast/NoopStatement.hh"
-#include "hooast/ReturnStatement.hh"
-#include "hooast/Unit.hh"
-#include "hooast/FunctionDeclaration.hh"
-#include "hooast/Declarator.hh"
-#include "hooast/BasicDataTypes.hh"
-#include "hooast/BasicDataTypeSpecification.hh"
-#include "hooast/ReferenceDataTypeSpecification.hh"
-#include "hooast/ArrayDataTypeSpecification.hh"
-#include "hooast/CompoundStatement.hh"
-#include "hooast/ClassDefinition.hh"
-#include "hooast/ExpressionStatement.hh"
-#include "hooast/DeclarationStatement.hh"
+#include <hoo/parser/UnitVisitor.hh>
+#include <hoo/ast/AST.hh>
 
 #include <list>
 #include <string>
-#include <boost/regex.hpp>
 #include <utility>
+#include <regex>
 
 using namespace hoo::ast;
 using namespace antlrcpp;
-using namespace boost;
 
 UnitVisitor::UnitVisitor()
 {
@@ -117,7 +95,7 @@ Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext 
 Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx)
 {
     auto name = ctx->Identifier()->getText();
-    auto expression = (Expression *)new ReferenceExpression(name, ctx, this->_file_name);
+    auto expression = (Expression *)new ReferenceExpression(name);
     return Any(expression);
 }
 
@@ -144,15 +122,13 @@ Any UnitVisitor::visitNestedRefExpr(HooParser::NestedRefExprContext *ctx)
                 text += ".";
                 text += name;
                 delete parent;
-                auto decimalExpression = (Expression *)new LiteralExpression(LITERAL_DOUBLE, text, ctx,
-                                                                             this->_file_name);
+                auto decimalExpression = (Expression *)new LiteralExpression(LITERAL_DOUBLE, text);
                 return Any(decimalExpression);
             }
         }
     }
 
-    auto expression = (Expression *)new ReferenceExpression(parent, name,
-                                                            ctx, this->_file_name);
+    auto expression = (Expression *)new ReferenceExpression(parent, name);
     return Any(expression);
 }
 
@@ -165,8 +141,7 @@ Any UnitVisitor::visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext 
 Any UnitVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx)
 {
     auto text = ctx->StringLiteral()->getText();
-    auto expression = (Expression *)new LiteralExpression(LITERAL_STRING, text,
-                                                          ctx, this->_file_name);
+    auto expression = (Expression *)new LiteralExpression(LITERAL_STRING, text);
     return Any(expression);
 }
 
@@ -174,40 +149,35 @@ Any UnitVisitor::visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx)
 {
     auto container = this->visit(ctx->container).as<Expression *>();
     auto accessIndex = this->visit(ctx->accessIndex).as<Expression *>();
-    auto expression = (Expression *)new ArrayAccessExpression(container, accessIndex,
-                                                              ctx, this->_file_name);
+    auto expression = (Expression *)new ArrayAccessExpression(container, accessIndex);
     return Any(expression);
 }
 
 Any UnitVisitor::visitConstantInteger(HooParser::ConstantIntegerContext *ctx)
 {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_INTEGER, value,
-                                            ctx, this->_file_name);
+    auto expression = new LiteralExpression(LITERAL_INTEGER, value);
     return Any(expression);
 }
 
 Any UnitVisitor::visitByteConstant(HooParser::ByteConstantContext *ctx)
 {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_BYTE, value,
-                                            ctx, this->_file_name);
+    auto expression = new LiteralExpression(LITERAL_BYTE, value);
     return Any(expression);
 }
 
 Any UnitVisitor::visitConstantFloating(HooParser::ConstantFloatingContext *ctx)
 {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_DOUBLE, value,
-                                            ctx, this->_file_name);
+    auto expression = new LiteralExpression(LITERAL_DOUBLE, value);
     return Any(expression);
 }
 
 Any UnitVisitor::visitConstantCharacter(HooParser::ConstantCharacterContext *ctx)
 {
     auto value = ctx->getText();
-    auto expression = new LiteralExpression(LITERAL_CHARACTER, value,
-                                            ctx, this->_file_name);
+    auto expression = new LiteralExpression(LITERAL_CHARACTER, value);
     return Any(expression);
 }
 
@@ -217,8 +187,7 @@ Any UnitVisitor::visitBooleanConstant(HooParser::BooleanConstantContext *ctx)
     if ((0 == value.compare("true")) ||
         (0 == value.compare("false")))
     {
-        auto expression = new LiteralExpression(LITERAL_BOOLEAN, value,
-                                                ctx, this->_file_name);
+        auto expression = new LiteralExpression(LITERAL_BOOLEAN, value);
         return Any(expression);
     }
     else
@@ -241,8 +210,7 @@ Any UnitVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx)
         }
     }
 
-    Expression *expression = new InvokeExpression(receiver, argumentList,
-                                                  ctx, this->_file_name);
+    Expression *expression = new InvokeExpression(receiver, argumentList);
     return Any(expression);
 }
 
@@ -480,19 +448,13 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
     return Any(unit);
 }
 
-const std::string &UnitVisitor::GetFileName() const
-{
-    return _file_name;
-}
-
 Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
                                                 HooParser::ExpressionContext *rvalue, ParserRuleContext *context)
 {
     auto left = this->visit(lvalue).as<Expression *>();
     auto right = this->visit(rvalue).as<Expression *>();
     auto oprText = new Operator(opr->getText());
-    Expression *expr = new BinaryExpression(left, oprText, right,
-                                            context, this->_file_name);
+    Expression *expr = new BinaryExpression(left, oprText, right);
     return expr;
 }
 

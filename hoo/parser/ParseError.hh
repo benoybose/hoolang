@@ -19,7 +19,7 @@
 #ifndef HOOLANG_PARSEERROR_HH
 #define HOOLANG_PARSEERROR_HH
 
-#include "BaseError.hh"
+#include <hoo/parser/BaseError.hh>
 
 namespace hoo {
     namespace parser {

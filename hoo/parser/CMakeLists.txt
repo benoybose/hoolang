@@ -15,7 +15,8 @@ SET(HOO_PARSER_HEADERS
         CompilationContext.hh
         ErrorListener.hh
         BaseError.hh
-        ParseError.hh)
+        ParseError.hh
+        UnitVisitor.hh)
 
 SET(HOO_PARSER_SOURCES
         ${ANTLR4_SRC_FILES_HooANTLR4}
@@ -25,7 +26,8 @@ SET(HOO_PARSER_SOURCES
         CompilationContext.cpp
         ErrorListener.cpp
         BaseError.cpp
-        ParseError.cpp)
+        ParseError.cpp
+        UnitVisitor.cpp)
 
 ADD_LIBRARY(hooparser STATIC ${HOO_PARSER_HEADERS} ${HOO_PARSER_SOURCES})
 TARGET_INCLUDE_DIRECTORIES(hooparser PRIVATE 

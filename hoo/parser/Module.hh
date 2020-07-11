@@ -19,7 +19,7 @@
 #ifndef HOOC_COMPILATION_UNIT_H
 #define HOOC_COMPILATION_UNIT_H
 
-#include "BaseError.hh"
+#include <hoo/parser/BaseError.hh>
 #include <hoo/ast/Unit.hh>
 
 #include <string>

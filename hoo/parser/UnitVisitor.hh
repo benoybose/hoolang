@@ -27,6 +27,7 @@
 #include <string>
 
 using namespace hoo::ast;
+using namespace antlr4;
 
 class UnitVisitor : public HooBaseVisitor {
 
@@ -117,8 +118,6 @@ public:
     antlrcpp::Any visitDefinitionUnitItem(HooParser::DefinitionUnitItemContext *ctx) override;
 
     antlrcpp::Any visitStmtOperative(HooParser::StmtOperativeContext *ctx) override;
-
-    const std::string &GetFileName() const;
 
 private:
 

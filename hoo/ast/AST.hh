@@ -1,0 +1,25 @@
+#ifndef _HOO_AST_H
+#define _HOO_AST_H
+#include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/VariableDeclaration.hh>
+#include <hoo/ast/FunctionDefinition.hh>
+#include <hoo/ast/ReferenceExpression.hh>
+#include <hoo/ast/LiteralExpression.hh>
+#include <hoo/ast/BinaryExpression.hh>
+#include <hoo/ast/ArrayAccessExpression.hh>
+#include <hoo/ast/InvokeExpression.hh>
+#include <hoo/ast/Statement.hh>
+#include <hoo/ast/NoopStatement.hh>
+#include <hoo/ast/ReturnStatement.hh>
+#include <hoo/ast/Unit.hh>
+#include <hoo/ast/FunctionDeclaration.hh>
+#include <hoo/ast/Declarator.hh>
+#include <hoo/ast/BasicDataTypes.hh>
+#include <hoo/ast/BasicDataTypeSpecification.hh>
+#include <hoo/ast/ReferenceDataTypeSpecification.hh>
+#include <hoo/ast/ArrayDataTypeSpecification.hh>
+#include <hoo/ast/CompoundStatement.hh>
+#include <hoo/ast/ClassDefinition.hh>
+#include <hoo/ast/ExpressionStatement.hh>
+#include <hoo/ast/DeclarationStatement.hh>
+#endif

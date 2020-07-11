@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "ErrorListener.hh"
-#include "SyntaxError.hh"
+#include <hoo/parser/ErrorListener.hh>
+#include <hoo/parser/SyntaxError.hh>
 #include "antlr4-runtime.h"
 
 #include <sstream>

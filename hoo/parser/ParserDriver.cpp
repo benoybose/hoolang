@@ -16,10 +16,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "ParserDriver.hh"
-#include "CompilationContext.hh"
-#include "ParseError.hh"
-#include "UnitVisitor.hh"
+#include <hoo/parser/ParserDriver.hh>
+#include <hoo/parser/CompilationContext.hh>
+#include <hoo/parser/ParseError.hh>
+#include <hoo/parser/UnitVisitor.hh>
 
 #include <exception>
 

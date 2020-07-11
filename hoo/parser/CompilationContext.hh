@@ -22,9 +22,9 @@
 #include "antlr4-runtime.h"
 #include "HooParser.h"
 #include "HooLexer.h"
-#include "Module.hh"
-#include "ErrorListener.hh"
-#include "BaseError.hh"
+#include <hoo/parser/Module.hh>
+#include <hoo/parser/ErrorListener.hh>
+#include <hoo/parser/BaseError.hh>
 
 #include <string>
 #include <memory>

@@ -19,10 +19,9 @@
 #ifndef PARSERDRIVER_HH
 #define PARSERDRIVER_HH
 
-#include "Module.hh"
+#include <hoo/parser/Module.hh>
 #include "HooParser.h"
-#include "CompilationContext.hh"
-#include "Module.hh"
+#include <hoo/parser/CompilationContext.hh>
 
 #include <string>
 #include <list>

@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "SyntaxError.hh"
+#include <hoo/parser/SyntaxError.hh>
 
 namespace hoo {
     namespace parser {

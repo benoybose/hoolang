@@ -19,7 +19,7 @@
 #ifndef COMPILATIONERROR_HH
 #define COMPILATIONERROR_HH
 
-#include "BaseError.hh"
+#include <hoo/parser/BaseError.hh>
 
 #include <string>
 #include <list>
