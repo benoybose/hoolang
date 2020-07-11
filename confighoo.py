@@ -6,6 +6,7 @@ import os
 import re
 import json
 import argparse
+import shutil
 
 from zipfile import ZipFile
 
@@ -60,7 +61,7 @@ def mkpkgrelpath(dir, root):
     return pkgrelpath
 
 
-def mkpkgdir(root, package, arch, buildtype):
+def mkpkgdir(root, package, arch, buildtype, platform):
     pkgdir = os.path.join(root, package['name'])
     pkgdir = os.path.join(pkgdir, package['version'])
     pkgdir = os.path.join(pkgdir, arch)
@@ -68,6 +69,7 @@ def mkpkgdir(root, package, arch, buildtype):
         pkgdir = os.path.join(pkgdir, 'generic')
     else:
         pkgdir = os.path.join(pkgdir, buildtype)
+    pkgdir = os.path.join(pkgdir, platform)
     if not os.path.exists(pkgdir):
         os.makedirs(pkgdir)
     return pkgdir
@@ -219,6 +221,35 @@ def chkpkgexists(root, url):
         return mtime == modifiedtime
 
 
+def mkbuilddir(rootdir, arch, build_type, platform):
+    builddir = os.path.join(rootdir, "out")
+    builddir = os.path.join(builddir, arch)
+    builddir = os.path.join(builddir, build_type)
+    builddir = os.path.join(builddir, platform)
+    builddir = nomalizeSlash(builddir)
+    return builddir
+
+
+def runconfig(build_type, builddir, cmake_defs, rootdir):
+    cmkbuildType = "Debug"
+    if build_type == "release":
+        cmkbuildType = "Release"
+
+    installdir = os.path.join(builddir, "dist")
+    installdir = nomalizeSlash(installdir)
+    configcmd = "cmake -G \"Ninja\" -B \"%s\" " % builddir
+    configcmd += "-DCMAKE_INSTALL_PREFIX=\"%s\" " % installdir
+    configcmd += "-DCMAKE_BUILD_TYPE=%s " % cmkbuildType
+    for cmakedef in cmake_defs:
+        configcmd += "-D%s=\"%s\" " % (cmakedef, cmake_defs[cmakedef])
+    configcmd = configcmd.strip()
+    configcmd += " %s" % nomalizeSlash(rootdir)
+    exitcode = os.system(configcmd)
+    if 0 != exitcode:
+        raise Exception(
+            "Error while trying to configure using '%s'" % configcmd)
+
+
 def main():
     try:
         arch = None
@@ -237,10 +268,18 @@ def main():
                                help='architecture could be x64 or x86')
         argparser.add_argument('--platform', default=platform, action='store',
                                help='platform could be win32 or linux')
+        argparser.add_argument('--build', action='store_true',
+                               help='initiate the build for present configuration')
+        argparser.add_argument('--clean', action='store_true',
+                               help='clean the build')
         args = argparser.parse_args()
 
         build_type = args.build_type.lower()
         arch = args.arch.lower()
+        platform = args.platform.lower()
+        buildflag = args.build
+        cleanflag = args.clean
+        print("configuring for %s-%s-%s" % (arch, platform, build_type))
 
         rootdir = os.path.dirname(os.path.abspath(__file__))
         pkgroot = os.path.join(rootdir, 'packages')
@@ -277,7 +316,7 @@ def main():
         cmake_defs = {}
         for package in packages:
             packageurl = package['url']
-            pkgdir = mkpkgdir(pkgroot, package, arch, build_type)
+            pkgdir = mkpkgdir(pkgroot, package, arch, build_type, platform)
             pkgrelpath = mkpkgrelpath(pkgdir, pkgroot)
             pkghome = os.path.join(pkgroot, pkgrelpath)
             pkghome = nomalizeSlash(pkghome)
@@ -300,40 +339,26 @@ def main():
                     defval = defval.replace('$$HOME$$', pkghome)
                     cmake_defs[defkey] = defval
 
-        builddir = os.path.join(rootdir, "out")
-        builddir = os.path.join(builddir, arch)
-        builddir = os.path.join(builddir, build_type)
-        builddir = nomalizeSlash(builddir)
-        installdir = os.path.join(builddir, "dist")
-        installdir = nomalizeSlash(installdir)
+        builddir = mkbuilddir(rootdir, arch, build_type, platform)
+        if cleanflag:
+            if os.path.exists(builddir):
+                shutil.rmtree(builddir)
 
         cmkcache = os.path.join(builddir, 'CMakeCache.txt')
-        if os.path.exists(cmkcache):
-            os.unlink(cmkcache)
-        else:
-            if os.path.exists(builddir):
-                print('Remove directory %s before proceed.' % builddir)
-                sys.exit()
+        if (not os.path.exists(cmkcache)) and os.path.exists(builddir):
+            shutil.rmtree(builddir)
 
-        cmkbuildType = "Debug"
-        if build_type == "release":
-            cmkbuildType = "Release"
-
-        configcmd = "cmake -G \"Ninja\" -B \"%s\" " % builddir
-        configcmd += "-DCMAKE_INSTALL_PREFIX=\"%s\" " % installdir
-        configcmd += "-DCMAKE_BUILD_TYPE=%s " % cmkbuildType
-        for cmakedef in cmake_defs:
-            configcmd += "-D%s=\"%s\" " % (cmakedef, cmake_defs[cmakedef])
-        configcmd = configcmd.strip()
-        configcmd += " %s" % nomalizeSlash(rootdir)
-        exitcode = os.system(configcmd)
-        if 0 != exitcode:
-            raise Exception(
-                "Error while trying to configure using '%s'" % configcmd)
+        runconfig(build_type, builddir, cmake_defs, rootdir)
+        if buildflag:
+            buildcmd = 'ninja -C %s' % builddir
+            exitcode = os.system(buildcmd)
+            if 0 != exitcode:
+                raise Exception('Build failed')
+        sys.exit(0)
 
     except Exception as e:
         logging.error(e)
-        raise e
+        sys.exit(-1)
 
 
 if __name__ == "__main__":

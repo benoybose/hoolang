@@ -22,8 +22,8 @@
 #include <istream>
 #include <sstream>
 #include <mutex>
-#include <ctime>
 #include <iomanip>
+#include <time.h>
 
 namespace hoo
 {
