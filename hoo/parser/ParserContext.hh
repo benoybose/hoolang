@@ -31,7 +31,7 @@
 
 namespace hoo {
     namespace parser {
-        class CompilationContext {
+        class ParserContext {
         private:
             antlr4::ANTLRInputStream *stream = nullptr;
             HooLexer *lexer = nullptr;
@@ -42,7 +42,7 @@ namespace hoo {
             ErrorListener* error_listener = nullptr;
 
         public:
-            CompilationContext(std::string source_code);
+            ParserContext(std::string source_code);
 
         public:
             HooParser::UnitContext *GetUnit();
@@ -50,7 +50,7 @@ namespace hoo {
             const std::list<BaseError*>& GetErrors() const;
 
         public:
-            ~CompilationContext();
+            ~ParserContext();
         };
     }
 }

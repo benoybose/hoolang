@@ -16,11 +16,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <hoo/parser/CompilationContext.hh>
+#include <hoo/parser/ParserContext.hh>
 
-namespace hoo {
-    namespace parser {
-        CompilationContext::CompilationContext(std::string source_code) {
+namespace hoo
+{
+    namespace parser
+    {
+        ParserContext::ParserContext(std::string source_code)
+        {
             stream = new antlr4::ANTLRInputStream(source_code);
             lexer = new HooLexer(stream);
             tokens = new antlr4::CommonTokenStream(lexer);
@@ -33,7 +36,8 @@ namespace hoo {
             parser->addErrorListener(error_listener);
         }
 
-        CompilationContext::~CompilationContext() {
+        ParserContext::~ParserContext()
+        {
             delete error_listener;
             delete tokens;
             delete lexer;
@@ -41,16 +45,19 @@ namespace hoo {
             delete parser;
         }
 
-        HooParser::UnitContext* CompilationContext::GetUnit() {
+        HooParser::UnitContext *ParserContext::GetUnit()
+        {
             return this->parser->unit();
         }
 
-        void CompilationContext::AddCompilationError(BaseError *error) {
+        void ParserContext::AddCompilationError(BaseError *error)
+        {
             error_listener->Add(error);
         }
 
-        const std::list<BaseError *> &CompilationContext::GetErrors() const {
+        const std::list<BaseError *> &ParserContext::GetErrors() const
+        {
             return error_listener->GetErrors();
         }
-    }
-}
+    } // namespace parser
+} // namespace hoo

@@ -19,9 +19,10 @@
 #ifndef PARSERDRIVER_HH
 #define PARSERDRIVER_HH
 
-#include <hoo/parser/Module.hh>
 #include "HooParser.h"
-#include <hoo/parser/CompilationContext.hh>
+
+#include <hoo/ast/Unit.hh>
+#include <hoo/parser/ParserContext.hh>
 
 #include <string>
 #include <list>
@@ -37,7 +38,7 @@ namespace hoo {
             ParserDriver(const std::string &source_code);
 
         public:
-            Module *BuildModule();
+            hoo::ast::Unit *BuildModule();
         };
     }
 }

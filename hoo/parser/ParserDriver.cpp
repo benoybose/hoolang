@@ -17,9 +17,10 @@
  */
 
 #include <hoo/parser/ParserDriver.hh>
-#include <hoo/parser/CompilationContext.hh>
+#include <hoo/parser/ParserContext.hh>
 #include <hoo/parser/ParseError.hh>
 #include <hoo/parser/UnitVisitor.hh>
+#include <hoo/parser/ParseException.hh>
 
 #include <exception>
 
@@ -28,39 +29,52 @@ using namespace hoo::ast;
 using namespace antlr4;
 using namespace antlr4::tree;
 
-namespace hoo {
-    namespace parser {
+namespace hoo
+{
+    namespace parser
+    {
 
-        ParserDriver::ParserDriver(const std::string &source_code) :
-                _source_code(source_code) {
+        ParserDriver::ParserDriver(const std::string &source_code) : _source_code(source_code)
+        {
         }
 
-        Module* ParserDriver::BuildModule() {
-            CompilationContext context(this->_source_code);
-            Module* module = nullptr;
-            Unit* unit = nullptr;
+        hoo::ast::Unit *ParserDriver::BuildModule()
+        {
+            ParserContext context(this->_source_code);
+            Module *module = nullptr;
+            Unit *unit = nullptr;
 
-            try {
+            try
+            {
                 auto unitContext = context.GetUnit();
-                if (nullptr == unitContext) {
+                if (nullptr == unitContext)
+                {
                     throw std::runtime_error("Parsing failed because of unknown error.");
                 }
 
                 UnitVisitor visitor;
                 unit = visitor.visit(unitContext).as<Unit *>();
-            } catch (const std::bad_cast& ex) {
+            }
+            catch (const std::bad_cast &ex)
+            {
                 std::string message(ex.what());
                 auto error = new ParseError(ERROR_CODE_BAD_CAST_PARSING, message);
                 context.AddCompilationError(error);
-            } catch (const std::exception &ex) {
+            }
+            catch (const std::exception &ex)
+            {
                 std::string message(ex.what());
                 auto error = new ParseError(ERROR_CODE_FAILED_PARSING, message);
                 context.AddCompilationError(error);
             }
 
             auto errors = context.GetErrors();
-            module = new Module(unit, errors);
-            return module;
+            if (0 < errors.size())
+            {
+                throw ParseException(errors);
+            }
+
+            return unit;
         }
-    }
-}
+    } // namespace parser
+} // namespace hoo

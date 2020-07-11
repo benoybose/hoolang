@@ -94,7 +94,7 @@ returnStatement
     ;
 
 classDefinition
-    :   'class' Identifier ( '(' typeSpecifier+ ')' )? classBody
+    :   'class' Identifier ( ':' typeSpecifier+  )? classBody
     ;
 
 classBody

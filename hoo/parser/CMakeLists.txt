@@ -9,25 +9,25 @@ ANTLR4_GENERATE(HooANTLR4
 MESSAGE("${ANTLR4_INCLUDE_DIR_HooANTLR4}")
         
 SET(HOO_PARSER_HEADERS
-        Module.hh
         SyntaxError.hh
         ParserDriver.hh
-        CompilationContext.hh
+        ParserContext.hh
         ErrorListener.hh
         BaseError.hh
         ParseError.hh
-        UnitVisitor.hh)
+        UnitVisitor.hh
+        ParseException.hh)
 
 SET(HOO_PARSER_SOURCES
         ${ANTLR4_SRC_FILES_HooANTLR4}
-        Module.cpp
         SyntaxError.cpp
         ParserDriver.cpp
-        CompilationContext.cpp
+        ParserContext.cpp
         ErrorListener.cpp
         BaseError.cpp
         ParseError.cpp
-        UnitVisitor.cpp)
+        UnitVisitor.cpp
+        ParseException.cpp)
 
 ADD_LIBRARY(hooparser STATIC ${HOO_PARSER_HEADERS} ${HOO_PARSER_SOURCES})
 TARGET_INCLUDE_DIRECTORIES(hooparser PRIVATE 
@@ -35,3 +35,9 @@ TARGET_INCLUDE_DIRECTORIES(hooparser PRIVATE
         ${Boost_INCLUDE_DIRS} 
         ${ANTLR4_INCLUDE_DIR}
         ${ANTLR4_INCLUDE_DIR_HooANTLR4})
+
+ADD_EXECUTABLE(BasicClassDefinitionTest 
+        test/BasicClassDefinitionTest.cpp)
+TARGET_INCLUDE_DIRECTORIES(BasicClassDefinitionTest PRIVATE ${CMAKE_SOURCE_DIR})
+TARGET_LINK_LIBRARIES(BasicClassDefinitionTest hootest)
+ADD_TEST(BasicClassDefinitionTest BasicClassDefinitionTest)
