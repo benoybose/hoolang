@@ -19,7 +19,7 @@
 #ifndef PARSERDRIVER_HH
 #define PARSERDRIVER_HH
 
-#include "HooParser.h"
+#include <HooParser.h>
 
 #include <hoo/ast/Unit.hh>
 #include <hoo/parser/ParserContext.hh>
