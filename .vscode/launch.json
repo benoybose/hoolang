@@ -3,17 +3,14 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Debug UtilityTest",
+    "configurations": [{
+            "name": "BasicClassDefinitionTest.exe [Debug x64]",
             "type": "cppvsdbg",
             "request": "launch",
-            "windows": {
-                "program": "utlitytest.exe",
-                "cwd": "${workspaceFolder}\\Build\\Debug\\hoocommon\\",
-            },
+            "program": "${workspaceFolder}\\out\\x64\\debug\\win32\\hoo\\parser\\BasicClassDefinitionTest.exe",
             "args": [],
             "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false
         }

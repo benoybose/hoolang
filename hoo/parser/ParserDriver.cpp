@@ -38,10 +38,9 @@ namespace hoo
         {
         }
 
-        hoo::ast::Unit *ParserDriver::BuildModule()
+        const hoo::ast::Unit *ParserDriver::BuildModule() const
         {
             ParserContext context(this->_source_code);
-            Module *module = nullptr;
             Unit *unit = nullptr;
 
             try

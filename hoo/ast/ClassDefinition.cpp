@@ -18,10 +18,19 @@
 
 #include <hoo/ast/ClassDefinition.hh>
 
-namespace hoo {
-    namespace ast {
-        ClassDefinition::ClassDefinition():
-                Definition(DEFINITION_CLASS) {
+namespace hoo
+{
+    namespace ast
+    {
+        ClassDefinition::ClassDefinition(std::string &className)
+            : Definition(DEFINITION_CLASS),
+              _className(std::move(className))
+        {
         }
-    }
-}
+
+        const std::string &ClassDefinition::GetClassName() const
+        {
+            return this->_className;
+        }
+    } // namespace ast
+} // namespace hoo

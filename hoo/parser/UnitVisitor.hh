@@ -119,6 +119,8 @@ public:
 
     antlrcpp::Any visitStmtOperative(HooParser::StmtOperativeContext *ctx) override;
 
+    antlrcpp::Any visitClassDefinition(HooParser::ClassDefinitionContext *ctx) override;
+
 private:
 
     Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,

@@ -28,14 +28,18 @@ namespace hoo
                 try
                 {
                     test(this);
-                    TestResult result(name, this->_assert_count - asserted_count,
-                                      this->_failed_count - failed_count);
-                    results.push_back(result);
                 }
                 catch (...)
                 {
+                    if (failed_count == this->_failed_count) {
+                        this->_failed_count += 1;
+                    }
                     Out() << "failed test case: \"" << name << "\"" << std::endl;
                 }
+
+                TestResult result(name, this->_assert_count - asserted_count,
+                                  this->_failed_count - failed_count);
+                results.push_back(result);
             }
             return results;
         }
@@ -75,12 +79,13 @@ namespace hoo
                 {
                     this->_failed_count += 1;
                     Out() << "String equality failed. Actual = \""
-                        << orignal << "\". " << "Expected = \""
-                        << expected << "\"."
-                        << std::endl;
+                          << orignal << "\". "
+                          << "Expected = \""
+                          << expected << "\"."
+                          << std::endl;
                     if (!message.empty())
                     {
-                        Out() << message << std::endl;                        
+                        Out() << message << std::endl;
                     }
                 }
             }

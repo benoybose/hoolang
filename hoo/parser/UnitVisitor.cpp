@@ -448,6 +448,14 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
     return Any(unit);
 }
 
+Any UnitVisitor::visitClassDefinition(HooParser::ClassDefinitionContext *ctx)
+{
+    auto className = ctx->className->getText();
+    auto classDefinition = new ClassDefinition(className);
+    Definition *definition = (Definition *) classDefinition;
+    return Any(definition);
+}
+
 Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
                                                 HooParser::ExpressionContext *rvalue, ParserRuleContext *context)
 {

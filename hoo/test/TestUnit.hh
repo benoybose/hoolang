@@ -5,6 +5,7 @@
 #include <list>
 #include <ostream>
 #include <cstdint>
+#include <typeinfo>
 
 #include "TestResult.hh"
 
@@ -121,7 +122,7 @@ namespace hoo
             }
 
             template <typename T>
-            void NotNull(T *v, const std::string &message)
+            void NotNull(T *v, const std::string &message = "")
             {
                 try
                 {
@@ -129,6 +130,7 @@ namespace hoo
                     if (nullptr == v)
                     {
                         this->_failed_count += 1;
+                        Out() << "NotNull test failed." << std::endl;
                         if (!message.empty())
                         {
                             Out() << message;
@@ -168,7 +170,7 @@ namespace hoo
             }
 
             template <typename T>
-            void DoesNotThrow(std::function<void()> code, const std::string &message)
+            void DoesNotThrow(std::function<void()> code, const std::string &message = "")
             {
                 try
                 {
@@ -180,6 +182,9 @@ namespace hoo
                     catch (T)
                     {
                         this->_failed_count += 1;
+                        Out() << "DoesNotThrow test failed. The given code has thrown '"
+                              << typeid(T).name()
+                              << "'" << std::endl;
                         if (!message.empty())
                         {
                             Out() << message;
@@ -189,6 +194,37 @@ namespace hoo
                 catch (...)
                 {
                     // todo: Do nothing
+                }
+            }
+
+            template <typename T, typename TReturn>
+            TReturn DoesNotThrowAndReturn(std::function<TReturn()> code, const std::string &message = "")
+            {
+                TReturn *defaultValue = nullptr;
+                try
+                {
+                    this->_assert_count += 1;
+                    try
+                    {
+                        TReturn value = code();
+                        return value;
+                    }
+                    catch (T)
+                    {
+                        this->_failed_count += 1;
+                        Out() << "DoesNotThrowAndReturn test failed. The given code has thrown '"
+                              << typeid(T).name()
+                              << "'" << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message;
+                        }
+                        return *(defaultValue);
+                    }
+                }
+                catch (...)
+                {
+                    return *(defaultValue);
                 }
             }
 
@@ -232,8 +268,10 @@ namespace hoo
                     {
                         this->_failed_count += 1;
                         Out() << "Count test failed. Actual = \""
-                              << std::to_string(items.size()) << "\". Expected = \""
-                              << std::to_string(expected) "\".";
+                              << std::to_string(items.size())
+                              << "\". Expected = \""
+                              << std::to_string(expected)
+                              << "\"."
                               << std::endl;
                         if (!message.empty())
                         {
@@ -248,8 +286,8 @@ namespace hoo
             }
 
             template <typename T>
-            void At(const std::vector<T> &items, size_t index, T expected, 
-            const std::string &message = "")
+            void At(const std::vector<T> &items, size_t index, T expected,
+                    const std::string &message = "")
             {
                 try
                 {
@@ -265,12 +303,38 @@ namespace hoo
                         {
                             this->_failed_count += 1;
                             Out() << "Value at index " << index << " failed. "
-                                << ". Actual = \"" << std::to_string(original) << "\""
-                                << ". Expected = \"" << std::to_string(expected) << "\"."
-                                << std::endl;
-                            if (!message.empty()) {
+                                  << ". Actual = \"" << std::to_string(original) << "\""
+                                  << ". Expected = \"" << std::to_string(expected) << "\"."
+                                  << std::endl;
+                            if (!message.empty())
+                            {
                                 Out() << message << std::endl;
                             }
+                        }
+                    }
+                }
+                catch (...)
+                {
+                    this->_failed_count += 1;
+                }
+            }
+
+            template <typename TExpected, typename TOriginal>
+            void IsA(TOriginal value, const std::string& message = "")
+            {
+                try
+                {
+                    auto casted = dynamic_cast<TExpected>(value);
+                    if (casted == nullptr)
+                    {
+                        this->_failed_count ++;
+                        Out() << "IsA test failed. "
+                        << ". Actual = \"" << typeid(TOriginal).name() << "\""
+                        << ". Expected = \"" << typeid(TExpected).name() << "\""
+                        << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message << std::endl;
                         }
                     }
                 }

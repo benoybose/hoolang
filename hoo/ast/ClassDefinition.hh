@@ -21,14 +21,24 @@
 
 #include <hoo/ast/Definition.hh>
 
-namespace hoo {
-    namespace ast {
-        class ClassDefinition : public Definition {
-        public:
-            ClassDefinition();
-        };
-    }
-}
+#include <string>
 
+namespace hoo
+{
+    namespace ast
+    {
+        class ClassDefinition : public Definition
+        {
+        private:
+            std::string _className;
+
+        public:
+            ClassDefinition(std::string& className);
+
+        public:
+            const std::string &GetClassName() const;
+        };
+    } // namespace ast
+} // namespace hoo
 
 #endif //HC_CLASS_DEFINITION_HH
