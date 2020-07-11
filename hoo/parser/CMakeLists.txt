@@ -3,7 +3,7 @@ CMAKE_POLICY(SET CMP0074 NEW)
 PROJECT(hooparser)
 
 ANTLR4_GENERATE(HooANTLR4
-	${CMAKE_SOURCE_DIR}/hooparser/grammar/Hoo.g4
+	${CMAKE_SOURCE_DIR}/hoo/parser/grammar/Hoo.g4
         BOTH FALSE TRUE)
 
 MESSAGE("${ANTLR4_INCLUDE_DIR_HooANTLR4}")

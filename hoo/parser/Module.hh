@@ -20,7 +20,7 @@
 #define HOOC_COMPILATION_UNIT_H
 
 #include "BaseError.hh"
-#include "hooast/Unit.hh"
+#include <hoo/ast/Unit.hh>
 
 #include <string>
 #include <memory>

@@ -20,9 +20,9 @@
 #define PROJECT_UNITVISITOR_HH
 
 #include "HooBaseVisitor.h"
-#include "hooast/Expression.hh"
-#include "hooast/Operator.hh"
-#include "hooast/Declarator.hh"
+#include <hoo/ast/Expression.hh>
+#include <hoo/ast/Operator.hh>
+#include <hoo/ast/Declarator.hh>
 
 #include <string>
 
