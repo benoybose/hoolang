@@ -271,7 +271,9 @@ def main():
         argparser.add_argument('--build', action='store_true',
                                help='initiate the build for present configuration')
         argparser.add_argument('--clean', action='store_true',
-                               help='clean the build')
+                               help='clean the build before do configure')
+        argparser.add_argument('--test', action='store_true',
+                               help='test the build')
         args = argparser.parse_args()
 
         build_type = args.build_type.lower()
@@ -279,7 +281,8 @@ def main():
         platform = args.platform.lower()
         buildflag = args.build
         cleanflag = args.clean
-        print("configuring for %s-%s-%s" % (arch, platform, build_type))
+        testflag = args.test
+        print("[%s-%s-%s]" % (arch, platform, build_type))
 
         rootdir = os.path.dirname(os.path.abspath(__file__))
         pkgroot = os.path.join(rootdir, 'packages')
@@ -349,12 +352,20 @@ def main():
             shutil.rmtree(builddir)
 
         runconfig(build_type, builddir, cmake_defs, rootdir)
+        if testflag:
+            buildflag = True
+
         if buildflag:
             buildcmd = 'ninja -C %s' % builddir
             exitcode = os.system(buildcmd)
             if 0 != exitcode:
-                raise Exception('Build failed')
-        sys.exit(0)
+                raise Exception('build failed')
+        
+        if testflag:
+            testcmd = 'ninja -C %s test' % builddir
+            exitcode = os.system(testcmd)
+            if 0 != exitcode:
+                raise Exception('test failed')
 
     except Exception as e:
         logging.error(e)
