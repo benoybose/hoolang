@@ -3,94 +3,10 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [{
-            "label": "Hoo: Get Packages",
+            "label": "Hoo: Build",
             "type": "shell",
             "command": "python3",
-            "args": ["getpackages.py"],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Hoo: Configure (Release)",
-            "type": "shell",
-            "command": "cmake",
-            "windows": {
-                "args": [
-                    "-G",
-                    "NMake Makefiles",
-                    "-B",
-                    "./Build/Release",
-                    "-DCMAKE_BUILD_TYPE=Release",
-                    "-DCMAKE_C_COMPILER=clang-cl",
-                    "-DCMAKE_CXX_COMPILER=clang-cl"
-                ],
-            },
-            "options": {
-                "cwd": "${workspaceFolder}",
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Hoo: Build (Release)",
-            "type": "shell",
-            "windows": {
-                "command": "nmake"
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/Build/Release"
-            },
-            "problemMatcher": "$vsls",
-            "dependsOn": ["Hoo: Configure (Release)"]
-        },
-        {
-            "label": "Hoo: Configure (Debug)",
-            "type": "shell",
-            "command": "cmake",
-            "windows": {
-                "args": [
-                    "-G",
-                    "NMake Makefiles",
-                    "-B",
-                    "./Build/Debug",
-                    "-DCMAKE_BUILD_TYPE=Debug",
-                    "-DCMAKE_C_COMPILER=clang-cl",
-                    "-DCMAKE_CXX_COMPILER=clang-cl"
-                ],
-            },
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Hoo: Build (Debug)",
-            "type": "shell",
-            "windows": {
-                "command": "nmake"
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/Build/Debug"
-            },
-            "problemMatcher": "$vsls",
-            "dependsOn": ["Hoo: Configure (Debug)"],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": false,
-                "clear": true
-            }
-        },
-        {
-            "label": "Hoo: Clean",
-            "type": "shell",
-            "windows": {
-                "command": "rmdir",
-                "args": ["/S/Q", "${workspaceFolder}\\Build"]
-            },
+            "args": ["${workspaceFolder}/confighoo.py", "--build"],
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
@@ -102,17 +18,26 @@
             }
         },
         {
-            "label": "Hoo: Test (Debug)",
+            "label": "Hoo: Rebuild",
             "type": "shell",
-            "windows": {
-                "command": "nmake",
-                "args": [ "test" ]
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/Build/Debug"
-            },
+            "command": "python3",
+            "args": ["${workspaceFolder}/confighoo.py", "--build", "--clean"],
             "problemMatcher": [],
-            "dependsOn": ["Hoo: Build (Debug)"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "Hoo: Test",
+            "type": "shell",
+            "command": "python3",
+            "args": ["${workspaceFolder}/confighoo.py", "--build", "--test"],
+            "problemMatcher": [],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
