@@ -1,4 +1,4 @@
-#include "TestResult.hh"
+#include <hoo/test/TestResult.hh>
 
 namespace hoo
 {

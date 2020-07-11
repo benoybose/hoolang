@@ -1,8 +1,8 @@
+#include <hoo/common/Utility.hh>
+#include <hoo/test/TestUnit.hh>
+
 #include <cstdint>
 #include <vector>
-
-#include "Utility.hh"
-#include "TestUnit.hh"
 
 class UtilityTest : public hoo::test::TestUnit
 {

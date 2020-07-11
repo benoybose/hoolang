@@ -16,34 +16,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "JITException.hh"
+#include <hoo/common/NotImplementedException.hh>
 
-namespace hoo {
-    namespace jit {
-        const int HOO_ERROR_DUPLICATE_MODULE_NAME = 3000;
-        const int HOO_ERROR_DUPLICATE_ITEM_NAME = 3001;
+namespace hoo
+{
+        namespace common
+        {
+                NotImplementedException::NotImplementedException()
+                    : runtime_error("Feature not implemented.")
+                {
+                }
 
-        JITException::JITException(int errorCode) : std::exception() {
-            this->_errorCode = errorCode;
-        }
-
-        JITException::~JITException() {}
-
-        std::string JITException::GetMessage() {
-            switch (this->_errorCode) {
-                case HOO_ERROR_DUPLICATE_MODULE_NAME:
-                    return std::string("Duplicate module.");
-
-                case HOO_ERROR_DUPLICATE_ITEM_NAME:
-                    return std::string("Duplicate stack item.");
-
-                default:
-                    return std::string("");
-            }
-        }
-
-        int JITException::GetErrorCode() {
-            return this->_errorCode;
-        }
-    }
-}
+                NotImplementedException::NotImplementedException(const std::string &arg)
+                    : runtime_error(std::string("Feature '") + arg + std::string("' is not implemented."))
+                {
+                }
+        } // namespace common
+} // namespace hoo

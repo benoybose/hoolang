@@ -3,8 +3,8 @@
 #include <list>
 #include <exception>
 
-#include "TestResult.hh"
-#include "TestUnit.hh"
+#include <hoo/test/TestResult.hh>
+#include <hoo/test/TestUnit.hh>
 
 namespace hoo
 {
