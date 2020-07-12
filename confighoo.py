@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import urllib.request
 import sys
 import logging
@@ -40,8 +41,35 @@ libindex = {
             ]
         }
     },
-    'linux': [
-    ]
+    'linux': {
+        'x64': {
+            'generic': [
+                {
+                    'name': 'clang',
+                    'version': '10.0.0',
+                    'url': 'https://www.dropbox.com/s/fb7qtvh3t03e7zs/clang-10.0.0-x64-linux-release.zip?dl=1',
+                    'defs': {
+                        'CMAKE_C_COMPILER': '$$HOME$$/bin/clang',
+                        'CMAKE_CXX_COMPILER': '$$HOME$$/bin/clang++',
+                    }                    
+                },
+            ],
+            'debug': [
+                {
+                    'name': 'antlr4-runtime-cpp',
+                    'version': '4.8',
+                    'url': 'https://www.dropbox.com/s/j6uxr0wpbi1zgdl/antlr4-4.8-x64-linux-debug.zip?dl=1'
+                }
+            ],
+            'release': [
+                {
+                    'name': 'antlr4-runtime-cpp',
+                    'version': '4.8',
+                    'url': 'https://www.dropbox.com/s/k2ccuzvh9ffnn39/antlr4-4.8-x64-linux-release.zip?dl=1'
+                }
+            ]
+        }
+    }
 }
 
 SIZE_ONE_MB = 1048576
