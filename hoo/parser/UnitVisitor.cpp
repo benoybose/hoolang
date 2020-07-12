@@ -435,15 +435,16 @@ Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx
 Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
 {
     auto items = ctx->unitItem();
-    std::list<UnitItem *> unit_items;
+    UnitItemList unit_items;
     for (auto item : items)
     {
         auto unit_item = this->visit(item).as<UnitItem *>();
         if (nullptr != unit_item)
         {
-            unit_items.push_back(unit_item);
+            unit_items.push_back(std::shared_ptr<UnitItem>(unit_item));
         }
     }
+
     auto unit = new Unit(unit_items);
     return Any(unit);
 }

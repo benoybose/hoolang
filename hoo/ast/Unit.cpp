@@ -22,20 +22,15 @@
 
 namespace hoo {
     namespace ast {
-        Unit::Unit(std::list<UnitItem *> items)
+        Unit::Unit(UnitItemList items)
                 : _items(std::move(items)) {
 
         }
 
         Unit::~Unit() {
-            while(this->_items.begin() != this->_items.end()) {
-                auto item = *(this->_items.begin());
-                this->_items.remove(item);
-                delete item;
-            }
         }
 
-        const std::list<UnitItem *> &Unit::GetItems() const {
+        UnitItemList &Unit::GetItems() {
             return this->_items;
         }
     }

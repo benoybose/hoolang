@@ -143,6 +143,28 @@ namespace hoo
                 }
             }
 
+            template<typename T>
+            void NotNull(std::shared_ptr<T> v, const std::string &message = "")
+            {
+                try
+                {
+                    this->_assert_count += 1;
+                    if (!v)
+                    {
+                        this->_failed_count += 1;
+                        Out() << "NotNull test failed." << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message;
+                        }
+                    }
+                }
+                catch (...)
+                {
+                    this->_failed_count += 1;
+                }                
+            }
+
             template <typename T>
             void Throws(std::function<void()> code, const std::string &message)
             {
@@ -198,7 +220,8 @@ namespace hoo
             }
 
             template <typename T, typename TReturn>
-            TReturn DoesNotThrowAndReturn(std::function<TReturn()> code, const std::string &message = "")
+            TReturn DoesNotThrowAndReturn(std::function<TReturn()> code,
+                                          const std::string &message = "")
             {
                 TReturn *defaultValue = nullptr;
                 try
@@ -320,18 +343,18 @@ namespace hoo
             }
 
             template <typename TExpected, typename TOriginal>
-            void IsA(TOriginal value, const std::string& message = "")
+            void IsA(TOriginal value, const std::string &message = "")
             {
                 try
                 {
-                    auto casted = dynamic_cast<TExpected>(value);
+                    auto casted = dynamic_cast<TExpected*>(value);
                     if (casted == nullptr)
                     {
-                        this->_failed_count ++;
+                        this->_failed_count++;
                         Out() << "IsA test failed. "
-                        << ". Actual = \"" << typeid(TOriginal).name() << "\""
-                        << ". Expected = \"" << typeid(TExpected).name() << "\""
-                        << std::endl;
+                              << ". Actual = \"" << typeid(TOriginal).name() << "\""
+                              << ". Expected = \"" << typeid(TExpected).name() << "\""
+                              << std::endl;
                         if (!message.empty())
                         {
                             Out() << message << std::endl;
@@ -342,6 +365,33 @@ namespace hoo
                 {
                     this->_failed_count += 1;
                 }
+            }
+
+            template <typename TExpected, typename TOriginal>
+            std::shared_ptr<TExpected> IsA(std::shared_ptr<TOriginal> value, const std::string &message = "")
+            {
+                std::shared_ptr<TExpected> casted;
+                try
+                {
+                    casted = std::dynamic_pointer_cast<TExpected>(value);
+                    if (!casted)
+                    {
+                        this->_failed_count++;
+                        Out() << "IsA test failed. "
+                              << ". Actual = \"" << typeid(TOriginal).name() << "\""
+                              << ". Expected = \"" << typeid(TExpected).name() << "\""
+                              << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message << std::endl;
+                        }
+                    }
+                }
+                catch (...)
+                {
+                    this->_failed_count += 1;
+                }
+                return casted;
             }
         };
     } // namespace test

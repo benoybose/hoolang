@@ -22,25 +22,28 @@
 #include <hoo/ast/UnitItem.hh>
 
 #include <list>
+#include <memory>
 
-
-namespace hoo {
-    namespace ast {
-        class Unit {
+namespace hoo
+{
+    namespace ast
+    {
+        typedef std::list<std::shared_ptr<UnitItem>> UnitItemList;
+        class Unit
+        {
         private:
-            std::list<UnitItem*> _items;
-        public:
-            Unit(std::list<UnitItem*>  items);
+            UnitItemList _items;
 
         public:
-            const std::list<UnitItem*>& GetItems() const;
+            Unit (UnitItemList items);
+
+        public:
+            UnitItemList &GetItems();
 
         public:
             virtual ~Unit();
         };
-    }
-}
-
-
+    } // namespace ast
+} // namespace hoo
 
 #endif //HC_UNIT_H

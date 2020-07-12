@@ -38,7 +38,7 @@ namespace hoo {
             ParserDriver(const std::string &source_code);
 
         public:
-            const hoo::ast::Unit *BuildModule() const;
+            std::shared_ptr<hoo::ast::Unit> Build();
         };
     }
 }

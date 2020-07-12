@@ -3,6 +3,8 @@
 #include <hoo/parser/ParseException.hh>
 #include <hoo/ast/AST.hh>
 
+#include <memory>
+
 using namespace hoo::parser;
 using namespace hoo::ast;
 
@@ -19,15 +21,28 @@ public:
     void EmptyClassDefinitionTest()
     {
         const auto source = "class Human {}";
-        auto unit = DoesNotThrowAndReturn<ParseException, const Unit *>([source]() -> const Unit * {
+        DoesNotThrow<ParseException>([source]() {
             ParserDriver driver(source);
-            return driver.BuildModule();
+            driver.Build();
         });
+
+        auto unit = DoesNotThrowAndReturn<ParseException,
+                                          std::shared_ptr<hoo::ast::Unit>>([source]() -> std::shared_ptr<hoo::ast::Unit> {
+            ParserDriver driver(source);
+            auto unit = driver.Build();
+            return unit;
+        });
+
         NotNull(unit);
         auto unit_items = unit->GetItems();
-        Count<UnitItem *>(unit_items, 1);
+        Count<>(unit_items, 1);
         auto single_item = *unit_items.begin();
-        IsA<ClassDefinition*>(single_item);
+        auto classDefinition = IsA<ClassDefinition, UnitItem>(single_item);
+        if (!classDefinition)
+        {
+            return;
+        }
+        StringEqual(classDefinition->GetClassName(), "Human");
     }
 };
 

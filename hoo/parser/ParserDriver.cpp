@@ -23,6 +23,7 @@
 #include <hoo/parser/ParseException.hh>
 
 #include <exception>
+#include <memory>
 
 using namespace hoo;
 using namespace hoo::ast;
@@ -38,10 +39,10 @@ namespace hoo
         {
         }
 
-        const hoo::ast::Unit *ParserDriver::BuildModule() const
+        std::shared_ptr<hoo::ast::Unit> ParserDriver::Build()
         {
             ParserContext context(this->_source_code);
-            Unit *unit = nullptr;
+            std::shared_ptr<hoo::ast::Unit> unit;
 
             try
             {
@@ -52,7 +53,8 @@ namespace hoo
                 }
 
                 UnitVisitor visitor;
-                unit = visitor.visit(unitContext).as<Unit *>();
+                auto compile_unit = visitor.visit(unitContext).as<Unit *>();
+                unit = std::shared_ptr<hoo::ast::Unit>(compile_unit);
             }
             catch (const std::bad_cast &ex)
             {
