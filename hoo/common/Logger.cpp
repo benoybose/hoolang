@@ -57,10 +57,11 @@ namespace hoo
         {
             std::lock_guard<std::mutex> guard(Logger::_write_lock);
             std::ostringstream text;
-            
-            auto time = std::localtime(nullptr);
-            text << "[" << std::put_time(time, "%c %Z") << "] ["
-                 << Logger::GetLogLevelName(logLevel)
+            time_t t = time(NULL);
+            struct tm tbuff = {0};
+
+            auto time = localtime_s(&tbuff, &t);
+            text << "[" << Logger::GetLogLevelName(logLevel)
                  << "] " << message << std::endl;
             text.flush();
             std::string content = text.str();
@@ -104,4 +105,4 @@ namespace hoo
             }
         }
     } // namespace common
-} // namespace hooc
+} // namespace hoo
