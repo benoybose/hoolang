@@ -8,6 +8,7 @@ import re
 import json
 import argparse
 import shutil
+import stat
 
 from zipfile import ZipFile
 
@@ -51,7 +52,11 @@ libindex = {
                     'defs': {
                         'CMAKE_C_COMPILER': '$$HOME$$/bin/clang',
                         'CMAKE_CXX_COMPILER': '$$HOME$$/bin/clang++',
-                    }                    
+                    },
+                    'execs': [
+                        '$$HOME$$/bin/clang',
+                        '$$HOME$$/bin/clang++'
+                    ]
                 },
             ],
             'debug': [
@@ -369,6 +374,13 @@ def main():
                     defval = defs[defkey]
                     defval = defval.replace('$$HOME$$', pkghome)
                     cmake_defs[defkey] = defval
+            execs = package.get('execs')
+            if not execs is None:
+                print('executables')
+                for path in execs:
+                    path = path.replace('$$HOME$$', pkghome)
+                    os.chmod(path, stat.S_IRWXU)
+                    print(path)
 
         builddir = mkbuilddir(rootdir, arch, build_type, platform)
         if cleanflag:
