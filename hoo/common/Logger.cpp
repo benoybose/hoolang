@@ -57,10 +57,6 @@ namespace hoo
         {
             std::lock_guard<std::mutex> guard(Logger::_write_lock);
             std::ostringstream text;
-            time_t t = time(NULL);
-            struct tm tbuff = {0};
-
-            auto time = localtime_s(&tbuff, &t);
             text << "[" << Logger::GetLogLevelName(logLevel)
                  << "] " << message << std::endl;
             text.flush();

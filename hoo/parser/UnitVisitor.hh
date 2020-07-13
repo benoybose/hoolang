@@ -19,6 +19,7 @@
 #ifndef PROJECT_UNITVISITOR_HH
 #define PROJECT_UNITVISITOR_HH
 
+#include <iostream>
 #include "HooBaseVisitor.h"
 #include <hoo/ast/Expression.hh>
 #include <hoo/ast/Operator.hh>

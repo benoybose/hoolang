@@ -63,14 +63,14 @@ libindex = {
                 {
                     'name': 'antlr4-runtime-cpp',
                     'version': '4.8',
-                    'url': 'https://www.dropbox.com/s/j6uxr0wpbi1zgdl/antlr4-4.8-x64-linux-debug.zip?dl=1'
+                    'url': 'https://www.dropbox.com/s/9vz3tmurvqhztqx/antlr4-4.8-x64-linux.zip?dl=1'
                 }
             ],
             'release': [
                 {
                     'name': 'antlr4-runtime-cpp',
                     'version': '4.8',
-                    'url': 'https://www.dropbox.com/s/k2ccuzvh9ffnn39/antlr4-4.8-x64-linux-release.zip?dl=1'
+                    'url': 'https://www.dropbox.com/s/9vz3tmurvqhztqx/antlr4-4.8-x64-linux.zip?dl=1'
                 }
             ]
         }

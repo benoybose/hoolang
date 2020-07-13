@@ -16,6 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <iostream>
 #include "HooLexer.h"
 #include <hoo/parser/UnitVisitor.hh>
 #include <hoo/ast/AST.hh>
