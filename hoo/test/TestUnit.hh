@@ -6,6 +6,7 @@
 #include <ostream>
 #include <cstdint>
 #include <typeinfo>
+#include <memory>
 
 #include "TestResult.hh"
 
