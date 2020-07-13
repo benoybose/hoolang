@@ -94,7 +94,11 @@ returnStatement
     ;
 
 classDefinition
-    :   'class' className=Identifier ( ':' typeSpecifier+  )? classBody
+    :   'class' className=Identifier ( ':' baseEntities=typeList  )? classBody
+    ;
+
+typeList
+    : typeSpecifier ( ',' typeSpecifier)*
     ;
 
 classBody

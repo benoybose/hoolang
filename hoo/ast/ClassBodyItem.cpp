@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2020 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,45 +16,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <hoo/ast/ClassDefinition.hh>
+#include <hoo/ast/ClassBodyItem.hh>
 
 namespace hoo
 {
     namespace ast
     {
-        ClassDefinition::ClassDefinition(std::string &class_name,
-                                         std::list<std::string> &base_entities,
-                                         std::shared_ptr<ClassBody> &body)
-            : Definition(DEFINITION_CLASS),
-              _class_name(std::move(class_name)),
-              _base_entities(base_entities),
-              _body(body)
+        ClassBodyItem::ClassBodyItem(std::shared_ptr<FunctionDefinition> &funcdef)
+            : _class_body_type(CLSBODY_FUNCTIONDEF),
+              _function_def(std::move(funcdef))
         {
         }
 
-        const std::string &ClassDefinition::GetClassName() const
+        ClassBodyItem::ClassBodyItem(std::shared_ptr<DeclarationStatement> &declstmt)
+            : _class_body_type(CLSBODY_DECLARATIONSTMT),
+              _declaration_stmt(std::move(declstmt))
         {
-            return this->_class_name;
         }
 
-        const bool ClassDefinition::IsEmpty() const
+        ClassBodyItemType ClassBodyItem::GetType()
         {
-            if (!this->_body)
-            {
-                return true;
-            }
-            return this->_body->IsEmpty();
+            return this->_class_body_type;
         }
 
-        const std::list<std::string> &ClassDefinition::GetBaseEntities() const
+        std::shared_ptr<FunctionDefinition> &ClassBodyItem::GetFunctionDefinition()
         {
-            return this->_base_entities;
+            return this->_function_def;
         }
 
-        const bool ClassDefinition::HasBaseEntities() const
+        std::shared_ptr<DeclarationStatement> &ClassBodyItem::GetDeclarationStatement()
         {
-            auto base_entities = this->GetBaseEntities();
-            return (0 < base_entities.size());
+            return this->_declaration_stmt;
         }
     } // namespace ast
 } // namespace hoo

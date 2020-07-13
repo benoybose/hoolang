@@ -25,6 +25,7 @@
 #include <string>
 #include <utility>
 #include <regex>
+#include <memory>
 
 using namespace hoo::ast;
 using namespace antlrcpp;
@@ -453,13 +454,43 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
 Any UnitVisitor::visitClassDefinition(HooParser::ClassDefinitionContext *ctx)
 {
     auto className = ctx->className->getText();
-    auto classDefinition = new ClassDefinition(className);
-    Definition *definition = (Definition *) classDefinition;
+    std::list<std::string> base_entity_names;
+    std::shared_ptr<ClassBody> class_body;
+    auto base_entities = ctx->baseEntities;
+    if (nullptr != base_entities)
+    {
+        auto base_types = base_entities->typeSpecifier();
+        for (auto base_type : base_types)
+        {
+            auto type = visit(base_type).as<TypeSpecification *>();
+            if (nullptr != type)
+            {
+                auto typeType = type->GetType();
+                if (typeType != TYPE_SPEC_REFERENCE)
+                {
+                    delete type;
+                    // todo: // Throw parse exception                 
+                }
+                else {
+                    auto base_entity_name = type->GetName();
+                    base_entity_names.push_back(base_entity_name);
+                    delete type;
+                }
+            }
+        }
+    }
+
+    auto classDefinition = new ClassDefinition(className,
+                                               base_entity_names,
+                                               class_body);
+    Definition *definition = (Definition *)classDefinition;
     return Any(definition);
 }
 
-Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
-                                                HooParser::ExpressionContext *rvalue, ParserRuleContext *context)
+Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
+                                                antlr4::Token *opr,
+                                                HooParser::ExpressionContext *rvalue,
+                                                ParserRuleContext *context)
 {
     auto left = this->visit(lvalue).as<Expression *>();
     auto right = this->visit(rvalue).as<Expression *>();

@@ -21,11 +21,6 @@ public:
     void EmptyClassDefinitionTest()
     {
         const auto source = "class Human {}";
-        DoesNotThrow<ParseException>([source]() {
-            ParserDriver driver(source);
-            driver.Build();
-        });
-
         auto unit = DoesNotThrowAndReturn<ParseException,
                                           std::shared_ptr<hoo::ast::Unit>>([source]() -> std::shared_ptr<hoo::ast::Unit> {
             ParserDriver driver(source);
@@ -34,6 +29,11 @@ public:
         });
 
         NotNull(unit);
+        if (!unit)
+        {
+            return;
+        }
+
         auto unit_items = unit->GetItems();
         Count<>(unit_items, 1);
         auto single_item = *unit_items.begin();
@@ -43,6 +43,8 @@ public:
             return;
         }
         StringEqual(classDefinition->GetClassName(), "Human");
+        False(classDefinition->HasBaseEntities());
+        True(classDefinition->IsEmpty());
     }
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Benoy Bose
+ * Copyright 2020 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,38 +16,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HC_CLASS_DEFINITION_HH
-#define HC_CLASS_DEFINITION_HH
+#ifndef _CLASS_BODY_HH
+#define _CLASS_BODY_HH
 
-#include <hoo/ast/Definition.hh>
-#include <hoo/ast/ClassBody.hh>
+#include <hoo/ast/ClassBodyItem.hh>
 
-#include <string>
+#include <memory>
 #include <list>
 
 namespace hoo
 {
-    namespace ast
-    {
-        class ClassDefinition : public Definition
+    namespace ast {
+        class ClassBody
         {
-        private:
-            std::string _class_name;
-            std::list<std::string> _base_entities;
-            std::shared_ptr<ClassBody> _body;
+            private:
+            std::list<std::shared_ptr<ClassBodyItem>> _items;
 
-        public:
-            ClassDefinition(std::string &class_name,
-                            std::list<std::string> &base_entities,
-                            std::shared_ptr<ClassBody> &body);
+            public:
+            ClassBody(std::list<std::shared_ptr<ClassBodyItem>>& items);
 
-        public:
-            const std::string &GetClassName() const;
-            const bool IsEmpty() const;
-            const std::list<std::string>& GetBaseEntities() const;
-            const bool HasBaseEntities() const;
+            public:
+            std::list<std::shared_ptr<ClassBodyItem>>& GetItems();
+            bool IsEmpty();
         };
-    } // namespace ast
-} // namespace hoo
-
-#endif //HC_CLASS_DEFINITION_HH
+    }
+}
+#endif // _CLASS_BODY_HH

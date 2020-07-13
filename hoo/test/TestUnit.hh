@@ -55,8 +55,8 @@ namespace hoo
             std::ostream &Out() { return _out; }
 
         protected:
-            void True(bool expr, const std::string &message);
-            void False(bool expr, const std::string &message);
+            void True(bool expr, const std::string &message = "");
+            void False(bool expr, const std::string &message = "");
             void StringEqual(std::string orignal, std::string expected, const std::string &message = "");
 
             template <typename T>

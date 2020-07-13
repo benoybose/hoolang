@@ -30,7 +30,9 @@ SET (HOO_AST_HEADERS ArrayAccessExpression.hh
     TypeSpecification.hh
     Unit.hh
     UnitItem.hh
-    VariableDeclaration.hh)
+    VariableDeclaration.hh
+    ClassBodyItem.hh
+    ClassBody.hh)
 
 SET (HOO_AST_SOURCES ArrayAccessExpression.cpp
     ArrayDataTypeSpecification.cpp
@@ -59,7 +61,9 @@ SET (HOO_AST_SOURCES ArrayAccessExpression.cpp
     TypeSpecification.cpp
     Unit.cpp
     UnitItem.cpp
-    VariableDeclaration.cpp)
+    VariableDeclaration.cpp
+    ClassBodyItem.cpp
+    ClassBody.cpp)
 
 ADD_LIBRARY(hooast STATIC ${HOO_AST_HEADERS} ${HOO_AST_SOURCES})
 TARGET_INCLUDE_DIRECTORIES(hooast PRIVATE ${CMAKE_SOURCE_DIR})
