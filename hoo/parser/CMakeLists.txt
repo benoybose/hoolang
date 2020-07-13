@@ -31,6 +31,10 @@ SET(HOO_PARSER_SOURCES
         ParseException.cpp)
 
 ADD_LIBRARY(hooparser STATIC ${HOO_PARSER_HEADERS} ${HOO_PARSER_SOURCES})
+ADD_DEPENDENCIES(hooparser antlr4_static)
+TARGET_LINK_LIBRARIES(hooparser PRIVATE
+        hooast
+        antlr4_static)
 TARGET_INCLUDE_DIRECTORIES(hooparser PRIVATE 
         ${CMAKE_SOURCE_DIR}
         ${ANTLR4_INCLUDE_DIR}
