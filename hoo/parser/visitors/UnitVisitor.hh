@@ -19,8 +19,9 @@
 #ifndef PROJECT_UNITVISITOR_HH
 #define PROJECT_UNITVISITOR_HH
 
-#include <iostream>
 #include "HooBaseVisitor.h"
+
+#include <iostream>
 #include <hoo/ast/Expression.hh>
 #include <hoo/ast/Operator.hh>
 #include <hoo/ast/Declarator.hh>
@@ -30,7 +31,8 @@
 using namespace hoo::ast;
 using namespace antlr4;
 
-class UnitVisitor : public HooBaseVisitor {
+class UnitVisitor : public HooBaseVisitor
+{
 
 public:
     explicit UnitVisitor();
@@ -74,7 +76,7 @@ public:
 
     antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
 
-    antlrcpp::Any visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx) override;
+    antlrcpp::Any visitUnitItem(HooParser::UnitItemContext *ctx) override;
 
     antlrcpp::Any visitStmtNoop(HooParser::StmtNoopContext *ctx) override;
 
@@ -116,20 +118,13 @@ public:
 
     antlrcpp::Any visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) override;
 
-    antlrcpp::Any visitDefinitionUnitItem(HooParser::DefinitionUnitItemContext *ctx) override;
-
     antlrcpp::Any visitStmtOperative(HooParser::StmtOperativeContext *ctx) override;
 
-    antlrcpp::Any visitClassDefinition(HooParser::ClassDefinitionContext *ctx) override;
-
 private:
-
     Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
                                        HooParser::ExpressionContext *rvalue, ParserRuleContext *context);
 
-    DeclaratorType GetDeclarator(const std::string& declarator) const;
-
+    DeclaratorType GetDeclarator(const std::string &declarator) const;
 };
-
 
 #endif //PROJECT_UNITVISITOR_HH

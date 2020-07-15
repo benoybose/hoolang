@@ -140,8 +140,8 @@ defenition
     ;
 
 unitItem
-    :   defenition #definitionUnitItem
-    |   statement #statementUnitItem
+    :   defenition
+    |   statement
     ;
 
 unit

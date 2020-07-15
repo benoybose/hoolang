@@ -18,7 +18,9 @@
 
 #include <iostream>
 #include "HooLexer.h"
-#include <hoo/parser/UnitVisitor.hh>
+#include <hoo/parser/visitors/UnitVisitor.hh>
+#include <hoo/parser/visitors/DefinitionVisitor.hh>
+#include <hoo/parser/visitors/StatementVisitor.hh>
 #include <hoo/ast/AST.hh>
 
 #include <list>
@@ -29,6 +31,7 @@
 
 using namespace hoo::ast;
 using namespace antlrcpp;
+using namespace hoo::parser;
 
 UnitVisitor::UnitVisitor()
 {
@@ -419,21 +422,6 @@ antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinition
     return Any(definition);
 }
 
-Any UnitVisitor::visitDefinitionUnitItem(HooParser::DefinitionUnitItemContext *ctx)
-{
-    auto definition = this->visit(ctx->defenition())
-                          .as<Definition *>();
-    auto unit_item = (UnitItem *)definition;
-    return Any(unit_item);
-}
-
-Any UnitVisitor::visitStatementUnitItem(HooParser::StatementUnitItemContext *ctx)
-{
-    auto statement = this->visit(ctx->statement()).as<Statement *>();
-    auto unit_item = (UnitItem *)statement;
-    return Any(unit_item);
-}
-
 Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
 {
     auto items = ctx->unitItem();
@@ -451,40 +439,27 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
     return Any(unit);
 }
 
-Any UnitVisitor::visitClassDefinition(HooParser::ClassDefinitionContext *ctx)
+Any UnitVisitor::visitUnitItem(HooParser::UnitItemContext *ctx)
 {
-    auto className = ctx->className->getText();
-    std::list<std::string> base_entity_names;
-    std::shared_ptr<ClassBody> class_body;
-    auto base_entities = ctx->baseEntities;
-    if (nullptr != base_entities)
+    auto definition_context = ctx->defenition();
+    if (nullptr != definition_context)
     {
-        auto base_types = base_entities->typeSpecifier();
-        for (auto base_type : base_types)
-        {
-            auto type = visit(base_type).as<TypeSpecification *>();
-            if (nullptr != type)
-            {
-                auto typeType = type->GetType();
-                if (typeType != TYPE_SPEC_REFERENCE)
-                {
-                    delete type;
-                    // todo: // Throw parse exception                 
-                }
-                else {
-                    auto base_entity_name = type->GetName();
-                    base_entity_names.push_back(base_entity_name);
-                    delete type;
-                }
-            }
-        }
+        DefinitionVisitor visitor;
+        auto definition = visitor.visit(definition_context).as<Definition*>();
+        UnitItem* unit_item = (UnitItem*) definition;
+        return Any(unit_item);
     }
 
-    auto classDefinition = new ClassDefinition(className,
-                                               base_entity_names,
-                                               class_body);
-    Definition *definition = (Definition *)classDefinition;
-    return Any(definition);
+    auto statement_context = ctx->statement();
+    if (nullptr != statement_context)
+    {
+        StatementVisitor visitor;
+        auto statement = visitor.visit(statement_context).as<Statement*>();
+        UnitItem* unit_item = (UnitItem*) statement;
+        return Any(unit_item);
+    }
+
+    throw std::exception("");
 }
 
 Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue,

@@ -16,8 +16,12 @@ SET(HOO_PARSER_HEADERS
         ErrorListener.hh
         BaseError.hh
         ParseError.hh
-        UnitVisitor.hh
-        ParseException.hh)
+        visitors/UnitVisitor.hh
+        ParseException.hh
+        visitors/DefinitionVisitor.hh
+        visitors/ClassDefinitionVisitor.hh
+        visitors/StatementVisitor.hh
+        visitors/VisitorHelper.hh)
 
 SET(HOO_PARSER_SOURCES
         ${ANTLR4_SRC_FILES_HooANTLR4}
@@ -27,8 +31,12 @@ SET(HOO_PARSER_SOURCES
         ErrorListener.cpp
         BaseError.cpp
         ParseError.cpp
-        UnitVisitor.cpp
-        ParseException.cpp)
+        visitors/UnitVisitor.cpp
+        ParseException.cpp
+        visitors/DefinitionVisitor.cpp
+        visitors/ClassDefinitionVisitor.cpp
+        visitors/StatementVisitor.cpp
+        visitors/VisitorHelper.cpp)
 
 ADD_LIBRARY(hooparser STATIC ${HOO_PARSER_HEADERS} ${HOO_PARSER_SOURCES})
 ADD_DEPENDENCIES(hooparser antlr4_static)

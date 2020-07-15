@@ -19,7 +19,7 @@
 #include <hoo/parser/ParserDriver.hh>
 #include <hoo/parser/ParserContext.hh>
 #include <hoo/parser/ParseError.hh>
-#include <hoo/parser/UnitVisitor.hh>
+#include <hoo/parser/visitors/UnitVisitor.hh>
 #include <hoo/parser/ParseException.hh>
 
 #include <exception>
