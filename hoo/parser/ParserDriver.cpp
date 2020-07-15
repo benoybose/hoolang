@@ -21,6 +21,7 @@
 #include <hoo/parser/ParseError.hh>
 #include <hoo/parser/visitors/UnitVisitor.hh>
 #include <hoo/parser/ParseException.hh>
+#include <hoo/parser/ErrorListener.hh>
 
 #include <exception>
 #include <memory>
@@ -41,7 +42,8 @@ namespace hoo
 
         std::shared_ptr<hoo::ast::Unit> ParserDriver::Build()
         {
-            ParserContext context(this->_source_code);
+            ErrorListener error_listener;
+            ParserContext context(this->_source_code, &error_listener);
             std::shared_ptr<hoo::ast::Unit> unit;
 
             try
@@ -52,7 +54,7 @@ namespace hoo
                     throw std::runtime_error("Parsing failed because of unknown error.");
                 }
 
-                UnitVisitor visitor;
+                UnitVisitor visitor(&error_listener);
                 auto compile_unit = visitor.visit(unitContext).as<Unit *>();
                 unit = std::shared_ptr<hoo::ast::Unit>(compile_unit);
             }
@@ -60,16 +62,15 @@ namespace hoo
             {
                 std::string message(ex.what());
                 auto error = new ParseError(ERROR_CODE_BAD_CAST_PARSING, message);
-                context.AddCompilationError(error);
+                error_listener.Add(ERROR_CODE_BAD_CAST_PARSING, message);
             }
             catch (const std::exception &ex)
             {
                 std::string message(ex.what());
-                auto error = new ParseError(ERROR_CODE_FAILED_PARSING, message);
-                context.AddCompilationError(error);
+                error_listener.Add(ERROR_CODE_FAILED_PARSING, message);
             }
 
-            auto errors = context.GetErrors();
+            auto errors = error_listener.GetErrors();
             if (0 < errors.size())
             {
                 throw ParseException(errors);

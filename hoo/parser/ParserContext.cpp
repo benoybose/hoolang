@@ -22,13 +22,13 @@ namespace hoo
 {
     namespace parser
     {
-        ParserContext::ParserContext(std::string source_code)
+        ParserContext::ParserContext(std::string source_code, ErrorListener *errorlistener)
+            : error_listener(errorlistener)
         {
             stream = new antlr4::ANTLRInputStream(source_code);
             lexer = new HooLexer(stream);
             tokens = new antlr4::CommonTokenStream(lexer);
             parser = new HooParser(tokens);
-            error_listener = new ErrorListener();
             auto errorHandler = std::shared_ptr<antlr4::ANTLRErrorStrategy>(new antlr4::DefaultErrorStrategy());
             parser->setErrorHandler(errorHandler);
             lexer->removeErrorListeners();
@@ -38,7 +38,6 @@ namespace hoo
 
         ParserContext::~ParserContext()
         {
-            delete error_listener;
             delete tokens;
             delete lexer;
             delete stream;
@@ -48,16 +47,6 @@ namespace hoo
         HooParser::UnitContext *ParserContext::GetUnit()
         {
             return this->parser->unit();
-        }
-
-        void ParserContext::AddCompilationError(BaseError *error)
-        {
-            error_listener->Add(error);
-        }
-
-        const std::list<BaseError *> &ParserContext::GetErrors() const
-        {
-            return error_listener->GetErrors();
         }
     } // namespace parser
 } // namespace hoo

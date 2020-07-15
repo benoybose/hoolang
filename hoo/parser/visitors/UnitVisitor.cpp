@@ -21,6 +21,7 @@
 #include <hoo/parser/visitors/UnitVisitor.hh>
 #include <hoo/parser/visitors/DefinitionVisitor.hh>
 #include <hoo/parser/visitors/StatementVisitor.hh>
+#include <hoo/parser/ErrorListener.hh>
 #include <hoo/ast/AST.hh>
 
 #include <list>
@@ -33,7 +34,8 @@ using namespace hoo::ast;
 using namespace antlrcpp;
 using namespace hoo::parser;
 
-UnitVisitor::UnitVisitor()
+UnitVisitor::UnitVisitor(ErrorListener *error_listener)
+    : _error_listener(error_listener)
 {
 }
 
@@ -433,6 +435,10 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
         {
             unit_items.push_back(std::shared_ptr<UnitItem>(unit_item));
         }
+        else
+        {
+            _error_listener->Add(item, "Invalid source.");
+        }        
     }
 
     auto unit = new Unit(unit_items);
@@ -445,8 +451,8 @@ Any UnitVisitor::visitUnitItem(HooParser::UnitItemContext *ctx)
     if (nullptr != definition_context)
     {
         DefinitionVisitor visitor;
-        auto definition = visitor.visit(definition_context).as<Definition*>();
-        UnitItem* unit_item = (UnitItem*) definition;
+        auto definition = visitor.visit(definition_context).as<Definition *>();
+        UnitItem *unit_item = (UnitItem *)definition;
         return Any(unit_item);
     }
 
@@ -454,12 +460,13 @@ Any UnitVisitor::visitUnitItem(HooParser::UnitItemContext *ctx)
     if (nullptr != statement_context)
     {
         StatementVisitor visitor;
-        auto statement = visitor.visit(statement_context).as<Statement*>();
-        UnitItem* unit_item = (UnitItem*) statement;
+        auto statement = visitor.visit(statement_context).as<Statement *>();
+        UnitItem *unit_item = (UnitItem *)statement;
         return Any(unit_item);
     }
 
-    throw std::exception("");
+    UnitItem* unit_item = nullptr;
+    return Any(unit_item);
 }
 
 Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lvalue,

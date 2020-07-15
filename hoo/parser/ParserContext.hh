@@ -42,13 +42,11 @@ namespace hoo {
             ErrorListener* error_listener = nullptr;
 
         public:
-            ParserContext(std::string source_code);
+            ParserContext(std::string source_code, ErrorListener* errorlistener);
 
         public:
             HooParser::UnitContext *GetUnit();
-            void AddCompilationError(BaseError* error);
-            const std::list<BaseError*>& GetErrors() const;
-
+            
         public:
             ~ParserContext();
         };

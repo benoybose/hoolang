@@ -21,37 +21,48 @@
 
 #include "antlr4-runtime.h"
 #include <hoo/parser/BaseError.hh>
+#include "ParserRuleContext.h"
 
 #include <list>
+#include <memory>
 
 using namespace antlr4;
 
-namespace hoo {
-    namespace parser {
-        class ErrorListener: public BaseErrorListener {
+namespace hoo
+{
+    namespace parser
+    {
+        class ErrorListener : public BaseErrorListener
+        {
 
         public:
             ErrorListener();
 
         private:
-            std::list<BaseError*> _errors;
+            std::list<std::shared_ptr<BaseError>> _errors;
 
         public:
-            void syntaxError(Recognizer *recognizer, Token *offendingSymbol, size_t line, size_t charPositionInLine,
+            void syntaxError(Recognizer *recognizer,
+                             Token *offendingSymbol,
+                             size_t line, size_t charPositionInLine,
                              const std::string &msg, std::exception_ptr e) override;
-            void Add(BaseError* error);
+
+            void Add(ParserRuleContext *ctx, const std::string &message);
+            void Add(ErrorCode error_code, const std::string &message);
 
         public:
-            const std::list<BaseError*>& GetErrors() const;
+            const std::list<std::shared_ptr<BaseError>> &GetErrors() const;
+
+        private:
+            std::shared_ptr<BaseError> CreateSyntaxError(Token *start,
+                                                                          const std::string &message);
+            std::shared_ptr<BaseError> CreateParseError(ErrorCode error_code,
+                                                                         const std::string &message);
 
         public:
             virtual ~ErrorListener();
-
         };
-    }
-}
-
-
-
+    } // namespace parser
+} // namespace hoo
 
 #endif //HC_COMPILATIONERRORLISTENER_HH

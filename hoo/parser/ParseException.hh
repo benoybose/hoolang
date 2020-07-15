@@ -5,6 +5,7 @@
 
 #include <exception>
 #include <list>
+#include <memory>
 
 namespace hoo
 {
@@ -13,13 +14,13 @@ namespace hoo
         class ParseException : std::exception
         {
         private:
-            std::list<BaseError *> _errors;
+            std::list<std::shared_ptr<BaseError>> _errors;
 
         public:
-            ParseException(std::list<BaseError *> errors);
+            ParseException(std::list<std::shared_ptr<BaseError>> errors);
 
         public:
-            const std::list<BaseError *> &GetErrors() const;
+            const std::list<std::shared_ptr<BaseError>> &GetErrors() const;
         };
     } // namespace parser
 } // namespace hoo

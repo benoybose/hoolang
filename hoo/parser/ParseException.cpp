@@ -6,12 +6,12 @@ namespace hoo
 {
     namespace parser
     {
-        ParseException::ParseException(std::list<BaseError *> errors)
-            : _errors(std::move(errors))
+        ParseException::ParseException(std::list<std::shared_ptr<BaseError>> errors)
+            : _errors(errors)
         {
         }
 
-        const std::list<BaseError *> &ParseException::GetErrors() const
+        const std::list<std::shared_ptr<BaseError>> &ParseException::GetErrors() const
         {
             return this->_errors;
         }

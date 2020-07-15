@@ -25,17 +25,22 @@
 #include <hoo/ast/Expression.hh>
 #include <hoo/ast/Operator.hh>
 #include <hoo/ast/Declarator.hh>
+#include <hoo/parser/ErrorListener.hh>
 
 #include <string>
 
 using namespace hoo::ast;
+using namespace hoo::parser;
 using namespace antlr4;
 
 class UnitVisitor : public HooBaseVisitor
 {
 
+private:
+    ErrorListener *_error_listener;
+
 public:
-    explicit UnitVisitor();
+    UnitVisitor(ErrorListener* error_listener);
 
 public:
     antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
