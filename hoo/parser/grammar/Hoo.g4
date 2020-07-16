@@ -135,8 +135,8 @@ Declarator
     ;
 
 defenition
-    :   classDefinition #classDef
-    |   functionDefinition #funcDef
+    :   classDefinition
+    |   functionDefinition
     ;
 
 unitItem

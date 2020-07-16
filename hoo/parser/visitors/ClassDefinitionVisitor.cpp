@@ -18,6 +18,7 @@
 
 #include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/ClassDefinitionVisitor.hh>
+#include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
 
 #include <string>
 
@@ -29,6 +30,11 @@ namespace hoo
 {
     namespace parser
     {
+        ClassDefinitionVisitor::ClassDefinitionVisitor(ErrorListener* error_listener)
+        : _error_listener(error_listener)
+        {
+        }
+
         Any ClassDefinitionVisitor::visitClassDefinition(HooParser::ClassDefinitionContext *ctx)
         {
             auto className = ctx->className->getText();
@@ -38,6 +44,7 @@ namespace hoo
             if (nullptr != base_entities)
             {
                 auto base_types = base_entities->typeSpecifier();
+                TypeSpecificationVisitor visitor(_error_listener);
                 for (auto base_type : base_types)
                 {
                     auto type = visit(base_type).as<TypeSpecification *>();

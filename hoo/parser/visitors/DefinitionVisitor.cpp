@@ -16,17 +16,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/DefinitionVisitor.hh>
+#include <hoo/parser/visitors/ClassDefinitionVisitor.hh>
+#include <hoo/parser/visitors/FunctionDefinitionVisitor.hh>
 
 using namespace antlr4;
 using namespace antlrcpp;
+using namespace hoo::ast;
 
 namespace hoo
 {
     namespace parser
     {
-        DefinitionVisitor::DefinitionVisitor()
+        DefinitionVisitor::DefinitionVisitor(ErrorListener *error_listener)
+            : _error_listener(error_listener)
         {
+        }
+
+        Any DefinitionVisitor::visitDefenition(HooParser::DefenitionContext *ctx)
+        {
+            auto class_definition_visitor = ctx->classDefinition();
+            Definition *definition = nullptr;
+
+            if (nullptr != class_definition_visitor)
+            {
+                ClassDefinitionVisitor visitor(_error_listener);
+                definition = visitor.visit(class_definition_visitor).as<Definition *>();
+            }
+            else
+            {
+                auto function_definition_context = ctx->functionDefinition();
+                if (nullptr != function_definition_context)
+                {
+                    FunctionDefinitionVisitor visitor(_error_listener);
+                    definition = visitor.visit(function_definition_context).as<Definition *>();
+                }
+            }
+            return Any(definition);
         }
     } // namespace parser
 } // namespace hoo

@@ -39,46 +39,6 @@ UnitVisitor::UnitVisitor(ErrorListener *error_listener)
 {
 }
 
-Any UnitVisitor::visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx)
-{
-    auto basicDataType = GetBasicDataType(ctx->BasicDataType()->getText());
-    if (BASIC_DATA_TYPE_INVALID == basicDataType)
-    {
-        // todo: Error handling
-    }
-    TypeSpecification *type = new BasicDataTypeSpecification(basicDataType);
-    return Any(type);
-}
-
-Any UnitVisitor::visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx)
-{
-    auto parent = this->visit(ctx->typeSpecifier())
-                      .as<TypeSpecification *>();
-    if (TYPE_SPEC_REFERENCE != parent->GetType())
-    {
-        // todo: Error handling
-    }
-    auto name = ctx->Identifier()->getText();
-    TypeSpecification *type = new ReferenceDataTypeSpecification(name,
-                                                                 (ReferenceDataTypeSpecification *)parent);
-    return Any(type);
-}
-
-Any UnitVisitor::visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx)
-{
-    auto name = ctx->Identifier()->getText();
-    TypeSpecification *type = new ReferenceDataTypeSpecification(name, nullptr);
-    return Any(type);
-}
-
-Any UnitVisitor::visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx)
-{
-    auto parent = this->visit(ctx->typeSpecifier())
-                      .as<TypeSpecification *>();
-    TypeSpecification *type = new ArrayDataTypeSpecification(parent);
-    return Any(type);
-}
-
 Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx)
 {
     auto param_list = this->visit(ctx->list).as<std::list<VariableDeclaration *>>();
@@ -438,7 +398,7 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
         else
         {
             _error_listener->Add(item, "Invalid source.");
-        }        
+        }
     }
 
     auto unit = new Unit(unit_items);
@@ -448,24 +408,25 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
 Any UnitVisitor::visitUnitItem(HooParser::UnitItemContext *ctx)
 {
     auto definition_context = ctx->defenition();
+    UnitItem *unit_item = nullptr;
+
     if (nullptr != definition_context)
     {
-        DefinitionVisitor visitor;
+        DefinitionVisitor visitor(_error_listener);
         auto definition = visitor.visit(definition_context).as<Definition *>();
-        UnitItem *unit_item = (UnitItem *)definition;
-        return Any(unit_item);
+        unit_item = (UnitItem *)definition;
     }
-
-    auto statement_context = ctx->statement();
-    if (nullptr != statement_context)
+    else
     {
-        StatementVisitor visitor;
-        auto statement = visitor.visit(statement_context).as<Statement *>();
-        UnitItem *unit_item = (UnitItem *)statement;
-        return Any(unit_item);
+        auto statement_context = ctx->statement();
+        if (nullptr != statement_context)
+        {
+            StatementVisitor visitor;
+            auto statement = visitor.visit(statement_context).as<Statement *>();
+            unit_item = (UnitItem *)statement;
+        }
     }
 
-    UnitItem* unit_item = nullptr;
     return Any(unit_item);
 }
 

@@ -26,8 +26,5 @@ namespace hoo
 {
     namespace parser
     {
-        void VistorHelper::GetContextInfo(ParserRuleContext* context)
-        {
-        }
     }
 }

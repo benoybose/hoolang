@@ -16,22 +16,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef VISITOR_HELPER_HH
-#define VISITOR_HELPER_HH
+#include "HooBaseVisitor.h"
+#include <hoo/parser/ErrorListener.hh>
 
-#include "ParserRuleContext.h"
-#include <hoo/parser/ParseError.hh>
+#ifndef FUNCTION_DEFINITION_VISITOR_HH
+#define FUNCTION_DEFINITION_VISITOR_HH
 
 using namespace antlr4;
+using namespace antlrcpp;
 
 namespace hoo
 {
     namespace parser
     {
-        class VistorHelper
+        class FunctionDefinitionVisitor : public HooBaseVisitor
         {
+        private:
+            ErrorListener *_error_listener;
+
+        public:
+            FunctionDefinitionVisitor(ErrorListener *error_listener);
         };
     } // namespace parser
 } // namespace hoo
-
-#endif // VISITOR_HELPER_HH
+#endif

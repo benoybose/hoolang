@@ -16,9 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef CLASS_DEFINITION_HH
-#define CLASS_DEFINITION_HH
+#ifndef CLASS_DEFINITION_VISITOR_HH
+#define CLASS_DEFINITION_VISITOR_HH
+
 #include "HooBaseVisitor.h"
+
+#include <hoo/parser/ErrorListener.hh>
 
 using namespace antlr4;
 using namespace antlrcpp;
@@ -29,6 +32,13 @@ namespace hoo
     {
         class ClassDefinitionVisitor : public HooBaseVisitor
         {
+        private:
+            ErrorListener *_error_listener;
+
+        public:
+            ClassDefinitionVisitor(ErrorListener *error_listener);
+
+        public:
             Any visitClassDefinition(HooParser::ClassDefinitionContext *ctx) override;
 
             Any visitClassBody(HooParser::ClassBodyContext *ctx) override;

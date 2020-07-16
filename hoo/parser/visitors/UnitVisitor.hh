@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PROJECT_UNITVISITOR_HH
-#define PROJECT_UNITVISITOR_HH
+#ifndef UNITVISITOR_HH
+#define UNITVISITOR_HH
 
 #include "HooBaseVisitor.h"
 
@@ -115,14 +115,6 @@ public:
 
     antlrcpp::Any visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) override;
 
-    antlrcpp::Any visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx) override;
-
-    antlrcpp::Any visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx) override;
-
-    antlrcpp::Any visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx) override;
-
-    antlrcpp::Any visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx) override;
-
     antlrcpp::Any visitStmtOperative(HooParser::StmtOperativeContext *ctx) override;
 
 private:
@@ -132,4 +124,4 @@ private:
     DeclaratorType GetDeclarator(const std::string &declarator) const;
 };
 
-#endif //PROJECT_UNITVISITOR_HH
+#endif //UNITVISITOR_HH
