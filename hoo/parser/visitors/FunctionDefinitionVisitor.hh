@@ -40,6 +40,7 @@ namespace hoo
         public:
             Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
             Any visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) override;
+            Any visitParamList(HooParser::ParamListContext* ctx) override;
         };
     } // namespace parser
 } // namespace hoo

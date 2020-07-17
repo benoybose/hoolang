@@ -126,8 +126,7 @@ variableDeclaration
     ;
 
 paramList
-    :   decl=variableDeclaration #singleItemParamList
-    |   list=paramList ( ',' variableDeclaration )+ #multipleItemParamList
+    : variableDeclaration ( ',' variableDeclaration)+
     ;
 
 Declarator

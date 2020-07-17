@@ -43,28 +43,6 @@ public:
     UnitVisitor(ErrorListener *error_listener);
 
 public:
-    antlrcpp::Any visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) override;
-
-    antlrcpp::Any visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) override;
-
-    antlrcpp::Any visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) override;
-
-    antlrcpp::Any visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) override;
-
-    antlrcpp::Any visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx) override;
-
-    antlrcpp::Any visitConstantInteger(HooParser::ConstantIntegerContext *ctx) override;
-
-    antlrcpp::Any visitConstantFloating(HooParser::ConstantFloatingContext *ctx) override;
-
-    antlrcpp::Any visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) override;
-
-    antlrcpp::Any visitExprInvoke(HooParser::ExprInvokeContext *ctx) override;
-
-    antlrcpp::Any visitExprPrimary(HooParser::ExprPrimaryContext *ctx) override;
-
-    antlrcpp::Any visitExprGrouped(HooParser::ExprGroupedContext *ctx) override;
-
     antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
 
     antlrcpp::Any visitReturnStatement(HooParser::ReturnStatementContext *ctx) override;
@@ -85,31 +63,11 @@ public:
 
     antlrcpp::Any visitStmtExpression(HooParser::StmtExpressionContext *ctx) override;
 
-    antlrcpp::Any visitBooleanConstant(HooParser::BooleanConstantContext *ctx) override;
-
-    antlrcpp::Any visitByteConstant(HooParser::ByteConstantContext *ctx) override;
-
-    antlrcpp::Any visitExprLogical(HooParser::ExprLogicalContext *ctx) override;
-
-    antlrcpp::Any visitExprAdditive(HooParser::ExprAdditiveContext *ctx) override;
-
-    antlrcpp::Any visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx) override;
-
-    antlrcpp::Any visitExprComparison(HooParser::ExprComparisonContext *ctx) override;
-
-    antlrcpp::Any visitExpAssignment(HooParser::ExpAssignmentContext *ctx) override;
-
-    antlrcpp::Any visitExprBitwise(HooParser::ExprBitwiseContext *ctx) override;
-
     antlrcpp::Any visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx) override;
 
     antlrcpp::Any visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) override;
 
     antlrcpp::Any visitStmtOperative(HooParser::StmtOperativeContext *ctx) override;
-
-private:
-    Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
-                                       HooParser::ExpressionContext *rvalue, ParserRuleContext *context);
 };
 
 #endif //UNITVISITOR_HH

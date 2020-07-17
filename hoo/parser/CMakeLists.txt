@@ -24,7 +24,8 @@ SET(HOO_PARSER_HEADERS
         visitors/VisitorHelper.hh
         visitors/FunctionDefinitionVisitor.hh
         visitors/TypeSpecificationVisitor.hh
-        visitors/VariableDeclarationVisitor.hh)
+        visitors/VariableDeclarationVisitor.hh
+        visitors/ExpressionVisitor.hh)
 
 SET(HOO_PARSER_SOURCES
         ${ANTLR4_SRC_FILES_HooANTLR4}
@@ -42,7 +43,8 @@ SET(HOO_PARSER_SOURCES
         visitors/VisitorHelper.cpp
         visitors/FunctionDefinitionVisitor.cpp
         visitors/TypeSpecificationVisitor.cpp
-        visitors/VariableDeclarationVisitor.cpp)
+        visitors/VariableDeclarationVisitor.cpp
+        visitors/ExpressionVisitor.cpp)
 
 ADD_LIBRARY(hooparser STATIC ${HOO_PARSER_HEADERS} ${HOO_PARSER_SOURCES})
 ADD_DEPENDENCIES(hooparser antlr4_static)

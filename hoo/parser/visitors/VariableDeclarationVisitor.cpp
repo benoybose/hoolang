@@ -56,26 +56,5 @@ namespace hoo
                                                        declared_type, initializer);
             return Any(declaration);
         }
-
-        Any VariableDeclarationVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx)
-        {
-            auto param_list = this->visit(ctx->list)
-                                  .as<std::list<std::shared_ptr<VariableDeclaration>>>();
-            auto declarations = ctx->variableDeclaration();
-            for (auto declaration : declarations)
-            {
-                auto item = this->visit(declaration).as<VariableDeclaration *>();
-                param_list.push_back(std::shared_ptr<VariableDeclaration>(item));
-            }
-            return Any(param_list);
-        }
-
-        Any VariableDeclarationVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx)
-        {
-            auto declaration = this->visit(ctx->decl).as<VariableDeclaration *>();
-            std::list<std::shared_ptr<VariableDeclaration>> param_list;
-            param_list.push_back(shared_ptr<VariableDeclaration>(declaration));
-            return Any(param_list);
-        }
     } // namespace parser
 } // namespace hoo

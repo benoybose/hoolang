@@ -40,8 +40,7 @@ namespace hoo
 
         public:
             Any visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) override;
-            Any visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) override;
-            Any visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx) override;
+            
         };
     } // namespace parser
 } // namespace hoo

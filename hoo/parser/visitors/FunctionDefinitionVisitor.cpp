@@ -66,24 +66,53 @@ namespace hoo
             {
                 TypeSpecificationVisitor type_specification_visitor(_error_listener);
                 auto type_spec = type_specification_visitor
-                                  .visit(ctx->returnType)
-                                  .as<TypeSpecification *>();
+                                     .visit(ctx->returnType)
+                                     .as<TypeSpecification *>();
                 return_type = std::shared_ptr<TypeSpecification>(type_spec);
             }
 
             std::string name = ctx->name->getText();
-            auto parameterList = ctx->paramList();
+            auto param_list_context = ctx->paramList();
             std::list<std::shared_ptr<VariableDeclaration>> param_list;
-            if (nullptr != parameterList)
+            if (nullptr != param_list_context)
             {
-                VariableDeclarationVisitor var_decl_visitor(_error_listener);
-                param_list = var_decl_visitor.visit(parameterList)
-                                 .as<std::list<std::shared_ptr<VariableDeclaration>>>();
+                auto var_decl_list = this->visit(param_list_context)
+                                         .as<std::list<std::shared_ptr<VariableDeclaration>> *>();
+                if (nullptr != var_decl_list)
+                {
+                    std::copy(var_decl_list->begin(), var_decl_list->end(), param_list.begin());
+                    delete var_decl_list;
+                }
+                else
+                {
+                    _error_listener->Add(param_list_context, "Invalid parameter list.");
+                }
             }
 
             auto declaration = new FunctionDeclaration(declarator_type,
-                                                       return_type, name, param_list);
+                                                       return_type, name,
+                                                       param_list);
             return Any(declaration);
+        }
+
+        Any FunctionDefinitionVisitor::visitParamList(HooParser::ParamListContext *ctx)
+        {
+            auto param_contexts = ctx->variableDeclaration();
+            auto param_list = new std::list<std::shared_ptr<VariableDeclaration>>();
+            VariableDeclarationVisitor var_decl_visitor(_error_listener);
+            for (auto param_context : param_contexts)
+            {
+                auto variable_declaration = var_decl_visitor.visit(param_context).as<VariableDeclaration *>();
+                if (nullptr != variable_declaration)
+                {
+                    param_list->push_back(std::shared_ptr<VariableDeclaration>(variable_declaration));
+                }
+                else
+                {
+                    _error_listener->Add(ctx, "Invalid variabled declaration.");
+                }
+            }
+            return Any(param_list);
         }
     } // namespace parser
 } // namespace hoo

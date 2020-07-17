@@ -33,7 +33,7 @@ namespace hoo
     {
         class VistorHelper
         {
-            public:
+        public:
             static DeclaratorType GetDeclarator(const std::string &declarator);
         };
     } // namespace parser

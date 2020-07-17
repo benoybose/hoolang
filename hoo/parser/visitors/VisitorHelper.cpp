@@ -16,9 +16,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <hoo/parser/visitors/VisitorHelper.hh>
-
+#include "HooBaseVisitor.h"
 #include "ParserRuleContext.h"
+
+#include <hoo/parser/visitors/VisitorHelper.hh>
+#include <hoo/parser/visitors/ExpressionVisitor.hh>
 
 using namespace antlr4;
 using namespace hoo::ast;
