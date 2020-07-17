@@ -20,32 +20,41 @@
 
 #include <hoo/ast/FunctionDeclaration.hh>
 
-namespace hoo {
-    namespace ast {
+#include <memory>
 
-        FunctionDeclaration::FunctionDeclaration(DeclaratorType declarator_type, TypeSpecification *return_type,
+namespace hoo
+{
+    namespace ast
+    {
+
+        FunctionDeclaration::FunctionDeclaration(DeclaratorType declarator_type,
+                                                 std::shared_ptr<TypeSpecification> return_type,
                                                  std::string name,
-                                                 std::list<VariableDeclaration *> param_list) :
-                Declaration(DECLARATION_FUNCTION, declarator_type),
-                _return_type(return_type),
-                _name(std::move(name)),
-                _param_list(std::move(param_list)) {
+                                                 std::list<std::shared_ptr<VariableDeclaration>> param_list)
+            : Declaration(DECLARATION_FUNCTION, declarator_type),
+              _return_type(return_type),
+              _name(std::move(name)),
+              _param_list(param_list)
+        {
         }
 
-        TypeSpecification *FunctionDeclaration::GetReturnType() const {
+        std::shared_ptr<TypeSpecification> FunctionDeclaration::GetReturnType() const
+        {
             return _return_type;
         }
 
-        const std::string &FunctionDeclaration::GetName() const {
+        const std::string &FunctionDeclaration::GetName() const
+        {
             return _name;
         }
 
-        const std::list<VariableDeclaration *> &FunctionDeclaration::GetParamList() const {
+        const std::list<std::shared_ptr<VariableDeclaration>> &FunctionDeclaration::GetParamList() const
+        {
             return _param_list;
         }
 
-        FunctionDeclaration::~FunctionDeclaration() {
-                delete this->_return_type;
+        FunctionDeclaration::~FunctionDeclaration()
+        {
         }
-    }
-}
+    } // namespace ast
+} // namespace hoo

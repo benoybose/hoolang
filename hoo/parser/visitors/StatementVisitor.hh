@@ -21,6 +21,8 @@
 
 #include "HooBaseVisitor.h"
 
+#include <hoo/parser/ErrorListener.hh>
+
 using namespace antlr4;
 using namespace antlrcpp;
 
@@ -30,7 +32,11 @@ namespace hoo
     {
         class StatementVisitor: public HooBaseVisitor
         {
+            private:
+            ErrorListener* _error_listener;
 
+            public:
+            StatementVisitor(ErrorListener* error_listener);
         };
     }
 }

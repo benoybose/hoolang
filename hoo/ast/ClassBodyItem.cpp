@@ -17,18 +17,19 @@
  */
 
 #include <hoo/ast/ClassBodyItem.hh>
+#include <hoo/ast/Definition.hh>
 
 namespace hoo
 {
     namespace ast
     {
-        ClassBodyItem::ClassBodyItem(std::shared_ptr<FunctionDefinition> &funcdef)
-            : _class_body_type(CLSBODY_FUNCTIONDEF),
-              _function_def(std::move(funcdef))
+        ClassBodyItem::ClassBodyItem(std::shared_ptr<Definition> definition)
+            : _class_body_type(CLSBODY_DEFINITION),
+              _definition(definition)
         {
         }
 
-        ClassBodyItem::ClassBodyItem(std::shared_ptr<DeclarationStatement> &declstmt)
+        ClassBodyItem::ClassBodyItem(std::shared_ptr<DeclarationStatement> declstmt)
             : _class_body_type(CLSBODY_DECLARATIONSTMT),
               _declaration_stmt(std::move(declstmt))
         {
@@ -39,9 +40,9 @@ namespace hoo
             return this->_class_body_type;
         }
 
-        std::shared_ptr<FunctionDefinition> &ClassBodyItem::GetFunctionDefinition()
+        std::shared_ptr<Definition> &ClassBodyItem::GetDefinition()
         {
-            return this->_function_def;
+            return this->_definition;
         }
 
         std::shared_ptr<DeclarationStatement> &ClassBodyItem::GetDeclarationStatement()

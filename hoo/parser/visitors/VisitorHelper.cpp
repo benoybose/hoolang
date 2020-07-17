@@ -21,10 +21,38 @@
 #include "ParserRuleContext.h"
 
 using namespace antlr4;
+using namespace hoo::ast;
 
 namespace hoo
 {
     namespace parser
     {
-    }
-}
+        DeclaratorType VistorHelper::GetDeclarator(const std::string &declarator)
+        {
+            if (declarator.empty())
+            {
+                return DECLARATOR_NONE;
+            }
+            else if (declarator == "public")
+            {
+                return DECLARATOR_PUBLIC;
+            }
+            else if (declarator == "private")
+            {
+                return DECLARATOR_PRIVATE;
+            }
+            else if (declarator == "protected")
+            {
+                return DECLARATOR_PROTECTED;
+            }
+            else if (declarator == "var")
+            {
+                return DECLARATOR_VAR;
+            }
+            else
+            {
+                return DECLARATOR_INVALID;
+            }
+        }
+    } // namespace parser
+} // namespace hoo

@@ -36,6 +36,10 @@ namespace hoo
 
         public:
             FunctionDefinitionVisitor(ErrorListener *error_listener);
+
+        public:
+            Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
+            Any visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) override;
         };
     } // namespace parser
 } // namespace hoo

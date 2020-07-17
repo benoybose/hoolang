@@ -26,30 +26,36 @@
 
 #include <string>
 #include <list>
+#include <memory>
 
-namespace hoo {
-    namespace ast {
-        class FunctionDeclaration: public Declaration {
+namespace hoo
+{
+    namespace ast
+    {
+        class FunctionDeclaration : public Declaration
+        {
         private:
-            TypeSpecification* _return_type;
+            std::shared_ptr<TypeSpecification> _return_type;
             std::string _name;
-            std::list<VariableDeclaration *> _param_list;
+            std::list<std::shared_ptr<VariableDeclaration>> _param_list;
 
         public:
-            FunctionDeclaration(DeclaratorType declarator_type, TypeSpecification* return_type,
-                    std::string name, std::list<VariableDeclaration*> param_list);
+            FunctionDeclaration(DeclaratorType declarator_type,
+                                std::shared_ptr<TypeSpecification> return_type,
+                                std::string name,
+                                std::list<std::shared_ptr<VariableDeclaration>> param_list);
 
         public:
-            TypeSpecification *GetReturnType() const;
+            std::shared_ptr<TypeSpecification> GetReturnType() const;
 
             const std::string &GetName() const;
 
-            const std::list<VariableDeclaration *> &GetParamList() const;
+            const std::list<std::shared_ptr<VariableDeclaration>> &GetParamList() const;
 
+        public:
             virtual ~FunctionDeclaration();
         };
-    }
-}
-
+    } // namespace ast
+} // namespace hoo
 
 #endif //HOOLANG_FUNCTIONDECLARATION_HH

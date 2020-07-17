@@ -42,6 +42,8 @@ namespace hoo
             Any visitClassDefinition(HooParser::ClassDefinitionContext *ctx) override;
 
             Any visitClassBody(HooParser::ClassBodyContext *ctx) override;
+
+            Any visitClassBodyItem(HooParser::ClassBodyItemContext* ctx) override;
         };
     } // namespace parser
 } // namespace hoo

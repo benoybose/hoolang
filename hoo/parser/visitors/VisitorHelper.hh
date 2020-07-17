@@ -20,9 +20,12 @@
 #define VISITOR_HELPER_HH
 
 #include "ParserRuleContext.h"
+
 #include <hoo/parser/ParseError.hh>
+#include <hoo/ast/AST.hh>
 
 using namespace antlr4;
+using namespace hoo::ast;
 
 namespace hoo
 {
@@ -30,6 +33,8 @@ namespace hoo
     {
         class VistorHelper
         {
+            public:
+            static DeclaratorType GetDeclarator(const std::string &declarator);
         };
     } // namespace parser
 } // namespace hoo

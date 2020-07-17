@@ -40,17 +40,9 @@ private:
     ErrorListener *_error_listener;
 
 public:
-    UnitVisitor(ErrorListener* error_listener);
+    UnitVisitor(ErrorListener *error_listener);
 
 public:
-    antlrcpp::Any visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx) override;
-
-    antlrcpp::Any visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) override;
-
-    antlrcpp::Any visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) override;
-
-    antlrcpp::Any visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx) override;
-
     antlrcpp::Any visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) override;
 
     antlrcpp::Any visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) override;
@@ -109,8 +101,6 @@ public:
 
     antlrcpp::Any visitExprBitwise(HooParser::ExprBitwiseContext *ctx) override;
 
-    antlrcpp::Any visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx) override;
-
     antlrcpp::Any visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx) override;
 
     antlrcpp::Any visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) override;
@@ -120,8 +110,6 @@ public:
 private:
     Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue, antlr4::Token *opr,
                                        HooParser::ExpressionContext *rvalue, ParserRuleContext *context);
-
-    DeclaratorType GetDeclarator(const std::string &declarator) const;
 };
 
 #endif //UNITVISITOR_HH

@@ -18,11 +18,13 @@
 
 #include <iostream>
 #include "HooLexer.h"
+
+#include <hoo/ast/AST.hh>
+#include <hoo/parser/visitors/VisitorHelper.hh>
+#include <hoo/parser/ErrorListener.hh>
 #include <hoo/parser/visitors/UnitVisitor.hh>
 #include <hoo/parser/visitors/DefinitionVisitor.hh>
 #include <hoo/parser/visitors/StatementVisitor.hh>
-#include <hoo/parser/ErrorListener.hh>
-#include <hoo/ast/AST.hh>
 
 #include <list>
 #include <string>
@@ -37,26 +39,6 @@ using namespace hoo::parser;
 UnitVisitor::UnitVisitor(ErrorListener *error_listener)
     : _error_listener(error_listener)
 {
-}
-
-Any UnitVisitor::visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx)
-{
-    auto param_list = this->visit(ctx->list).as<std::list<VariableDeclaration *>>();
-    auto declarations = ctx->variableDeclaration();
-    for (auto declaration : declarations)
-    {
-        auto item = this->visit(declaration).as<VariableDeclaration *>();
-        param_list.push_back(item);
-    }
-    return Any(param_list);
-}
-
-Any UnitVisitor::visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx)
-{
-    auto declaration = this->visit(ctx->decl).as<VariableDeclaration *>();
-    std::list<VariableDeclaration *> param_list;
-    param_list.push_back(declaration);
-    return Any(param_list);
 }
 
 Any UnitVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx)
@@ -315,73 +297,12 @@ Any UnitVisitor::visitStmtVariableDeclaration(HooParser::StmtVariableDeclaration
     return Any(stmt);
 }
 
-Any UnitVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx)
-{
-    DeclaratorType declaratorLabel = DECLARATOR_NONE;
-    auto declarator = ctx->Declarator();
-    if (nullptr != declarator)
-    {
-        declaratorLabel = this->GetDeclarator(ctx->Declarator()->getText());
-    }
-
-    auto name = ctx->name->getText();
-    auto declared_type = this->visit(ctx->declared_type).as<TypeSpecification *>();
-    Expression *initializer = nullptr;
-    if (nullptr != ctx->init)
-    {
-        initializer = this->visit(ctx->init).as<Expression *>();
-    }
-
-    auto declaration = new VariableDeclaration(declaratorLabel, name,
-                                               declared_type, initializer);
-    return Any(declaration);
-}
-
 Any UnitVisitor::visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx)
 {
     auto declaration = this->visit(ctx->functionDeclaration())
                            .as<FunctionDeclaration *>();
     auto stmt = new DeclarationStatement(declaration);
     return Any(stmt);
-}
-
-Any UnitVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx)
-{
-    DeclaratorType declarator_type = DECLARATOR_NONE;
-    auto declarator = ctx->Declarator();
-    if (nullptr != declarator)
-    {
-        declarator_type = this->GetDeclarator(declarator->getText());
-    }
-
-    TypeSpecification *return_type = nullptr;
-    if (nullptr != ctx->returnType)
-    {
-        return_type = this->visit(ctx->returnType).as<TypeSpecification *>();
-    }
-
-    std::string name = ctx->name->getText();
-    auto parameterList = ctx->paramList();
-    std::list<VariableDeclaration *> param_list;
-    if (nullptr != parameterList)
-    {
-        param_list = this->visit(parameterList)
-                         .as<std::list<VariableDeclaration *>>();
-    }
-
-    auto declaration = new FunctionDeclaration(declarator_type,
-                                               return_type, name, param_list);
-    return Any(declaration);
-}
-
-antlrcpp::Any UnitVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx)
-{
-    auto declaration = this->visit(ctx->functionDeclaration())
-                           .as<FunctionDeclaration *>();
-    auto body = this->visit(ctx->operativeStatement())
-                    .as<Statement *>();
-    auto definition = (Definition *)new FunctionDefinition(declaration, body);
-    return Any(definition);
 }
 
 Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
@@ -421,7 +342,7 @@ Any UnitVisitor::visitUnitItem(HooParser::UnitItemContext *ctx)
         auto statement_context = ctx->statement();
         if (nullptr != statement_context)
         {
-            StatementVisitor visitor;
+            StatementVisitor visitor(_error_listener);
             auto statement = visitor.visit(statement_context).as<Statement *>();
             unit_item = (UnitItem *)statement;
         }
@@ -440,32 +361,4 @@ Expression *UnitVisitor::CreateBinaryExpression(HooParser::ExpressionContext *lv
     auto oprText = new Operator(opr->getText());
     Expression *expr = new BinaryExpression(left, oprText, right);
     return expr;
-}
-
-DeclaratorType UnitVisitor::GetDeclarator(const std::string &declarator) const
-{
-    if (declarator.empty())
-    {
-        return DECLARATOR_NONE;
-    }
-    else if (declarator == "public")
-    {
-        return DECLARATOR_PUBLIC;
-    }
-    else if (declarator == "private")
-    {
-        return DECLARATOR_PRIVATE;
-    }
-    else if (declarator == "protected")
-    {
-        return DECLARATOR_PROTECTED;
-    }
-    else if (declarator == "var")
-    {
-        return DECLARATOR_VAR;
-    }
-    else
-    {
-        return DECLARATOR_INVALID;
-    }
 }

@@ -19,6 +19,12 @@
 #include <hoo/parser/visitors/FunctionDefinitionVisitor.hh>
 #include <hoo/parser/ErrorListener.hh>
 #include <hoo/ast/AST.hh>
+#include <hoo/parser/visitors/StatementVisitor.hh>
+#include <hoo/parser/visitors/VisitorHelper.hh>
+#include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
+#include <hoo/parser/visitors/VariableDeclarationVisitor.hh>
+
+#include <memory>
 
 using namespace antlr4;
 using namespace antlrcpp;
@@ -28,9 +34,56 @@ namespace hoo
 {
     namespace parser
     {
-        FunctionDefinitionVisitor::FunctionDefinitionVisitor(ErrorListener* error_listener)
-        : _error_listener(error_listener)
+        FunctionDefinitionVisitor::FunctionDefinitionVisitor(ErrorListener *error_listener)
+            : _error_listener(error_listener)
         {
         }
-    }
-}
+
+        Any FunctionDefinitionVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx)
+        {
+            auto declaration_context = ctx->functionDeclaration();
+            auto declaration = this->visit(declaration_context).as<FunctionDeclaration *>();
+            auto stmt_context = ctx->operativeStatement();
+
+            StatementVisitor visitor(_error_listener);
+            auto body = visitor.visit(stmt_context).as<Statement *>();
+            auto definition = (Definition *)new FunctionDefinition(declaration, body);
+            return Any(definition);
+        }
+
+        Any FunctionDefinitionVisitor::visitFunctionDeclaration(HooParser::FunctionDeclarationContext *ctx)
+        {
+            DeclaratorType declarator_type = DECLARATOR_NONE;
+            auto declarator = ctx->Declarator();
+            if (nullptr != declarator)
+            {
+                auto declarator_name = declarator->getText();
+                declarator_type = VistorHelper::GetDeclarator(declarator_name);
+            }
+
+            std::shared_ptr<TypeSpecification> return_type = nullptr;
+            if (nullptr != ctx->returnType)
+            {
+                TypeSpecificationVisitor type_specification_visitor(_error_listener);
+                auto type_spec = type_specification_visitor
+                                  .visit(ctx->returnType)
+                                  .as<TypeSpecification *>();
+                return_type = std::shared_ptr<TypeSpecification>(type_spec);
+            }
+
+            std::string name = ctx->name->getText();
+            auto parameterList = ctx->paramList();
+            std::list<std::shared_ptr<VariableDeclaration>> param_list;
+            if (nullptr != parameterList)
+            {
+                VariableDeclarationVisitor var_decl_visitor(_error_listener);
+                param_list = var_decl_visitor.visit(parameterList)
+                                 .as<std::list<std::shared_ptr<VariableDeclaration>>>();
+            }
+
+            auto declaration = new FunctionDeclaration(declarator_type,
+                                                       return_type, name, param_list);
+            return Any(declaration);
+        }
+    } // namespace parser
+} // namespace hoo

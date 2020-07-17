@@ -109,7 +109,7 @@ classBody
     ;
 
 classBodyItem
-    :   functionDefinition
+    :   defenition
     |   declarationStatement
     ;
 

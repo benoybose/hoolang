@@ -19,6 +19,8 @@
 #include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/ClassDefinitionVisitor.hh>
 #include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
+#include <hoo/parser/visitors/DefinitionVisitor.hh>
+#include <hoo/parser/visitors/StatementVisitor.hh>
 
 #include <string>
 
@@ -30,8 +32,8 @@ namespace hoo
 {
     namespace parser
     {
-        ClassDefinitionVisitor::ClassDefinitionVisitor(ErrorListener* error_listener)
-        : _error_listener(error_listener)
+        ClassDefinitionVisitor::ClassDefinitionVisitor(ErrorListener *error_listener)
+            : _error_listener(error_listener)
         {
         }
 
@@ -47,21 +49,20 @@ namespace hoo
                 TypeSpecificationVisitor visitor(_error_listener);
                 for (auto base_type : base_types)
                 {
-                    auto type = visit(base_type).as<TypeSpecification *>();
+                    auto type = visitor.visit(base_type).as<TypeSpecification *>();
                     if (nullptr != type)
                     {
                         auto typeType = type->GetType();
                         if (typeType != TYPE_SPEC_REFERENCE)
                         {
-                            delete type;
-                            // todo: // Throw parse exception
+                            _error_listener->Add(base_type, "Invalid base type for the class definition.");
                         }
                         else
                         {
                             auto base_entity_name = type->GetName();
                             base_entity_names.push_back(base_entity_name);
-                            delete type;
                         }
+                        delete type;
                     }
                 }
             }
@@ -84,11 +85,54 @@ namespace hoo
             for (auto class_body_item_context : class_body_item_contexts)
             {
                 auto item = this->visit(class_body_item_context).as<ClassBodyItem *>();
-                std::shared_ptr<ClassBodyItem> itemptr(item);
-                items.push_back(itemptr);
+                if (nullptr != item)
+                {
+                    std::shared_ptr<ClassBodyItem> itemptr(item);
+                    items.push_back(itemptr);
+                }
+                else
+                {
+                    _error_listener->Add(class_body_item_context, "Invalid class body item.");
+                }
             }
             ClassBody *class_body = new ClassBody(items);
             return Any(class_body);
+        }
+
+        Any ClassDefinitionVisitor::visitClassBodyItem(HooParser::ClassBodyItemContext *ctx)
+        {
+            ClassBodyItem *body_item = nullptr;
+            auto definition_context = ctx->defenition();
+            if (nullptr != definition_context)
+            {
+                DefinitionVisitor visitor(_error_listener);
+                auto definition = visitor.visit(definition_context)
+                                      .as<Definition *>();
+                body_item = new ClassBodyItem(std::shared_ptr<Definition>(definition));
+            }
+            else
+            {
+                auto decl_stmt_context = ctx->declarationStatement();
+                if (nullptr != decl_stmt_context)
+                {
+                    StatementVisitor visitor(_error_listener);
+                    auto stmt = visitor.visit(decl_stmt_context).as<Statement *>();
+                    if (stmt->GetStatementType() == STMT_DECLARATION)
+                    {
+                        auto decl_stmt = (DeclarationStatement *)stmt;
+                        body_item = new ClassBodyItem(std::shared_ptr<DeclarationStatement>(decl_stmt));
+                    }
+                    else
+                    {
+                        _error_listener->Add(ctx, "Invalid statement. Declaration statement expected.");
+                    }
+                }
+                else
+                {
+                    _error_listener->Add(ctx, "Invalid class body item");
+                }
+            }
+            return Any(body_item);
         }
     } // namespace parser
 } // namespace hoo

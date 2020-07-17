@@ -16,42 +16,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _CLASS_BODY_ITEM_HH
-#define _CLASS_BODY_ITEM_HH
+#ifndef VARIABLE_DECLARATION_VISITOR_HH
+#define VARIABLE_DECLARATION_VISITOR_HH
 
-#include <hoo/ast/Definition.hh>
-#include <hoo/ast/DeclarationStatement.hh>
+#include "HooBaseVisitor.h"
 
-#include <memory>
+#include <hoo/parser/ErrorListener.hh>
+
+using namespace antlr4;
+using namespace antlrcpp;
 
 namespace hoo
 {
-    namespace ast
+    namespace parser
     {
-        typedef enum
-        {
-            // Definition
-            CLSBODY_DEFINITION,
-            // Declaration Statement
-            CLSBODY_DECLARATIONSTMT,
-        } ClassBodyItemType;
-
-        class ClassBodyItem
+        class VariableDeclarationVisitor : public HooBaseVisitor
         {
         private:
-            ClassBodyItemType _class_body_type;
-            std::shared_ptr<Definition> _definition;
-            std::shared_ptr<DeclarationStatement> _declaration_stmt;
+            ErrorListener *_error_listener;
 
         public:
-            ClassBodyItem(std::shared_ptr<Definition> definition);
-            ClassBodyItem(std::shared_ptr<DeclarationStatement> declstmt);
+            VariableDeclarationVisitor(ErrorListener *error_listener);
 
         public:
-            ClassBodyItemType GetType();
-            std::shared_ptr<Definition> &GetDefinition();
-            std::shared_ptr<DeclarationStatement> &GetDeclarationStatement();
+            Any visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) override;
+            Any visitMultipleItemParamList(HooParser::MultipleItemParamListContext *ctx) override;
+            Any visitSingleItemParamList(HooParser::SingleItemParamListContext *ctx) override;
         };
-    } // namespace ast
+    } // namespace parser
 } // namespace hoo
-#endif // _CLASS_BODY_ITEM_HH
+#endif

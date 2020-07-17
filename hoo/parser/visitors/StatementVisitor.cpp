@@ -17,11 +17,15 @@
  */
 
 #include <hoo/parser/visitors/StatementVisitor.hh>
+#include <hoo/parser/ErrorListener.hh>
 
 namespace hoo
 {
     namespace parser
     {
-        
-    }
-}
+        StatementVisitor::StatementVisitor(ErrorListener *error_listener)
+            : _error_listener(error_listener)
+        {
+        }
+    } // namespace parser
+} // namespace hoo

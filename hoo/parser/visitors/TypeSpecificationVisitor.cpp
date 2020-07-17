@@ -42,23 +42,29 @@ namespace hoo
             }
             else
             {
-                
-            }           
-            
+                this->_error_listener->Add(ctx, "Invalid basic data type.");
+            }
+
             return Any(type);
         }
 
         Any TypeSpecificationVisitor::visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx)
         {
+            TypeSpecificationType *type = nullptr;
             auto parent = this->visit(ctx->typeSpecifier())
                               .as<TypeSpecification *>();
-            if (TYPE_SPEC_REFERENCE != parent->GetType())
+            if (TYPE_SPEC_REFERENCE == parent->GetType())
             {
-                // todo: Error handling
+                auto name = ctx->Identifier()->getText();
+                TypeSpecification *type = new ReferenceDataTypeSpecification(name,
+                                                                             (ReferenceDataTypeSpecification *)parent);
             }
-            auto name = ctx->Identifier()->getText();
-            TypeSpecification *type = new ReferenceDataTypeSpecification(name,
-                                                                         (ReferenceDataTypeSpecification *)parent);
+            else 
+            {
+                auto token = ctx->Identifier()->getSymbol();
+                this->_error_listener->Add(ctx, "Invalid type specification found.");
+            }
+
             return Any(type);
         }
 
