@@ -22,7 +22,7 @@
 
 namespace hoo {
     namespace ast {
-        Unit::Unit(UnitItemList items)
+        Unit::Unit(std::list<std::shared_ptr<UnitItem>> items)
                 : _items(std::move(items)) {
 
         }
@@ -30,7 +30,7 @@ namespace hoo {
         Unit::~Unit() {
         }
 
-        UnitItemList &Unit::GetItems() {
+        std::list<std::shared_ptr<UnitItem>> Unit::GetItems() {
             return this->_items;
         }
     }

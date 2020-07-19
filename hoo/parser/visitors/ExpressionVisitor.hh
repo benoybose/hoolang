@@ -41,11 +41,11 @@ namespace hoo
             ExpressionVisitor(ErrorListener *error_listener);
 
         public:
-            Any visitByteConstant(HooParser::ByteConstantContext *ctx) override;
+            Any visitConstantByte(HooParser::ConstantByteContext *ctx) override;
             Any visitConstantInteger(HooParser::ConstantIntegerContext *ctx) override;
             Any visitConstantFloating(HooParser::ConstantFloatingContext *ctx) override;
             Any visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) override;
-            Any visitBooleanConstant(HooParser::BooleanConstantContext *ctx) override;
+            Any visitConstantBoolean(HooParser::ConstantBooleanContext *ctx) override;
             Any visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) override;
             Any visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) override;
             Any visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) override;

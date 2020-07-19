@@ -41,102 +41,10 @@ UnitVisitor::UnitVisitor(ErrorListener *error_listener)
 {
 }
 
-Any UnitVisitor::visitCompoundStatement(HooParser::CompoundStatementContext *ctx)
-{
-    auto statements = ctx->statement();
-    std::list<Statement *> statement_list;
-    for (auto statement_ctx : statements)
-    {
-        auto statement = this->visit(statement_ctx).as<Statement *>();
-        statement_list.push_back(statement);
-    }
-    auto compoundStatement = new CompoundStatement(statement_list);
-    return Any(compoundStatement);
-}
-
-Any UnitVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx)
-{
-    if (nullptr == ctx->returnValue)
-    {
-        return Any(new ReturnStatement());
-    }
-    else
-    {
-        auto expression = this->visit(ctx->returnValue).as<Expression *>();
-        auto statement = new ReturnStatement(expression);
-        return Any(statement);
-    }
-}
-
-Any UnitVisitor::visitExpressionStatement(HooParser::ExpressionStatementContext *ctx)
-{
-    auto expression = this->visit(ctx->expression()).as<Expression *>();
-    auto expressionStatement = new ExpressionStatement(expression);
-    return Any(expressionStatement);
-}
-
-Any UnitVisitor::visitStmtNoop(HooParser::StmtNoopContext *ctx)
-{
-    auto noop_statement = new NoopStatement();
-    auto stmt = (Statement *)noop_statement;
-    return Any(stmt);
-}
-
-Any UnitVisitor::visitStmtCompound(HooParser::StmtCompoundContext *ctx)
-{
-    auto compound_statement = this->visit(ctx->compoundStatement()).as<CompoundStatement *>();
-    auto stmt = (Statement *)compound_statement;
-    return Any(stmt);
-}
-
-Any UnitVisitor::visitStmtReturn(HooParser::StmtReturnContext *ctx)
-{
-    auto return_statement = this->visit(ctx->returnStatement()).as<ReturnStatement *>();
-    auto stmt = (Statement *)return_statement;
-    return Any(stmt);
-}
-
-Any UnitVisitor::visitStmtDeclaration(HooParser::StmtDeclarationContext *ctx)
-{
-    auto declaration_statement = this->visit(ctx->declarationStatement()).as<DeclarationStatement *>();
-    auto stmt = (Statement *)declaration_statement;
-    return Any(stmt);
-}
-
-Any UnitVisitor::visitStmtExpression(HooParser::StmtExpressionContext *ctx)
-{
-    auto expression_statement = this->visit(ctx->expressionStatement()).as<ExpressionStatement *>();
-    auto stmt = (Statement *)expression_statement;
-    return Any(stmt);
-}
-
-Any UnitVisitor::visitStmtOperative(HooParser::StmtOperativeContext *ctx)
-{
-    auto statement = this->visit(ctx->operativeStatement())
-                         .as<Statement *>();
-    return Any(statement);
-}
-
-Any UnitVisitor::visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx)
-{
-    auto variableDeclaration = this->visit(ctx->variableDeclaration())
-                                   .as<VariableDeclaration *>();
-    auto stmt = new DeclarationStatement(variableDeclaration);
-    return Any(stmt);
-}
-
-Any UnitVisitor::visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx)
-{
-    auto declaration = this->visit(ctx->functionDeclaration())
-                           .as<FunctionDeclaration *>();
-    auto stmt = new DeclarationStatement(declaration);
-    return Any(stmt);
-}
-
 Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
 {
     auto items = ctx->unitItem();
-    UnitItemList unit_items;
+    std::list<std::shared_ptr<UnitItem>> unit_items;
     for (auto item : items)
     {
         auto unit_item = this->visit(item).as<UnitItem *>();
@@ -162,7 +70,8 @@ Any UnitVisitor::visitUnitItem(HooParser::UnitItemContext *ctx)
     if (nullptr != definition_context)
     {
         DefinitionVisitor visitor(_error_listener);
-        auto definition = visitor.visit(definition_context).as<Definition *>();
+        auto definition = visitor.visit(definition_context)
+                              .as<Definition *>();
         unit_item = (UnitItem *)definition;
     }
     else
@@ -171,7 +80,8 @@ Any UnitVisitor::visitUnitItem(HooParser::UnitItemContext *ctx)
         if (nullptr != statement_context)
         {
             StatementVisitor visitor(_error_listener);
-            auto statement = visitor.visit(statement_context).as<Statement *>();
+            auto statement = visitor.visit(statement_context)
+                                 .as<Statement *>();
             unit_item = (UnitItem *)statement;
         }
     }

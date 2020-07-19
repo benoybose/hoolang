@@ -50,21 +50,26 @@ namespace hoo
 
         Any TypeSpecificationVisitor::visitNestedTypeSpecifier(HooParser::NestedTypeSpecifierContext *ctx)
         {
-            TypeSpecificationType *type = nullptr;
-            auto parent = this->visit(ctx->typeSpecifier())
-                              .as<TypeSpecification *>();
-            if (TYPE_SPEC_REFERENCE == parent->GetType())
+            TypeSpecification *type = nullptr;
+            try
             {
-                auto name = ctx->Identifier()->getText();
-                TypeSpecification *type = new ReferenceDataTypeSpecification(name,
-                                                                             (ReferenceDataTypeSpecification *)parent);
+                auto parent_type_spec = this->visit(ctx->typeSpecifier())
+                                  .as<TypeSpecification *>();
+                if (TYPE_SPEC_REFERENCE == parent_type_spec->GetType())
+                {
+                    auto parent = std::shared_ptr<TypeSpecification>(parent_type_spec);
+                    auto name = ctx->Identifier()->getText();
+                    type = new ReferenceDataTypeSpecification(name, parent);
+                }
+                else
+                {
+                    auto token = ctx->Identifier()->getSymbol();
+                    this->_error_listener->Add(ctx, "Invalid type specification found.");
+                }
             }
-            else 
+            catch (...)
             {
-                auto token = ctx->Identifier()->getSymbol();
-                this->_error_listener->Add(ctx, "Invalid type specification found.");
             }
-
             return Any(type);
         }
 
@@ -77,9 +82,24 @@ namespace hoo
 
         Any TypeSpecificationVisitor::visitArrayTypeSpecifier(HooParser::ArrayTypeSpecifierContext *ctx)
         {
-            auto parent = this->visit(ctx->typeSpecifier())
-                              .as<TypeSpecification *>();
-            TypeSpecification *type = new ArrayDataTypeSpecification(parent);
+            auto type_spec_context = ctx->typeSpecifier();
+            std::shared_ptr<TypeSpecification> parent_type_spec;
+            try
+            {
+                auto parent = this->visit(ctx->typeSpecifier())
+                                  .as<TypeSpecification *>();
+                parent_type_spec = std::shared_ptr<TypeSpecification>(parent);
+            }
+            catch (...)
+            {
+                _error_listener->Add(ctx, "Invalid array type");
+            }
+
+            TypeSpecification *type = nullptr;
+            if (parent_type_spec)
+            {
+                type = new ArrayDataTypeSpecification(parent_type_spec);
+            }
             return Any(type);
         }
 

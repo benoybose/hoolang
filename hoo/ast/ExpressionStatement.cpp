@@ -18,20 +18,23 @@
 
 #include <hoo/ast/ExpressionStatement.hh>
 
-namespace hoo {
-    namespace ast {
-        ExpressionStatement::ExpressionStatement(Expression *expression) :
-                Statement(STMT_EXPRESSION),
-                _expression(expression) {
-
+namespace hoo
+{
+    namespace ast
+    {
+        ExpressionStatement::ExpressionStatement(std::shared_ptr<Expression> expression)
+            : Statement(STMT_EXPRESSION),
+              _expression(expression)
+        {
         }
 
-        const Expression *ExpressionStatement::GetExpression() const {
+        std::shared_ptr<Expression> ExpressionStatement::GetExpression()
+        {
             return this->_expression;
         }
 
-        ExpressionStatement::~ExpressionStatement() {
-            delete this->_expression;
+        ExpressionStatement::~ExpressionStatement()
+        {
         }
-    }
-}
+    } // namespace ast
+} // namespace hoo

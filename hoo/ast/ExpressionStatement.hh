@@ -20,17 +20,18 @@
 #define HOOLANG_EXPRESSIONSTATEMENT_HH
 
 #include <hoo/ast/Statement.hh>
+#include <memory>
 
 namespace hoo {
     namespace ast {
         class ExpressionStatement : public Statement {
         private:
-            Expression *_expression;
+            std::shared_ptr<Expression> _expression;
         public:
-            ExpressionStatement(Expression *expression);
+            explicit ExpressionStatement(std::shared_ptr<Expression> expression);
 
         public:
-            const Expression *GetExpression() const;
+            std::shared_ptr<Expression> GetExpression();
 
         public:
             virtual ~ExpressionStatement();

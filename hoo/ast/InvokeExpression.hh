@@ -22,26 +22,31 @@
 #include <hoo/ast/Expression.hh>
 #include <list>
 
-namespace hoo {
-    namespace ast {
-        class InvokeExpression : public Expression {
+#include <memory>
+
+namespace hoo
+{
+    namespace ast
+    {
+        class InvokeExpression : public Expression
+        {
         private:
-            Expression *_receiver;
-            std::list<Expression *> _arguments;
+            std::shared_ptr<Expression> _receiver;
+            std::list<std::shared_ptr<Expression>> _arguments;
 
         public:
-            InvokeExpression(Expression *receiver, std::list<Expression *> arguments);
+            InvokeExpression(std::shared_ptr<Expression> receiver,
+                             std::list<std::shared_ptr<Expression>> arguments);
 
         public:
-            const Expression *GetReceiver() const;
+            std::shared_ptr<Expression> GetReceiver();
 
-            const std::list<Expression *> GetArguments() const;
+            std::list<std::shared_ptr<Expression>> GetArguments();
 
         public:
             virtual ~InvokeExpression();
         };
-    }
-}
-
+    } // namespace ast
+} // namespace hoo
 
 #endif //HC_INVOKEEXPRESSION_H

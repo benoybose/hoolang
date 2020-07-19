@@ -30,14 +30,25 @@ namespace hoo
 {
     namespace parser
     {
-        class StatementVisitor: public HooBaseVisitor
+        class StatementVisitor : public HooBaseVisitor
         {
-            private:
-            ErrorListener* _error_listener;
+        private:
+            ErrorListener *_error_listener;
 
-            public:
-            StatementVisitor(ErrorListener* error_listener);
+        public:
+            StatementVisitor(ErrorListener *error_listener);
+
+        public:
+            Any visitNoOpStatement(HooParser::NoOpStatementContext *ctx) override;
+
+            Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
+
+            Any visitReturnStatement(HooParser::ReturnStatementContext *ctx) override;
+
+            Any visitExpressionStatement(HooParser::ExpressionStatementContext *ctx) override;
+
+            Any visitDeclarationStatement(HooParser::DeclarationStatementContext *ctx) override;
         };
-    }
-}
+    } // namespace parser
+} // namespace hoo
 #endif // STATEMENT_VISITOR_HH

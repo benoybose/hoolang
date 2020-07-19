@@ -22,24 +22,23 @@ namespace hoo
 {
     namespace ast
     {
-        ArrayAccessExpression::ArrayAccessExpression(Expression *container,
-                                                     Expression *index) : Expression(EXPRESSION_ARRAY),
-                                                                          _container(container), _index(index)
+        ArrayAccessExpression::ArrayAccessExpression(std::shared_ptr<Expression> container,
+                                                     std::shared_ptr<Expression> index)
+            : Expression(EXPRESSION_ARRAY),
+              _container(container), _index(index)
         {
         }
 
         ArrayAccessExpression::~ArrayAccessExpression()
         {
-            delete this->_container;
-            delete this->_index;
         }
 
-        const Expression *ArrayAccessExpression::GetContainer() const
+        std::shared_ptr<Expression> ArrayAccessExpression::GetContainer()
         {
             return this->_container;
         }
 
-        const Expression *ArrayAccessExpression::GetIndex() const
+        std::shared_ptr <Expression> ArrayAccessExpression::GetIndex()
         {
             return this->_index;
         }

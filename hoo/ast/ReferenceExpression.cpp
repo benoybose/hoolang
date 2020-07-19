@@ -28,9 +28,11 @@ namespace hoo
         {
         }
 
-        ReferenceExpression::ReferenceExpression(Expression *parent,
-                                                 std::string &name) : Expression(EXPRESSION_REFERENCE),
-                                                                      _parent(parent), _name(name)
+        ReferenceExpression::ReferenceExpression(std::shared_ptr<Expression> parent,
+                                                 std::string &name)
+            : Expression(EXPRESSION_REFERENCE),
+              _parent(parent),
+              _name(name)
         {
         }
 
@@ -39,14 +41,13 @@ namespace hoo
             return this->_name;
         }
 
-        const Expression *ReferenceExpression::GetParent() const
+        std::shared_ptr<Expression> ReferenceExpression::GetParent()
         {
             return this->_parent;
         }
 
         ReferenceExpression::~ReferenceExpression()
         {
-            delete this->_parent;
         }
     } // namespace ast
 } // namespace hoo

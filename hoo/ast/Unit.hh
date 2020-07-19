@@ -28,17 +28,16 @@ namespace hoo
 {
     namespace ast
     {
-        typedef std::list<std::shared_ptr<UnitItem>> UnitItemList;
         class Unit
         {
         private:
-            UnitItemList _items;
+            std::list<std::shared_ptr<UnitItem>> _items;
 
         public:
-            Unit (UnitItemList items);
+            Unit (std::list<std::shared_ptr<UnitItem>> items);
 
         public:
-            UnitItemList &GetItems();
+            std::list<std::shared_ptr<UnitItem>> GetItems();
 
         public:
             virtual ~Unit();

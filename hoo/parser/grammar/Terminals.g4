@@ -96,19 +96,12 @@ HexadecimalDigit
 
 FloatingConstant
     :   DecimalFloatingConstant
-    |   HexadecimalFloatingConstant
     ;
 
 fragment
 DecimalFloatingConstant
     :   Sign? FractionalConstant ExponentPart?
     |   Sign? DigitSequence ExponentPart
-    ;
-
-fragment
-HexadecimalFloatingConstant
-    :   HexadecimalPrefix HexadecimalFractionalConstant BinaryExponentPart
-    |   HexadecimalPrefix HexadecimalDigitSequence BinaryExponentPart
     ;
 
 fragment
@@ -130,18 +123,6 @@ Sign
 
 DigitSequence
     :   Digit+
-    ;
-
-fragment
-HexadecimalFractionalConstant
-    :   HexadecimalDigitSequence? '.' HexadecimalDigitSequence
-    |   HexadecimalDigitSequence '.'
-    ;
-
-fragment
-BinaryExponentPart
-    :   'p' Sign? DigitSequence
-    |   'P' Sign? DigitSequence
     ;
 
 fragment

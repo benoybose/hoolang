@@ -29,7 +29,7 @@ namespace hoo
 {
     namespace parser
     {
-        DeclaratorType VistorHelper::GetDeclarator(const std::string &declarator)
+        DeclaratorType VisitorHelper::GetDeclarator(const std::string &declarator)
         {
             if (declarator.empty())
             {

@@ -24,31 +24,32 @@ namespace hoo
 {
     namespace ast
     {
-        Node::Node() : _file_name(""),
-                       _start(nullptr),
-                       _end(nullptr)
+        Node::Node()
         {
         }
 
-        const std::string &Node::GetFileName() const
-        {
-            return _file_name;
-        }
-
-        Position *Node::GetStart() const
+        std::shared_ptr<Position> Node::GetStart()
         {
             return _start;
         }
 
-        Position *Node::GetEnd() const
+        std::shared_ptr<Position> Node::GetEnd()
         {
             return _end;
         }
 
+        void Node::SetStart(std::shared_ptr<Position> start)
+        {
+            this->_start = start;
+        }
+
+        void Node::SetEnd(std::shared_ptr<Position> end)
+        {
+            this->_end = end;
+        }
+
         Node::~Node()
         {
-            delete this->_start;
-            delete this->_end;
         }
     } // namespace ast
 } // namespace hoo

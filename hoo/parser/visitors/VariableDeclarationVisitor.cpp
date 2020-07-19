@@ -20,6 +20,8 @@
 #include <hoo/parser/visitors/VariableDeclarationVisitor.hh>
 #include <hoo/parser/ErrorListener.hh>
 #include <hoo/parser/visitors/VisitorHelper.hh>
+#include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
+#include <hoo/parser/visitors/ExpressionVisitor.hh>
 
 #include <memory>
 
@@ -41,15 +43,32 @@ namespace hoo
             if (nullptr != declarator)
             {
                 auto declarator_text = declarator->getText();
-                declarator_label = VistorHelper::GetDeclarator(declarator_text);
+                declarator_label = VisitorHelper::GetDeclarator(declarator_text);
             }
 
             auto name = ctx->name->getText();
-            auto declared_type = this->visit(ctx->declared_type).as<TypeSpecification *>();
-            Expression *initializer = nullptr;
+            shared_ptr<TypeSpecification> declared_type = nullptr;
+            if (nullptr != ctx->declared_type)
+            {
+                TypeSpecificationVisitor type_spec_visitor(_error_listener);
+                auto type_spec = type_spec_visitor.visit(ctx->declared_type)
+                                     .as<TypeSpecification *>();
+                declared_type = std::shared_ptr<TypeSpecification>(type_spec);
+            }
+
+            shared_ptr<Expression> initializer = nullptr;
             if (nullptr != ctx->init)
             {
-                initializer = this->visit(ctx->init).as<Expression *>();
+                ExpressionVisitor expression_visitor(_error_listener);
+                auto expr = expression_visitor.visit(ctx->init)
+                                .as<Expression *>();
+                initializer = std::shared_ptr<Expression>(expr);
+            }
+
+            if ((!declared_type) && (!initializer))
+            {
+                _error_listener->Add(ctx,
+                                     "Invalid variable declaration. Type of the variable cannot be inferenced.");
             }
 
             auto declaration = new VariableDeclaration(declarator_label, name,

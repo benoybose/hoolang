@@ -31,7 +31,7 @@ namespace hoo
 {
     namespace parser
     {
-        class VistorHelper
+        class VisitorHelper
         {
         public:
             static DeclaratorType GetDeclarator(const std::string &declarator);

@@ -22,27 +22,33 @@
 #include <hoo/ast/Expression.hh>
 #include <hoo/ast/Operator.hh>
 
-namespace hoo {
-    namespace ast {
-        class BinaryExpression: public Expression {
+#include <memory>
+
+namespace hoo
+{
+    namespace ast
+    {
+        class BinaryExpression : public Expression
+        {
         private:
-            Expression* _lvalue;
-            Operator* _operator;
-            Expression* _rvalue;
+            std::shared_ptr<Expression> _lvalue;
+            std::shared_ptr<Operator> _operator;
+            std::shared_ptr<Expression> _rvalue;
 
         public:
-            BinaryExpression(Expression *lvalue, Operator *opr, Expression *rvalue);
+            BinaryExpression(std::shared_ptr<Expression> lvalue,
+                             std::shared_ptr<Operator> opr,
+                             std::shared_ptr<Expression> rvalue);
 
         public:
-            const Expression* GetLeftExpression() const;
-            const Operator* GetOperator() const;
-            const Expression* GetRightExpression() const;
+            std::shared_ptr<Expression> GetLeftExpression();
+            std::shared_ptr<Operator> GetOperator();
+            std::shared_ptr<Expression> GetRightExpression();
 
         public:
             virtual ~BinaryExpression();
         };
-    }
-}
+    } // namespace ast
+} // namespace hoo
 
 #endif /* HCBINARYEXPR_H */
-

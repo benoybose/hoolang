@@ -25,27 +25,29 @@
 #include <hoo/ast/Expression.hh>
 
 #include <string>
+#include <memory>
 
 namespace hoo {
     namespace ast {
         class VariableDeclaration: public Declaration {
         private:
             DeclaratorType _declarator;
-            TypeSpecification *_declared_type;
             std::string _name;
-            Expression *_initializer;
+            std::shared_ptr<TypeSpecification> _declared_type;            
+            std::shared_ptr<Expression> _initializer;
 
         public:
             VariableDeclaration(DeclaratorType declarator,
                                 const std::string &name,
-                                TypeSpecification *declared_type,
-                                Expression *initializer
+                                std::shared_ptr<TypeSpecification> declared_type,
+                                std::shared_ptr<Expression> initializer
             );
 
         public:
-            const TypeSpecification *GetDelcaredType() const;
+            const DeclaratorType GetDeclarator() const;
             const std::string &GetName() const;
-            const Expression *GetInitializer() const;
+            std::shared_ptr<TypeSpecification> GetDelcaredType();
+            std::shared_ptr<Expression> GetInitializer();
 
         public:
             virtual ~VariableDeclaration();

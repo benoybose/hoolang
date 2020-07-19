@@ -43,31 +43,9 @@ public:
     UnitVisitor(ErrorListener *error_listener);
 
 public:
-    antlrcpp::Any visitCompoundStatement(HooParser::CompoundStatementContext *ctx) override;
-
-    antlrcpp::Any visitReturnStatement(HooParser::ReturnStatementContext *ctx) override;
-
-    antlrcpp::Any visitExpressionStatement(HooParser::ExpressionStatementContext *ctx) override;
-
     antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
 
     antlrcpp::Any visitUnitItem(HooParser::UnitItemContext *ctx) override;
-
-    antlrcpp::Any visitStmtNoop(HooParser::StmtNoopContext *ctx) override;
-
-    antlrcpp::Any visitStmtCompound(HooParser::StmtCompoundContext *ctx) override;
-
-    antlrcpp::Any visitStmtReturn(HooParser::StmtReturnContext *ctx) override;
-
-    antlrcpp::Any visitStmtDeclaration(HooParser::StmtDeclarationContext *ctx) override;
-
-    antlrcpp::Any visitStmtExpression(HooParser::StmtExpressionContext *ctx) override;
-
-    antlrcpp::Any visitStmtVariableDeclaration(HooParser::StmtVariableDeclarationContext *ctx) override;
-
-    antlrcpp::Any visitStmtFunctionDeclaration(HooParser::StmtFunctionDeclarationContext *ctx) override;
-
-    antlrcpp::Any visitStmtOperative(HooParser::StmtOperativeContext *ctx) override;
 };
 
 #endif //UNITVISITOR_HH

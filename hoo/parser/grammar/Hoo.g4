@@ -25,11 +25,11 @@ options {
 }
 
 constant
-    :   ByteContant #byteConstant
+    :   ByteContant #constantByte
     |   IntegerConstant #constantInteger
     |   FloatingConstant #constantFloating
     |   CharacterConstant #constantCharacter
-    |   BooleanConstant #booleanConstant
+    |   BooleanConstant #constantBoolean
     ;
 
 primaryExpression
@@ -65,15 +65,19 @@ expressionList
     ;
 
 statement
-    :   ';' #stmtNoop
-    |   operativeStatement #stmtOperative
+    :   declarationStatement
+    |   operativeStatement
+    |   noOpStatement
+    ;
+
+noOpStatement
+    : ';'
     ;
 
 operativeStatement
-    :   compoundStatement #stmtCompound
-    |   returnStatement #stmtReturn
-    |   declarationStatement #stmtDeclaration
-    |   expressionStatement #stmtExpression
+    :   compoundStatement
+    |   returnStatement
+    |   expressionStatement
     ;
 
 expressionStatement
@@ -81,8 +85,8 @@ expressionStatement
     ;
 
 declarationStatement
-    :   variableDeclaration ';' #stmtVariableDeclaration
-    |   functionDeclaration ';' #stmtFunctionDeclaration
+    :   variableDeclaration ';'
+    |   functionDeclaration ';'
     ;
 
 compoundStatement
@@ -114,7 +118,7 @@ classBodyItem
     ;
 
 functionDefinition
-    :   functionDeclaration operativeStatement
+    :   functionDeclaration function_body=operativeStatement
     ;
 
 functionDeclaration
@@ -122,7 +126,7 @@ functionDeclaration
     ;
 
 variableDeclaration
-    :   Declarator? name=Identifier ':' declared_type=typeSpecifier ( '=' init=expression)?
+    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? ( '=' init=expression)?
     ;
 
 paramList

@@ -22,6 +22,7 @@
 #include <hoo/ast/Position.hh>
 
 #include <string>
+#include <memory>
 
 namespace hoo
 {
@@ -30,9 +31,8 @@ namespace hoo
         class Node
         {
         private:
-            std::string _file_name;
-            Position *_start;
-            Position *_end;
+            std::shared_ptr<Position> _start;
+            std::shared_ptr<Position> _end;
 
         public:
             /**
@@ -42,39 +42,32 @@ namespace hoo
             Node();
 
             /**
-             * @brief Get the file name
-             * 
-             * @return const std::string& 
-             */
-            const std::string &GetFileName() const;
-
-            /**
              * @brief Get the start position
              * 
              * @return Position* 
              */
-            Position *GetStart() const;
+            std::shared_ptr<Position> GetStart();
 
             /**
              * @brief Get the end position
              * 
              * @return Position* 
              */
-            Position *GetEnd() const;
+            std::shared_ptr<Position> GetEnd();
 
             /**
              * @brief Set the start position
              * 
              * @param start 
              */
-            void SetStart(Position* start);
+            void SetStart(std::shared_ptr<Position> start);
 
             /**
              * @brief Set the end position
              * 
              * @param end 
              */
-            void SetEnd(Position* end);
+            void SetEnd(std::shared_ptr<Position> end);
 
         public:
             virtual ~Node();

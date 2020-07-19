@@ -18,34 +18,43 @@
 
 #include <hoo/ast/VariableDeclaration.hh>
 
-namespace hoo {
-    namespace ast {
+namespace hoo
+{
+    namespace ast
+    {
         VariableDeclaration::VariableDeclaration(DeclaratorType declarator,
                                                  const std::string &name,
-                                                 TypeSpecification *declared_type,
-                                                 Expression *initializer) :
-                Declaration(DECLARATION_VARIABLE, declarator),
-                _declarator(declarator),
-                _name(name),
-                _declared_type(declared_type),
-                _initializer(initializer) {
+                                                 std::shared_ptr<TypeSpecification> declared_type,
+                                                 std::shared_ptr<Expression> initializer) : Declaration(DECLARATION_VARIABLE, declarator),
+                                                                                            _declarator(declarator),
+                                                                                            _name(name),
+                                                                                            _declared_type(declared_type),
+                                                                                            _initializer(initializer)
+        {
         }
 
-        VariableDeclaration::~VariableDeclaration() {
-            delete this->_declared_type;
-            delete this->_initializer;
+        const DeclaratorType VariableDeclaration::GetDeclarator() const
+        {
+            return this->_declarator;
         }
 
-        const TypeSpecification *VariableDeclaration::GetDelcaredType() const {
-            return _declared_type;
-        }
-
-        const std::string &VariableDeclaration::GetName() const {
+        const std::string &VariableDeclaration::GetName() const
+        {
             return _name;
         }
 
-        const Expression *VariableDeclaration::GetInitializer() const {
+        std::shared_ptr<TypeSpecification> VariableDeclaration::GetDelcaredType()
+        {
+            return _declared_type;
+        }
+
+        std::shared_ptr<Expression> VariableDeclaration::GetInitializer()
+        {
             return _initializer;
         }
-    }
-}
+
+        VariableDeclaration::~VariableDeclaration()
+        {
+        }
+    } // namespace ast
+} // namespace hoo

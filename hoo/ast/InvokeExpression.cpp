@@ -20,29 +20,30 @@
 
 #include <hoo/ast/InvokeExpression.hh>
 
-namespace hoo {
-    namespace ast {
-        InvokeExpression::InvokeExpression(Expression *receiver, std::list<Expression *> arguments) :
-                Expression(EXPRESSION_INVOKE),
-                _receiver(receiver),
-                _arguments(std::move(arguments)) {
+namespace hoo
+{
+    namespace ast
+    {
+        InvokeExpression::InvokeExpression(std::shared_ptr<Expression> receiver,
+                                           std::list<std::shared_ptr<Expression>> arguments)
+            : Expression(EXPRESSION_INVOKE),
+              _receiver(receiver),
+              _arguments(std::move(arguments))
+        {
         }
 
-        InvokeExpression::~InvokeExpression() {
-            delete _receiver;
-            while (_arguments.begin() != _arguments.end()) {
-                auto arg = *(_arguments.begin());
-                _arguments.remove(arg);
-                delete arg;
-            }
+        InvokeExpression::~InvokeExpression()
+        {
         }
 
-        const Expression *InvokeExpression::GetReceiver() const {
+        std::shared_ptr<Expression> InvokeExpression::GetReceiver()
+        {
             return this->_receiver;
         }
 
-        const std::list<Expression *> InvokeExpression::GetArguments() const {
+        std::list<std::shared_ptr<Expression>> InvokeExpression::GetArguments()
+        {
             return this->_arguments;
         }
-    }
-}
+    } // namespace ast
+} // namespace hoo

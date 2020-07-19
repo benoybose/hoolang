@@ -18,16 +18,20 @@
 
 #include <hoo/ast/ReferenceDataTypeSpecification.hh>
 
-namespace hoo {
-    namespace ast {
+namespace hoo
+{
+    namespace ast
+    {
         ReferenceDataTypeSpecification::ReferenceDataTypeSpecification(const std::string &name,
-                                                                       ReferenceDataTypeSpecification *parent) :
-                TypeSpecification(TYPE_SPEC_REFERENCE),
-                _name(name),
-                _parent(parent),
-                _full_name("") {
+                                                                       std::shared_ptr<TypeSpecification> parent)
+            : TypeSpecification(TYPE_SPEC_REFERENCE),
+              _name(name),
+              _parent(parent),
+              _full_name("")
+        {
             std::string full_name;
-            if(nullptr != this->_parent) {
+            if (nullptr != this->_parent)
+            {
                 full_name += this->_parent->GetName();
                 full_name += ".";
             }
@@ -35,16 +39,18 @@ namespace hoo {
             this->_full_name = full_name;
         }
 
-        ReferenceDataTypeSpecification::~ReferenceDataTypeSpecification() {
-            delete this->_parent;
-        }
-
-        const std::string &ReferenceDataTypeSpecification::GetName() const {
+        const std::string &ReferenceDataTypeSpecification::GetName() const
+        {
             return this->_full_name;
         }
 
-        ReferenceDataTypeSpecification *ReferenceDataTypeSpecification::GetParent() const {
+        std::shared_ptr<TypeSpecification> ReferenceDataTypeSpecification::GetParent()
+        {
             return _parent;
         }
-    }
-}
+
+        ReferenceDataTypeSpecification::~ReferenceDataTypeSpecification()
+        {
+        }
+    } // namespace ast
+} // namespace hoo

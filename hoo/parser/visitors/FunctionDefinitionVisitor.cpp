@@ -16,9 +16,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "HooBaseVisitor.h"
+
+#include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/FunctionDefinitionVisitor.hh>
 #include <hoo/parser/ErrorListener.hh>
-#include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/StatementVisitor.hh>
 #include <hoo/parser/visitors/VisitorHelper.hh>
 #include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
@@ -41,13 +43,40 @@ namespace hoo
 
         Any FunctionDefinitionVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx)
         {
-            auto declaration_context = ctx->functionDeclaration();
-            auto declaration = this->visit(declaration_context).as<FunctionDeclaration *>();
-            auto stmt_context = ctx->operativeStatement();
+            Definition* definition = nullptr;
+            std::shared_ptr<FunctionDeclaration> func_declaration;
+            try
+            {
+                auto func_decl_ctx = ctx->functionDeclaration();
+                auto func_decl = this->visit(func_decl_ctx)
+                                     .as<FunctionDeclaration *>();
+                func_declaration = std::shared_ptr<FunctionDeclaration>(func_decl);
+            }
+            catch (...)
+            {
+                _error_listener->Add(ctx, "Invalid function declaration on function definition.");
+            }
 
-            StatementVisitor visitor(_error_listener);
-            auto body = visitor.visit(stmt_context).as<Statement *>();
-            auto definition = (Definition *)new FunctionDefinition(declaration, body);
+            std::shared_ptr<Statement> statement;
+            try
+            {
+                StatementVisitor visitor(_error_listener);
+                auto stmt_context = ctx->function_body;
+                auto stmt = visitor.visit(stmt_context)
+                                .as<Statement *>();
+                statement = std::shared_ptr<Statement>(stmt);
+            }
+            catch (...)
+            {
+                _error_listener->Add(ctx,
+                                     "Invalid function body on function definition.");
+            }
+
+            if ((func_declaration) && (statement))
+            {
+                definition = new FunctionDefinition(func_declaration, statement);
+            }
+
             return Any(definition);
         }
 
@@ -58,7 +87,7 @@ namespace hoo
             if (nullptr != declarator)
             {
                 auto declarator_name = declarator->getText();
-                declarator_type = VistorHelper::GetDeclarator(declarator_name);
+                declarator_type = VisitorHelper::GetDeclarator(declarator_name);
             }
 
             std::shared_ptr<TypeSpecification> return_type = nullptr;

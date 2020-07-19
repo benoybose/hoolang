@@ -22,27 +22,31 @@
 #include <hoo/ast/TypeSpecification.hh>
 
 #include <string>
+#include <memory>
 
-namespace hoo {
-    namespace ast {
-        class ReferenceDataTypeSpecification: public TypeSpecification {
+namespace hoo
+{
+    namespace ast
+    {
+        class ReferenceDataTypeSpecification : public TypeSpecification
+        {
         private:
             std::string _name;
             std::string _full_name;
-            ReferenceDataTypeSpecification* _parent;
+            std::shared_ptr<TypeSpecification> _parent;
 
         public:
-            ReferenceDataTypeSpecification(const std::string& name, ReferenceDataTypeSpecification* parent);
+            ReferenceDataTypeSpecification(const std::string &name,
+                                           std::shared_ptr<TypeSpecification> parent);
 
         public:
             const std::string &GetName() const;
 
-            ReferenceDataTypeSpecification *GetParent() const;
+            std::shared_ptr<TypeSpecification> GetParent();
 
             virtual ~ReferenceDataTypeSpecification();
-
         };
-    }
-}
+    } // namespace ast
+} // namespace hoo
 
 #endif //HOOLANG_REFERENCEDATATYPESPECIFICATION_HH

@@ -20,6 +20,7 @@
 #define ARRAY_ACCESSEXPRESSION_HH
 
 #include <hoo/ast/Expression.hh>
+#include <memory>
 
 namespace hoo
 {
@@ -28,16 +29,16 @@ namespace hoo
         class ArrayAccessExpression : public Expression
         {
         private:
-            Expression *_container;
-            Expression *_index;
+            std::shared_ptr<Expression> _container;
+            std::shared_ptr<Expression> _index;
 
         public:
-            ArrayAccessExpression(Expression *container,
-                                  Expression *index);
+            ArrayAccessExpression(std::shared_ptr<Expression> container,
+                                  std::shared_ptr<Expression> index);
 
         public:
-            const Expression *GetContainer() const;
-            const Expression *GetIndex() const;
+            std::shared_ptr<Expression> GetContainer();
+            std::shared_ptr<Expression> GetIndex();
 
         public:
             ~ArrayAccessExpression() override;

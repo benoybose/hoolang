@@ -20,13 +20,13 @@
 
 namespace hoo {
     namespace ast {
-        DeclarationStatement::DeclarationStatement(Declaration *declaration) :
+        DeclarationStatement::DeclarationStatement(std::shared_ptr<Declaration> declaration) :
                 Statement(STMT_DECLARATION),
                 _declaration(declaration) {
 
         }
 
-        const Declaration *DeclarationStatement::GetDeclaration() const {
+        std::shared_ptr<Declaration> DeclarationStatement::GetDeclaration() {
             return this->_declaration;
         }
     }

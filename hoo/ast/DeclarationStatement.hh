@@ -22,17 +22,19 @@
 #include <hoo/ast/Declaration.hh>
 #include <hoo/ast/Statement.hh>
 
+#include <memory>
+
 namespace hoo {
     namespace ast {
         class DeclarationStatement : public Statement {
         private:
-            Declaration *_declaration;
+            std::shared_ptr<Declaration> _declaration;
 
         public:
-            explicit DeclarationStatement(Declaration *declaration);
+            explicit DeclarationStatement(std::shared_ptr<Declaration> declaration);
 
         public:
-            const Declaration *GetDeclaration() const;
+            std::shared_ptr<Declaration> GetDeclaration();
         };
     }
 }

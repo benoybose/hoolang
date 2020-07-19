@@ -18,26 +18,30 @@
 
 #include <hoo/ast/FunctionDefinition.hh>
 
-namespace hoo {
-    namespace ast {
-        FunctionDefinition::FunctionDefinition(FunctionDeclaration *declaration,
-                                               Statement *statements) :
-                Definition(DEFINITION_FUNCTION),
-                _declaration(declaration),
-                _statements(statements) {
+namespace hoo
+{
+    namespace ast
+    {
+        FunctionDefinition::FunctionDefinition(std::shared_ptr<FunctionDeclaration> declaration,
+                                               std::shared_ptr<Statement> statements)
+            : Definition(DEFINITION_FUNCTION),
+              _declaration(declaration),
+              _statements(statements)
+        {
         }
 
-        FunctionDeclaration *FunctionDefinition::GetDeclaration() const {
+        std::shared_ptr<FunctionDeclaration> FunctionDefinition::GetDeclaration()
+        {
             return _declaration;
         }
 
-        Statement * FunctionDefinition::GetBody() const {
+        std::shared_ptr<Statement> FunctionDefinition::GetBody()
+        {
             return _statements;
         }
 
-        FunctionDefinition::~FunctionDefinition() {
-            delete this->_declaration;
-            delete this->_statements;
+        FunctionDefinition::~FunctionDefinition()
+        {
         }
-    }
-}
+    } // namespace ast
+} // namespace hoo

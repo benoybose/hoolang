@@ -18,26 +18,23 @@
 
 #include <hoo/ast/CompoundStatement.hh>
 
-namespace hoo {
-    namespace ast {
-        CompoundStatement::CompoundStatement(std::list<Statement *> &statements) :
-                Statement(STMT_COMPOUND) {
-            for (auto statement: statements) {
-                this->_statements.push_back(statement);
-            }
+namespace hoo
+{
+    namespace ast
+    {
+        CompoundStatement::CompoundStatement(std::list<std::shared_ptr<Statement>> statements)
+            : Statement(STMT_COMPOUND),
+              _statements(statements)
+        {
         }
 
-        CompoundStatement::~CompoundStatement() {
-            while (this->_statements.begin()
-                   != this->_statements.end()) {
-                auto statement = *(this->_statements.begin());
-                this->_statements.remove(statement);
-                delete statement;
-            }
-        }
-
-        const std::list<Statement *> &CompoundStatement::GetStatements() const {
+        std::list<std::shared_ptr<Statement>> CompoundStatement::GetStatements()
+        {
             return this->_statements;
         }
-    }
-}
+
+        CompoundStatement::~CompoundStatement()
+        {
+        }
+    } // namespace ast
+} // namespace hoo

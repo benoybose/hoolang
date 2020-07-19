@@ -22,18 +22,20 @@
 #include <hoo/ast/Statement.hh>
 #include <hoo/ast/Expression.hh>
 
+#include <memory>
+
 namespace hoo {
     namespace ast {
         class ReturnStatement : public Statement {
         private:
-            Expression *_expression;
+            std::shared_ptr<Expression> _expression;
 
         public:
             ReturnStatement();
-            explicit ReturnStatement(Expression *expression);
+            explicit ReturnStatement(std::shared_ptr<Expression> expression);
 
         public:
-            Expression* GetExpression() const;
+            std::shared_ptr<Expression> GetExpression();
 
         public:
             virtual ~ReturnStatement();

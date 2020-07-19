@@ -22,29 +22,33 @@
 #include <hoo/ast/Expression.hh>
 
 #include <string>
+#include <memory>
 
-namespace hoo {
-    namespace ast {
-        class ReferenceExpression : public Expression {
+namespace hoo
+{
+    namespace ast
+    {
+        class ReferenceExpression : public Expression
+        {
         private:
-            Expression *_parent;
+            std::shared_ptr<Expression> _parent;
             std::string _name;
 
         public:
             ReferenceExpression(std::string &name);
 
-            ReferenceExpression(Expression *parent, std::string &name);
+            ReferenceExpression(std::shared_ptr<Expression> parent,
+                                std::string &name);
 
         public:
             const std::string &GetName() const;
 
-            const Expression *GetParent() const;
+            std::shared_ptr<Expression> GetParent();
 
         public:
             virtual ~ReferenceExpression();
         };
-    }
-}
-
+    } // namespace ast
+} // namespace hoo
 
 #endif //PROJECT_REFERENCEEXPRESSION_HH

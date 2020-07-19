@@ -21,21 +21,27 @@
 
 #include <hoo/ast/Statement.hh>
 
-namespace hoo {
-    namespace ast {
-        class CompoundStatement : public Statement {
+#include <memory>
+
+namespace hoo
+{
+    namespace ast
+    {
+        class CompoundStatement : public Statement
+        {
         private:
-            std::list<Statement *> _statements;
-        public:
-            explicit CompoundStatement(std::list<Statement *> &statements);
+            std::list<std::shared_ptr<Statement>> _statements;
 
         public:
-            const std::list<Statement *> &GetStatements() const;
+            explicit CompoundStatement(std::list<std::shared_ptr<Statement>> statements);
+
+        public:
+            std::list<std::shared_ptr<Statement>> GetStatements();
 
         public:
             virtual ~CompoundStatement();
         };
-    }
-}
+    } // namespace ast
+} // namespace hoo
 
 #endif //HOOLANG_COMPOUNDSTATEMENT_HH

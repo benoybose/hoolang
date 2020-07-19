@@ -18,28 +18,29 @@
 
 #include <hoo/ast/ReturnStatement.hh>
 
-namespace hoo {
-    namespace ast {
+namespace hoo
+{
+    namespace ast
+    {
 
-        ReturnStatement::ReturnStatement() :
-                Statement(STMT_RETURN),
-                _expression(nullptr) {
-
+        ReturnStatement::ReturnStatement() : Statement(STMT_RETURN),
+                                             _expression(nullptr)
+        {
         }
 
-        ReturnStatement::ReturnStatement(Expression *expression) :
-                Statement(STMT_RETURN),
-                _expression(expression) {
+        ReturnStatement::ReturnStatement(std::shared_ptr<Expression> expression)
+            : Statement(STMT_RETURN),
+              _expression(expression)
+        {
         }
 
-        Expression *ReturnStatement::GetExpression() const {
+        std::shared_ptr<Expression> ReturnStatement::GetExpression()
+        {
             return this->_expression;
         }
 
-        ReturnStatement::~ReturnStatement() {
-            if (nullptr != this->_expression) {
-                delete this->_expression;
-            }
+        ReturnStatement::~ReturnStatement()
+        {
         }
-    }
-}
+    } // namespace ast
+} // namespace hoo

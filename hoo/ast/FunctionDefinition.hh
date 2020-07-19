@@ -25,26 +25,30 @@
 
 #include <string>
 #include <list>
+#include <memory>
 
-namespace hoo {
-    namespace ast {
-        class FunctionDefinition: public Definition {
+namespace hoo
+{
+    namespace ast
+    {
+        class FunctionDefinition : public Definition
+        {
         private:
-            FunctionDeclaration *_declaration;
-            Statement *_statements;
+            std::shared_ptr<FunctionDeclaration> _declaration;
+            std::shared_ptr<Statement> _statements;
 
         public:
-            FunctionDefinition(FunctionDeclaration *declaration,
-                               Statement *statements);
+            FunctionDefinition(std::shared_ptr<FunctionDeclaration> declaration,
+                               std::shared_ptr<Statement> statements);
 
-            FunctionDeclaration *GetDeclaration() const;
+            std::shared_ptr<FunctionDeclaration> GetDeclaration();
 
-            Statement * GetBody() const;
+            std::shared_ptr<Statement> GetBody();
 
         public:
             virtual ~FunctionDefinition();
         };
-    }
-}
+    } // namespace ast
+} // namespace hoo
 
 #endif //PROJECT_FUNCTIONDEFINITION_HH

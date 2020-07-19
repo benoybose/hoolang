@@ -20,7 +20,7 @@
 
 namespace hoo {
     namespace ast {
-        ArrayDataTypeSpecification::ArrayDataTypeSpecification(TypeSpecification *parent) :
+        ArrayDataTypeSpecification::ArrayDataTypeSpecification(std::shared_ptr<TypeSpecification> parent) :
                 TypeSpecification(TYPE_SPEC_ARRAY),
                 _parent(parent),
                 _name("") {
@@ -33,7 +33,7 @@ namespace hoo {
             this->_name = name;
         }
 
-        TypeSpecification *ArrayDataTypeSpecification::GetParent() const {
+        std::shared_ptr<TypeSpecification> ArrayDataTypeSpecification::GetParent() {
             return _parent;
         }
 

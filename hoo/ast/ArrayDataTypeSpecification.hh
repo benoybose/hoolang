@@ -21,17 +21,19 @@
 
 #include <hoo/ast/TypeSpecification.hh>
 
+#include <memory>
+
 namespace hoo {
     namespace ast {
         class ArrayDataTypeSpecification: public TypeSpecification {
         private:
             std::string _name;
-            TypeSpecification* _parent;
+            std::shared_ptr<TypeSpecification> _parent;
 
         public:
-            explicit ArrayDataTypeSpecification(TypeSpecification* parent);
+            ArrayDataTypeSpecification(std::shared_ptr<TypeSpecification> parent);
 
-            TypeSpecification *GetParent() const;
+            std::shared_ptr<TypeSpecification> GetParent();
 
             const std::string &GetName() const override;
         };
