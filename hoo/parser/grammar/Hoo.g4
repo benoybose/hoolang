@@ -24,32 +24,40 @@ options {
     language=Cpp;
 }
 
-constant
-    :   ByteContant #constantByte
-    |   IntegerConstant #constantInteger
-    |   FloatingConstant #constantFloating
-    |   CharacterConstant #constantCharacter
-    |   BooleanConstant #constantBoolean
+constantExpression
+    :   ByteContant
+    |   IntegerConstant
+    |   FloatingConstant
+    |   CharacterConstant
+    |   BooleanConstant
+    ;
+
+stringExpression
+    : StringLiteral
+    ;
+
+identifierExpression
+    : Identifier
     ;
 
 primaryExpression
-    :   constant #primaryConstantExpr
-    |   StringLiteral #primaryStringExpr
-    |   Identifier #primaryRefExpr
+    :   constantExpression
+    |   stringExpression
+    |   identifierExpression
     ;
 
 expression
-    :   primaryExpression #exprPrimary
-    |   container=expression '[' accessIndex=expression ']' #arrayAccessExpr
-    |   receiver=expression '(' arguments=expressionList? ')' #exprInvoke
-    |   parent=expression '.' name=Identifier #nestedRefExpr
-    |   lvalue=expression opr=('|' | '&' | '^' | '~' | '<<' | '>>') rvalue=expression #exprBitwise
-    |   lvalue=expression opr=( '+' | '-' ) rvalue=expression #exprAdditive
-    |   lvalue=expression opr=( '*' | '/' | '%') rvalue=expression #exprMultiplicative
-    |   lvalue=expression opr=( '==' | '!=' | '>' | '<' | '>=' | '<=' ) rvalue=expression #exprComparison
-    |   lvalue=expression opr=( '&&' | '||' ) rvalue=expression #exprLogical
-    |   lvalue=expression opr=( '=' | '+=' | '-=' | '/=' | '*=' ) rvalue=expression #expAssignment
-    |   '(' expression ')' #exprGrouped
+    :   primaryExpression #simpleExpression
+    |   container=expression '[' accessIndex=expression ']' #arrayAccessExpression
+    |   receiver=expression '(' arguments=expressionList? ')' #invokeExpression
+    |   parent=expression '.' name=Identifier #nestedExpression
+    |   lvalue=expression opr=('|' | '&' | '^' | '~' | '<<' | '>>') rvalue=expression #binaryBitExpression
+    |   lvalue=expression opr=( '+' | '-' ) rvalue=expression #binaryAddExpression
+    |   lvalue=expression opr=( '*' | '/' | '%') rvalue=expression #binaryMultiplicateExpression
+    |   lvalue=expression opr=( '==' | '!=' | '>' | '<' | '>=' | '<=' ) rvalue=expression #binaryCompareExpression
+    |   lvalue=expression opr=( '&&' | '||' ) rvalue=expression #binaryLogicExpression
+    |   lvalue=expression opr=( '=' | '+=' | '-=' | '/=' | '*=' ) rvalue=expression #binaryAssignmentExpression
+    |   '(' expression ')' #groupedExpression
     ;
 
 typeSpecifier

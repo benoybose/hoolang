@@ -43,18 +43,23 @@ namespace hoo
 
         Any FunctionDefinitionVisitor::visitFunctionDefinition(HooParser::FunctionDefinitionContext *ctx)
         {
-            Definition* definition = nullptr;
+            Definition *definition = nullptr;
             std::shared_ptr<FunctionDeclaration> func_declaration;
             try
             {
                 auto func_decl_ctx = ctx->functionDeclaration();
-                auto func_decl = this->visit(func_decl_ctx)
-                                     .as<FunctionDeclaration *>();
-                func_declaration = std::shared_ptr<FunctionDeclaration>(func_decl);
+                auto declaration = this->visit(func_decl_ctx)
+                                       .as<Declaration *>();
+                if (DECLARATION_FUNCTION == declaration->GetDeclarationType())
+                {
+                    auto func_decl = (FunctionDeclaration *)declaration;
+                    func_declaration = std::shared_ptr<FunctionDeclaration>(func_decl);
+                }
             }
             catch (...)
             {
-                _error_listener->Add(ctx, "Invalid function declaration on function definition.");
+                _error_listener->Add(ctx,
+                                     "Invalid function declaration on function definition.");
             }
 
             std::shared_ptr<Statement> statement;
@@ -118,9 +123,9 @@ namespace hoo
                 }
             }
 
-            auto declaration = new FunctionDeclaration(declarator_type,
-                                                       return_type, name,
-                                                       param_list);
+            Declaration *declaration = new FunctionDeclaration(declarator_type,
+                                                               return_type, name,
+                                                               param_list);
             return Any(declaration);
         }
 
@@ -131,9 +136,12 @@ namespace hoo
             VariableDeclarationVisitor var_decl_visitor(_error_listener);
             for (auto param_context : param_contexts)
             {
-                auto variable_declaration = var_decl_visitor.visit(param_context).as<VariableDeclaration *>();
-                if (nullptr != variable_declaration)
+                auto declaration = var_decl_visitor.visit(param_context)
+                                       .as<Declaration *>();
+                if ((nullptr != declaration) &&
+                    (DECLARATION_VARIABLE == declaration->GetDeclarationType()))
                 {
+                    auto variable_declaration = (VariableDeclaration *)declaration;
                     param_list->push_back(std::shared_ptr<VariableDeclaration>(variable_declaration));
                 }
                 else

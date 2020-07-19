@@ -36,21 +36,40 @@ namespace hoo
 
         Any DefinitionVisitor::visitDefenition(HooParser::DefenitionContext *ctx)
         {
-            auto class_definition_visitor = ctx->classDefinition();
+            auto class_definition_ctx = ctx->classDefinition();
             Definition *definition = nullptr;
 
-            if (nullptr != class_definition_visitor)
+            if (nullptr != class_definition_ctx)
             {
-                ClassDefinitionVisitor visitor(_error_listener);
-                definition = visitor.visit(class_definition_visitor).as<Definition *>();
+                try
+                {
+                    ClassDefinitionVisitor visitor(_error_listener);
+                    definition = visitor.visit(class_definition_ctx).as<Definition *>();
+                }
+                catch (...)
+                {
+                    _error_listener->Add(class_definition_ctx,
+                                         "Invalid definition. Invalid class definition.");
+                }
             }
             else
             {
                 auto function_definition_context = ctx->functionDefinition();
                 if (nullptr != function_definition_context)
                 {
-                    FunctionDefinitionVisitor visitor(_error_listener);
-                    definition = visitor.visit(function_definition_context).as<Definition *>();
+                    try
+                    {
+                        FunctionDefinitionVisitor visitor(_error_listener);
+                        definition = visitor.visit(function_definition_context).as<Definition *>();
+                    }
+                    catch (...)
+                    {
+                        _error_listener->Add(function_definition_context, "Invalid definition. Invalid class definition.");
+                    }
+                }
+                else
+                {
+                    _error_listener->Add(ctx, "Invalid definition.");
                 }
             }
             return Any(definition);

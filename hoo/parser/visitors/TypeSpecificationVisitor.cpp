@@ -54,7 +54,7 @@ namespace hoo
             try
             {
                 auto parent_type_spec = this->visit(ctx->typeSpecifier())
-                                  .as<TypeSpecification *>();
+                                            .as<TypeSpecification *>();
                 if (TYPE_SPEC_REFERENCE == parent_type_spec->GetType())
                 {
                     auto parent = std::shared_ptr<TypeSpecification>(parent_type_spec);
@@ -69,6 +69,8 @@ namespace hoo
             }
             catch (...)
             {
+                this->_error_listener->Add(ctx,
+                                           "Invalid type specification on netsted type specification.");
             }
             return Any(type);
         }

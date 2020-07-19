@@ -52,24 +52,41 @@ namespace hoo
                     auto type = visitor.visit(base_type).as<TypeSpecification *>();
                     if (nullptr != type)
                     {
-                        auto typeType = type->GetType();
-                        if (typeType != TYPE_SPEC_REFERENCE)
+                        try
                         {
-                            _error_listener->Add(base_type, "Invalid base type for the class definition.");
+                            auto typeType = type->GetType();
+                            if (typeType != TYPE_SPEC_REFERENCE)
+                            {
+                                _error_listener->Add(base_type,
+                                                     "Invalid base type for the class definition.");
+                            }
+                            else
+                            {
+                                auto base_entity_name = type->GetName();
+                                base_entity_names.push_back(base_entity_name);
+                            }
+                            delete type;
                         }
-                        else
+                        catch (...)
                         {
-                            auto base_entity_name = type->GetName();
-                            base_entity_names.push_back(base_entity_name);
+                            _error_listener->Add(base_type,
+                                                 "Invalid base type specification for the class definition.");
                         }
-                        delete type;
                     }
                 }
             }
 
             auto body_context = ctx->classBody();
-            auto body = this->visit(body_context).as<ClassBody *>();
-            class_body = std::shared_ptr<ClassBody>(body);
+            try
+            {
+                auto body = this->visit(body_context).as<ClassBody *>();
+                class_body = std::shared_ptr<ClassBody>(body);
+            }
+            catch (...)
+            {
+                _error_listener->Add(ctx,
+                                     "Invalid class body on class definition.");
+            }
 
             auto classDefinition = new ClassDefinition(className,
                                                        base_entity_names,
@@ -84,15 +101,24 @@ namespace hoo
             std::list<std::shared_ptr<ClassBodyItem>> items;
             for (auto class_body_item_context : class_body_item_contexts)
             {
-                auto item = this->visit(class_body_item_context).as<ClassBodyItem *>();
-                if (nullptr != item)
+                try
                 {
-                    std::shared_ptr<ClassBodyItem> itemptr(item);
-                    items.push_back(itemptr);
+                    auto item = this->visit(class_body_item_context).as<ClassBodyItem *>();
+                    if (nullptr != item)
+                    {
+                        std::shared_ptr<ClassBodyItem> itemptr(item);
+                        items.push_back(itemptr);
+                    }
+                    else
+                    {
+                        _error_listener->Add(class_body_item_context,
+                                             "Invalid class body item.");
+                    }
                 }
-                else
+                catch (...)
                 {
-                    _error_listener->Add(class_body_item_context, "Invalid class body item.");
+                    _error_listener->Add(class_body_item_context,
+                                         "Invalid item on class.");
                 }
             }
             ClassBody *class_body = new ClassBody(items);
@@ -105,26 +131,41 @@ namespace hoo
             auto definition_context = ctx->defenition();
             if (nullptr != definition_context)
             {
-                DefinitionVisitor visitor(_error_listener);
-                auto definition = visitor.visit(definition_context)
-                                      .as<Definition *>();
-                body_item = new ClassBodyItem(std::shared_ptr<Definition>(definition));
+                try
+                {
+                    DefinitionVisitor visitor(_error_listener);
+                    auto definition = visitor.visit(definition_context)
+                                          .as<Definition *>();
+                    body_item = new ClassBodyItem(std::shared_ptr<Definition>(definition));
+                }
+                catch (...)
+                {
+                    _error_listener->Add(ctx,
+                                         "Invalid definition as class body item");
+                }
             }
             else
             {
                 auto decl_stmt_context = ctx->declarationStatement();
                 if (nullptr != decl_stmt_context)
                 {
-                    StatementVisitor visitor(_error_listener);
-                    auto stmt = visitor.visit(decl_stmt_context).as<Statement *>();
-                    if (stmt->GetStatementType() == STMT_DECLARATION)
+                    try
                     {
-                        auto decl_stmt = (DeclarationStatement *)stmt;
-                        body_item = new ClassBodyItem(std::shared_ptr<DeclarationStatement>(decl_stmt));
+                        StatementVisitor visitor(_error_listener);
+                        auto stmt = visitor.visit(decl_stmt_context).as<Statement *>();
+                        if (stmt->GetStatementType() == STMT_DECLARATION)
+                        {
+                            auto decl_stmt = (DeclarationStatement *)stmt;
+                            body_item = new ClassBodyItem(std::shared_ptr<DeclarationStatement>(decl_stmt));
+                        }
+                        else
+                        {
+                            _error_listener->Add(ctx, "Invalid statement. Declaration statement expected.");
+                        }
                     }
-                    else
+                    catch (...)
                     {
-                        _error_listener->Add(ctx, "Invalid statement. Declaration statement expected.");
+                        _error_listener->Add(ctx, "Invalid statement as class body item.");
                     }
                 }
                 else

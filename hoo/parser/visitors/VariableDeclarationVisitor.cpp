@@ -38,6 +38,7 @@ namespace hoo
 
         Any VariableDeclarationVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx)
         {
+            Declaration* declaration = nullptr;
             DeclaratorType declarator_label = DECLARATOR_NONE;
             auto declarator = ctx->Declarator();
             if (nullptr != declarator)
@@ -50,19 +51,35 @@ namespace hoo
             shared_ptr<TypeSpecification> declared_type = nullptr;
             if (nullptr != ctx->declared_type)
             {
-                TypeSpecificationVisitor type_spec_visitor(_error_listener);
-                auto type_spec = type_spec_visitor.visit(ctx->declared_type)
-                                     .as<TypeSpecification *>();
-                declared_type = std::shared_ptr<TypeSpecification>(type_spec);
+                try
+                {
+                    TypeSpecificationVisitor type_spec_visitor(_error_listener);
+                    auto type_spec = type_spec_visitor.visit(ctx->declared_type)
+                                         .as<TypeSpecification *>();
+                    declared_type = std::shared_ptr<TypeSpecification>(type_spec);
+                }
+                catch (...)
+                {
+                    _error_listener->Add(ctx->declared_type,
+                                         "Invalid declared type in variable declaration.");
+                }
             }
 
             shared_ptr<Expression> initializer = nullptr;
             if (nullptr != ctx->init)
             {
-                ExpressionVisitor expression_visitor(_error_listener);
-                auto expr = expression_visitor.visit(ctx->init)
-                                .as<Expression *>();
-                initializer = std::shared_ptr<Expression>(expr);
+                try
+                {
+                    ExpressionVisitor expression_visitor(_error_listener);
+                    auto expr = expression_visitor.visit(ctx->init)
+                                    .as<Expression *>();
+                    initializer = std::shared_ptr<Expression>(expr);
+                }
+                catch (...)
+                {
+                    _error_listener->Add(ctx,
+                                         "Invalid initializer on variable declaration.");
+                }
             }
 
             if ((!declared_type) && (!initializer))
@@ -71,7 +88,7 @@ namespace hoo
                                      "Invalid variable declaration. Type of the variable cannot be inferenced.");
             }
 
-            auto declaration = new VariableDeclaration(declarator_label, name,
+            declaration = new VariableDeclaration(declarator_label, name,
                                                        declared_type, initializer);
             return Any(declaration);
         }

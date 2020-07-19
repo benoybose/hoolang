@@ -37,78 +37,91 @@ namespace hoo
         {
         }
 
-        Any ExpressionVisitor::visitConstantByte(HooParser::ConstantByteContext *ctx)
+        Any ExpressionVisitor::visitConstantExpression(HooParser::ConstantExpressionContext *ctx)
         {
-            auto value = ctx->getText();
-            auto expression = new LiteralExpression(LITERAL_BYTE, value);
-            return Any(expression);
-        }
-
-        Any ExpressionVisitor::visitConstantInteger(HooParser::ConstantIntegerContext *ctx)
-        {
-            auto value = ctx->getText();
-            auto expression = new LiteralExpression(LITERAL_INTEGER, value);
-            return Any(expression);
-        }
-
-        Any ExpressionVisitor::visitConstantFloating(HooParser::ConstantFloatingContext *ctx)
-        {
-            auto value = ctx->getText();
-            auto expression = new LiteralExpression(LITERAL_DOUBLE, value);
-            return Any(expression);
-        }
-
-        Any ExpressionVisitor::visitConstantCharacter(HooParser::ConstantCharacterContext *ctx)
-        {
-            auto value = ctx->getText();
-            auto expression = new LiteralExpression(LITERAL_CHARACTER, value);
-            return Any(expression);
-        }
-
-        Any ExpressionVisitor::visitConstantBoolean(HooParser::ConstantBooleanContext *ctx)
-        {
-            auto value = ctx->getText();
-            if ((0 == value.compare("true")) ||
-                (0 == value.compare("false")))
+            Expression *expression = nullptr;
+            auto byte_constant_terminal = ctx->ByteContant();
+            if (nullptr != byte_constant_terminal)
             {
-                auto expression = new LiteralExpression(LITERAL_BOOLEAN, value);
-                return Any(expression);
+                auto byte_text = byte_constant_terminal->getText();
+                Expression *byte_expression = new LiteralExpression(LITERAL_BYTE,
+                                                                    byte_text);
+                return Any(byte_expression);
             }
-            else
+
+            auto integer_constant_terminal = ctx->IntegerConstant();
+            if (nullptr != integer_constant_terminal)
             {
-                return Any(nullptr);
+                auto integer_text = integer_constant_terminal->getText();
+                Expression *integer_expression = new LiteralExpression(LITERAL_INTEGER,
+                                                                       integer_text);
+                return Any(integer_expression);
             }
-        }
 
-        Any ExpressionVisitor::visitPrimaryConstantExpr(
-            HooParser::PrimaryConstantExprContext *ctx)
-        {
-            auto expression = (Expression *)this->visit(ctx->constant())
-                                  .as<LiteralExpression *>();
+            auto floating_constant_terminal = ctx->FloatingConstant();
+            if (nullptr != floating_constant_terminal)
+            {
+                auto float_text = floating_constant_terminal->getText();
+                Expression *fp_expression = new LiteralExpression(LITERAL_DOUBLE,
+                                                                  float_text);
+                return Any(fp_expression);
+            }
+
+            auto char_constant_terminal = ctx->CharacterConstant();
+            if (nullptr != char_constant_terminal)
+            {
+                auto char_text = char_constant_terminal->getText();
+                Expression *char_expression = new LiteralExpression(LITERAL_CHARACTER,
+                                                                    char_text);
+                return Any(char_expression);
+            }
+
+            auto bool_constant_terminal = ctx->BooleanConstant();
+            if (nullptr != bool_constant_terminal)
+            {
+                auto bool_text = bool_constant_terminal->getText();
+                Expression *bool_expression = new LiteralExpression(LITERAL_BOOLEAN,
+                                                                    bool_text);
+                return Any(bool_expression);
+            }
+
+            _error_listener->Add(ctx,
+                                 "Invalid literal expression on constant expression.");
             return Any(expression);
         }
 
-        Any ExpressionVisitor::visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx)
+        Any ExpressionVisitor::visitStringExpression(HooParser::StringExpressionContext *ctx)
         {
-            auto text = ctx->StringLiteral()->getText();
-            auto expression = (Expression *)new LiteralExpression(LITERAL_STRING, text);
+            auto string_terminal = ctx->StringLiteral();
+            auto string_text = string_terminal->getText();
+            Expression *expression = new LiteralExpression(LITERAL_STRING, string_text);
             return Any(expression);
         }
 
-        Any ExpressionVisitor::visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx)
+        Any ExpressionVisitor::visitIdentifierExpression(HooParser::IdentifierExpressionContext *ctx)
         {
-            auto name = ctx->Identifier()->getText();
-            auto expression = (Expression *)new ReferenceExpression(name);
+            auto id_terminal = ctx->Identifier();
+            auto id_name = id_terminal->getText();
+            Expression *expression = new ReferenceExpression(id_name);
             return Any(expression);
         }
 
-        Any ExpressionVisitor::visitExprPrimary(HooParser::ExprPrimaryContext *ctx)
+        Any ExpressionVisitor::visitSimpleExpression(HooParser::SimpleExpressionContext *ctx)
         {
-            auto expression = this->visit(ctx->primaryExpression()).as<Expression *>();
-            return Any(expression);
+            Expression *expression = nullptr;
+            try
+            {
+                expression = this->visit(ctx->primaryExpression())
+                                 .as<Expression *>();
+            }
+            catch (...)
+            {
+                _error_listener->Add(ctx, "Error while parsing simple expression.");
+            }
+            return expression;
         }
 
-        Any ExpressionVisitor::visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx)
+        Any ExpressionVisitor::visitArrayAccessExpression(HooParser::ArrayAccessExpressionContext *ctx)
         {
             std::shared_ptr<Expression> container;
             try
@@ -145,7 +158,7 @@ namespace hoo
             return Any(expression);
         }
 
-        Any ExpressionVisitor::visitExprInvoke(HooParser::ExprInvokeContext *ctx)
+        Any ExpressionVisitor::visitInvokeExpression(HooParser::InvokeExpressionContext *ctx)
         {
             std::shared_ptr<Expression> receiver_expr;
             Expression *expression = nullptr;
@@ -196,7 +209,7 @@ namespace hoo
             return Any(expression);
         }
 
-        Any ExpressionVisitor::visitNestedRefExpr(HooParser::NestedRefExprContext *ctx)
+        Any ExpressionVisitor::visitNestedExpression(HooParser::NestedExpressionContext *ctx)
         {
             std::shared_ptr<Expression> parent;
             try
@@ -215,56 +228,60 @@ namespace hoo
             {
                 name = ctx->name->getText();
             }
-            else 
+            else
             {
                 _error_listener->Add(ctx, "Invalid name on nested reference expression.");
             }
 
-            Expression* expression = new ReferenceExpression(parent, name);
+            Expression *expression = new ReferenceExpression(parent, name);
             return Any(expression);
         }
 
-        Any ExpressionVisitor::visitExprBitwise(HooParser::ExprBitwiseContext *ctx)
+        Any ExpressionVisitor::visitBinaryBitExpression(HooParser::BinaryBitExpressionContext *ctx)
+        {
+            Expression *expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
+            return Any(expr);
+        }
+
+        Any ExpressionVisitor::visitBinaryAddExpression(HooParser::BinaryAddExpressionContext *ctx)
+        {
+            Expression *expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
+            return Any(expr);
+        }
+
+        Any ExpressionVisitor::visitBinaryMultiplicateExpression(
+            HooParser::BinaryMultiplicateExpressionContext *ctx)
+        {
+            Expression *expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
+            return Any(expr);
+        }
+
+        Any ExpressionVisitor::visitBinaryCompareExpression(
+            HooParser::BinaryCompareExpressionContext *ctx)
         {
             auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
             return Any((Expression *)expr);
         }
 
-        Any ExpressionVisitor::visitExprAdditive(HooParser::ExprAdditiveContext *ctx)
-        {
-            auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
-            return Any((Expression *)expr);
-        }
-
-        Any ExpressionVisitor::visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx)
-        {
-            auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
-            return Any((Expression *)expr);
-        }
-
-        Any ExpressionVisitor::visitExprComparison(HooParser::ExprComparisonContext *ctx)
-        {
-            auto expr = CreateBinaryExpression(ctx->lvalue, ctx->opr, ctx->rvalue, ctx);
-            return Any((Expression *)expr);
-        }
-
-        Any ExpressionVisitor::visitExprLogical(HooParser::ExprLogicalContext *ctx)
+        Any ExpressionVisitor::visitBinaryLogicExpression(HooParser::BinaryLogicExpressionContext *ctx)
         {
             Expression *expr = CreateBinaryExpression(ctx->lvalue,
                                                       ctx->opr, ctx->rvalue, ctx);
             return Any((Expression *)expr);
         }
 
-        Any ExpressionVisitor::visitExpAssignment(HooParser::ExpAssignmentContext *ctx)
+        Any ExpressionVisitor::visitBinaryAssignmentExpression(
+            HooParser::BinaryAssignmentExpressionContext *ctx)
         {
             Expression *expr = CreateBinaryExpression(ctx->lvalue,
                                                       ctx->opr, ctx->rvalue, ctx);
             return Any((Expression *)expr);
         }
 
-        Any ExpressionVisitor::visitExprGrouped(HooParser::ExprGroupedContext *ctx)
+        Any ExpressionVisitor::visitGroupedExpression(HooParser::GroupedExpressionContext *ctx)
         {
-            auto expression = this->visit(ctx->expression()).as<Expression *>();
+            auto expression = this->visit(ctx->expression())
+                                  .as<Expression *>();
             return Any(expression);
         }
 

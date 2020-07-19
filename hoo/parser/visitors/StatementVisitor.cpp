@@ -77,11 +77,8 @@ namespace hoo
 
         Any StatementVisitor::visitReturnStatement(HooParser::ReturnStatementContext *ctx)
         {
-            if (nullptr == ctx->returnValue)
-            {
-                return Any(new ReturnStatement());
-            }
-            else
+            Statement *statement = nullptr;
+            if (nullptr != ctx->returnValue)
             {
                 std::shared_ptr<Expression> return_expr;
                 try
@@ -92,12 +89,17 @@ namespace hoo
                 }
                 catch (...)
                 {
-                    _error_listener->Add(ctx, "Invalid expression on return statement.");
+                    _error_listener->Add(ctx,
+                                         "Invalid expression on return statement.");
                 }
 
-                Statement *statement = new ReturnStatement(return_expr);
-                return Any(statement);
+                statement = new ReturnStatement(return_expr);
             }
+            else 
+            {
+                statement = new ReturnStatement();
+            }
+            return Any(statement);
         }
 
         Any StatementVisitor::visitExpressionStatement(HooParser::ExpressionStatementContext *ctx)

@@ -41,25 +41,21 @@ namespace hoo
             ExpressionVisitor(ErrorListener *error_listener);
 
         public:
-            Any visitConstantByte(HooParser::ConstantByteContext *ctx) override;
-            Any visitConstantInteger(HooParser::ConstantIntegerContext *ctx) override;
-            Any visitConstantFloating(HooParser::ConstantFloatingContext *ctx) override;
-            Any visitConstantCharacter(HooParser::ConstantCharacterContext *ctx) override;
-            Any visitConstantBoolean(HooParser::ConstantBooleanContext *ctx) override;
-            Any visitPrimaryConstantExpr(HooParser::PrimaryConstantExprContext *ctx) override;
-            Any visitPrimaryStringExpr(HooParser::PrimaryStringExprContext *ctx) override;
-            Any visitPrimaryRefExpr(HooParser::PrimaryRefExprContext *ctx) override;
-            Any visitExprPrimary(HooParser::ExprPrimaryContext *ctx) override;
-            Any visitArrayAccessExpr(HooParser::ArrayAccessExprContext *ctx) override;
-            Any visitExprInvoke(HooParser::ExprInvokeContext *ctx) override;
-            Any visitNestedRefExpr(HooParser::NestedRefExprContext *ctx) override;
-            Any visitExprBitwise(HooParser::ExprBitwiseContext *ctx) override;
-            Any visitExprAdditive(HooParser::ExprAdditiveContext *ctx) override;
-            Any visitExprMultiplicative(HooParser::ExprMultiplicativeContext *ctx) override;
-            Any visitExprComparison(HooParser::ExprComparisonContext *ctx) override;
-            Any visitExprLogical(HooParser::ExprLogicalContext *ctx) override;
-            Any visitExpAssignment(HooParser::ExpAssignmentContext *ctx) override;
-            Any visitExprGrouped(HooParser::ExprGroupedContext *ctx) override;
+            Any visitConstantExpression(HooParser::ConstantExpressionContext *ctx) override;
+
+            Any visitStringExpression(HooParser::StringExpressionContext *ctx) override;
+            Any visitIdentifierExpression(HooParser::IdentifierExpressionContext *ctx) override;
+            Any visitSimpleExpression(HooParser::SimpleExpressionContext *ctx) override;
+            Any visitArrayAccessExpression(HooParser::ArrayAccessExpressionContext *ctx) override;
+            Any visitInvokeExpression(HooParser::InvokeExpressionContext *ctx) override;
+            Any visitNestedExpression(HooParser::NestedExpressionContext *ctx) override;
+            Any visitBinaryBitExpression(HooParser::BinaryBitExpressionContext *ctx) override;
+            Any visitBinaryAddExpression(HooParser::BinaryAddExpressionContext *ctx) override;
+            Any visitBinaryMultiplicateExpression(HooParser::BinaryMultiplicateExpressionContext *ctx) override;
+            Any visitBinaryCompareExpression(HooParser::BinaryCompareExpressionContext *ctx) override;
+            Any visitBinaryLogicExpression(HooParser::BinaryLogicExpressionContext *ctx) override;
+            Any visitBinaryAssignmentExpression(HooParser::BinaryAssignmentExpressionContext *ctx) override;
+            Any visitGroupedExpression(HooParser::GroupedExpressionContext *ctx) override;
             Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
                                                antlr4::Token *opr,
                                                HooParser::ExpressionContext *rvalue,
