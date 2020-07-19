@@ -35,24 +35,24 @@ namespace hoo
                                         std::exception_ptr e)
         {
             auto error = CreateSyntaxError(offendingSymbol, msg);
-            this->_errors.push_back(error);
+            this->_syntax_errors.push_back(error);
         }
 
         void ErrorListener::Add(ParserRuleContext *ctx, const std::string &message)
         {
             auto start = ctx->getStart();
             auto error = CreateSyntaxError(start, message);
-            this->_errors.push_back(error);
+            this->_syntax_errors.push_back(error);
         }
 
         void ErrorListener::Add(ErrorCode error_code, const std::string &message)
         {
             auto error = CreateParseError(error_code, message);
-            this->_errors.push_back(error);
+            this->_parse_errors.push_back(error);
         }
 
-        std::shared_ptr<BaseError> ErrorListener::CreateSyntaxError(Token *start,
-                                                                    const std::string &message)
+        std::shared_ptr<SyntaxError> ErrorListener::CreateSyntaxError(Token *start,
+                                                                      const std::string &message)
         {
             auto errorText = start->getText();
             if (20 > errorText.length())
@@ -75,24 +75,34 @@ namespace hoo
                 out << " " << message;
             }
             auto msg = out.str();
-            BaseError *error = (BaseError *)new SyntaxError(line, column, msg);
-            return std::shared_ptr<BaseError>(error);
+            auto error = std::shared_ptr<SyntaxError>(new SyntaxError(line, column, msg));
+            return error;
         }
 
-        std::shared_ptr<BaseError> ErrorListener::CreateParseError(ErrorCode error_code,
-                                                    const std::string &message)
+        std::shared_ptr<ParseError> ErrorListener::CreateParseError(ErrorCode error_code,
+                                                                    const std::string &message)
         {
-            BaseError *error = (BaseError*) new ParseError(error_code, message);
-            return std::shared_ptr<BaseError>(error);
+            auto error = std::shared_ptr<ParseError>(new ParseError(error_code, message));
+            return error;
         }
 
         ErrorListener::~ErrorListener()
         {
         }
 
-        const std::list<std::shared_ptr<BaseError>> &ErrorListener::GetErrors() const
+        std::list<std::shared_ptr<SyntaxError>> ErrorListener::GetSyntaxErrors() const
         {
-            return this->_errors;
+            return this->_syntax_errors;
+        }
+
+        std::list<std::shared_ptr<ParseError>> ErrorListener::GetParseErrors() const
+        {
+            return this->_parse_errors;
+        }
+
+        bool ErrorListener::HasErrors() const
+        {
+            return (0 < _syntax_errors.size()) || (0 < _parse_errors.size());
         }
 
         ErrorListener::ErrorListener() : BaseErrorListener()

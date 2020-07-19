@@ -1,7 +1,8 @@
 #ifndef _PARSE_EXCEPTION_H
 #define _PARSE_EXCEPTION_H
 
-#include <hoo/parser/BaseError.hh>
+#include <hoo/parser/SyntaxError.hh>
+#include <hoo/parser/ParseError.hh>
 
 #include <exception>
 #include <list>
@@ -14,13 +15,16 @@ namespace hoo
         class ParseException : std::exception
         {
         private:
-            std::list<std::shared_ptr<BaseError>> _errors;
+            std::list<std::shared_ptr<SyntaxError>> _syntax_errors;
+            std::list<std::shared_ptr<ParseError>> _parse_errors;
 
         public:
-            ParseException(std::list<std::shared_ptr<BaseError>> errors);
+            ParseException(std::list<std::shared_ptr<SyntaxError>> syntax_errors,
+                           std::list<std::shared_ptr<ParseError>> parse_errors);
 
         public:
-            const std::list<std::shared_ptr<BaseError>> &GetErrors() const;
+            std::list<std::shared_ptr<SyntaxError>> GetSyntaxErrors() const;
+            std::list<std::shared_ptr<ParseError>> GetParseErrors() const;
         };
     } // namespace parser
 } // namespace hoo

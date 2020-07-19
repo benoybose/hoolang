@@ -70,10 +70,11 @@ namespace hoo
                 error_listener.Add(ERROR_CODE_FAILED_PARSING, message);
             }
 
-            auto errors = error_listener.GetErrors();
-            if (0 < errors.size())
+            if (0 < error_listener.HasErrors())
             {
-                throw ParseException(errors);
+                auto syntax_errors = error_listener.GetSyntaxErrors();
+                auto parse_errors = error_listener.GetParseErrors();
+                throw ParseException(syntax_errors, parse_errors);
             }
 
             return unit;

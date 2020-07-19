@@ -60,17 +60,22 @@ namespace hoo
             void StringEqual(std::string orignal, std::string expected, const std::string &message = "");
 
             template <typename T>
-            void Equal(T v1, T v2, const std::string &message)
+            void Equal(T original, T expected, const std::string &message = "")
             {
                 try
                 {
                     this->_assert_count += 1;
-                    if (v1 != v2)
+                    if (original != expected)
                     {
                         this->_failed_count += 1;
+                        Out() << "Equal test failed. "
+                        << "Original = \"" << original << "\". "
+                        << "Expected = \"" << expected << "\"."
+                        << std::endl;
+
                         if (!message.empty())
                         {
-                            Out() << message;
+                            Out() << message << std::endl;
                         }
                     }
                 }
@@ -144,7 +149,7 @@ namespace hoo
                 }
             }
 
-            template<typename T>
+            template <typename T>
             void NotNull(std::shared_ptr<T> v, const std::string &message = "")
             {
                 try
@@ -163,11 +168,11 @@ namespace hoo
                 catch (...)
                 {
                     this->_failed_count += 1;
-                }                
+                }
             }
 
-            template <typename T>
-            void Throws(std::function<void()> code, const std::string &message)
+            template <typename TExceptionType>
+            void Throws(std::function<void()> code, const std::string &message = "")
             {
                 try
                 {
@@ -181,9 +186,9 @@ namespace hoo
                             Out() << message;
                         }
                     }
-                    catch (T)
+                    catch (TExceptionType)
                     {
-                        // todo: Do nothing
+                        // do nothing
                     }
                 }
                 catch (...)
@@ -348,7 +353,7 @@ namespace hoo
             {
                 try
                 {
-                    auto casted = dynamic_cast<TExpected*>(value);
+                    auto casted = dynamic_cast<TExpected *>(value);
                     if (casted == nullptr)
                     {
                         this->_failed_count++;
@@ -393,6 +398,63 @@ namespace hoo
                     this->_failed_count += 1;
                 }
                 return casted;
+            }
+
+            template <typename TType>
+            void Equal(std::list<TType> &original,
+                       const std::list<TType> &expected,
+                       const std::string &message = "")
+            {
+                try
+                {
+                    this->_assert_count += 1;
+                    if (original.size() != expected.size())
+                    {
+                        this->_failed_count += 1;
+                        Out() << "List equal test failed. Both list has different size." << std::endl
+                              << "Size of original list is " << original.size() << ", while "
+                              << "size of expected list is " << expected.size() << "."
+                              << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message << std::endl;
+                        }
+                        return;
+                    }
+
+                    auto original_itr = original.begin();
+                    auto expected_itr = expected.begin();
+                    auto index = 0;
+
+                    while ((original_itr != original.end()) &&
+                           (expected_itr != expected.end()))
+                    {
+                        auto original_value = *(original_itr);
+                        auto expected_value = *(expected_itr);
+                        if (original_value != expected_value)
+                        {
+                            this->_failed_count ++;
+                            Out() << "Value at [" << index << "] is not matching. "
+                            << "Original [" << index << "] = " << original_value << ". "
+                            << "Expected [" << index << "] = " << expected_value << ". "
+                            << std::endl;
+
+                            if (!message.empty())
+                            {
+                                Out() << message << std::endl;
+                            }
+
+                            break;
+                        }
+                        original_itr ++;
+                        expected_itr ++;
+                        index ++;
+                    }
+                }
+                catch (...)
+                {
+                    this->_failed_count += 1;
+                }
             }
         };
     } // namespace test

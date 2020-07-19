@@ -20,7 +20,8 @@
 #define HC_COMPILATIONERRORLISTENER_HH
 
 #include "antlr4-runtime.h"
-#include <hoo/parser/BaseError.hh>
+#include <hoo/parser/SyntaxError.hh>
+#include <hoo/parser/ParseError.hh>
 #include "ParserRuleContext.h"
 
 #include <list>
@@ -39,7 +40,8 @@ namespace hoo
             ErrorListener();
 
         private:
-            std::list<std::shared_ptr<BaseError>> _errors;
+            std::list<std::shared_ptr<SyntaxError>> _syntax_errors;
+            std::list<std::shared_ptr<ParseError>> _parse_errors;
 
         public:
             void syntaxError(Recognizer *recognizer,
@@ -51,12 +53,14 @@ namespace hoo
             void Add(ErrorCode error_code, const std::string &message);
 
         public:
-            const std::list<std::shared_ptr<BaseError>> &GetErrors() const;
+            std::list<std::shared_ptr<SyntaxError>> GetSyntaxErrors() const;
+            std::list<std::shared_ptr<ParseError>> GetParseErrors() const;
+            bool HasErrors() const;
 
         private:
-            std::shared_ptr<BaseError> CreateSyntaxError(Token *start,
+            std::shared_ptr<SyntaxError> CreateSyntaxError(Token *start,
                                                                           const std::string &message);
-            std::shared_ptr<BaseError> CreateParseError(ErrorCode error_code,
+            std::shared_ptr<ParseError> CreateParseError(ErrorCode error_code,
                                                                          const std::string &message);
 
         public:
