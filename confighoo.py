@@ -270,17 +270,24 @@ def runconfig(build_type, builddir, cmake_defs, rootdir):
 
     installdir = os.path.join(builddir, "dist")
     installdir = nomalizeSlash(installdir)
-    configcmd = "cmake -G \"Ninja\" -B \"%s\" " % builddir
+    gn = 'NMake Makefiles'
+    if sys.platform == 'linux':
+        gn = 'Unix Makefiles'
+
+    configcmd = "cmake -G \"%s\" -B \"%s\" " % (gn, builddir)
     configcmd += "-DCMAKE_INSTALL_PREFIX=\"%s\" " % installdir
     configcmd += "-DCMAKE_BUILD_TYPE=%s " % cmkbuildType
     for cmakedef in cmake_defs:
         configcmd += "-D%s=\"%s\" " % (cmakedef, cmake_defs[cmakedef])
     configcmd = configcmd.strip()
     configcmd += " %s" % nomalizeSlash(rootdir)
+    print(configcmd)
     exitcode = os.system(configcmd)
     if 0 != exitcode:
         raise Exception(
             "Error while trying to configure using '%s'" % configcmd)
+    else:
+        print('successfully configured')
 
 
 def main():
@@ -409,13 +416,15 @@ def main():
             buildflag = True
 
         if buildflag:
-            buildcmd = 'ninja -C %s' % builddir
+            buildcmd = 'cmake --build %s' % builddir
+            print(buildcmd)
             exitcode = os.system(buildcmd)
             if 0 != exitcode:
                 raise Exception('build failed')
         
         if testflag:
-            testcmd = 'ninja -C %s test' % builddir
+            testcmd = 'cmake --build %s --target test' % builddir
+            print(buildcmd)
             exitcode = os.system(testcmd)
             if 0 != exitcode:
                 raise Exception('test failed')
