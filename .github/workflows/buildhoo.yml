@@ -1,0 +1,21 @@
+name: 'Build hoo'
+on:
+    push:
+        branches: [ master ]
+jobs:
+    build:
+        name: ${{ matrix.os }} Build
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-20.04, windows-2019]
+        steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-java@v1
+            with:
+                java-version: '11'
+        - uses: actions/setup-python@v2
+            python-version: '3.6'
+        - name: Managed Build
+            run: python3 ./confighoo --build-type=release --clean --build --test
+        
