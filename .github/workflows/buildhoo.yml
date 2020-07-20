@@ -18,4 +18,4 @@ jobs:
           with:
             python-version: '3.6'
         - name: Managed Build
-          run: python3 ./confighoo.py --build-type=release
+          run: python ./confighoo.py --build-type=release
