@@ -369,28 +369,41 @@ def main():
                 print('[exists %s-%s]' % (package['name'], package['version']))
 
             defs = package.get('defs')
+            print('checking definitions')
             if not defs is None:
+                print('definitions found')
                 for defkey in defs:
                     defval = defs[defkey]
                     defval = defval.replace('$$HOME$$', pkghome)
                     cmake_defs[defkey] = defval
+                    print('[def %s = %s]' % (defkey, defval))
+            else:
+                print('no definitions found')
+
+            print('checking executables')
             execs = package.get('execs')
             if not execs is None:
-                print('executables')
+                print('executables found')
                 for path in execs:
                     path = path.replace('$$HOME$$', pkghome)
-                    os.chmod(path, stat.S_IRWXU)
-                    print(path)
+                    print('[chmod +x %s]' % path)
+                    os.chmod(path, stat.S_IRWXU)                    
+            else:
+                print('no executables found')
 
         builddir = mkbuilddir(rootdir, arch, build_type, platform)
+        print('[BuildDir %s]' % builddir)
+
         if cleanflag:
             if os.path.exists(builddir):
                 shutil.rmtree(builddir)
 
         cmkcache = os.path.join(builddir, 'CMakeCache.txt')
         if (not os.path.exists(cmkcache)) and os.path.exists(builddir):
+            print('[removedir %s]' % builddir)
             shutil.rmtree(builddir)
 
+        print('running configuration')
         runconfig(build_type, builddir, cmake_defs, rootdir)
         if testflag:
             buildflag = True
