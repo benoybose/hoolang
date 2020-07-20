@@ -21,6 +21,6 @@ jobs:
         - name: Configure
           run: python .\confighoo.py --build-type=release
         - name: Build
-          run: cmake --build ${GITHUB_WORKSPACE}\out\x64\release\win32
+          run: cmake --build %GITHUB_WORKSPACE%\out\x64\release\win32
         - name: Test
-          run: cmake --build ${GITHUB_WORKSPACE}\out\x64\release\win32 --target test
+          run: cmake --build %GITHUB_WORKSPACE%\out\x64\release\win32 --target test
