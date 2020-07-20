@@ -17,5 +17,9 @@ jobs:
         - uses: actions/setup-python@v2
           with:
             python-version: '3.6'
-        - name: Managed Build
-          run: python ./confighoo.py --build-type=release --build --test
+        - name: Configure
+          run: python ./confighoo.py --build-type=release
+        - name: Build
+          run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux
+        - name: Test
+          run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux --target test
