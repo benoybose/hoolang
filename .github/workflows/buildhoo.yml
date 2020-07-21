@@ -29,6 +29,11 @@ jobs:
         - name: Compress distribution
           run: tar -cvzf hoolang.tar.gz -C ${GITHUB_WORKSPACE}/out/x64/release/linux dist
 
+        - name: Upload artifact
+          run: uses: actions/upload-artifact@v1
+          with:
+            path: hoolang.tar.gz
+
     windows-build:
         name: Windows 2019 Build
         runs-on: windows-2019

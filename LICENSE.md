@@ -25,6 +25,7 @@ SOFTWARE.
 #### ANTLR4 License
 
 [The "BSD 3-clause license"]
+
 Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -57,6 +58,7 @@ A few portion of the ANTLR4 grammar is adapted from [C grammar] (https://github.
 written by Sam Harwell and licensed as follows.
 
 [The "BSD licence"]
+
  Copyright (c) 2013 Sam Harwell
  All rights reserved.
 
