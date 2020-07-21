@@ -16,11 +16,17 @@ jobs:
             python-version: '3.6'
         - name: Configure
           run: python ./confighoo.py --build-type=release
-        - name: Build
+
+        - name: Build All targets
           run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux
-        - name: Test
+
+        - name: Run test
           run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux --target test
-        - name: Compress Dist
+
+        - name: Create distribution
+          run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux --target install
+
+        - name: Compress distribution
           run: tar -cvzf hoolang.tar.gz -C ${GITHUB_WORKSPACE}/out/x64/release/linux dist
 
     windows-build:
