@@ -1,8 +1,0 @@
-name: 'Build hoo'
-on:
-    push:
-        branches: [ master ]
-jobs:
-    build:
-        -name: Depricated
-         run: echo "I may be deprecated"
