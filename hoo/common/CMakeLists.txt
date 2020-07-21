@@ -8,9 +8,9 @@ SET(HOO_COMMON_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/common/NotImplementedException.hh)
 
 SET(HOO_COMMON_SOURCES
-    Logger.cpp
-    Utility.cpp
-    NotImplementedException.cpp)
+    ${CMAKE_SOURCE_DIR}/hoo/common/Logger.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/common/Utility.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/common/NotImplementedException.cpp)
 
 ADD_LIBRARY(hoocommon STATIC
     ${HOO_COMMON_HEADERS}

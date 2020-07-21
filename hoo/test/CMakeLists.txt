@@ -6,8 +6,8 @@ SET(HOO_TEST_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/test/TestUnit.hh 
     ${CMAKE_SOURCE_DIR}/hoo/test/TestResult.hh)
 SET(HOO_TEST_SOURCES 
-    TestUnit.cpp 
-    TestResult.cpp)
+    ${CMAKE_SOURCE_DIR}/hoo/test/TestUnit.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/test/TestResult.cpp)
 
 ADD_LIBRARY(hootest STATIC 
     ${HOO_TEST_HEADERS} 

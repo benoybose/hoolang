@@ -18,7 +18,9 @@ SET(HOO_PARSER_HEADERS
         ${CMAKE_SOURCE_DIR}/hoo/parser/ErrorListener.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/BaseError.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/ParseError.hh
-        ${CMAKE_SOURCE_DIR}/hoo/parser/ParseException.hh
+        ${CMAKE_SOURCE_DIR}/hoo/parser/ParseException.hh)
+
+SET(HOO_PARSER_VISITOR_HEADERS 
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/UnitVisitor.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/DefinitionVisitor.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ClassDefinitionVisitor.hh
@@ -48,7 +50,10 @@ SET(HOO_PARSER_SOURCES
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/VariableDeclarationVisitor.cpp
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ExpressionVisitor.cpp)
 
-ADD_LIBRARY(hooparser STATIC ${HOO_PARSER_HEADERS} ${HOO_PARSER_SOURCES})
+ADD_LIBRARY(hooparser STATIC 
+        ${HOO_PARSER_HEADERS}
+        ${HOO_PARSER_VISITOR_HEADERS}
+        ${HOO_PARSER_SOURCES})
 
 SET_TARGET_PROPERTIES(hooparser
         PROPERTIES

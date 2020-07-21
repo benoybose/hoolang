@@ -35,36 +35,37 @@ SET (HOO_AST_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBodyItem.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBody.hh)
 
-SET (HOO_AST_SOURCES ArrayAccessExpression.cpp
-    ArrayDataTypeSpecification.cpp
-    BasicDataTypes.cpp
-    BasicDataTypeSpecification.cpp
-    BinaryExpression.cpp
-    ClassDefinition.cpp
-    CompoundStatement.cpp
-    Declaration.cpp
-    DeclarationStatement.cpp
-    Definition.cpp
-    Expression.cpp
-    ExpressionStatement.cpp
-    FunctionDeclaration.cpp
-    FunctionDefinition.cpp
-    InvokeExpression.cpp
-    LiteralExpression.cpp
-    Node.cpp
-    NoopStatement.cpp
-    Operator.cpp
-    Position.cpp
-    ReferenceDataTypeSpecification.cpp
-    ReferenceExpression.cpp
-    ReturnStatement.cpp
-    Statement.cpp
-    TypeSpecification.cpp
-    Unit.cpp
-    UnitItem.cpp
-    VariableDeclaration.cpp
-    ClassBodyItem.cpp
-    ClassBody.cpp)
+SET (HOO_AST_SOURCES
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayAccessExpression.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayDataTypeSpecification.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypes.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypeSpecification.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/BinaryExpression.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ClassDefinition.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/CompoundStatement.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Declaration.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/DeclarationStatement.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Definition.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Expression.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ExpressionStatement.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/FunctionDeclaration.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/FunctionDefinition.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/InvokeExpression.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/LiteralExpression.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Node.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/NoopStatement.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Operator.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Position.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ReferenceDataTypeSpecification.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ReferenceExpression.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ReturnStatement.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Statement.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/TypeSpecification.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Unit.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/UnitItem.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/VariableDeclaration.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBodyItem.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBody.cpp)
 
 ADD_LIBRARY(hooast STATIC ${HOO_AST_HEADERS} ${HOO_AST_SOURCES})
 SET_TARGET_PROPERTIES(hooast 

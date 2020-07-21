@@ -20,6 +20,9 @@ ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/hoo/parser")
 
 INSTALL(TARGETS hooparser
     PUBLIC_HEADER DESTINATION include/hoo/parser)
+INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/hoo/parser/visitors"
+    DESTINATION include/hoo/parser
+    FILES_MATCHING PATTERN *.hh)
 INSTALL(TARGETS hooast
     PUBLIC_HEADER DESTINATION include/hoo/ast)
 INSTALL(TARGETS hoocommon
