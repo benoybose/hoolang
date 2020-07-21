@@ -26,14 +26,11 @@ jobs:
         - name: Create distribution
           run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux --target install
 
-        - name: Compress distribution
-          run: tar -cvzf hoolang.tar.gz -C ${GITHUB_WORKSPACE}/out/x64/release/linux dist
-
         - name: Upload artifact
           uses: actions/upload-artifact@v1
           with:
             name: hoolang-x64-ubuntu-20.04
-            path: hoolang.tar.gz
+            path: ${GITHUB_WORKSPACE}/out/x64/release/linux/dist
 
     windows-build:
         name: Windows 2019 Build
