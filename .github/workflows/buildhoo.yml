@@ -40,13 +40,26 @@ jobs:
         - uses: actions/setup-java@v1
           with:
             java-version: '11'
+
         - uses: actions/setup-python@v2
           with:
             python-version: '3.6'
+
         - uses: ilammy/msvc-dev-cmd@v1
         - name: Configure
           run: python .\confighoo.py --build-type=release
-        - name: Build
+
+        - name: Build All targets
           run: cmake --build .\out\x64\release\win32
-        - name: Test
+
+        - name: Run test
           run: cmake --build .\out\x64\release\win32 --target test
+
+        - name: Create distribution
+          run: cmake --build .\out\x64\release\win32 --target install
+
+        - name: Upload artifact
+          uses: actions/upload-artifact@v1
+          with:
+            name: hoolang-x64-windows
+            path: out\x64\release\win32\dist
