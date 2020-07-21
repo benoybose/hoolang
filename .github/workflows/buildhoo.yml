@@ -30,7 +30,7 @@ jobs:
           run: tar -cvzf hoolang.tar.gz -C ${GITHUB_WORKSPACE}/out/x64/release/linux dist
 
         - name: Upload artifact
-          run: uses: actions/upload-artifact@v1
+          uses: actions/upload-artifact@v1
           with:
             path: hoolang.tar.gz
 
