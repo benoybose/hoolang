@@ -32,6 +32,7 @@ jobs:
         - name: Upload artifact
           uses: actions/upload-artifact@v1
           with:
+            name: hoolang-x64-ubuntu-20.04
             path: hoolang.tar.gz
 
     windows-build:
