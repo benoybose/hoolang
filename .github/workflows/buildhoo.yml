@@ -29,7 +29,7 @@ jobs:
         - name: Upload artifact
           uses: actions/upload-artifact@v1
           with:
-            name: hoolang-x64-ubuntu-20.04-${{ github.ref }}
+            name: hoolang-x64-ubuntu-20.04-${{ github.run_number }}
             path: out/x64/release/linux/dist
 
     windows-build:
@@ -61,5 +61,5 @@ jobs:
         - name: Upload artifact
           uses: actions/upload-artifact@v1
           with:
-            name: hoolang-x64-windows-${{ github.ref }}
+            name: hoolang-x64-windows-${{ github.run_number }}
             path: out\x64\release\win32\dist
