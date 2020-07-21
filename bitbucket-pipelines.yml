@@ -1,8 +1,0 @@
-image: benoybose/hooc-dev
-pipelines:
-  default:
-    - step:
-        script:
-          - cmake -G "Unix Makefiles"
-          - make all
-          - make test
