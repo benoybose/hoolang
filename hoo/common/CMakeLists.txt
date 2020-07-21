@@ -2,17 +2,24 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
 CMAKE_POLICY(SET CMP0074 NEW)
 PROJECT(hoocommon)
 
-SET(HOO_COMMON_HEADER 
-    Logger.hh
-    Utility.hh
-    NotImplementedException.hh)
+SET(HOO_COMMON_HEADERS
+    ${CMAKE_SOURCE_DIR}/hoo/common/Logger.hh
+    ${CMAKE_SOURCE_DIR}/hoo/common/Utility.hh
+    ${CMAKE_SOURCE_DIR}/hoo/common/NotImplementedException.hh)
 
-SET(HOO_COMMON_SOURCE
+SET(HOO_COMMON_SOURCES
     Logger.cpp
     Utility.cpp
     NotImplementedException.cpp)
 
-ADD_LIBRARY(hoocommon STATIC ${HOO_COMMON_HEADER} ${HOO_COMMON_SOURCE})
+ADD_LIBRARY(hoocommon STATIC
+    ${HOO_COMMON_HEADERS}
+    ${HOO_COMMON_SOURCES})
+
+SET_TARGET_PROPERTIES(hoocommon
+    PROPERTIES
+    PUBLIC_HEADER "${HOO_COMMON_HEADERS}")
+
 TARGET_INCLUDE_DIRECTORIES(hoocommon PRIVATE ${CMAKE_SOURCE_DIR})
 
 ADD_EXECUTABLE(utlitytest ./test/UtilityTest.cpp)

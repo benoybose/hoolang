@@ -288,6 +288,7 @@ def runconfig(build_type, builddir, cmake_defs, rootdir):
             "Error while trying to configure using '%s'" % configcmd)
     else:
         print('successfully configured')
+        print('[BuildDir %s]' % builddir)
 
 
 def main():
