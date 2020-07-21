@@ -20,6 +20,8 @@ jobs:
           run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux
         - name: Test
           run: cmake --build ${GITHUB_WORKSPACE}/out/x64/release/linux --target test
+        - name: Compress Dist
+          run: tar -cvzf hoolang.tar.gz -C ${GITHUB_WORKSPACE}/out/x64/release/linux dist
 
     windows-build:
         name: Windows 2019 Build
