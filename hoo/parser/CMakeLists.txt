@@ -1,6 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
 CMAKE_POLICY(SET CMP0074 NEW)
 PROJECT(hooparser)
+INCLUDE(extras.cmake)
+
 ADD_DEFINITIONS(-DANTLR4CPP_STATIC)
 
 ANTLR4_GENERATE(HooANTLR4
@@ -58,15 +60,4 @@ TARGET_INCLUDE_DIRECTORIES(hooparser PRIVATE
 
 ADD_EXECUTABLE(BasicClassDefinitionTest 
         test/BasicClassDefinitionTest.cpp)
-TARGET_INCLUDE_DIRECTORIES(BasicClassDefinitionTest PRIVATE 
-        ${CMAKE_SOURCE_DIR}
-        ${ANTLR4_INCLUDE_DIR}
-        ${ANTLR4_INCLUDE_DIR_HooANTLR4})
-
-ADD_DEPENDENCIES(BasicClassDefinitionTest antlr4_static)
-TARGET_LINK_LIBRARIES(BasicClassDefinitionTest PRIVATE
-        antlr4_static
-        hooast
-        hootest
-        hooparser)
-ADD_TEST(BasicClassDefinitionTest BasicClassDefinitionTest)
+ADD_HOO_PARSER_TEST(BasicClassDefinitionTest)
