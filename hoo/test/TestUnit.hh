@@ -54,7 +54,7 @@ namespace hoo
         private:
             std::ostream &Out() { return _out; }
 
-        protected:
+        public:
             void True(bool expr, const std::string &message = "");
             void False(bool expr, const std::string &message = "");
             void StringEqual(std::string orignal, std::string expected, const std::string &message = "");
@@ -69,9 +69,9 @@ namespace hoo
                     {
                         this->_failed_count += 1;
                         Out() << "Equal test failed. "
-                        << "Original = \"" << original << "\". "
-                        << "Expected = \"" << expected << "\"."
-                        << std::endl;
+                              << "Original = \"" << original << "\". "
+                              << "Expected = \"" << expected << "\"."
+                              << std::endl;
 
                         if (!message.empty())
                         {
@@ -150,7 +150,7 @@ namespace hoo
             }
 
             template <typename T>
-            void Null(std::shared_ptr<T> v, const std::string& message = "")
+            void Null(std::shared_ptr<T> v, const std::string &message = "")
             {
                 try
                 {
@@ -165,11 +165,10 @@ namespace hoo
                         }
                     }
                 }
-                catch(...)
+                catch (...)
                 {
                     this->_failed_count += 1;
                 }
-                
             }
 
             template <typename T>
@@ -282,6 +281,54 @@ namespace hoo
 
             void ThrowsAny(std::function<void()> code, const std::string &message);
             void DoesNotThrowAny(std::function<void()> code, const std::string &message);
+
+            template <typename T>
+            void NotEmpty(const std::list<T> &items, const std::string &message = "")
+            {
+                try
+                {
+                    this->_assert_count += 1;
+                    if (0 == items.size())
+                    {
+                        this->_failed_count += 1;
+                        Out() << "NotEmpty test failed. "
+                              << "The provided list is empty."
+                              << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message << std::endl;
+                        }
+                    }
+                }
+                catch (...)
+                {
+                    this->_failed_count += 1;
+                }
+            }
+
+            template <typename T>
+            void Empty(const std::list<T> &items, const std::string &message = "")
+            {
+                try
+                {
+                    this->_assert_count += 1;
+                    if (0 < items.size())
+                    {
+                        this->_failed_count += 1;
+                        Out() << "Empty test failed. "
+                              << "The provided list contains " << items.size() << " items."
+                              << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message << std::endl;
+                        }
+                    }
+                }
+                catch (...)
+                {
+                    this->_failed_count += 1;
+                }
+            }
 
             template <typename T>
             void Count(const std::vector<T> &items, size_t expected,
@@ -456,11 +503,11 @@ namespace hoo
                         auto expected_value = *(expected_itr);
                         if (original_value != expected_value)
                         {
-                            this->_failed_count ++;
+                            this->_failed_count++;
                             Out() << "Value at [" << index << "] is not matching. "
-                            << "Original [" << index << "] = " << original_value << ". "
-                            << "Expected [" << index << "] = " << expected_value << ". "
-                            << std::endl;
+                                  << "Original [" << index << "] = " << original_value << ". "
+                                  << "Expected [" << index << "] = " << expected_value << ". "
+                                  << std::endl;
 
                             if (!message.empty())
                             {
@@ -469,9 +516,9 @@ namespace hoo
 
                             break;
                         }
-                        original_itr ++;
-                        expected_itr ++;
-                        index ++;
+                        original_itr++;
+                        expected_itr++;
+                        index++;
                     }
                 }
                 catch (...)

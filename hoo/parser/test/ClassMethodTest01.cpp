@@ -16,6 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "ParserTestHelper.hh"
+
 #include <hoo/ast/AST.hh>
 #include <hoo/test/HooTest.hh>
 #include <hoo/parser/ParserDriver.hh>
@@ -36,6 +38,29 @@ public:
                          &ClassMethodTest01::EmptyFunctionTest);
     }
 
+private:
+    std::shared_ptr<FunctionDefinition> GetClassMethod(const std::string source,
+                                                       const std::string &expcted_class_name,
+                                                       const std::string &expected_func_name)
+    {
+        auto unit = DoesNotThrowAndReturn<ParseException,
+                                          std::shared_ptr<hoo::ast::Unit>>([source]()
+                                                                               -> std::shared_ptr<hoo::ast::Unit> {
+            auto unit = ParserTestHelper::BuildUnit(source);
+            return unit;
+        });
+        NotNull(unit);
+
+        auto class_definition = ParserTestHelper::GetClassByName(unit, expcted_class_name);
+        NotNull(class_definition);
+
+        auto function_definitions = ParserTestHelper::GetFunctionsByName(class_definition, expected_func_name);
+        NotEmpty(function_definitions);
+        auto func_def = * function_definitions.begin();
+        return func_def;
+    }
+
+public:
     void EmptyFunctionTest()
     {
         std::ostringstream out;
@@ -44,34 +69,8 @@ public:
             << "\t}" << std::endl
             << "}";
         auto source = out.str();
-        ParserDriver driver(source);
-        auto unit = driver.Build();
-        NotNull(unit);
-        auto items = unit->GetItems();
-        Count<>(items, 1);
-        auto first_item = *items.begin();
-        auto class_def = std::static_pointer_cast<ClassDefinition>(first_item);
-        NotNull(class_def);
-        auto class_name = class_def->GetClassName();
-        StringEqual(class_name, "Maths");
-        False(class_def->HasBaseEntities());
-        False(class_def->IsEmpty());
-        auto body = class_def->GetBody();
-        NotNull(body);
-        auto class_body_items = body->GetItems();
-        Count<>(class_body_items, 1);
-        auto first_class_item = *class_body_items.begin();
-        NotNull(first_class_item);
-        Equal(CLSBODY_DEFINITION, first_class_item->GetType());
-        auto def = first_class_item->GetDefinition();
-        NotNull(def);
-        Equal(DEFINITION_FUNCTION, def->GetDefinitionType());
-        auto func_def = std::static_pointer_cast<FunctionDefinition>(def);
-        NotNull(func_def);
+        auto func_def = GetClassMethod(source, "Maths", "add");
         auto func_decl = func_def->GetDeclaration();
-        NotNull(func_decl);
-        auto func_name = func_decl->GetName();
-        StringEqual(func_name, "add");
         auto declarator = func_decl->GetDeclarator();
         Equal(declarator, DECLARATOR_PUBLIC);
         auto return_type = func_decl->GetReturnType();

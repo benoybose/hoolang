@@ -74,7 +74,8 @@ ADD_EXECUTABLE(BasicClassDefinitionTest
 ADD_HOO_PARSER_TEST(BasicClassDefinitionTest)
 
 ADD_EXECUTABLE(ClassMethodTest01
-        test/ClassMethodTest01.cpp)
+        test/ClassMethodTest01.cpp
+        test/ParserTestHelper.cpp)
 ADD_HOO_PARSER_TEST(ClassMethodTest01)
 
 INSTALL(DIRECTORY "${ANTLR4_INCLUDE_DIR_HooANTLR4}"
