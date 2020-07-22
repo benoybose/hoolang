@@ -22,6 +22,8 @@ public:
                          &BasicClassDefinitionTest::MultipleBaseEntitiesTest);
         RegisterTestCase("InvalidClassDefTest",
                          &BasicClassDefinitionTest::InvalidClassDefTest);
+        RegisterTestCase("InvalidDerivedClassDefTest",
+                         &BasicClassDefinitionTest::InvalidDerivedClassDefTest);
     }
 
 private:
@@ -104,9 +106,39 @@ public:
             ParserDriver driver(source);
             auto unit = driver.Build();
         }
-        catch (ParseException& ex)
+        catch (ParseException &ex)
         {
-            std::cout << "Parse exception is caught";
+            auto syntax_errors = ex.GetSyntaxErrors();
+            Count<>(syntax_errors, 1);
+            auto error = *syntax_errors.begin();
+            auto line_number = error->GetLineNumber();
+            auto column = error->GetCharacterPosition();
+            auto code = error->GetCode();
+            Equal(line_number, 1);
+            Equal(column, 6);
+            Equal(code, ERROR_CODE_WRONG_SYNTAX);
+        }
+    }
+
+    void InvalidDerivedClassDefTest()
+    {
+        try
+        {
+            const auto source = "class ClassName: BaseClass^ {}";
+            ParserDriver driver(source);
+            auto unit = driver.Build();
+        }
+        catch (ParseException &ex)
+        {
+            auto syntax_errors = ex.GetSyntaxErrors();
+            Count<>(syntax_errors, 1);
+            auto error = *syntax_errors.begin();
+            auto line_number = error->GetLineNumber();
+            auto column = error->GetCharacterPosition();
+            auto code = error->GetCode();
+            Equal(line_number, 1);
+            Equal(column, 26);
+            Equal(code, ERROR_CODE_WRONG_SYNTAX);
         }
     }
 };
