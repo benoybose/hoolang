@@ -46,6 +46,7 @@ namespace hoo
             const bool IsEmpty() const;
             const std::list<std::string>& GetBaseEntities() const;
             const bool HasBaseEntities() const;
+            std::shared_ptr<ClassBody> GetBody() const;
         };
     } // namespace ast
 } // namespace hoo

@@ -150,6 +150,29 @@ namespace hoo
             }
 
             template <typename T>
+            void Null(std::shared_ptr<T> v, const std::string& message = "")
+            {
+                try
+                {
+                    this->_assert_count += 1;
+                    if (v)
+                    {
+                        this->_failed_count += 1;
+                        Out() << "Null test failed." << std::endl;
+                        if (!message.empty())
+                        {
+                            Out() << message << std::endl;
+                        }
+                    }
+                }
+                catch(...)
+                {
+                    this->_failed_count += 1;
+                }
+                
+            }
+
+            template <typename T>
             void NotNull(std::shared_ptr<T> v, const std::string &message = "")
             {
                 try
@@ -161,7 +184,7 @@ namespace hoo
                         Out() << "NotNull test failed." << std::endl;
                         if (!message.empty())
                         {
-                            Out() << message;
+                            Out() << message << std::endl;
                         }
                     }
                 }

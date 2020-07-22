@@ -56,5 +56,10 @@ namespace hoo
             auto base_entities = this->GetBaseEntities();
             return (0 < base_entities.size());
         }
+
+        std::shared_ptr<ClassBody> ClassDefinition::GetBody() const
+        {
+            return this->_body;
+        }
     } // namespace ast
 } // namespace hoo
