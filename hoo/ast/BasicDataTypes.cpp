@@ -17,6 +17,7 @@
  */
 
 #include <hoo/ast/BasicDataTypes.hh>
+#include <stdexcept>
 
 namespace hoo {
     namespace ast {
@@ -26,7 +27,6 @@ namespace hoo {
         const std::string NAME_BOOL = "bool";
         const std::string NAME_DOUBLE = "double";
         const std::string NAME_BYTE = "byte";
-        const std::string NAME_INVALID = "##";
 
         const std::string& GetBasicDataTypeName(BasicDataTypeType type) {
             switch(type) {
@@ -36,8 +36,7 @@ namespace hoo {
                 case BASIC_DATA_TYPE_BOOL: return NAME_BOOL;
                 case BASIC_DATA_TYPE_DOUBLE: return NAME_DOUBLE;
                 case BASIC_DATA_TYPE_BYTE: return NAME_BYTE;
-                case BASIC_DATA_TYPE_INVALID: return NAME_INVALID;
-                default: return NAME_INVALID;
+                default: throw std::runtime_error("Invalid basic data type.");
             }
         }
 
@@ -48,7 +47,7 @@ namespace hoo {
             if (text == NAME_BOOL) return BASIC_DATA_TYPE_BOOL;
             if (text == NAME_DOUBLE) return BASIC_DATA_TYPE_DOUBLE;
             if (text == NAME_BYTE) return BASIC_DATA_TYPE_BYTE;
-            return BASIC_DATA_TYPE_INVALID;
+            throw std::runtime_error("Invalid basic data type name.");
         }
     }
 }

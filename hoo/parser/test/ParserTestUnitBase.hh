@@ -16,34 +16,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _HOO_TEST_TESTRESULT_
-#define _HOO_TEST_TESTRESULT_
+#include <hoo/test/TestUnit.hh>
+#include <hoo/ast/AST.hh>
 
-#include <string>
-#include <cstdint>
+#include <list>
+#include <memory>
 
-namespace hoo
+using namespace hoo::test;
+using namespace hoo::ast;
+
+class ParserTestUnitBase : public TestUnit
 {
-    namespace test
-    {
-        class TestResult
-        {
-        private:
-            std::string _name;
-            size_t _assert_count;
-            size_t _failed_count;
-
-        public:
-            TestResult(const std::string &name, size_t assert_count, size_t failed_count);
-            TestResult(const TestResult &test_result);
-
-        public:
-            const std::string &GetName() const;
-            const size_t GetAssertCount() const;
-            const size_t GetFailedCount() const;
-            const bool IsSuccess() const;
-        };
-    } // namespace test
-} // namespace hoo
-
-#endif // _HOO_TEST_TESTRESULT_
+public:
+    std::shared_ptr<Unit> ParseUnit(const std::string &source);
+    std::shared_ptr<ClassDefinition>
+    GetClassByName(std::shared_ptr<Unit> unit, const std::string &class_name);
+    std::list<std::shared_ptr<FunctionDefinition>>
+    GetFunctionsByName(std::shared_ptr<ClassDefinition> class_definition,
+                       const std::string &function_name);
+    void VerifyType(std::shared_ptr<TypeSpecification> type,
+                    BasicDataTypeType basic_data_type);
+};

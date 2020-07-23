@@ -35,16 +35,15 @@ namespace hoo
         Any TypeSpecificationVisitor::visitBasicDataTypeSpecifier(HooParser::BasicDataTypeSpecifierContext *ctx)
         {
             TypeSpecification *type = nullptr;
-            auto basic_data_type = GetBasicDataType(ctx->BasicDataType()->getText());
-            if (BASIC_DATA_TYPE_INVALID != basic_data_type)
+            try 
             {
+                auto basic_data_type = GetBasicDataType(ctx->BasicDataType()->getText());
                 type = new BasicDataTypeSpecification(basic_data_type);
             }
-            else
+            catch(...)
             {
                 this->_error_listener->Add(ctx, "Invalid basic data type.");
             }
-
             return Any(type);
         }
 

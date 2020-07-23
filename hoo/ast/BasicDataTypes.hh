@@ -29,8 +29,7 @@ namespace hoo {
             BASIC_DATA_TYPE_STRING,
             BASIC_DATA_TYPE_BOOL,
             BASIC_DATA_TYPE_DOUBLE,
-            BASIC_DATA_TYPE_BYTE,
-            BASIC_DATA_TYPE_INVALID
+            BASIC_DATA_TYPE_BYTE
         } BasicDataTypeType;
 
         extern const std::string NAME_INT;

@@ -75,6 +75,7 @@ ADD_HOO_PARSER_TEST(BasicClassDefinitionTest)
 
 ADD_EXECUTABLE(ClassMethodTest01
         test/ClassMethodTest01.cpp
+        test/ParserTestUnitBase.cpp
         test/ParserTestHelper.cpp)
 ADD_HOO_PARSER_TEST(ClassMethodTest01)
 

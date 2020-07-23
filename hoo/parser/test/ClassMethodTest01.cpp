@@ -16,11 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "ParserTestHelper.hh"
+#include "ParserTestUnitBase.hh"
 
 #include <hoo/ast/AST.hh>
 #include <hoo/test/HooTest.hh>
 #include <hoo/parser/ParserDriver.hh>
+#include <hoo/parser/ParseException.hh>
 
 #include <sstream>
 #include <memory>
@@ -29,13 +30,15 @@ using namespace hoo::ast;
 using namespace hoo::test;
 using namespace hoo::parser;
 
-class ClassMethodTest01 : public TestUnit
+class ClassMethodTest01 : public ParserTestUnitBase
 {
 public:
     ClassMethodTest01()
     {
         RegisterTestCase("EmptyFunctionTest",
                          &ClassMethodTest01::EmptyFunctionTest);
+        RegisterTestCase("FunctionReturnTypeTest",
+                         &ClassMethodTest01::FunctionReturnTypeTest);
     }
 
 private:
@@ -44,19 +47,19 @@ private:
                                                        const std::string &expected_func_name)
     {
         auto unit = DoesNotThrowAndReturn<ParseException,
-                                          std::shared_ptr<hoo::ast::Unit>>([source]()
+                                          std::shared_ptr<hoo::ast::Unit>>([this, source]()
                                                                                -> std::shared_ptr<hoo::ast::Unit> {
-            auto unit = ParserTestHelper::BuildUnit(source);
+            auto unit = ParseUnit(source);
             return unit;
         });
         NotNull(unit);
 
-        auto class_definition = ParserTestHelper::GetClassByName(unit, expcted_class_name);
+        auto class_definition = GetClassByName(unit, expcted_class_name);
         NotNull(class_definition);
 
-        auto function_definitions = ParserTestHelper::GetFunctionsByName(class_definition, expected_func_name);
+        auto function_definitions = GetFunctionsByName(class_definition, expected_func_name);
         NotEmpty(function_definitions);
-        auto func_def = * function_definitions.begin();
+        auto func_def = *function_definitions.begin();
         return func_def;
     }
 
@@ -75,6 +78,22 @@ public:
         Equal(declarator, DECLARATOR_PUBLIC);
         auto return_type = func_decl->GetReturnType();
         Null(return_type);
+    }
+
+    void FunctionReturnTypeTest()
+    {
+        std::ostringstream out;
+        out << "class Bar {" << std::endl
+            << "\tpublic func:int foo() {" << std::endl
+            << "\t}" << std::endl
+            << "}";
+        auto source = out.str();
+        auto func_def = GetClassMethod(source, "Bar", "foo");
+        auto func_decl = func_def->GetDeclaration();
+        auto declarator = func_decl->GetDeclarator();
+        Equal(declarator, DECLARATOR_PUBLIC);
+        auto return_type = func_decl->GetReturnType();
+        VerifyType(return_type, BASIC_DATA_TYPE_INT);
     }
 };
 
