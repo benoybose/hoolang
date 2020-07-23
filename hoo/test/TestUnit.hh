@@ -57,7 +57,8 @@ namespace hoo
         public:
             void True(bool expr, const std::string &message = "");
             void False(bool expr, const std::string &message = "");
-            void StringEqual(std::string orignal, std::string expected, const std::string &message = "");
+            void StringEqual(std::string orignal, std::string expected,
+                             const std::string &message = "");
 
             template <typename T>
             void Equal(T original, T expected, const std::string &message = "")
@@ -77,11 +78,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"Equal\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Equal\" failed.");
                 }
             }
 
@@ -98,11 +101,13 @@ namespace hoo
                         {
                             Out() << message;
                         }
+                        throw std::runtime_error("test \"NotEqual\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"NotEqual\" failed.");
                 }
             }
 
@@ -119,11 +124,13 @@ namespace hoo
                         {
                             Out() << message;
                         }
+                        throw std::runtime_error("test \"Null\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Null\" failed.");
                 }
             }
 
@@ -141,11 +148,13 @@ namespace hoo
                         {
                             Out() << message;
                         }
+                        throw std::runtime_error("test \"NotNull\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"NotNull\" failed.");
                 }
             }
 
@@ -163,11 +172,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"Null\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Null\" failed.");
                 }
             }
 
@@ -185,11 +196,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"NotNull\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"NotNull\" failed.");
                 }
             }
 
@@ -207,6 +220,7 @@ namespace hoo
                         {
                             Out() << message;
                         }
+                        throw std::runtime_error("test \"Throws\" failed.");
                     }
                     catch (TExceptionType)
                     {
@@ -216,6 +230,7 @@ namespace hoo
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Throws\" failed.");
                 }
             }
 
@@ -239,6 +254,7 @@ namespace hoo
                         {
                             Out() << message;
                         }
+                        throw std::runtime_error("test \"DoesNotThrow\" failed.");
                     }
                 }
                 catch (...)
@@ -298,11 +314,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"NotEmpty\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"NotEmpty\" failed.");
                 }
             }
 
@@ -322,11 +340,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"Empty\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Empty\" failed.");
                 }
             }
 
@@ -348,11 +368,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"Count\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Count\" failed.");
                 }
             }
 
@@ -376,11 +398,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"Count\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Count\" failed.");
                 }
             }
 
@@ -409,12 +433,14 @@ namespace hoo
                             {
                                 Out() << message << std::endl;
                             }
+                            throw std::runtime_error("test \"At\" failed.");
                         }
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"At\" failed.");
                 }
             }
 
@@ -435,11 +461,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"IsA\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"IsA\" failed.");
                 }
             }
 
@@ -461,11 +489,13 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
+                        throw std::runtime_error("test \"IsA\" failed.");
                     }
                 }
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"IsA\" failed.");
                 }
                 return casted;
             }
@@ -489,7 +519,7 @@ namespace hoo
                         {
                             Out() << message << std::endl;
                         }
-                        return;
+                        throw std::runtime_error("test \"Equal\" failed.");
                     }
 
                     auto original_itr = original.begin();
@@ -514,7 +544,7 @@ namespace hoo
                                 Out() << message << std::endl;
                             }
 
-                            break;
+                            throw std::runtime_error("test \"Equal\" failed.");
                         }
                         original_itr++;
                         expected_itr++;
@@ -524,6 +554,7 @@ namespace hoo
                 catch (...)
                 {
                     this->_failed_count += 1;
+                    throw std::runtime_error("test \"Equal\" failed.");
                 }
             }
         };

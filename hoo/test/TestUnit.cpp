@@ -31,10 +31,11 @@ namespace hoo
                 }
                 catch (...)
                 {
-                    if (failed_count == this->_failed_count) {
+                    if (failed_count == this->_failed_count)
+                    {
                         this->_failed_count += 1;
                     }
-                    Out() << "failed test case: \"" << name << "\"" << std::endl;
+                    Out() << "failed test procedure: \"" << name << "\"" << std::endl;
                 }
 
                 TestResult result(name, this->_assert_count - asserted_count,
@@ -54,6 +55,7 @@ namespace hoo
                 {
                     Out() << message;
                 }
+                throw std::runtime_error("test \"True\" failed.");
             }
         }
 
@@ -67,10 +69,12 @@ namespace hoo
                 {
                     Out() << message;
                 }
+                throw std::runtime_error("test \"False\" failed.");
             }
         }
 
-        void TestUnit::StringEqual(std::string orignal, std::string expected, const std::string &message)
+        void TestUnit::StringEqual(std::string orignal,
+                                   std::string expected, const std::string &message)
         {
             try
             {
@@ -87,11 +91,13 @@ namespace hoo
                     {
                         Out() << message << std::endl;
                     }
+                    throw std::runtime_error("test \"StringEqual\" failed.");
                 }
             }
             catch (...)
             {
                 this->_failed_count += 1;
+                throw std::runtime_error("test \"StringEqual\" failed.");
             }
         }
 
@@ -106,6 +112,7 @@ namespace hoo
                 {
                     Out() << message;
                 }
+                throw std::runtime_error("test \"ThrowsAny\" failed.");
             }
             catch (...)
             {
@@ -125,6 +132,7 @@ namespace hoo
                 {
                     Out() << message;
                 }
+                throw std::runtime_error("test \"DoesNotThrowAny\" failed.");
             }
         }
     } // namespace test
