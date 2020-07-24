@@ -40,10 +40,14 @@ namespace hoo
                                            std::shared_ptr<TypeSpecification> parent);
 
         public:
-            const std::string &GetName() const;
-
             std::shared_ptr<TypeSpecification> GetParent();
 
+        public:
+            const std::string &GetName() const override;
+
+            virtual const bool Equals(const TypeSpecification &other) override;
+
+        public:
             virtual ~ReferenceDataTypeSpecification();
         };
     } // namespace ast

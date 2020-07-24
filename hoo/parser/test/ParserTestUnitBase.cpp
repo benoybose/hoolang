@@ -30,7 +30,7 @@ std::shared_ptr<Unit> ParserTestUnitBase::ParseUnit(const std::string &source)
     auto unit = DoesNotThrowAndReturn<ParseException,
                                       std::shared_ptr<hoo::ast::Unit>>([source]()
                                                                            -> std::shared_ptr<hoo::ast::Unit> {
-        ParserDriver driver(source);
+        ParserDriver driver(source, true);
         auto unit = driver.Build();
         return unit;
     });
@@ -106,4 +106,15 @@ void ParserTestUnitBase::VerifyType(std::shared_ptr<TypeSpecification> type,
     NotNull(basic_data_type);
     auto data_type = basic_data_type->GetDataType();
     Equal(data_type, expected_basic_data_type);
+}
+
+std::shared_ptr<CompoundStatement>
+ParserTestUnitBase::AsCompoundStatement(std::shared_ptr<Statement> statement)
+{
+    NotNull(statement);
+    const auto statement_type = statement->GetStatementType();
+    Equal(statement_type, STMT_COMPOUND);
+    auto compound_statement = std::static_pointer_cast<CompoundStatement>(statement);
+    NotNull(compound_statement);
+    return compound_statement;
 }

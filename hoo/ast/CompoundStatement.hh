@@ -20,6 +20,7 @@
 #define HOOLANG_COMPOUNDSTATEMENT_HH
 
 #include <hoo/ast/Statement.hh>
+#include <hoo/ast/TypeSpecification.hh>
 
 #include <memory>
 
@@ -31,12 +32,15 @@ namespace hoo
         {
         private:
             std::list<std::shared_ptr<Statement>> _statements;
+            std::shared_ptr<TypeSpecification> _return_type;
 
         public:
-            explicit CompoundStatement(std::list<std::shared_ptr<Statement>> statements);
+            CompoundStatement(std::list<std::shared_ptr<Statement>> statements,
+                              std::shared_ptr<TypeSpecification> return_type);
 
         public:
             std::list<std::shared_ptr<Statement>> GetStatements();
+            std::shared_ptr<TypeSpecification> GetReturnType();
 
         public:
             virtual ~CompoundStatement();

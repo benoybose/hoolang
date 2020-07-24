@@ -212,7 +212,7 @@ namespace hoo
                     if (!v)
                     {
                         this->_failed_count += 1;
-                        Out() << "NotNull test failed." << std::endl;
+                        Out() << "test \"NotNull\" failed." << std::endl;
                         if (!message.empty())
                         {
                             Out() << message << std::endl;

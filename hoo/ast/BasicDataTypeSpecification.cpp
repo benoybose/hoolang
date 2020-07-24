@@ -35,6 +35,17 @@ namespace hoo {
             return GetBasicDataTypeName(this->_data_type);
         }
 
+        const bool BasicDataTypeSpecification::Equals(const TypeSpecification &other)
+        {
+            if (!TypeSpecification::Equals(other))
+            {
+                return false;
+            }
+            auto p_other = &other;
+            auto basic_type = static_cast<const BasicDataTypeSpecification*>(p_other);
+            return this->_data_type == basic_type->_data_type;
+        }
+
         BasicDataTypeSpecification::~BasicDataTypeSpecification() {
         }
     }

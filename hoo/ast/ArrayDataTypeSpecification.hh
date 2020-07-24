@@ -23,9 +23,12 @@
 
 #include <memory>
 
-namespace hoo {
-    namespace ast {
-        class ArrayDataTypeSpecification: public TypeSpecification {
+namespace hoo
+{
+    namespace ast
+    {
+        class ArrayDataTypeSpecification : public TypeSpecification
+        {
         private:
             std::string _name;
             std::shared_ptr<TypeSpecification> _parent;
@@ -36,10 +39,10 @@ namespace hoo {
             std::shared_ptr<TypeSpecification> GetParent();
 
             const std::string &GetName() const override;
+            
+            virtual const bool Equals(const TypeSpecification &other) override;
         };
-    }
-}
-
-
+    } // namespace ast
+} // namespace hoo
 
 #endif //HOOLANG_ARRAYDATATYPESPECIFICATION_HH

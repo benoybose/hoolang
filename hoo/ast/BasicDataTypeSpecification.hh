@@ -22,10 +22,13 @@
 #include <hoo/ast/TypeSpecification.hh>
 #include <hoo/ast/BasicDataTypes.hh>
 
-namespace hoo {
-    namespace ast {
+namespace hoo
+{
+    namespace ast
+    {
 
-        class BasicDataTypeSpecification : public TypeSpecification {
+        class BasicDataTypeSpecification : public TypeSpecification
+        {
         private:
             BasicDataTypeType _data_type;
 
@@ -36,12 +39,13 @@ namespace hoo {
             BasicDataTypeType GetDataType() const;
 
         public:
-            virtual ~BasicDataTypeSpecification();
-
             const std::string &GetName() const override;
-        };
-    }
-}
+            virtual const bool Equals(const TypeSpecification &other) override;
 
+        public:
+            virtual ~BasicDataTypeSpecification();
+        };
+    } // namespace ast
+} // namespace hoo
 
 #endif //HOOLANG_BASICDATATYPESPECIFICATION_HH

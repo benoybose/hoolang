@@ -22,15 +22,22 @@ namespace hoo
 {
     namespace ast
     {
-        CompoundStatement::CompoundStatement(std::list<std::shared_ptr<Statement>> statements)
+        CompoundStatement::CompoundStatement(std::list<std::shared_ptr<Statement>> statements,
+                                             std::shared_ptr<TypeSpecification> return_type)
             : Statement(STMT_COMPOUND),
-              _statements(statements)
+              _statements(statements),
+              _return_type(return_type)
         {
         }
 
         std::list<std::shared_ptr<Statement>> CompoundStatement::GetStatements()
         {
             return this->_statements;
+        }
+
+        std::shared_ptr<TypeSpecification> CompoundStatement::GetReturnType()
+        {
+            return this->_return_type;
         }
 
         CompoundStatement::~CompoundStatement()

@@ -30,11 +30,12 @@ namespace hoo
               _full_name("")
         {
             std::string full_name;
-            if (nullptr != this->_parent)
+            if (_parent)
             {
                 full_name += this->_parent->GetName();
                 full_name += ".";
             }
+
             full_name += this->_name;
             this->_full_name = full_name;
         }
@@ -47,6 +48,18 @@ namespace hoo
         std::shared_ptr<TypeSpecification> ReferenceDataTypeSpecification::GetParent()
         {
             return _parent;
+        }
+
+        const bool ReferenceDataTypeSpecification::Equals(const TypeSpecification &other)
+        {
+            if (!TypeSpecification::Equals(other))
+            {
+                return false;
+            }
+
+            auto p_other = &other;
+            auto ref_other = static_cast<const ReferenceDataTypeSpecification*>(p_other);
+            return (this->_full_name == ref_other->_full_name);
         }
 
         ReferenceDataTypeSpecification::~ReferenceDataTypeSpecification()

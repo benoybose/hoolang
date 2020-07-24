@@ -25,6 +25,7 @@
 
 #include <exception>
 #include <memory>
+#include <iostream>
 
 using namespace hoo;
 using namespace hoo::ast;
@@ -36,7 +37,10 @@ namespace hoo
     namespace parser
     {
 
-        ParserDriver::ParserDriver(const std::string &source_code) : _source_code(source_code)
+        ParserDriver::ParserDriver(const std::string &source_code,
+                                   bool debug)
+            : _source_code(source_code),
+              _debug(debug)
         {
         }
 
@@ -74,6 +78,20 @@ namespace hoo
             {
                 auto syntax_errors = error_listener.GetSyntaxErrors();
                 auto parse_errors = error_listener.GetParseErrors();
+                if (this->_debug)
+                {
+                    for(auto err: syntax_errors)
+                    {
+                        std::cout << err->GetMessage() << std::endl;
+                    }
+
+                    for(auto err: parse_errors)
+                    {
+                        std::cout << err->GetCode() << " "
+                        << err->GetMessage()
+                        << std::endl;
+                    }
+                }
                 throw ParseException(syntax_errors, parse_errors);
             }
 

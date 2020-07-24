@@ -36,4 +36,6 @@ public:
                        const std::string &function_name);
     void VerifyType(std::shared_ptr<TypeSpecification> type,
                     BasicDataTypeType basic_data_type);
+    std::shared_ptr<CompoundStatement>
+    AsCompoundStatement(std::shared_ptr<Statement> statement);
 };

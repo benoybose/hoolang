@@ -21,16 +21,21 @@
 
 #include <string>
 #include <list>
+#include <memory>
 
-namespace hoo {
-    namespace ast {
-        typedef enum {
+namespace hoo
+{
+    namespace ast
+    {
+        typedef enum
+        {
             TYPE_SPEC_BASIC,
             TYPE_SPEC_REFERENCE,
             TYPE_SPEC_ARRAY
         } TypeSpecificationType;
 
-        class TypeSpecification {
+        class TypeSpecification
+        {
         public:
             explicit TypeSpecification(TypeSpecificationType type);
 
@@ -39,13 +44,16 @@ namespace hoo {
 
         public:
             TypeSpecificationType GetType() const;
-            virtual const std::string& GetName() const = 0;
+            virtual const std::string &GetName() const = 0;
+
+        public:
+            virtual const bool Equals(const TypeSpecification &other);
+            virtual const bool Equals(const std::shared_ptr<TypeSpecification> other);
 
         public:
             virtual ~TypeSpecification();
         };
-    }
-}
-
+    } // namespace ast
+} // namespace hoo
 
 #endif //PROJECT_TYPESPECIFICATION_HH

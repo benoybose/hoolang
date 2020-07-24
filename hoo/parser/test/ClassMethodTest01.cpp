@@ -35,8 +35,8 @@ class ClassMethodTest01 : public ParserTestUnitBase
 public:
     ClassMethodTest01()
     {
-        RegisterTestCase("EmptyFunctionTest",
-                         &ClassMethodTest01::EmptyFunctionTest);
+        // RegisterTestCase("EmptyFunctionTest",
+        //                  &ClassMethodTest01::EmptyFunctionTest);
         RegisterTestCase("FunctionReturnTypeTest",
                          &ClassMethodTest01::FunctionReturnTypeTest);
     }
@@ -85,15 +85,23 @@ public:
         std::ostringstream out;
         out << "class Bar {" << std::endl
             << "\tpublic func:int foo() {" << std::endl
+            << "\t\treturn 23;"
             << "\t}" << std::endl
             << "}";
-        auto source = out.str();
-        auto func_def = GetClassMethod(source, "Bar", "foo");
+        const auto source = out.str();
+        const auto class_name = "Bar";
+        const auto function_name = "foo";
+
+        auto func_def = GetClassMethod(source, class_name, function_name);
         auto func_decl = func_def->GetDeclaration();
         auto declarator = func_decl->GetDeclarator();
         Equal(declarator, DECLARATOR_PUBLIC);
         auto return_type = func_decl->GetReturnType();
         VerifyType(return_type, BASIC_DATA_TYPE_INT);
+        auto func_body = func_def->GetBody();
+        auto compound_stmt = AsCompoundStatement(func_body);
+        auto body_return_type = compound_stmt->GetReturnType();
+        // NotNull(body_return_type);
     }
 };
 

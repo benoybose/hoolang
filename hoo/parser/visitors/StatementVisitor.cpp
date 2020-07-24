@@ -19,6 +19,7 @@
 
 #include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/StatementVisitor.hh>
+#include <hoo/parser/visitors/ExpressionVisitor.hh>
 #include <hoo/parser/visitors/VariableDeclarationVisitor.hh>
 #include <hoo/parser/visitors/FunctionDefinitionVisitor.hh>
 #include <hoo/parser/ErrorListener.hh>
@@ -71,7 +72,19 @@ namespace hoo
                 }
             }
 
-            Statement *compound_statement = new CompoundStatement(statement_list);
+            std::shared_ptr<TypeSpecification> return_type(nullptr);
+            for(auto stmt_item: statement_list)
+            {
+                const auto stmt_type = stmt_item->GetStatementType();
+                if (STMT_RETURN == stmt_type)
+                {
+                    auto return_stmt = std::static_pointer_cast<ReturnStatement>(stmt_item);
+                    auto expression = return_stmt->GetExpression();
+                    if (!expression) continue;
+                }
+            }
+
+            Statement *compound_statement = new CompoundStatement(statement_list, return_type);
             return Any(compound_statement);
         }
 
@@ -83,17 +96,17 @@ namespace hoo
                 std::shared_ptr<Expression> return_expr;
                 try
                 {
-                    auto expression = this->visit(ctx->returnValue)
+                    ExpressionVisitor visitor(_error_listener);
+                    auto expression = visitor.visit(ctx->returnValue)
                                           .as<Expression *>();
                     return_expr = std::shared_ptr<Expression>(expression);
+                    statement = new ReturnStatement(return_expr);
                 }
                 catch (...)
                 {
                     _error_listener->Add(ctx,
                                          "Invalid expression on return statement.");
                 }
-
-                statement = new ReturnStatement(return_expr);
             }
             else 
             {

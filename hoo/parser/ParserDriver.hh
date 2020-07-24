@@ -28,19 +28,24 @@
 #include <list>
 #include <memory>
 
-namespace hoo {
-    namespace parser {
-        class ParserDriver {
+namespace hoo
+{
+    namespace parser
+    {
+        class ParserDriver
+        {
         private:
             std::string _source_code;
+            bool _debug;
 
         public:
-            ParserDriver(const std::string &source_code);
+            ParserDriver(const std::string &source_code,
+                         bool debug = false);
 
         public:
             std::shared_ptr<hoo::ast::Unit> Build();
         };
-    }
-}
+    } // namespace parser
+} // namespace hoo
 
 #endif //PROJECT_PARSERDRIVER_HH

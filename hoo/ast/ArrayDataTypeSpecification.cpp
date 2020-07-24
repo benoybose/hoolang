@@ -18,27 +18,44 @@
 
 #include <hoo/ast/ArrayDataTypeSpecification.hh>
 
-namespace hoo {
-    namespace ast {
-        ArrayDataTypeSpecification::ArrayDataTypeSpecification(std::shared_ptr<TypeSpecification> parent) :
-                TypeSpecification(TYPE_SPEC_ARRAY),
-                _parent(parent),
-                _name("") {
+namespace hoo
+{
+    namespace ast
+    {
+        ArrayDataTypeSpecification::ArrayDataTypeSpecification(std::shared_ptr<TypeSpecification> parent) : TypeSpecification(TYPE_SPEC_ARRAY),
+                                                                                                            _parent(parent),
+                                                                                                            _name("")
+        {
 
             std::string name;
-            if(nullptr != parent) {
+            if (nullptr != parent)
+            {
                 name += this->_parent->GetName();
             }
             name += "[]";
             this->_name = name;
         }
 
-        std::shared_ptr<TypeSpecification> ArrayDataTypeSpecification::GetParent() {
+        std::shared_ptr<TypeSpecification> ArrayDataTypeSpecification::GetParent()
+        {
             return _parent;
         }
 
-        const std::string &ArrayDataTypeSpecification::GetName() const {
+        const std::string &ArrayDataTypeSpecification::GetName() const
+        {
             return this->_name;
         }
-    }
-}
+
+        const bool ArrayDataTypeSpecification::Equals(const TypeSpecification &other)
+        {
+            if (!TypeSpecification::Equals(other))
+            {
+                return false;
+            }
+
+            auto p_other = &other;
+            auto array_other = static_cast<const ArrayDataTypeSpecification *>(p_other);
+            return (this->_name == array_other->_name) && (this->_parent->Equals(*p_other));
+        }
+    } // namespace ast
+} // namespace hoo

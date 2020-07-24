@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <cstdint>
+#include <list>
 
 #define UTILITY_OFFSET8 8
 #define UTILITY_OFFSET16 16
@@ -37,7 +38,7 @@ namespace hoo
         public:
             static std::vector<std::uint8_t> GetBytes(std::uint64_t value);
 
-            template<typename T>
+            template <typename T>
             static void AppendTo(std::vector<T> &to, const std::vector<T> &from)
             {
                 to.insert(to.end(), from.begin(), from.end());
@@ -68,6 +69,28 @@ namespace hoo
                 std::uint64_t v2 = (uint64_t)b2 << (uint8_t)UTILITY_OFFSET16;
                 std::uint64_t v3 = (uint64_t)b3 << (uint8_t)UTILITY_OFFSET24;
                 return v3 | v2 | v1 | v0;
+            }
+
+            template <typename T>
+            T First(std::list<T> items)
+            {
+                if (0 == items.size())
+                {
+                    throw std::runtime_error("List is empty");
+                }
+
+                return * items.begin();
+            }
+
+            template <typename T>
+            T Last(std::list<T> items)
+            {
+                if (0 == items.size())
+                {
+                    throw std::runtime_error("List is empty");
+                }
+                auto item = * (items.end() --);
+                return item;
             }
         };
     } // namespace common
