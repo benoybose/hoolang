@@ -16,13 +16,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <hoo/ast/ReferenceDataTypeSpecification.hh>
+#include <hoo/ast/RefTypeSpec.hh>
 
 namespace hoo
 {
     namespace ast
     {
-        ReferenceDataTypeSpecification::ReferenceDataTypeSpecification(const std::string &name,
+        RefTypeSpec::RefTypeSpec(const std::string &name,
                                                                        std::shared_ptr<TypeSpecification> parent)
             : TypeSpecification(TYPE_SPEC_REFERENCE),
               _name(name),
@@ -40,17 +40,17 @@ namespace hoo
             this->_full_name = full_name;
         }
 
-        const std::string &ReferenceDataTypeSpecification::GetName() const
+        const std::string &RefTypeSpec::GetName() const
         {
             return this->_full_name;
         }
 
-        std::shared_ptr<TypeSpecification> ReferenceDataTypeSpecification::GetParent()
+        std::shared_ptr<TypeSpecification> RefTypeSpec::GetParent()
         {
             return _parent;
         }
 
-        const bool ReferenceDataTypeSpecification::Equals(const TypeSpecification &other)
+        const bool RefTypeSpec::Equals(const TypeSpecification &other)
         {
             if (!TypeSpecification::Equals(other))
             {
@@ -58,11 +58,11 @@ namespace hoo
             }
 
             auto p_other = &other;
-            auto ref_other = static_cast<const ReferenceDataTypeSpecification*>(p_other);
+            auto ref_other = static_cast<const RefTypeSpec*>(p_other);
             return (this->_full_name == ref_other->_full_name);
         }
 
-        ReferenceDataTypeSpecification::~ReferenceDataTypeSpecification()
+        RefTypeSpec::~RefTypeSpec()
         {
         }
     } // namespace ast

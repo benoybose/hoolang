@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
-#define HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
+#ifndef HOOLANG_RefTypeSpec_HH
+#define HOOLANG_RefTypeSpec_HH
 
 #include <hoo/ast/TypeSpecification.hh>
 
@@ -28,7 +28,7 @@ namespace hoo
 {
     namespace ast
     {
-        class ReferenceDataTypeSpecification : public TypeSpecification
+        class RefTypeSpec : public TypeSpecification
         {
         private:
             std::string _name;
@@ -36,7 +36,7 @@ namespace hoo
             std::shared_ptr<TypeSpecification> _parent;
 
         public:
-            ReferenceDataTypeSpecification(const std::string &name,
+            RefTypeSpec(const std::string &name,
                                            std::shared_ptr<TypeSpecification> parent);
 
         public:
@@ -48,9 +48,9 @@ namespace hoo
             virtual const bool Equals(const TypeSpecification &other) override;
 
         public:
-            virtual ~ReferenceDataTypeSpecification();
+            virtual ~RefTypeSpec();
         };
     } // namespace ast
 } // namespace hoo
 
-#endif //HOOLANG_REFERENCEDATATYPESPECIFICATION_HH
+#endif //HOOLANG_RefTypeSpec_HH

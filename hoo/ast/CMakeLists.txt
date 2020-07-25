@@ -24,7 +24,7 @@ SET (HOO_AST_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/ast/NoopStatement.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/Operator.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/Position.hh
-    ${CMAKE_SOURCE_DIR}/hoo/ast/ReferenceDataTypeSpecification.hh
+    ${CMAKE_SOURCE_DIR}/hoo/ast/RefTypeSpec.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ReferenceExpression.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ReturnStatement.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/Statement.hh
@@ -56,7 +56,7 @@ SET (HOO_AST_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/ast/NoopStatement.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/Operator.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/Position.cpp
-    ${CMAKE_SOURCE_DIR}/hoo/ast/ReferenceDataTypeSpecification.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/RefTypeSpec.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/ReferenceExpression.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/ReturnStatement.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/Statement.cpp

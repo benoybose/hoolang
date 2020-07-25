@@ -58,7 +58,7 @@ namespace hoo
                 {
                     auto parent = std::shared_ptr<TypeSpecification>(parent_type_spec);
                     auto name = ctx->Identifier()->getText();
-                    type = new ReferenceDataTypeSpecification(name, parent);
+                    type = new RefTypeSpec(name, parent);
                 }
                 else
                 {
@@ -77,7 +77,7 @@ namespace hoo
         Any TypeSpecificationVisitor::visitIdentifierTypeSpecifier(HooParser::IdentifierTypeSpecifierContext *ctx)
         {
             auto name = ctx->Identifier()->getText();
-            TypeSpecification *type = new ReferenceDataTypeSpecification(name, nullptr);
+            TypeSpecification *type = new RefTypeSpec(name, nullptr);
             return Any(type);
         }
 
