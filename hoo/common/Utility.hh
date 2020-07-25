@@ -24,6 +24,7 @@
 #include <string>
 #include <cstdint>
 #include <list>
+#include <stdexcept>
 
 #define UTILITY_OFFSET8 8
 #define UTILITY_OFFSET16 16
