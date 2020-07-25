@@ -17,7 +17,7 @@
 #include <hoo/ast/BasicDataTypes.hh>
 #include <hoo/ast/BasicDataTypeSpecification.hh>
 #include <hoo/ast/ReferenceDataTypeSpecification.hh>
-#include <hoo/ast/ArrayDataTypeSpecification.hh>
+#include <hoo/ast/ArrayTypeSpec.hh>
 #include <hoo/ast/CompoundStatement.hh>
 #include <hoo/ast/ClassDefinition.hh>
 #include <hoo/ast/ExpressionStatement.hh>

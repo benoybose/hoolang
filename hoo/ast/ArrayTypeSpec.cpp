@@ -16,7 +16,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <hoo/ast/ArrayDataTypeSpecification.hh>
+#include <hoo/ast/ArrayTypeSpec.hh>
 
 namespace hoo
 {

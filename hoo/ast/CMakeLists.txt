@@ -4,7 +4,7 @@ PROJECT(hooast)
 
 SET (HOO_AST_HEADERS 
     ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayAccessExpression.hh
-    ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayDataTypeSpecification.hh
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayTypeSpec.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypes.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypeSpecification.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/BinaryExpression.hh
@@ -37,7 +37,7 @@ SET (HOO_AST_HEADERS
 
 SET (HOO_AST_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayAccessExpression.cpp
-    ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayDataTypeSpecification.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayTypeSpec.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypes.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypeSpecification.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/BinaryExpression.cpp
