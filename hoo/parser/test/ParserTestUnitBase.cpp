@@ -102,7 +102,7 @@ void ParserTestUnitBase::VerifyType(std::shared_ptr<TypeSpecification> type,
     NotNull(type);
     auto type_spec_type = type->GetType();
     Equal(type_spec_type, TYPE_SPEC_BASIC);
-    auto basic_data_type = std::static_pointer_cast<BasicDataTypeSpecification>(type);
+    auto basic_data_type = std::static_pointer_cast<BasicTypeSpec>(type);
     NotNull(basic_data_type);
     auto data_type = basic_data_type->GetDataType();
     Equal(data_type, expected_basic_data_type);

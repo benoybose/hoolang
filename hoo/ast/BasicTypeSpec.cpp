@@ -16,37 +16,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <hoo/ast/BasicDataTypeSpecification.hh>
+#include <hoo/ast/BasicTypeSpec.hh>
 #include <hoo/ast/BasicDataTypes.hh>
 
 namespace hoo {
     namespace ast {
 
-        BasicDataTypeSpecification::BasicDataTypeSpecification(BasicDataTypeType data_type) :
+        BasicTypeSpec::BasicTypeSpec(BasicDataTypeType data_type) :
                 TypeSpecification(TYPE_SPEC_BASIC),
                 _data_type(data_type) {
         }
 
-        BasicDataTypeType BasicDataTypeSpecification::GetDataType() const {
+        BasicDataTypeType BasicTypeSpec::GetDataType() const {
             return _data_type;
         }
 
-        const std::string &BasicDataTypeSpecification::GetName() const {
+        const std::string &BasicTypeSpec::GetName() const {
             return GetBasicDataTypeName(this->_data_type);
         }
 
-        const bool BasicDataTypeSpecification::Equals(const TypeSpecification &other)
+        const bool BasicTypeSpec::Equals(const TypeSpecification &other)
         {
             if (!TypeSpecification::Equals(other))
             {
                 return false;
             }
             auto p_other = &other;
-            auto basic_type = static_cast<const BasicDataTypeSpecification*>(p_other);
+            auto basic_type = static_cast<const BasicTypeSpec*>(p_other);
             return this->_data_type == basic_type->_data_type;
         }
 
-        BasicDataTypeSpecification::~BasicDataTypeSpecification() {
+        BasicTypeSpec::~BasicTypeSpec() {
         }
     }
 }

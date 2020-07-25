@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_BASICDATATYPESPECIFICATION_HH
-#define HOOLANG_BASICDATATYPESPECIFICATION_HH
+#ifndef HOOLANG_BASICTYPESPEC_HH
+#define HOOLANG_BASICTYPESPEC_HH
 
 #include <hoo/ast/TypeSpecification.hh>
 #include <hoo/ast/BasicDataTypes.hh>
@@ -27,13 +27,13 @@ namespace hoo
     namespace ast
     {
 
-        class BasicDataTypeSpecification : public TypeSpecification
+        class BasicTypeSpec : public TypeSpecification
         {
         private:
             BasicDataTypeType _data_type;
 
         public:
-            explicit BasicDataTypeSpecification(BasicDataTypeType data_type);
+            explicit BasicTypeSpec(BasicDataTypeType data_type);
 
         public:
             BasicDataTypeType GetDataType() const;
@@ -43,9 +43,9 @@ namespace hoo
             virtual const bool Equals(const TypeSpecification &other) override;
 
         public:
-            virtual ~BasicDataTypeSpecification();
+            virtual ~BasicTypeSpec();
         };
     } // namespace ast
 } // namespace hoo
 
-#endif //HOOLANG_BASICDATATYPESPECIFICATION_HH
+#endif //HOOLANG_BasicTypeSpec_HH

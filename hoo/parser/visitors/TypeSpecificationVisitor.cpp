@@ -38,7 +38,7 @@ namespace hoo
             try 
             {
                 auto basic_data_type = GetBasicDataType(ctx->BasicDataType()->getText());
-                type = new BasicDataTypeSpecification(basic_data_type);
+                type = new BasicTypeSpec(basic_data_type);
             }
             catch(...)
             {

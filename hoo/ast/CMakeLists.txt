@@ -6,7 +6,7 @@ SET (HOO_AST_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayAccessExpression.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayTypeSpec.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypes.hh
-    ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypeSpecification.hh
+    ${CMAKE_SOURCE_DIR}/hoo/ast/BasicTypeSpec.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/BinaryExpression.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassDefinition.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/CompoundStatement.hh
@@ -39,7 +39,7 @@ SET (HOO_AST_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayAccessExpression.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayTypeSpec.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypes.cpp
-    ${CMAKE_SOURCE_DIR}/hoo/ast/BasicDataTypeSpecification.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/BasicTypeSpec.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/BinaryExpression.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassDefinition.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/CompoundStatement.cpp

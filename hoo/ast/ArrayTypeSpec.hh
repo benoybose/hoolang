@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_ArrayTypeSpec_HH
-#define HOOLANG_ArrayTypeSpec_HH
+#ifndef HOOLANG_ARRAYTYPESPEC_HH
+#define HOOLANG_ARRAYTYPESPEC_HH
 
 #include <hoo/ast/TypeSpecification.hh>
 
