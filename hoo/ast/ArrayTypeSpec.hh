@@ -16,8 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef HOOLANG_ARRAYDATATYPESPECIFICATION_HH
-#define HOOLANG_ARRAYDATATYPESPECIFICATION_HH
+#ifndef HOOLANG_ArrayTypeSpec_HH
+#define HOOLANG_ArrayTypeSpec_HH
 
 #include <hoo/ast/TypeSpecification.hh>
 
@@ -27,14 +27,14 @@ namespace hoo
 {
     namespace ast
     {
-        class ArrayDataTypeSpecification : public TypeSpecification
+        class ArrayTypeSpec : public TypeSpecification
         {
         private:
             std::string _name;
             std::shared_ptr<TypeSpecification> _parent;
 
         public:
-            ArrayDataTypeSpecification(std::shared_ptr<TypeSpecification> parent);
+            ArrayTypeSpec(std::shared_ptr<TypeSpecification> parent);
 
             std::shared_ptr<TypeSpecification> GetParent();
 
@@ -45,4 +45,4 @@ namespace hoo
     } // namespace ast
 } // namespace hoo
 
-#endif //HOOLANG_ARRAYDATATYPESPECIFICATION_HH
+#endif //HOOLANG_ArrayTypeSpec_HH

@@ -99,7 +99,7 @@ namespace hoo
             TypeSpecification *type = nullptr;
             if (parent_type_spec)
             {
-                type = new ArrayDataTypeSpecification(parent_type_spec);
+                type = new ArrayTypeSpec(parent_type_spec);
             }
             return Any(type);
         }
