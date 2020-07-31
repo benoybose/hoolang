@@ -22,9 +22,11 @@ namespace hoo
 {
     namespace ast
     {
-        Expression::Expression(ExpressionType expressionType)
+        Expression::Expression(ExpressionType expressionType,
+                               std::shared_ptr<TypeSpecification> type)
+            : _expressionType(expressionType),
+              _type(type)
         {
-            this->_expressionType = expressionType;
         }
 
         Expression::~Expression()
@@ -34,6 +36,11 @@ namespace hoo
         const ExpressionType Expression::GetExpressionType() const
         {
             return this->_expressionType;
+        }
+
+        std::shared_ptr<TypeSpecification> Expression::GetType()
+        {
+            return this->_type;
         }
     } // namespace ast
 } // namespace hoo

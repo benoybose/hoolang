@@ -24,6 +24,8 @@
 #include <hoo/ast/AST.hh>
 #include <hoo/parser/ErrorListener.hh>
 
+#include <memory>
+
 using namespace antlr4;
 using namespace antlrcpp;
 using namespace hoo::ast;
@@ -56,10 +58,15 @@ namespace hoo
             Any visitBinaryLogicExpression(HooParser::BinaryLogicExpressionContext *ctx) override;
             Any visitBinaryAssignmentExpression(HooParser::BinaryAssignmentExpressionContext *ctx) override;
             Any visitGroupedExpression(HooParser::GroupedExpressionContext *ctx) override;
+
+        private:
             Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,
                                                antlr4::Token *opr,
                                                HooParser::ExpressionContext *rvalue,
                                                ParserRuleContext *context);
+            std::shared_ptr<TypeSpecification> DeduceType(std::shared_ptr<Expression> left_expr,
+                                                          std::shared_ptr<Operator> opr,
+                                                          std::shared_ptr<Expression> right_expr);
         };
     } // namespace parser
 } // namespace hoo

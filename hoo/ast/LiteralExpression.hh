@@ -20,38 +20,33 @@
 #define _LITERALTYPEEXPR_H_
 
 #include <hoo/ast/Expression.hh>
+#include <hoo/ast/TypeSpecification.hh>
 
 #include <cstdint>
 #include <cstdbool>
 #include <string>
+#include <memory>
 
-namespace hoo {
-    namespace ast {
-        enum LiteralType {
-            LITERAL_INTEGER,
-            LITERAL_CHARACTER,
-            LITERAL_STRING,
-            LITERAL_BOOLEAN,
-            LITERAL_DOUBLE,
-            LITERAL_BYTE
-        };
-
-        class LiteralExpression : public Expression {
+namespace hoo
+{
+    namespace ast
+    {
+        class LiteralExpression : public Expression
+        {
         private:
-            LiteralType _literalType;
             std::string _value;
 
         public:
-            LiteralExpression(LiteralType literal_type, std::string &value);
+            LiteralExpression(std::shared_ptr<TypeSpecification> type,
+                              std::string &value);
 
         public:
-            const LiteralType GetLiteralType() const;
             const std::string GetValue() const;
 
         public:
             virtual ~LiteralExpression();
         };
-    }
-};
+    } // namespace ast
+};    // namespace hoo
 
 #endif

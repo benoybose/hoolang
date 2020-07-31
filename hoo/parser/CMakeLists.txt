@@ -18,7 +18,8 @@ SET(HOO_PARSER_HEADERS
         ${CMAKE_SOURCE_DIR}/hoo/parser/ErrorListener.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/BaseError.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/ParseError.hh
-        ${CMAKE_SOURCE_DIR}/hoo/parser/ParseException.hh)
+        ${CMAKE_SOURCE_DIR}/hoo/parser/ParseException.hh
+        ${CMAKE_SOURCE_DIR}/hoo/parser/InvalidExprType.hh)
 
 SET(HOO_PARSER_VISITOR_HEADERS 
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/UnitVisitor.hh
@@ -48,7 +49,8 @@ SET(HOO_PARSER_SOURCES
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/FunctionDefinitionVisitor.cpp
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/TypeSpecificationVisitor.cpp
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/VariableDeclarationVisitor.cpp
-        ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ExpressionVisitor.cpp)
+        ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ExpressionVisitor.cpp
+        ${CMAKE_SOURCE_DIR}/hoo/parser/InvalidExprType.cpp)
 
 ADD_LIBRARY(hooparser STATIC 
         ${HOO_PARSER_HEADERS}

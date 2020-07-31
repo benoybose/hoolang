@@ -18,23 +18,24 @@
 
 #include <hoo/ast/LiteralExpression.hh>
 
-namespace hoo {
-    namespace ast {
-        LiteralExpression::LiteralExpression(LiteralType literal_type, std::string &value) :
-                Expression(EXPRESSION_LITERAL),
-                _literalType(literal_type),
-                _value(value) {
+namespace hoo
+{
+    namespace ast
+    {
+        LiteralExpression::LiteralExpression(std::shared_ptr<TypeSpecification> type,
+                                             std::string &value)
+            : Expression(EXPRESSION_LITERAL, type),
+              _value(value)
+        {
         }
 
-        LiteralExpression::~LiteralExpression() {
-        }
-
-        const LiteralType LiteralExpression::GetLiteralType() const {
-            return this->_literalType;
-        }
-
-        const std::string LiteralExpression::GetValue() const {
+        const std::string LiteralExpression::GetValue() const
+        {
             return this->_value;
         }
-    }
-}
+
+        LiteralExpression::~LiteralExpression()
+        {
+        }
+    } // namespace ast
+} // namespace hoo

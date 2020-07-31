@@ -24,7 +24,8 @@ namespace hoo
     {
         ArrayAccessExpression::ArrayAccessExpression(std::shared_ptr<Expression> container,
                                                      std::shared_ptr<Expression> index)
-            : Expression(EXPRESSION_ARRAY),
+            : Expression(EXPRESSION_ARRAY,
+                         container->GetType()),
               _container(container), _index(index)
         {
         }
@@ -38,7 +39,7 @@ namespace hoo
             return this->_container;
         }
 
-        std::shared_ptr <Expression> ArrayAccessExpression::GetIndex()
+        std::shared_ptr<Expression> ArrayAccessExpression::GetIndex()
         {
             return this->_index;
         }

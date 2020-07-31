@@ -19,10 +19,12 @@
 #include <hoo/ast/AST.hh>
 #include <hoo/parser/ErrorListener.hh>
 #include <hoo/parser/visitors/ExpressionVisitor.hh>
+#include <hoo/parser/InvalidExprType.hh>
 
 #include <regex>
 #include <list>
 #include <memory>
+#include <sstream>
 
 using namespace antlr4;
 using namespace antlrcpp;
@@ -44,8 +46,8 @@ namespace hoo
             if (nullptr != byte_constant_terminal)
             {
                 auto byte_text = byte_constant_terminal->getText();
-                Expression *byte_expression = new LiteralExpression(LITERAL_BYTE,
-                                                                    byte_text);
+                auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_BYTE));
+                Expression *byte_expression = new LiteralExpression(type, byte_text);
                 return Any(byte_expression);
             }
 
@@ -53,8 +55,8 @@ namespace hoo
             if (nullptr != integer_constant_terminal)
             {
                 auto integer_text = integer_constant_terminal->getText();
-                Expression *integer_expression = new LiteralExpression(LITERAL_INTEGER,
-                                                                       integer_text);
+                auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_INT));
+                Expression *integer_expression = new LiteralExpression(type, integer_text);
                 return Any(integer_expression);
             }
 
@@ -62,8 +64,8 @@ namespace hoo
             if (nullptr != floating_constant_terminal)
             {
                 auto float_text = floating_constant_terminal->getText();
-                Expression *fp_expression = new LiteralExpression(LITERAL_DOUBLE,
-                                                                  float_text);
+                auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_DOUBLE));
+                Expression *fp_expression = new LiteralExpression(type, float_text);
                 return Any(fp_expression);
             }
 
@@ -71,8 +73,8 @@ namespace hoo
             if (nullptr != char_constant_terminal)
             {
                 auto char_text = char_constant_terminal->getText();
-                Expression *char_expression = new LiteralExpression(LITERAL_CHARACTER,
-                                                                    char_text);
+                auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_CHAR));
+                Expression *char_expression = new LiteralExpression(type, char_text);
                 return Any(char_expression);
             }
 
@@ -80,8 +82,8 @@ namespace hoo
             if (nullptr != bool_constant_terminal)
             {
                 auto bool_text = bool_constant_terminal->getText();
-                Expression *bool_expression = new LiteralExpression(LITERAL_BOOLEAN,
-                                                                    bool_text);
+                auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_BOOL));
+                Expression *bool_expression = new LiteralExpression(type, bool_text);
                 return Any(bool_expression);
             }
 
@@ -94,7 +96,8 @@ namespace hoo
         {
             auto string_terminal = ctx->StringLiteral();
             auto string_text = string_terminal->getText();
-            Expression *expression = new LiteralExpression(LITERAL_STRING, string_text);
+            auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_STRING));
+            Expression *expression = new LiteralExpression(type, string_text);
             return Any(expression);
         }
 
@@ -317,19 +320,112 @@ namespace hoo
 
             std::shared_ptr<Operator> opr_expression;
             auto expr_operator = new Operator(opr->getText());
-            if (INVALID_OPERATOR != expr_operator->GetOperatorType())
+            if (OPERATOR_INVALID != expr_operator->GetOperatorType())
             {
                 opr_expression = std::shared_ptr<Operator>(expr_operator);
             }
 
             Expression *expression = nullptr;
-            if ((left_expression) && (opr) && (right_expression))
+            if ((left_expression) && (opr_expression) && (right_expression))
             {
+                auto type = DeduceType(left_expression,
+                                       opr_expression,
+                                       right_expression);
                 expression = new BinaryExpression(left_expression,
                                                   opr_expression,
-                                                  right_expression);
+                                                  right_expression,
+                                                  type);
             }
             return Any(expression);
+        }
+
+        std::shared_ptr<TypeSpecification>
+        ExpressionVisitor::DeduceType(std::shared_ptr<Expression> left_expr,
+                                      std::shared_ptr<Operator> opr,
+                                      std::shared_ptr<Expression> right_expr)
+        {
+            auto left_type = left_expr->GetType();
+            auto right_type = right_expr->GetType();
+
+            if ((!left_type) || (!opr) || (!right_type))
+            {
+                return std::shared_ptr<TypeSpecification>(nullptr);
+            }
+
+            const auto opr_type = opr->GetOperatorType();
+            switch (opr_type)
+            {
+            case OPERATOR_EQUAL:
+            case OPERATOR_NOT_EQUAL:
+            case OPERATOR_GREATER_THAN:
+            case OPERATOR_LESS_THAN:
+            case OPERATOR_GREATER_THAN_EQUAL:
+            case OPERATOR_LESS_THAN_EQUAL:
+            case OPERATOR_LOGICAL_AND:
+            case OPERATOR_LOGICAL_OR:
+                return std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_BOOL));
+            default:
+                break;
+            }
+
+            if ((left_type->GetType() == TYPE_SPEC_BASIC) &&
+                (right_type->GetType() == TYPE_SPEC_BASIC))
+            {
+                auto left_basic_type = static_pointer_cast<BasicTypeSpec>(left_type);
+                auto right_basic_type = static_pointer_cast<BasicTypeSpec>(right_type);
+                const auto ltype = left_basic_type->GetDataType();
+                const auto rtype = right_basic_type->GetDataType();
+                BasicDataTypeType expr_type = BASIC_DATA_TYPE_INVALID;
+                switch (ltype)
+                {
+                case BASIC_DATA_TYPE_BYTE:
+                    expr_type = GetOperatedTypeByte(opr_type, rtype);
+                    break;
+
+                case BASIC_DATA_TYPE_INT:
+                    expr_type = GetOperatedTypeInt(opr_type, rtype);
+                    break;
+
+                case BASIC_DATA_TYPE_DOUBLE:
+                    expr_type = GetOperatedTypeDouble(opr_type, rtype);
+                    break;
+
+                case BASIC_DATA_TYPE_BOOL:
+                    expr_type = GetOperatedTypeBool(opr_type, rtype);
+                    break;
+
+                case BASIC_DATA_TYPE_CHAR:
+                    expr_type = GetOperatedTypeChar(opr_type, rtype);
+                    break;
+
+                case BASIC_DATA_TYPE_STRING:
+                    expr_type = GetOperatedTypeString(opr_type, rtype);
+                    break;
+
+                case BASIC_DATA_TYPE_INVALID:
+                    expr_type = BASIC_DATA_TYPE_INVALID;
+                }
+
+                if (BASIC_DATA_TYPE_INVALID == expr_type)
+                {
+                    auto ltype_name = GetBasicDataTypeName(ltype);
+                    auto rtype_name = GetBasicDataTypeName(rtype);
+                    auto opr_name = Operator::GetOperatorSymbol(opr_type);
+                    std::ostringstream out;
+                    out << "operator \"" << opr_name << "\" "
+                        << "cannot be applied as ("
+                        << ltype_name << ") " << opr_name
+                        << " (" << rtype_name << ")";
+                    const auto message = out.str();
+                    throw InvalidExprType(message);
+                }
+                else
+                {
+                    return std::shared_ptr<TypeSpecification>(new BasicTypeSpec(expr_type));
+                }
+            }
+
+            return std::shared_ptr<TypeSpecification>(nullptr);
         }
     } // namespace parser
 } // namespace hoo

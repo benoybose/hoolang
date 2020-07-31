@@ -19,17 +19,26 @@
 #ifndef HOOLANG_BASICDATATYPES_HH
 #define HOOLANG_BASICDATATYPES_HH
 
+#include <hoo/ast/Operator.hh>
+
 #include <string>
 
-namespace hoo {
-    namespace ast {
-        typedef enum {
+namespace hoo
+{
+    namespace ast
+    {
+        typedef enum
+        {
+            BASIC_DATA_TYPE_INVALID,
+
+            BASIC_DATA_TYPE_BYTE,
             BASIC_DATA_TYPE_INT,
-            BASIC_DATA_TYPE_CHAR,
-            BASIC_DATA_TYPE_STRING,
-            BASIC_DATA_TYPE_BOOL,
             BASIC_DATA_TYPE_DOUBLE,
-            BASIC_DATA_TYPE_BYTE
+            BASIC_DATA_TYPE_BOOL,
+
+            BASIC_DATA_TYPE_CHAR,
+            BASIC_DATA_TYPE_STRING
+
         } BasicDataTypeType;
 
         extern const std::string NAME_INT;
@@ -40,9 +49,21 @@ namespace hoo {
         extern const std::string NAME_BYTE;
         extern const std::string NAME_INVALID;
 
-        extern const std::string& GetBasicDataTypeName(BasicDataTypeType type);
-        extern const BasicDataTypeType GetBasicDataType(const std::string& text);
-    }
-}
+        extern const std::string &GetBasicDataTypeName(BasicDataTypeType type);
+        extern const BasicDataTypeType GetBasicDataType(const std::string &text);
+        extern const BasicDataTypeType GetOperatedTypeByte(const OperatorType opr_type,
+                                                           const BasicDataTypeType rtype);
+        extern const BasicDataTypeType GetOperatedTypeInt(const OperatorType opr_type,
+                                                          const BasicDataTypeType rtype);
+        extern const BasicDataTypeType GetOperatedTypeDouble(const OperatorType opr_type,
+                                                             const BasicDataTypeType rtype);
+        extern const BasicDataTypeType GetOperatedTypeBool(const OperatorType opr_type,
+                                                           const BasicDataTypeType rtype);
+        extern const BasicDataTypeType GetOperatedTypeChar(const OperatorType opr_type,
+                                                           const BasicDataTypeType rtype);
+        extern const BasicDataTypeType GetOperatedTypeString(const OperatorType opr_type,
+                                                             const BasicDataTypeType rtype);
+    } // namespace ast
+} // namespace hoo
 
 #endif //HOOLANG_BASICDATATYPES_HH

@@ -73,14 +73,31 @@ namespace hoo
             }
 
             std::shared_ptr<TypeSpecification> return_type(nullptr);
-            for(auto stmt_item: statement_list)
+            for (auto stmt_item : statement_list)
             {
                 const auto stmt_type = stmt_item->GetStatementType();
-                if (STMT_RETURN == stmt_type)
+                switch (stmt_type)
+                {
+                case STMT_RETURN:
                 {
                     auto return_stmt = std::static_pointer_cast<ReturnStatement>(stmt_item);
                     auto expression = return_stmt->GetExpression();
-                    if (!expression) continue;
+                    if (expression)
+                    {
+                        return_type = expression->GetType();
+                    }
+                    break;
+                }
+                case STMT_COMPOUND:
+                {
+                    auto compound_stmt = std::static_pointer_cast<CompoundStatement>(stmt_item);
+                    return_type = compound_stmt->GetReturnType(); 
+                    break;
+                }
+                case STMT_NOOP:
+                case STMT_EXPRESSION:
+                case STMT_DECLARATION:
+                    break;
                 }
             }
 
@@ -108,7 +125,7 @@ namespace hoo
                                          "Invalid expression on return statement.");
                 }
             }
-            else 
+            else
             {
                 statement = new ReturnStatement();
             }

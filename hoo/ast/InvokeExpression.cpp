@@ -26,7 +26,8 @@ namespace hoo
     {
         InvokeExpression::InvokeExpression(std::shared_ptr<Expression> receiver,
                                            std::list<std::shared_ptr<Expression>> arguments)
-            : Expression(EXPRESSION_INVOKE),
+            : Expression(EXPRESSION_INVOKE,
+                         receiver->GetType()),
               _receiver(receiver),
               _arguments(std::move(arguments))
         {

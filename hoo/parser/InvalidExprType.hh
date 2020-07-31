@@ -16,35 +16,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _PARSE_EXCEPTION_H
-#define _PARSE_EXCEPTION_H
+#ifndef INVALID_EXPR_TYPE_HH
+#define INVALID_EXPR_TYPE_HH
 
 #include <hoo/parser/SyntaxError.hh>
-#include <hoo/parser/ParseError.hh>
 
-#include <exception>
-#include <list>
+#include <stdexcept>
 #include <memory>
 
 namespace hoo
 {
     namespace parser
     {
-        class ParseException : std::exception
+        class InvalidExprType: public std::runtime_error
         {
-        private:
-            std::list<std::shared_ptr<SyntaxError>> _syntax_errors;
-            std::list<std::shared_ptr<ParseError>> _parse_errors;
+            private:
+            std::shared_ptr<SyntaxError> _syntax_error;
 
-        public:
-            ParseException(std::list<std::shared_ptr<SyntaxError>> syntax_errors,
-                           std::list<std::shared_ptr<ParseError>> parse_errors);
-
-        public:
-            std::list<std::shared_ptr<SyntaxError>> GetSyntaxErrors() const;
-            std::list<std::shared_ptr<ParseError>> GetParseErrors() const;
+            public:
+            explicit InvalidExprType(const std::string& message);
         };
-    } // namespace parser
-} // namespace hoo
+    }
+}
 
 #endif

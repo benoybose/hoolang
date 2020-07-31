@@ -101,7 +101,8 @@ public:
         auto func_body = func_def->GetBody();
         auto compound_stmt = AsCompoundStatement(func_body);
         auto body_return_type = compound_stmt->GetReturnType();
-        // NotNull(body_return_type);
+        NotNull(body_return_type);
+        VerifyType(body_return_type, BASIC_DATA_TYPE_INT);
     }
 };
 

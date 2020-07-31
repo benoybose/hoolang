@@ -38,7 +38,8 @@ namespace hoo
         public:
             BinaryExpression(std::shared_ptr<Expression> lvalue,
                              std::shared_ptr<Operator> opr,
-                             std::shared_ptr<Expression> rvalue);
+                             std::shared_ptr<Expression> rvalue,
+                             std::shared_ptr<TypeSpecification> type);
 
         public:
             std::shared_ptr<Expression> GetLeftExpression();

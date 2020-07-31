@@ -23,6 +23,7 @@
 #include <string>
 
 #include <hoo/ast/Node.hh>
+#include <hoo/ast/TypeSpecification.hh>
 
 namespace hoo
 {
@@ -42,12 +43,15 @@ namespace hoo
 
         private:
             ExpressionType _expressionType;
+            std::shared_ptr<TypeSpecification> _type;
 
         public:
-            Expression(ExpressionType expressionType);
+            Expression(ExpressionType expressionType,
+                       std::shared_ptr<TypeSpecification> type);
 
         public:
             const ExpressionType GetExpressionType() const;
+            std::shared_ptr<TypeSpecification> GetType();
 
         public:
             virtual ~Expression();

@@ -22,17 +22,12 @@
 #include <string>
 #include <memory>
 
-namespace hoo {
-    namespace ast {
-        enum OperatorType {
-            INVALID_OPERATOR,
-
-            OPERATOR_ADD,
-            OPERATOR_SUB,
-            OPERATOR_DIV,
-            OPERATOR_MUL,
-            OPERATOR_MOD,
-
+namespace hoo
+{
+    namespace ast
+    {
+        enum OperatorType
+        {
             OPERATOR_EQUAL,
             OPERATOR_NOT_EQUAL,
             OPERATOR_GREATER_THAN,
@@ -42,31 +37,42 @@ namespace hoo {
             OPERATOR_LOGICAL_AND,
             OPERATOR_LOGICAL_OR,
 
-            OPERATOR_ASSIGN,
-            OPERATOR_ASSIGN_INC,
-            OPERATOR_ASSIGN_DEC,
-            OPERATOR_ASSIGN_DIV,
-            OPERATOR_ASSIGN_MUL,
+            OPERATOR_ADD,
+            OPERATOR_SUB,
+            OPERATOR_MUL,
+            OPERATOR_DIV,
+            OPERATOR_MOD,
 
             OPERATOR_BIT_OR,
             OPERATOR_BIT_AND,
             OPERATOR_BIT_XOR,
             OPERATOR_BIT_NOT,
             OPERATOR_BIT_SHIFT_RIGHT,
-            OPERATOR_BIT_SHIFT_LEFT
+            OPERATOR_BIT_SHIFT_LEFT,
+
+            OPERATOR_ASSIGN,
+            OPERATOR_ASSIGN_INC,
+            OPERATOR_ASSIGN_DEC,
+            OPERATOR_ASSIGN_DIV,
+            OPERATOR_ASSIGN_MUL,
+            OPERATOR_INVALID
         };
 
-        class Operator {
+        class Operator
+        {
         private:
             OperatorType _operatorType;
+
         public:
-            explicit Operator(const std::string& operatorText);
+            explicit Operator(const std::string &operatorText);
 
         public:
             const OperatorType GetOperatorType() const;
+
+        public:
+            static const std::string GetOperatorSymbol(const OperatorType opr_type);
         };
-    }
-};
+    } // namespace ast
+};    // namespace hoo
 
 #endif /* HCOPERATOR_H */
-

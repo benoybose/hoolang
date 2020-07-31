@@ -23,14 +23,16 @@ namespace hoo
     namespace ast
     {
         ReferenceExpression::ReferenceExpression(std::string &name)
-            : Expression(EXPRESSION_REFERENCE),
+            : Expression(EXPRESSION_REFERENCE,
+                         std::shared_ptr<TypeSpecification>(nullptr)),
               _parent(nullptr), _name(name)
         {
         }
 
         ReferenceExpression::ReferenceExpression(std::shared_ptr<Expression> parent,
                                                  std::string &name)
-            : Expression(EXPRESSION_REFERENCE),
+            : Expression(EXPRESSION_REFERENCE,
+                         std::shared_ptr<TypeSpecification>(nullptr)),
               _parent(parent),
               _name(name)
         {

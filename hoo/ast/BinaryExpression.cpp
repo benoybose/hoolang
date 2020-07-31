@@ -28,9 +28,11 @@ namespace hoo
     {
         BinaryExpression::BinaryExpression(std::shared_ptr<Expression> lvalue,
                                            std::shared_ptr<Operator> opr,
-                                           std::shared_ptr<Expression> rvalue)
-            : Expression(EXPRESSION_BINARY),
-              _lvalue(lvalue), _operator(opr),
+                                           std::shared_ptr<Expression> rvalue,
+                                           std::shared_ptr<TypeSpecification> type)
+            : Expression(EXPRESSION_BINARY, type),
+              _lvalue(lvalue),
+              _operator(opr),
               _rvalue(rvalue)
         {
         }
