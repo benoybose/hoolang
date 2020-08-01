@@ -24,12 +24,12 @@ options {
     language=Cpp;
 }
 
-constantExpression
-    :   ByteContant
-    |   IntegerConstant
-    |   FloatingConstant
-    |   CharacterConstant
-    |   BooleanConstant
+literalExpression
+    :   ByteLiteral
+    |   IntegerLiteral
+    |   DoubleLiteral
+    |   CharLiteral
+    |   BooleanLiteral
     ;
 
 stringExpression
@@ -41,7 +41,7 @@ identifierExpression
     ;
 
 primaryExpression
-    :   constantExpression
+    :   literalExpression
     |   stringExpression
     |   identifierExpression
     ;

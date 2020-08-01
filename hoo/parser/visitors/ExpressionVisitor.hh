@@ -43,7 +43,7 @@ namespace hoo
             ExpressionVisitor(ErrorListener *error_listener);
 
         public:
-            Any visitConstantExpression(HooParser::ConstantExpressionContext *ctx) override;
+            Any visitLiteralExpression(HooParser::LiteralExpressionContext *ctx) override;
 
             Any visitStringExpression(HooParser::StringExpressionContext *ctx) override;
             Any visitIdentifierExpression(HooParser::IdentifierExpressionContext *ctx) override;

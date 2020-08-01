@@ -39,10 +39,10 @@ namespace hoo
         {
         }
 
-        Any ExpressionVisitor::visitConstantExpression(HooParser::ConstantExpressionContext *ctx)
+        Any ExpressionVisitor::visitLiteralExpression(HooParser::LiteralExpressionContext *ctx)
         {
             Expression *expression = nullptr;
-            auto byte_constant_terminal = ctx->ByteContant();
+            auto byte_constant_terminal = ctx->ByteLiteral();
             if (nullptr != byte_constant_terminal)
             {
                 auto byte_text = byte_constant_terminal->getText();
@@ -51,7 +51,7 @@ namespace hoo
                 return Any(byte_expression);
             }
 
-            auto integer_constant_terminal = ctx->IntegerConstant();
+            auto integer_constant_terminal = ctx->IntegerLiteral();
             if (nullptr != integer_constant_terminal)
             {
                 auto integer_text = integer_constant_terminal->getText();
@@ -60,7 +60,7 @@ namespace hoo
                 return Any(integer_expression);
             }
 
-            auto floating_constant_terminal = ctx->FloatingConstant();
+            auto floating_constant_terminal = ctx->DoubleLiteral();
             if (nullptr != floating_constant_terminal)
             {
                 auto float_text = floating_constant_terminal->getText();
@@ -69,7 +69,7 @@ namespace hoo
                 return Any(fp_expression);
             }
 
-            auto char_constant_terminal = ctx->CharacterConstant();
+            auto char_constant_terminal = ctx->CharLiteral();
             if (nullptr != char_constant_terminal)
             {
                 auto char_text = char_constant_terminal->getText();
@@ -78,7 +78,7 @@ namespace hoo
                 return Any(char_expression);
             }
 
-            auto bool_constant_terminal = ctx->BooleanConstant();
+            auto bool_constant_terminal = ctx->BooleanLiteral();
             if (nullptr != bool_constant_terminal)
             {
                 auto bool_text = bool_constant_terminal->getText();

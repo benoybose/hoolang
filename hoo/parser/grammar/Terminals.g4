@@ -32,7 +32,7 @@ BasicDataType
     : ('int' | 'char' | 'string' | 'bool' | 'byte' | 'double')
     ;
 
-ByteContant
+ByteLiteral
     : HexadecimalPrefix HexadecimalDigit HexadecimalDigit
     ;
 
@@ -47,7 +47,7 @@ HexQuad
     :   HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
     ;
 
-IntegerConstant
+IntegerLiteral
     :   DecimalConstant
     |   OctalConstant
     |   HexadecimalConstant
@@ -94,7 +94,7 @@ HexadecimalDigit
     :   [0-9a-fA-F]
     ;
 
-FloatingConstant
+DoubleLiteral
     :   DecimalFloatingConstant
     ;
 
@@ -130,7 +130,7 @@ HexadecimalDigitSequence
     :   HexadecimalDigit+
     ;
 
-CharacterConstant
+CharLiteral
     :   '\'' CCharSequence '\''
     ;
 
@@ -171,15 +171,7 @@ HexadecimalEscapeSequence
     ;
 
 StringLiteral
-    :   EncodingPrefix? '"' SCharSequence? '"'
-    ;
-
-fragment
-EncodingPrefix
-    :   'u8'
-    |   'u'
-    |   'U'
-    |   'L'
+    :   '"' SCharSequence? '"'
     ;
 
 fragment
@@ -195,7 +187,7 @@ SChar
     |   '\\\r\n' // Added line
     ;
 
-BooleanConstant
+BooleanLiteral
     : 'true' | 'false'
     ;
 
