@@ -90,7 +90,8 @@ public:
         auto declarator = func_decl->GetDeclarator();
         Equal(declarator, DECLARATOR_PUBLIC);
         auto return_type = func_decl->GetReturnType();
-        Null(return_type);
+        NotNull(return_type);
+        VerifyType(return_type, BASIC_DATA_TYPE_INT);
     }
 };
 
