@@ -43,6 +43,8 @@ public:
                          &ClassMethodTest01::FunctionReturnByteTest);
         RegisterTestCase("FunctionReturnHexadecimalTest",
                          &ClassMethodTest01::FunctionReturnHexadecimalTest);
+        RegisterTestCase("FunctionReturnNegativeIntTest",
+                         &ClassMethodTest01::FunctionReturnNegativeIntTest);
     }
 
 private:
@@ -140,6 +142,31 @@ public:
         class Bar {
             private func:int foo() {
                 return 0x58980;
+            }
+        }
+        )source";
+        const auto class_name = "Bar";
+        const auto function_name = "foo";
+
+        auto func_def = GetClassMethod(source, class_name, function_name);
+        auto func_decl = func_def->GetDeclaration();
+        auto declarator = func_decl->GetDeclarator();
+        Equal(declarator, DECLARATOR_PRIVATE);
+        auto return_type = func_decl->GetReturnType();
+        VerifyType(return_type, BASIC_DATA_TYPE_INT);
+        auto func_body = func_def->GetBody();
+        auto compound_stmt = AsCompoundStatement(func_body);
+        auto body_return_type = compound_stmt->GetReturnType();
+        NotNull(body_return_type);
+        VerifyType(body_return_type, BASIC_DATA_TYPE_INT);
+    }
+
+    void FunctionReturnNegativeIntTest()
+    {
+        const std::string source = R"source(
+        class Bar {
+            private func:int foo() {
+                return -362880;
             }
         }
         )source";
