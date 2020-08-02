@@ -38,4 +38,8 @@ public:
                     BasicDataTypeType basic_data_type);
     std::shared_ptr<CompoundStatement>
     AsCompoundStatement(std::shared_ptr<Statement> statement);
+    std::shared_ptr<FunctionDefinition>
+    GetClassMethod(const std::string source,
+                   const std::string &expcted_class_name,
+                   const std::string &expected_func_name);
 };

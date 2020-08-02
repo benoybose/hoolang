@@ -118,3 +118,25 @@ ParserTestUnitBase::AsCompoundStatement(std::shared_ptr<Statement> statement)
     NotNull(compound_statement);
     return compound_statement;
 }
+
+std::shared_ptr<FunctionDefinition> 
+ParserTestUnitBase::GetClassMethod(const std::string source,
+                                                   const std::string &expcted_class_name,
+                                                   const std::string &expected_func_name)
+{
+    auto unit = DoesNotThrowAndReturn<ParseException,
+                                      std::shared_ptr<hoo::ast::Unit>>([this, source]()
+                                                                           -> std::shared_ptr<hoo::ast::Unit> {
+        auto unit = ParseUnit(source);
+        return unit;
+    });
+    NotNull(unit);
+
+    auto class_definition = GetClassByName(unit, expcted_class_name);
+    NotNull(class_definition);
+
+    auto function_definitions = GetFunctionsByName(class_definition, expected_func_name);
+    NotEmpty(function_definitions);
+    auto func_def = *function_definitions.begin();
+    return func_def;
+}

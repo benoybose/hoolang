@@ -80,6 +80,16 @@ ADD_EXECUTABLE(ClassMethodTest01
         test/ParserTestUnitBase.cpp)
 ADD_HOO_PARSER_TEST(ClassMethodTest01)
 
+ADD_EXECUTABLE(IntegerLiteralTest
+        test/IntegerLiteralTest.cpp
+        test/ParserTestUnitBase.cpp)
+ADD_HOO_PARSER_TEST(IntegerLiteralTest)
+
+ADD_EXECUTABLE(ByteLiteralTest
+        test/ByteLiteralTest.cpp
+        test/ParserTestUnitBase.cpp)
+ADD_HOO_PARSER_TEST(ByteLiteralTest)
+
 INSTALL(DIRECTORY "${ANTLR4_INCLUDE_DIR_HooANTLR4}"
     DESTINATION include/generated
     FILES_MATCHING PATTERN *.h)
