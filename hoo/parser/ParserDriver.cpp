@@ -16,6 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "HooParser.h"
+
 #include <hoo/parser/ParserDriver.hh>
 #include <hoo/parser/ParserContext.hh>
 #include <hoo/parser/ParseError.hh>

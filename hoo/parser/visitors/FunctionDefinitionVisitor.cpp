@@ -114,7 +114,8 @@ namespace hoo
                                          .as<std::list<std::shared_ptr<VariableDeclaration>> *>();
                 if (nullptr != var_decl_list)
                 {
-                    std::copy(var_decl_list->begin(), var_decl_list->end(), param_list.begin());
+                    std::copy(var_decl_list->begin(), var_decl_list->end(),
+                              std::front_inserter(param_list));
                     delete var_decl_list;
                 }
                 else

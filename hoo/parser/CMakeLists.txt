@@ -75,10 +75,10 @@ ADD_EXECUTABLE(BasicClassDefinitionTest
         test/BasicClassDefinitionTest.cpp)
 ADD_HOO_PARSER_TEST(BasicClassDefinitionTest)
 
-ADD_EXECUTABLE(ClassMethodTest01
-        test/ClassMethodTest01.cpp
+ADD_EXECUTABLE(ClassMethodTest
+        test/ClassMethodTest.cpp
         test/ParserTestUnitBase.cpp)
-ADD_HOO_PARSER_TEST(ClassMethodTest01)
+ADD_HOO_PARSER_TEST(ClassMethodTest)
 
 ADD_EXECUTABLE(IntegerLiteralTest
         test/IntegerLiteralTest.cpp

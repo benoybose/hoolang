@@ -30,17 +30,21 @@ using namespace hoo::ast;
 using namespace hoo::test;
 using namespace hoo::parser;
 
-class ClassMethodTest01 : public ParserTestUnitBase
+class ClassMethodTest : public ParserTestUnitBase
 {
 public:
-    ClassMethodTest01()
+    ClassMethodTest()
     {
-        RegisterTestCase("EmptyFunctionTest",
-                         &ClassMethodTest01::EmptyFunctionTest);
+        // RegisterTestCase("TEST01",
+        //                  &ClassMethodTest::TEST01);
+        RegisterTestCase("TEST02",
+                         &ClassMethodTest::TEST02);
+        RegisterTestCase("TEST03",
+                         &ClassMethodTest::TEST03);
     }
 
 public:
-    void EmptyFunctionTest()
+    void TEST01()
     {
         const auto source = R"source(
         class Maths {
@@ -55,6 +59,39 @@ public:
         auto return_type = func_decl->GetReturnType();
         Null(return_type);
     }
+
+    void TEST02()
+    {
+        const auto source = R"source(
+        class Maths {
+            public func add(a:int, b:int) {
+            }
+        }
+        )source";
+        auto func_def = GetClassMethod(source, "Maths", "add");
+        auto func_decl = func_def->GetDeclaration();
+        auto declarator = func_decl->GetDeclarator();
+        Equal(declarator, DECLARATOR_PUBLIC);
+        auto return_type = func_decl->GetReturnType();
+        Null(return_type);
+    }
+
+    void TEST03()
+    {
+        const auto source = R"source(
+        class Maths {
+            public func:int add(a:int, b:int) {
+                return a + b;
+            }
+        }
+        )source";
+        auto func_def = GetClassMethod(source, "Maths", "add");
+        auto func_decl = func_def->GetDeclaration();
+        auto declarator = func_decl->GetDeclarator();
+        Equal(declarator, DECLARATOR_PUBLIC);
+        auto return_type = func_decl->GetReturnType();
+        Null(return_type);
+    }
 };
 
-HOO_TEST_CASE(ClassMethodTest01)
+HOO_TEST_CASE(ClassMethodTest)

@@ -35,7 +35,7 @@
             "name": "WIN [ClassMethod01]",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}\\out\\x64\\debug\\win32\\hoo\\parser\\ClassMethodTest01.exe",
+            "program": "${workspaceFolder}\\out\\x64\\debug\\win32\\hoo\\parser\\ClassMethodTest.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
