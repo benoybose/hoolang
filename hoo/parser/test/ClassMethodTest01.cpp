@@ -35,10 +35,14 @@ class ClassMethodTest01 : public ParserTestUnitBase
 public:
     ClassMethodTest01()
     {
-        // RegisterTestCase("EmptyFunctionTest",
-        //                  &ClassMethodTest01::EmptyFunctionTest);
+        RegisterTestCase("EmptyFunctionTest",
+                         &ClassMethodTest01::EmptyFunctionTest);
         RegisterTestCase("FunctionReturnTypeTest",
                          &ClassMethodTest01::FunctionReturnTypeTest);
+        RegisterTestCase("FunctionReturnByteTest",
+                         &ClassMethodTest01::FunctionReturnByteTest);
+        RegisterTestCase("FunctionReturnHexadecimalTest",
+                         &ClassMethodTest01::FunctionReturnHexadecimalTest);
     }
 
 private:
@@ -66,12 +70,12 @@ private:
 public:
     void EmptyFunctionTest()
     {
-        std::ostringstream out;
-        out << "class Maths {" << std::endl
-            << "\tpublic func add() {" << std::endl
-            << "\t}" << std::endl
-            << "}";
-        auto source = out.str();
+        const auto source = R"source(
+        class Maths {
+            public func add() {
+            }
+        }
+        )source";
         auto func_def = GetClassMethod(source, "Maths", "add");
         auto func_decl = func_def->GetDeclaration();
         auto declarator = func_decl->GetDeclarator();
@@ -82,13 +86,13 @@ public:
 
     void FunctionReturnTypeTest()
     {
-        std::ostringstream out;
-        out << "class Bar {" << std::endl
-            << "\tpublic func:int foo() {" << std::endl
-            << "\t\treturn 23;"
-            << "\t}" << std::endl
-            << "}";
-        const auto source = out.str();
+        const auto source = R"source(
+        class Bar {
+            public func:int foo() {
+                return 23;
+            }
+        }
+        )source";
         const auto class_name = "Bar";
         const auto function_name = "foo";
 
@@ -96,6 +100,56 @@ public:
         auto func_decl = func_def->GetDeclaration();
         auto declarator = func_decl->GetDeclarator();
         Equal(declarator, DECLARATOR_PUBLIC);
+        auto return_type = func_decl->GetReturnType();
+        VerifyType(return_type, BASIC_DATA_TYPE_INT);
+        auto func_body = func_def->GetBody();
+        auto compound_stmt = AsCompoundStatement(func_body);
+        auto body_return_type = compound_stmt->GetReturnType();
+        NotNull(body_return_type);
+        VerifyType(body_return_type, BASIC_DATA_TYPE_INT);
+    }
+
+    void FunctionReturnByteTest()
+    {
+        const std::string source = R"source(
+        class Bar {
+            private func:byte foo() {
+                return 0xFF;
+            }            
+        }
+        )source";
+        const auto class_name = "Bar";
+        const auto function_name = "foo";
+
+        auto func_def = GetClassMethod(source, class_name, function_name);
+        auto func_decl = func_def->GetDeclaration();
+        auto declarator = func_decl->GetDeclarator();
+        Equal(declarator, DECLARATOR_PRIVATE);
+        auto return_type = func_decl->GetReturnType();
+        VerifyType(return_type, BASIC_DATA_TYPE_BYTE);
+        auto func_body = func_def->GetBody();
+        auto compound_stmt = AsCompoundStatement(func_body);
+        auto body_return_type = compound_stmt->GetReturnType();
+        NotNull(body_return_type);
+        VerifyType(body_return_type, BASIC_DATA_TYPE_BYTE);
+    }
+
+    void FunctionReturnHexadecimalTest()
+    {
+        const std::string source = R"source(
+        class Bar {
+            private func:int foo() {
+                return 0x58980;
+            }
+        }
+        )source";
+        const auto class_name = "Bar";
+        const auto function_name = "foo";
+
+        auto func_def = GetClassMethod(source, class_name, function_name);
+        auto func_decl = func_def->GetDeclaration();
+        auto declarator = func_decl->GetDeclarator();
+        Equal(declarator, DECLARATOR_PRIVATE);
         auto return_type = func_decl->GetReturnType();
         VerifyType(return_type, BASIC_DATA_TYPE_INT);
         auto func_body = func_def->GetBody();
