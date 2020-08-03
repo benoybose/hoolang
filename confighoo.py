@@ -31,6 +31,11 @@ libindex = {
                     'name': 'antlr4-runtime-cpp',
                     'version': '4.8',
                     'url': 'https://www.dropbox.com/s/fkfcvxxoml9mzaa/antlr4-4.8-x64-windows-debug.zip?dl=1'
+                },
+                {
+                    'name': 'llvm',
+                    'version': '10.0.0',
+                    'url': 'https://www.dropbox.com/s/oayfcbdp6neirp6/llvm-10.0.0-x64-windows-debug.zip?dl=1'
                 }
             ],
             'release': [
@@ -38,6 +43,11 @@ libindex = {
                     'name': 'antlr4-runtime-cpp',
                     'version': '4.8',
                     'url': 'https://www.dropbox.com/s/c08fuwh63upe1ux/antlr4-4.8-x64-windows-release.zip?dl=1'
+                },
+                {
+                    'name': 'llvm',
+                    'version': '10.0.0',
+                    'url': 'https://www.dropbox.com/s/y27mhcrlppkaoqc/llvm-10.0.0-x64-windows-release.zip?dl=1'
                 }
             ]
         }
@@ -64,6 +74,11 @@ libindex = {
                     'name': 'antlr4-runtime-cpp',
                     'version': '4.8',
                     'url': 'https://www.dropbox.com/s/9vz3tmurvqhztqx/antlr4-4.8-x64-linux.zip?dl=1'
+                },
+                {
+                    'name': 'llvm',
+                    'version': '10.0.0',
+                    'url': 'https://www.dropbox.com/s/ay865217z3z3uw5/llvm-10.0.0-x64-linux-debug.zip?dl=1'
                 }
             ],
             'release': [
@@ -71,6 +86,11 @@ libindex = {
                     'name': 'antlr4-runtime-cpp',
                     'version': '4.8',
                     'url': 'https://www.dropbox.com/s/9vz3tmurvqhztqx/antlr4-4.8-x64-linux.zip?dl=1'
+                },
+                {
+                    'name': 'llvm',
+                    'version': '10.0.0',
+                    'url': 'https://www.dropbox.com/s/ekv2dikbi4tn0us/llvm-10.0.0-x64-linux-release.zip?dl=1'
                 }
             ]
         }
