@@ -23,3 +23,15 @@ ADD_DEPENDENCIES(hooemitter
 
 TARGET_INCLUDE_DIRECTORIES(hooemitter PRIVATE
     ${CMAKE_SOURCE_DIR})
+
+ADD_EXECUTABLE(AddMethodTest 
+    test/AddMethodTest.cpp)
+TARGET_INCLUDE_DIRECTORIES(AddMethodTest PRIVATE
+    ${CMAKE_SOURCE_DIR}
+    ${ANTLR4_INCLUDE_DIR}
+    ${GENERATED_PARSER_DIR})
+TARGET_LINK_LIBRARIES(AddMethodTest PRIVATE
+    hootest
+    hooparser
+    hooemitter)
+ADD_TEST(AddMethodTest AddMethodTest)
