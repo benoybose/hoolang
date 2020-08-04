@@ -31,7 +31,7 @@ SET (HOO_AST_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/ast/TypeSpecification.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/Unit.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/UnitItem.hh
-    ${CMAKE_SOURCE_DIR}/hoo/ast/VariableDeclaration.hh
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ItemDeclaration.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBodyItem.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBody.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/StorageItem.hh
@@ -65,7 +65,7 @@ SET (HOO_AST_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/ast/TypeSpecification.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/Unit.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/UnitItem.cpp
-    ${CMAKE_SOURCE_DIR}/hoo/ast/VariableDeclaration.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/ItemDeclaration.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBodyItem.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBody.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/StorageItem.cpp

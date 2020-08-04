@@ -16,42 +16,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <hoo/ast/VariableDeclaration.hh>
+#ifndef VARIABLE_DECLARATION_VISITOR_HH
+#define VARIABLE_DECLARATION_VISITOR_HH
+
+#include "HooBaseVisitor.h"
+
+#include <hoo/parser/ErrorListener.hh>
+
+using namespace antlr4;
+using namespace antlrcpp;
 
 namespace hoo
 {
-    namespace ast
+    namespace parser
     {
-        VariableDeclaration::VariableDeclaration(LocalItemType local_item_type,
-                                                 std::shared_ptr<StorageItem> storage)
-            : Declaration(DECLARATION_LOCAL_ITEM, DECLARATOR_NONE),
-              _local_item_type(local_item_type),
-              _storage(storage)
+        class ItemDeclarationVisitor : public HooBaseVisitor
         {
-        }
+        private:
+            ErrorListener *_error_listener;
 
-        const DeclaratorType VariableDeclaration::GetDeclarator() const
-        {
-            return Declaration::GetDeclarator();
-        }
+        public:
+            ItemDeclarationVisitor(ErrorListener *error_listener);
 
-        const std::string &VariableDeclaration::GetName() const
-        {
-            return this->_storage->GetName();
-        }
-
-        std::shared_ptr<TypeSpecification> VariableDeclaration::GetDelcaredType()
-        {
-            return this->_storage->GetType();
-        }
-
-        std::shared_ptr<Expression> VariableDeclaration::GetInitializer()
-        {
-            return this->_storage->GetInitializer();
-        }
-
-        VariableDeclaration::~VariableDeclaration()
-        {
-        }
-    } // namespace ast
+        public:
+            Any visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) override;
+            Any visitTypedStorageItem(HooParser::TypedStorageItemContext *ctx) override;
+            Any visitStorageItem(HooParser::StorageItemContext* ctx) override;            
+        };
+    } // namespace parser
 } // namespace hoo
+#endif

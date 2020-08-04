@@ -24,7 +24,7 @@
 #include <hoo/parser/visitors/StatementVisitor.hh>
 #include <hoo/parser/visitors/VisitorHelper.hh>
 #include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
-#include <hoo/parser/visitors/VariableDeclarationVisitor.hh>
+#include <hoo/parser/visitors/ItemDeclarationVisitor.hh>
 
 #include <memory>
 
@@ -136,7 +136,7 @@ namespace hoo
             auto param_contexts = ctx->typedStorageItem();
             auto param_list = new std::list<std::shared_ptr<Param>>();
 
-            VariableDeclarationVisitor var_decl_visitor(_error_listener);
+            ItemDeclarationVisitor var_decl_visitor(_error_listener);
             size_t position = 0;
             for (auto param_context : param_contexts)
             {

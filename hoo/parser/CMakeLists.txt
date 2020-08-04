@@ -29,7 +29,7 @@ SET(HOO_PARSER_VISITOR_HEADERS
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/VisitorHelper.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/FunctionDefinitionVisitor.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/TypeSpecificationVisitor.hh
-        ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/VariableDeclarationVisitor.hh
+        ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ItemDeclarationVisitor.hh
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ExpressionVisitor.hh)
 
 SET(HOO_PARSER_SOURCES
@@ -48,7 +48,7 @@ SET(HOO_PARSER_SOURCES
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/VisitorHelper.cpp
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/FunctionDefinitionVisitor.cpp
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/TypeSpecificationVisitor.cpp
-        ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/VariableDeclarationVisitor.cpp
+        ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ItemDeclarationVisitor.cpp
         ${CMAKE_SOURCE_DIR}/hoo/parser/visitors/ExpressionVisitor.cpp
         ${CMAKE_SOURCE_DIR}/hoo/parser/InvalidExprType.cpp)
 

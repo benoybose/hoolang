@@ -20,7 +20,7 @@
 #include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/StatementVisitor.hh>
 #include <hoo/parser/visitors/ExpressionVisitor.hh>
-#include <hoo/parser/visitors/VariableDeclarationVisitor.hh>
+#include <hoo/parser/visitors/ItemDeclarationVisitor.hh>
 #include <hoo/parser/visitors/FunctionDefinitionVisitor.hh>
 #include <hoo/parser/ErrorListener.hh>
 
@@ -159,9 +159,9 @@ namespace hoo
             {
                 try
                 {
-                    VariableDeclarationVisitor var_decl_visitor(_error_listener);
+                    ItemDeclarationVisitor var_decl_visitor(_error_listener);
                     auto var_decl = var_decl_visitor.visit(var_decl_context)
-                                        .as<VariableDeclaration *>();
+                                        .as<ItemDeclaration *>();
                     std::shared_ptr<Declaration> declaration = std::shared_ptr<Declaration>(var_decl);
                     statement = new DeclarationStatement(declaration);
                 }

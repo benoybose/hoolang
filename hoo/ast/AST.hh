@@ -1,7 +1,7 @@
 #ifndef _HOO_AST_H
 #define _HOO_AST_H
 #include <hoo/ast/TypeSpecification.hh>
-#include <hoo/ast/VariableDeclaration.hh>
+#include <hoo/ast/ItemDeclaration.hh>
 #include <hoo/ast/FunctionDefinition.hh>
 #include <hoo/ast/ReferenceExpression.hh>
 #include <hoo/ast/LiteralExpression.hh>

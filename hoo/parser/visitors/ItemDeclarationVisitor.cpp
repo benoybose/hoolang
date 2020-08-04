@@ -19,7 +19,7 @@
 #include "HooBaseVisitor.h"
 
 #include <hoo/ast/AST.hh>
-#include <hoo/parser/visitors/VariableDeclarationVisitor.hh>
+#include <hoo/parser/visitors/ItemDeclarationVisitor.hh>
 #include <hoo/parser/ErrorListener.hh>
 #include <hoo/parser/visitors/VisitorHelper.hh>
 #include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
@@ -33,12 +33,12 @@ namespace hoo
 {
     namespace parser
     {
-        VariableDeclarationVisitor::VariableDeclarationVisitor(ErrorListener *error_listener)
+        ItemDeclarationVisitor::ItemDeclarationVisitor(ErrorListener *error_listener)
             : _error_listener(error_listener)
         {
         }
 
-        Any VariableDeclarationVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx)
+        Any ItemDeclarationVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx)
         {
             const std::string local_type_spec = ctx->type->getText();
             auto local_item_type = LOCAL_ITEM_VARIABLE;
@@ -59,11 +59,11 @@ namespace hoo
                 this->_error_listener->Add(ctx->decl, "Invalid storage declaration.");
             }
 
-            auto local_item_declaration = new VariableDeclaration(local_item_type, storage);
+            auto local_item_declaration = new ItemDeclaration(local_item_type, storage);
             return Any(local_item_declaration);
         }
 
-        Any VariableDeclarationVisitor::visitTypedStorageItem(HooParser::TypedStorageItemContext *ctx)
+        Any ItemDeclarationVisitor::visitTypedStorageItem(HooParser::TypedStorageItemContext *ctx)
         {
             auto name = ctx->name->getText();
 
@@ -100,7 +100,7 @@ namespace hoo
             return Any(storage_declaration);
         }
 
-        Any VariableDeclarationVisitor::visitStorageItem(HooParser::StorageItemContext *ctx)
+        Any ItemDeclarationVisitor::visitStorageItem(HooParser::StorageItemContext *ctx)
         {
             auto typed_storage_ctx = ctx->typedStorageItem();
             if (nullptr != typed_storage_ctx)

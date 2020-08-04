@@ -16,48 +16,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef PROJECT_DECLARATION_HH
-#define PROJECT_DECLARATION_HH
-
-#include <hoo/ast/Declaration.hh>
-#include <hoo/ast/Declarator.hh>
-#include <hoo/ast/TypeSpecification.hh>
-#include <hoo/ast/Expression.hh>
-#include <hoo/ast/StorageItem.hh>
-
-#include <string>
-#include <memory>
+#include <hoo/ast/ItemDeclaration.hh>
 
 namespace hoo
 {
     namespace ast
     {
-        typedef enum
+        ItemDeclaration::ItemDeclaration(LocalItemType local_item_type,
+                                                 std::shared_ptr<StorageItem> storage)
+            : Declaration(DECLARATION_LOCAL_ITEM, DECLARATOR_NONE),
+              _local_item_type(local_item_type),
+              _storage(storage)
         {
-            LOCAL_ITEM_VARIABLE,
-            LOCAL_ITEM_CONSTANT
-        } LocalItemType;
+        }
 
-        class VariableDeclaration : public Declaration
+        const DeclaratorType ItemDeclaration::GetDeclarator() const
         {
-        private:
-            LocalItemType _local_item_type;
-            std::shared_ptr<StorageItem> _storage;
+            return Declaration::GetDeclarator();
+        }
 
-        public:
-            VariableDeclaration(LocalItemType local_item_type,
-                                std::shared_ptr<StorageItem> storage);
+        const std::string &ItemDeclaration::GetName() const
+        {
+            return this->_storage->GetName();
+        }
 
-        public:
-            const DeclaratorType GetDeclarator() const;
-            const std::string &GetName() const;
-            std::shared_ptr<TypeSpecification> GetDelcaredType();
-            std::shared_ptr<Expression> GetInitializer();
+        std::shared_ptr<TypeSpecification> ItemDeclaration::GetDelcaredType()
+        {
+            return this->_storage->GetType();
+        }
 
-        public:
-            virtual ~VariableDeclaration();
-        };
+        std::shared_ptr<Expression> ItemDeclaration::GetInitializer()
+        {
+            return this->_storage->GetInitializer();
+        }
+
+        ItemDeclaration::~ItemDeclaration()
+        {
+        }
     } // namespace ast
 } // namespace hoo
-
-#endif //PROJECT_DECLARATION_HH

@@ -20,7 +20,7 @@
 #define HC_STATEMENT_H
 
 #include <hoo/ast/Expression.hh>
-#include <hoo/ast/VariableDeclaration.hh>
+#include <hoo/ast/ItemDeclaration.hh>
 #include <hoo/ast/InvokeExpression.hh>
 #include <hoo/ast/UnitItem.hh>
 
