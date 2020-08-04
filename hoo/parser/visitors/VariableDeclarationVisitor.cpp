@@ -16,6 +16,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "HooBaseVisitor.h"
+
 #include <hoo/ast/AST.hh>
 #include <hoo/parser/visitors/VariableDeclarationVisitor.hh>
 #include <hoo/parser/ErrorListener.hh>
@@ -38,34 +40,47 @@ namespace hoo
 
         Any VariableDeclarationVisitor::visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx)
         {
-            Declaration* declaration = nullptr;
-            DeclaratorType declarator_label = DECLARATOR_NONE;
-            auto declarator = ctx->Declarator();
-            if (nullptr != declarator)
+            const std::string local_type_spec = ctx->type->getText();
+            auto local_item_type = LOCAL_ITEM_VARIABLE;
+            if (local_type_spec == "let")
             {
-                auto declarator_text = declarator->getText();
-                declarator_label = VisitorHelper::GetDeclarator(declarator_text);
+                local_item_type = LOCAL_ITEM_VARIABLE;
             }
 
+            std::shared_ptr<StorageItem> storage;
+            try
+            {
+                auto storage_decl = this->visit(ctx->decl)
+                                        .as<StorageItem *>();
+                storage = std::shared_ptr<StorageItem>(storage_decl);
+            }
+            catch (...)
+            {
+                this->_error_listener->Add(ctx->decl, "Invalid storage declaration.");
+            }
+
+            auto local_item_declaration = new VariableDeclaration(local_item_type, storage);
+            return Any(local_item_declaration);
+        }
+
+        Any VariableDeclarationVisitor::visitTypedStorageItem(HooParser::TypedStorageItemContext *ctx)
+        {
             auto name = ctx->name->getText();
-            shared_ptr<TypeSpecification> declared_type = nullptr;
-            if (nullptr != ctx->declared_type)
+
+            std::shared_ptr<TypeSpecification> type;
+            try
             {
-                try
-                {
-                    TypeSpecificationVisitor type_spec_visitor(_error_listener);
-                    auto type_spec = type_spec_visitor.visit(ctx->declared_type)
-                                         .as<TypeSpecification *>();
-                    declared_type = std::shared_ptr<TypeSpecification>(type_spec);
-                }
-                catch (...)
-                {
-                    _error_listener->Add(ctx->declared_type,
-                                         "Invalid declared type in variable declaration.");
-                }
+                TypeSpecificationVisitor type_spec_visitor(_error_listener);
+                auto type_spec = type_spec_visitor.visit(ctx->declared_type)
+                                     .as<TypeSpecification *>();
+                type = std::shared_ptr<TypeSpecification>(type_spec);
+            }
+            catch (...)
+            {
+                this->_error_listener->Add(ctx->declared_type, "Invalid type specification for storage item.");
             }
 
-            shared_ptr<Expression> initializer = nullptr;
+            std::shared_ptr<Expression> expression;
             if (nullptr != ctx->init)
             {
                 try
@@ -73,24 +88,44 @@ namespace hoo
                     ExpressionVisitor expression_visitor(_error_listener);
                     auto expr = expression_visitor.visit(ctx->init)
                                     .as<Expression *>();
-                    initializer = std::shared_ptr<Expression>(expr);
+                    expression = std::shared_ptr<Expression>(expr);
                 }
                 catch (...)
                 {
-                    _error_listener->Add(ctx,
-                                         "Invalid initializer on variable declaration.");
+                    _error_listener->Add(ctx->init, "Invalid initializer on variable declaration.");
                 }
             }
 
-            if ((!declared_type) && (!initializer))
+            auto storage_declaration = new StorageItem(name, type, expression);
+            return Any(storage_declaration);
+        }
+
+        Any VariableDeclarationVisitor::visitStorageItem(HooParser::StorageItemContext *ctx)
+        {
+            auto typed_storage_ctx = ctx->typedStorageItem();
+            if (nullptr != typed_storage_ctx)
             {
-                _error_listener->Add(ctx,
-                                     "Invalid variable declaration. Type of the variable cannot be inferenced.");
+                auto storage = this->visit(typed_storage_ctx)
+                                   .as<StorageItem *>();
+                return Any(storage);
             }
 
-            declaration = new VariableDeclaration(declarator_label, name,
-                                                       declared_type, initializer);
-            return Any(declaration);
+            const auto name = ctx->name->getText();
+            std::shared_ptr<StorageItem> storage;
+            try
+            {
+                ExpressionVisitor visitor(_error_listener);
+                auto expression = visitor.visit(ctx->init)
+                                      .as<Expression *>();
+                auto type = expression->GetType();
+                std::shared_ptr<Expression> initializer = std::shared_ptr<Expression>(expression);
+                storage = std::shared_ptr<StorageItem>(new StorageItem(name, type, initializer));
+            }
+            catch (...)
+            {
+                this->_error_listener->Add(ctx->init, "Invalid initializing expression on storage declaration.");
+            }
+            return storage;
         }
     } // namespace parser
 } // namespace hoo

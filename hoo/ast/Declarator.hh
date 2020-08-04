@@ -26,7 +26,6 @@ namespace hoo {
             DECLARATOR_PUBLIC,
             DECLARATOR_PRIVATE,
             DECLARATOR_PROTECTED,
-            DECLARATOR_VAR,
             DECLARATOR_INVALID
         } DeclaratorType;
     }

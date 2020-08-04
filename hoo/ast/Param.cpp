@@ -16,41 +16,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "HooBaseVisitor.h"
-#include "ParserRuleContext.h"
-
-#include <hoo/parser/visitors/VisitorHelper.hh>
-#include <hoo/parser/visitors/ExpressionVisitor.hh>
-
-using namespace antlr4;
-using namespace hoo::ast;
+#include <hoo/ast/Param.hh>
 
 namespace hoo
 {
-    namespace parser
+    namespace ast
     {
-        DeclaratorType VisitorHelper::GetDeclarator(const std::string &declarator)
+        Param::Param(size_t position,
+                     std::shared_ptr<StorageItem> storage_item)
+            : _position(position),
+              _storage_item(storage_item)
         {
-            if (declarator.empty())
-            {
-                return DECLARATOR_NONE;
-            }
-            else if (declarator == "public")
-            {
-                return DECLARATOR_PUBLIC;
-            }
-            else if (declarator == "private")
-            {
-                return DECLARATOR_PRIVATE;
-            }
-            else if (declarator == "protected")
-            {
-                return DECLARATOR_PROTECTED;
-            }
-            else
-            {
-                return DECLARATOR_INVALID;
-            }
         }
-    } // namespace parser
+
+        const size_t Param::GetPosition() const
+        {
+            return this->_position;
+        }
+
+        const std::string &Param::GetName() const
+        {
+            return this->_storage_item->GetName();
+        }
+
+        std::shared_ptr<TypeSpecification> Param::GetType()
+        {
+            return this->_storage_item->GetType();
+        }
+
+        std::shared_ptr<Expression> Param::GetInitializer()
+        {
+            return this->_storage_item->GetInitializer();
+        }
+
+        bool Param::IsOptional()
+        {
+            auto initializer = this->GetInitializer();
+            if (initializer)
+            {
+                return true;
+            }
+            return false;
+        }
+    } // namespace ast
 } // namespace hoo

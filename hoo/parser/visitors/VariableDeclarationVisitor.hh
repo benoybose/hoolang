@@ -40,6 +40,8 @@ namespace hoo
 
         public:
             Any visitVariableDeclaration(HooParser::VariableDeclarationContext *ctx) override;
+            Any visitTypedStorageItem(HooParser::TypedStorageItemContext *ctx) override;
+            Any visitStorageItem(HooParser::StorageItemContext* ctx) override;
             
         };
     } // namespace parser

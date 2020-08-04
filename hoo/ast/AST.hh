@@ -22,4 +22,6 @@
 #include <hoo/ast/ClassDefinition.hh>
 #include <hoo/ast/ExpressionStatement.hh>
 #include <hoo/ast/DeclarationStatement.hh>
+#include <hoo/ast/StorageItem.hh>
+#include <hoo/ast/Param.hh>
 #endif

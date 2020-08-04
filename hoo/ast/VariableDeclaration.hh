@@ -23,25 +23,30 @@
 #include <hoo/ast/Declarator.hh>
 #include <hoo/ast/TypeSpecification.hh>
 #include <hoo/ast/Expression.hh>
+#include <hoo/ast/StorageItem.hh>
 
 #include <string>
 #include <memory>
 
-namespace hoo {
-    namespace ast {
-        class VariableDeclaration: public Declaration {
+namespace hoo
+{
+    namespace ast
+    {
+        typedef enum
+        {
+            LOCAL_ITEM_VARIABLE,
+            LOCAL_ITEM_CONSTANT
+        } LocalItemType;
+
+        class VariableDeclaration : public Declaration
+        {
         private:
-            DeclaratorType _declarator;
-            std::string _name;
-            std::shared_ptr<TypeSpecification> _declared_type;            
-            std::shared_ptr<Expression> _initializer;
+            LocalItemType _local_item_type;
+            std::shared_ptr<StorageItem> _storage;
 
         public:
-            VariableDeclaration(DeclaratorType declarator,
-                                const std::string &name,
-                                std::shared_ptr<TypeSpecification> declared_type,
-                                std::shared_ptr<Expression> initializer
-            );
+            VariableDeclaration(LocalItemType local_item_type,
+                                std::shared_ptr<StorageItem> storage);
 
         public:
             const DeclaratorType GetDeclarator() const;
@@ -52,8 +57,7 @@ namespace hoo {
         public:
             virtual ~VariableDeclaration();
         };
-    }
-}
-
+    } // namespace ast
+} // namespace hoo
 
 #endif //PROJECT_DECLARATION_HH

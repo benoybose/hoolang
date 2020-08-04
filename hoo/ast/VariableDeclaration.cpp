@@ -22,35 +22,32 @@ namespace hoo
 {
     namespace ast
     {
-        VariableDeclaration::VariableDeclaration(DeclaratorType declarator,
-                                                 const std::string &name,
-                                                 std::shared_ptr<TypeSpecification> declared_type,
-                                                 std::shared_ptr<Expression> initializer) : Declaration(DECLARATION_VARIABLE, declarator),
-                                                                                            _declarator(declarator),
-                                                                                            _name(name),
-                                                                                            _declared_type(declared_type),
-                                                                                            _initializer(initializer)
+        VariableDeclaration::VariableDeclaration(LocalItemType local_item_type,
+                                                 std::shared_ptr<StorageItem> storage)
+            : Declaration(DECLARATION_LOCAL_ITEM, DECLARATOR_NONE),
+              _local_item_type(local_item_type),
+              _storage(storage)
         {
         }
 
         const DeclaratorType VariableDeclaration::GetDeclarator() const
         {
-            return this->_declarator;
+            return Declaration::GetDeclarator();
         }
 
         const std::string &VariableDeclaration::GetName() const
         {
-            return _name;
+            return this->_storage->GetName();
         }
 
         std::shared_ptr<TypeSpecification> VariableDeclaration::GetDelcaredType()
         {
-            return _declared_type;
+            return this->_storage->GetType();
         }
 
         std::shared_ptr<Expression> VariableDeclaration::GetInitializer()
         {
-            return _initializer;
+            return this->_storage->GetInitializer();
         }
 
         VariableDeclaration::~VariableDeclaration()

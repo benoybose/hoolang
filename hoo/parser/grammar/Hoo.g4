@@ -134,11 +134,21 @@ functionDeclaration
     ;
 
 variableDeclaration
-    :   Declarator? name=Identifier (':' declared_type=typeSpecifier)? ( '=' init=expression)?
+    :   type=( 'let' | 'const' ) decl=storageItem
+    ;
+
+storageItem
+    :   typedStorageItem
+    |   name=Identifier '=' init=primaryExpression
+    ;
+
+typedStorageItem
+    :   name=Identifier ':' declared_type=typeSpecifier
+    |   name=Identifier ':' declared_type=typeSpecifier '=' init=expression
     ;
 
 paramList
-    : variableDeclaration ( ',' variableDeclaration)+
+    : typedStorageItem ( ',' typedStorageItem)+
     ;
 
 Declarator

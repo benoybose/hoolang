@@ -22,7 +22,7 @@
 #include <hoo/ast/Declaration.hh>
 #include <hoo/ast/Declarator.hh>
 #include <hoo/ast/TypeSpecification.hh>
-#include <hoo/ast/VariableDeclaration.hh>
+#include <hoo/ast/Param.hh>
 
 #include <string>
 #include <list>
@@ -37,20 +37,20 @@ namespace hoo
         private:
             std::shared_ptr<TypeSpecification> _return_type;
             std::string _name;
-            std::list<std::shared_ptr<VariableDeclaration>> _param_list;
+            std::list<std::shared_ptr<Param>> _param_list;
 
         public:
             FunctionDeclaration(DeclaratorType declarator_type,
                                 std::shared_ptr<TypeSpecification> return_type,
                                 std::string name,
-                                std::list<std::shared_ptr<VariableDeclaration>> param_list);
+                                std::list<std::shared_ptr<Param>> param_list);
 
         public:
             std::shared_ptr<TypeSpecification> GetReturnType() const;
 
             const std::string &GetName() const;
 
-            const std::list<std::shared_ptr<VariableDeclaration>> &GetParamList() const;
+            const std::list<std::shared_ptr<Param>> &GetParamList() const;
 
         public:
             virtual ~FunctionDeclaration();

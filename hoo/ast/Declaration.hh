@@ -24,7 +24,7 @@
 namespace hoo {
     namespace ast {
         typedef enum {
-            DECLARATION_VARIABLE,
+            DECLARATION_LOCAL_ITEM,
             DECLARATION_FUNCTION
         } DeclarationType;
 

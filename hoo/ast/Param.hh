@@ -16,41 +16,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "HooBaseVisitor.h"
-#include "ParserRuleContext.h"
+#ifndef HOO_AST_PARAM_HH
+#define HOO_AST_PARAM_HH
 
-#include <hoo/parser/visitors/VisitorHelper.hh>
-#include <hoo/parser/visitors/ExpressionVisitor.hh>
+#include <hoo/ast/StorageItem.hh>
+#include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/Expression.hh>
 
-using namespace antlr4;
-using namespace hoo::ast;
+#include <memory>
 
 namespace hoo
 {
-    namespace parser
+    namespace ast
     {
-        DeclaratorType VisitorHelper::GetDeclarator(const std::string &declarator)
+        class Param
         {
-            if (declarator.empty())
-            {
-                return DECLARATOR_NONE;
-            }
-            else if (declarator == "public")
-            {
-                return DECLARATOR_PUBLIC;
-            }
-            else if (declarator == "private")
-            {
-                return DECLARATOR_PRIVATE;
-            }
-            else if (declarator == "protected")
-            {
-                return DECLARATOR_PROTECTED;
-            }
-            else
-            {
-                return DECLARATOR_INVALID;
-            }
-        }
-    } // namespace parser
+        private:
+            size_t _position;
+            std::shared_ptr<StorageItem> _storage_item;
+
+        public:
+            Param(size_t position,
+                  std::shared_ptr<StorageItem> storage_item);
+
+        public:
+            const size_t GetPosition() const;
+            const std::string& GetName() const;
+            std::shared_ptr<TypeSpecification> GetType();
+            std::shared_ptr<Expression> GetInitializer();
+            bool IsOptional();
+        };
+    } // namespace ast
 } // namespace hoo
+#endif

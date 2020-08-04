@@ -107,16 +107,17 @@ namespace hoo
 
             std::string name = ctx->name->getText();
             auto param_list_context = ctx->paramList();
-            std::list<std::shared_ptr<VariableDeclaration>> param_list;
+            std::list<std::shared_ptr<Param>> param_list;
+
             if (nullptr != param_list_context)
             {
-                auto var_decl_list = this->visit(param_list_context)
-                                         .as<std::list<std::shared_ptr<VariableDeclaration>> *>();
-                if (nullptr != var_decl_list)
+                auto param_decl_list = this->visit(param_list_context)
+                                         .as<std::list<std::shared_ptr<Param>> *>();
+                if (nullptr != param_decl_list)
                 {
-                    std::copy(var_decl_list->begin(), var_decl_list->end(),
+                    std::copy(param_decl_list->begin(), param_decl_list->end(),
                               std::front_inserter(param_list));
-                    delete var_decl_list;
+                    delete param_decl_list;
                 }
                 else
                 {
@@ -132,18 +133,20 @@ namespace hoo
 
         Any FunctionDefinitionVisitor::visitParamList(HooParser::ParamListContext *ctx)
         {
-            auto param_contexts = ctx->variableDeclaration();
-            auto param_list = new std::list<std::shared_ptr<VariableDeclaration>>();
+            auto param_contexts = ctx->typedStorageItem();
+            auto param_list = new std::list<std::shared_ptr<Param>>();
+
             VariableDeclarationVisitor var_decl_visitor(_error_listener);
+            size_t position = 0;
             for (auto param_context : param_contexts)
             {
-                auto declaration = var_decl_visitor.visit(param_context)
-                                       .as<Declaration *>();
-                if ((nullptr != declaration) &&
-                    (DECLARATION_VARIABLE == declaration->GetDeclarationType()))
+                auto storage_item = var_decl_visitor.visit(param_context)
+                                        .as<StorageItem *>();
+                if (nullptr != storage_item)
                 {
-                    auto variable_declaration = (VariableDeclaration *)declaration;
-                    param_list->push_back(std::shared_ptr<VariableDeclaration>(variable_declaration));
+                    std::shared_ptr<StorageItem> item(storage_item);
+                    auto param = std::shared_ptr<Param>(new Param(position, item));
+                    param_list->push_back(param);
                 }
                 else
                 {
