@@ -35,3 +35,13 @@ packages/**/*.zip
 downloads
 venv
 packages/*
+CMakeCache.txt
+CMakeFiles/
+**/CMakeFiles/
+Makefile
+**/Makefile
+CTestTestfile.cmake
+cmake_install.cmake
+antlr4_generated_src/
+*.a
+Testing/
