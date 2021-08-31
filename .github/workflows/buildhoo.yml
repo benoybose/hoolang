@@ -32,34 +32,34 @@ jobs:
             name: hoolang-x64-ubuntu-20.04-${{ github.run_number }}
             path: out/x64/release/linux/dist
 
-    windows-build:
-        name: Windows 2019 Build
-        runs-on: windows-2019
-        steps:
-        - uses: actions/checkout@v2
-        - uses: actions/setup-java@v1
-          with:
-            java-version: '11'
+    # windows-build:
+    #     name: Windows 2019 Build
+    #     runs-on: windows-2019
+    #     steps:
+    #     - uses: actions/checkout@v2
+    #     - uses: actions/setup-java@v1
+    #       with:
+    #         java-version: '11'
 
-        - uses: actions/setup-python@v2
-          with:
-            python-version: '3.6'
+    #     - uses: actions/setup-python@v2
+    #       with:
+    #         python-version: '3.6'
 
-        - uses: ilammy/msvc-dev-cmd@v1
-        - name: Configure
-          run: python .\confighoo.py --build-type=release
+    #     - uses: ilammy/msvc-dev-cmd@v1
+    #     - name: Configure
+    #       run: python .\confighoo.py --build-type=release
 
-        - name: Build All targets
-          run: cmake --build .\out\x64\release\win32
+    #     - name: Build All targets
+    #       run: cmake --build .\out\x64\release\win32
 
-        - name: Run test
-          run: cmake --build .\out\x64\release\win32 --target test
+    #     - name: Run test
+    #       run: cmake --build .\out\x64\release\win32 --target test
 
-        - name: Create distribution
-          run: cmake --build .\out\x64\release\win32 --target install
+    #     - name: Create distribution
+    #       run: cmake --build .\out\x64\release\win32 --target install
 
-        - name: Upload artifact
-          uses: actions/upload-artifact@v1
-          with:
-            name: hoolang-x64-windows-${{ github.run_number }}
-            path: out\x64\release\win32\dist
+    #     - name: Upload artifact
+    #       uses: actions/upload-artifact@v1
+    #       with:
+    #         name: hoolang-x64-windows-${{ github.run_number }}
+    #         path: out\x64\release\win32\dist

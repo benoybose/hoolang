@@ -1,46 +1,24 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
-            "name": "Test Basic Class Def",
+    "configurations": [
+        {
+            "name": "AddMethodTest",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceRoot}/out/x64/debug/linux/hoo/parser/BasicClassDefinitionTest",
+            "program": "${workspaceFolder}/build/hoo/emitter/AddMethodTest",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/build/hoo/emitter",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "setupCommands": [{
-                "description": "Enable pretty-printing for gdb",
-                "text": "-enable-pretty-printing",
-                "ignoreFailures": true
-            }]
-        },
-        {
-            "name": "WIN [BasicClassDefinition]",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}\\out\\x64\\debug\\win32\\hoo\\parser\\BasicClassDefinitionTest.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false
-        },
-        {
-            "name": "WIN [ClassMethod01]",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}\\out\\x64\\debug\\win32\\hoo\\parser\\ClassMethodTest.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }
