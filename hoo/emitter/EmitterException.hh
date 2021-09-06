@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Benoy Bose
+ * Copyright 2021 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,37 +16,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef UNITVISITOR_HH
-#define UNITVISITOR_HH
+#ifndef EMITTER_EXCEPTION_HH
+#define EMITTER_EXCEPTION_HH
 
-#include "HooBaseVisitor.h"
+#define EMITTER_ERR_01 1
+#define EMITTER_ERR_01MSG "emitter: Unit item not supported"
 
-#include <iostream>
-#include <hoo/ast/Expression.hh>
-#include <hoo/ast/Operator.hh>
-#include <hoo/ast/Declarator.hh>
-#include <hoo/parser/ErrorListener.hh>
+#define EMITTER_ERR_02 2
+#define EMITTER_ERR_02MSG "emitter: Definition not supported"
 
+#define EMITTER_ERR_03 3
+#define EMITTER_ERR_03MSG "emitter: Class body item not supported"
+
+#include <exception>
 #include <string>
 
-using namespace hoo::ast;
-using namespace hoo::parser;
-using namespace antlr4;
-
-class UnitVisitor : public HooBaseVisitor
+namespace hoo
 {
+    namespace emitter
+    {
+        class EmitterException : virtual std::exception
+        {
+        private:
+            std::string _message;
+            int _error_no;
 
-private:
-    ErrorListener *_error_listener;
-    std::string _name;
+        public:
+            EmitterException(const std::string &message, int error_no);
 
-public:
-    UnitVisitor(ErrorListener *error_listener, const std::string& name);
+        public:
+            virtual ~EmitterException() throw() {}
 
-public:
-    antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
+        public:
+            const std::string &GetMessage();
+            const int GetErrorNo();
 
-    antlrcpp::Any visitUnitItem(HooParser::UnitItemContext *ctx) override;
-};
-
-#endif //UNITVISITOR_HH
+        public:
+            virtual const char *what() const throw();
+        };
+    }
+}
+#endif

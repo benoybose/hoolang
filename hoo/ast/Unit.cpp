@@ -20,11 +20,19 @@
 
 #include <hoo/ast/Unit.hh>
 
+#include <string>
+
 namespace hoo {
     namespace ast {
-        Unit::Unit(std::list<std::shared_ptr<UnitItem>> items)
-                : _items(std::move(items)) {
+        Unit::Unit(const std::string& name) : _name(name) {
+        }
 
+        Unit::Unit(std::list<std::shared_ptr<UnitItem>> items, const std::string& name)
+                : _items(std::move(items)), _name(name) {
+        }
+
+        const std::string& Unit::GetName() {
+            return _name;
         }
 
         Unit::~Unit() {

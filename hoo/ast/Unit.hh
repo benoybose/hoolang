@@ -23,6 +23,7 @@
 
 #include <list>
 #include <memory>
+#include <string>
 
 namespace hoo
 {
@@ -32,12 +33,17 @@ namespace hoo
         {
         private:
             std::list<std::shared_ptr<UnitItem>> _items;
+            std::string _name;
 
         public:
-            Unit (std::list<std::shared_ptr<UnitItem>> items);
+        Unit(const std::string &name);
+        Unit(std::list<std::shared_ptr<UnitItem>> items, const std::string &name);
 
         public:
-            std::list<std::shared_ptr<UnitItem>> GetItems();
+        std::list<std::shared_ptr<UnitItem>> GetItems();
+
+        public:
+        const std::string& GetName();
 
         public:
             virtual ~Unit();

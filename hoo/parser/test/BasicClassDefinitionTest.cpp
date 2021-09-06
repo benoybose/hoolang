@@ -51,7 +51,7 @@ private:
         auto unit = DoesNotThrowAndReturn<ParseException,
                                           std::shared_ptr<hoo::ast::Unit>>([source]()
                                                                                -> std::shared_ptr<hoo::ast::Unit> {
-            ParserDriver driver(source);
+            ParserDriver driver(source, "test", true);
             auto unit = driver.Build();
             return unit;
         });
@@ -122,7 +122,7 @@ public:
         try
         {
             const auto source = "class #ClassName {}";
-            ParserDriver driver(source);
+            ParserDriver driver(source, "test", true);
             auto unit = driver.Build();
         }
         catch (ParseException &ex)
@@ -144,7 +144,7 @@ public:
         try
         {
             const auto source = "class ClassName: BaseClass^ {}";
-            ParserDriver driver(source);
+            ParserDriver driver(source, "test", true);
             auto unit = driver.Build();
         }
         catch (ParseException &ex)

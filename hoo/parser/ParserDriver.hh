@@ -36,11 +36,13 @@ namespace hoo
         {
         private:
             std::string _source_code;
+            std::string _name;
             bool _debug;
 
         public:
             ParserDriver(const std::string &source_code,
-                         bool debug = false);
+            const std::string& name,
+            bool debug = false);
 
         public:
             std::shared_ptr<hoo::ast::Unit> Build();

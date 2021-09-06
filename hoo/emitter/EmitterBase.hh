@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Benoy Bose
+ * Copyright 2021 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,37 +16,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef UNITVISITOR_HH
-#define UNITVISITOR_HH
+#ifndef EMITTER_BASE_HH
+#define EMITTER_BASE_HH
 
-#include "HooBaseVisitor.h"
-
-#include <iostream>
-#include <hoo/ast/Expression.hh>
-#include <hoo/ast/Operator.hh>
-#include <hoo/ast/Declarator.hh>
-#include <hoo/parser/ErrorListener.hh>
-
+#include <memory.h>
 #include <string>
 
-using namespace hoo::ast;
-using namespace hoo::parser;
-using namespace antlr4;
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Module.h>
+#include <llvm/IR/IRBuilder.h>
 
-class UnitVisitor : public HooBaseVisitor
+using namespace llvm;
+
+namespace hoo
 {
+    namespace emitter
+    {
+        class EmitterBase {
+            private:
+            std::shared_ptr<llvm::LLVMContext> _context;
+            std::shared_ptr<llvm::Module> _module;
+            std::shared_ptr<llvm::IRBuilder<>> _builder;
+            std::string _unit_name;
 
-private:
-    ErrorListener *_error_listener;
-    std::string _name;
+            public:
+            EmitterBase(const std::string& unit_name);
+            EmitterBase(const EmitterBase& emitter_base);
 
-public:
-    UnitVisitor(ErrorListener *error_listener, const std::string& name);
+            public:
+            std::shared_ptr<llvm::LLVMContext> GetContext();
+            std::shared_ptr<llvm::Module> GetModule();
+            std::shared_ptr<llvm::IRBuilder<>> GetBuilder();
+            const std::string& GetUnitName();
 
-public:
-    antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
-
-    antlrcpp::Any visitUnitItem(HooParser::UnitItemContext *ctx) override;
-};
-
-#endif //UNITVISITOR_HH
+            public:
+            virtual void Emit() = 0;
+        };
+    }
+}
+#endif

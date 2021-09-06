@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Benoy Bose
+ * Copyright 2021 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,37 +16,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef UNITVISITOR_HH
-#define UNITVISITOR_HH
+#ifndef _FUNCTION_DEFINITION_EMITTER_HH
+#define _FUNCTION_DEFINITION_EMITTER_HH
 
-#include "HooBaseVisitor.h"
+#include <hoo/emitter/EmitterBase.hh>
+#include <hoo/emitter/DefinitionEmitter.hh>
+#include <hoo/ast/FunctionDefinition.hh>
+#include <hoo/ast/ClassDefinition.hh>
 
-#include <iostream>
-#include <hoo/ast/Expression.hh>
-#include <hoo/ast/Operator.hh>
-#include <hoo/ast/Declarator.hh>
-#include <hoo/parser/ErrorListener.hh>
-
-#include <string>
+#include <memory>
 
 using namespace hoo::ast;
-using namespace hoo::parser;
-using namespace antlr4;
 
-class UnitVisitor : public HooBaseVisitor
+namespace hoo
 {
+    namespace emitter
+    {
+        class FunctionDefinitionEmitter : public DefinitionEmitterExtended <FunctionDefinition>
+        {
+            public:
+            FunctionDefinitionEmitter (std::shared_ptr<FunctionDefinition> function_definition,
+            const EmitterBase& parent_emitter,
+            std::shared_ptr<ClassDefinition> parent_class_definition);
 
-private:
-    ErrorListener *_error_listener;
-    std::string _name;
+            public:
+            void Emit();
+        };     
+    }
+}
 
-public:
-    UnitVisitor(ErrorListener *error_listener, const std::string& name);
-
-public:
-    antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
-
-    antlrcpp::Any visitUnitItem(HooParser::UnitItemContext *ctx) override;
-};
-
-#endif //UNITVISITOR_HH
+#endif // _FUNCTION_DEFINITION_EMITTER_HH

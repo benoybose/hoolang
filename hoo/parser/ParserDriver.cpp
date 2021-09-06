@@ -40,8 +40,10 @@ namespace hoo
     {
 
         ParserDriver::ParserDriver(const std::string &source_code,
+                                   const std::string &name,
                                    bool debug)
             : _source_code(source_code),
+              _name(name),
               _debug(debug)
         {
         }
@@ -60,7 +62,7 @@ namespace hoo
                     throw std::runtime_error("Parsing failed because of unknown error.");
                 }
 
-                UnitVisitor visitor(&error_listener);
+                UnitVisitor visitor(&error_listener, _name);
                 auto compile_unit = visitor.visit(unitContext).as<Unit *>();
                 unit = std::shared_ptr<hoo::ast::Unit>(compile_unit);
             }
@@ -82,16 +84,16 @@ namespace hoo
                 auto parse_errors = error_listener.GetParseErrors();
                 if (this->_debug)
                 {
-                    for(auto err: syntax_errors)
+                    for (auto err : syntax_errors)
                     {
                         std::cout << err->GetMessage() << std::endl;
                     }
 
-                    for(auto err: parse_errors)
+                    for (auto err : parse_errors)
                     {
                         std::cout << err->GetCode() << " "
-                        << err->GetMessage()
-                        << std::endl;
+                                  << err->GetMessage()
+                                  << std::endl;
                     }
                 }
                 throw ParseException(syntax_errors, parse_errors);

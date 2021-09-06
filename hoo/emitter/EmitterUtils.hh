@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Benoy Bose
+ * Copyright 2021 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,37 +16,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef UNITVISITOR_HH
-#define UNITVISITOR_HH
+#ifndef EMITTER_UTILS_HH
+#define EMITTER_UTILS_HH
 
-#include "HooBaseVisitor.h"
+#include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/BasicDataTypes.hh>
+#include <hoo/ast/BasicTypeSpec.hh>
 
-#include <iostream>
-#include <hoo/ast/Expression.hh>
-#include <hoo/ast/Operator.hh>
-#include <hoo/ast/Declarator.hh>
-#include <hoo/parser/ErrorListener.hh>
-
-#include <string>
+#include <memory>
+#include <llvm/IR/Type.h>
 
 using namespace hoo::ast;
-using namespace hoo::parser;
-using namespace antlr4;
+using namespace llvm;
 
-class UnitVisitor : public HooBaseVisitor
+namespace hoo
 {
-
-private:
-    ErrorListener *_error_listener;
-    std::string _name;
-
-public:
-    UnitVisitor(ErrorListener *error_listener, const std::string& name);
-
-public:
-    antlrcpp::Any visitUnit(HooParser::UnitContext *ctx) override;
-
-    antlrcpp::Any visitUnitItem(HooParser::UnitItemContext *ctx) override;
-};
-
-#endif //UNITVISITOR_HH
+    namespace emitter
+    {
+        class EmitterUtils
+        {
+            public:
+            static llvm::Type* ResolveType(std::shared_ptr<TypeSpecification> type_spec,
+            LLVMContext& context);
+            static llvm::Type* ResolveType(std::shared_ptr<BasicTypeSpec> basic_type_spec,
+            LLVMContext& context);
+        };
+    }
+}
+#endif

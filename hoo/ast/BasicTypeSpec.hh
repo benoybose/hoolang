@@ -33,7 +33,7 @@ namespace hoo
             BasicDataTypeType _data_type;
 
         public:
-            explicit BasicTypeSpec(BasicDataTypeType data_type);
+        explicit BasicTypeSpec(BasicDataTypeType data_type);
 
         public:
             BasicDataTypeType GetDataType() const;

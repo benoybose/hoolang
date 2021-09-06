@@ -36,8 +36,8 @@ using namespace hoo::ast;
 using namespace antlrcpp;
 using namespace hoo::parser;
 
-UnitVisitor::UnitVisitor(ErrorListener *error_listener)
-    : _error_listener(error_listener)
+UnitVisitor::UnitVisitor(ErrorListener *error_listener, const std::string& name)
+    : _error_listener(error_listener), _name(name)
 {
 }
 
@@ -58,7 +58,7 @@ Any UnitVisitor::visitUnit(HooParser::UnitContext *ctx)
         }
     }
 
-    auto unit = new Unit(unit_items);
+    auto unit = new Unit(unit_items, _name);
     return Any(unit);
 }
 

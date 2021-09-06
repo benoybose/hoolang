@@ -30,7 +30,7 @@ std::shared_ptr<Unit> ParserTestUnitBase::ParseUnit(const std::string &source)
     auto unit = DoesNotThrowAndReturn<ParseException,
                                       std::shared_ptr<hoo::ast::Unit>>([source]()
                                                                            -> std::shared_ptr<hoo::ast::Unit> {
-        ParserDriver driver(source, true);
+        ParserDriver driver(source, "test", true);
         auto unit = driver.Build();
         return unit;
     });

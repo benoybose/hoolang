@@ -44,9 +44,10 @@ class AddMethodTest: public TestUnit
             }
         }
         )source";
-        ParserDriver driver(source);
+        ParserDriver driver(source, "test", true);
         const auto unit = driver.Build();
         UnitEmitter emitter(unit);
+        emitter.Emit();
     }
 };
 
