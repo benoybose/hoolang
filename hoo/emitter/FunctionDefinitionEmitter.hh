@@ -23,10 +23,25 @@
 #include <hoo/emitter/DefinitionEmitter.hh>
 #include <hoo/ast/FunctionDefinition.hh>
 #include <hoo/ast/ClassDefinition.hh>
+#include <hoo/ast/Statement.hh>
+#include <hoo/ast/CompoundStatement.hh>
+#include <hoo/ast/DeclarationStatement.hh>
+#include <hoo/ast/ExpressionStatement.hh>
+#include <hoo/ast/ReturnStatement.hh>
+#include <hoo/ast/LiteralExpression.hh>
+#include <hoo/ast/BinaryExpression.hh>
+#include <hoo/ast/ReferenceExpression.hh>
+#include <hoo/ast/Operator.hh>
+
+#include <llvm/IR/Function.h>
+#include <llvm/IR/Value.h>
 
 #include <memory>
+#include <map>
+#include <stack>
 
 using namespace hoo::ast;
+using namespace llvm;
 
 namespace hoo
 {
@@ -34,6 +49,11 @@ namespace hoo
     {
         class FunctionDefinitionEmitter : public DefinitionEmitterExtended <FunctionDefinition>
         {
+            private:
+            Function* _function;
+            std::stack<BasicBlock*> _blocks;
+            std::map<const std::string, Value*> _symbols;
+
             public:
             FunctionDefinitionEmitter (std::shared_ptr<FunctionDefinition> function_definition,
             const EmitterBase& parent_emitter,
@@ -41,6 +61,19 @@ namespace hoo
 
             public:
             void Emit();
+
+            private:
+            void Emit(Function* function, const shared_ptr<Statement>& body);
+            void Emit(const std::shared_ptr<CompoundStatement> &statement);
+            void Emit(const std::shared_ptr<DeclarationStatement> &statement);
+            Value* Emit(const std::shared_ptr<Expression> &expression);
+            Value* Emit(const std::shared_ptr<BinaryExpression> &expression);
+            Value* Emit(const std::shared_ptr<ReferenceExpression> &expression);
+            Value* Emit(const OperatorType operator_type, Value* left_value, Value* right_value);
+            Value* EmitAdd(Value* left_value, Value* right_value);
+            Value* Emit(const std::shared_ptr<LiteralExpression> &expression);
+            void Emit(const std::shared_ptr<ReturnStatement> &statement);
+            void Emit(const std::shared_ptr<Statement> &statement);            
         };     
     }
 }

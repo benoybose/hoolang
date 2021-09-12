@@ -19,17 +19,22 @@
 #ifndef EMITTER_EXCEPTION_HH
 #define EMITTER_EXCEPTION_HH
 
-#define EMITTER_ERR_01 1
-#define EMITTER_ERR_01MSG "emitter: Unit item not supported"
+#define ERR_EMITTER_UNSUPPORTED_UNIT_ITEM   "Unit item is not supported.", 1
+#define ERR_EMITTER_UNSUPPORTED_DEFINITION  "Definition is not supported.", 2
+#define ERR_EMITTER_UNSUPPORTED_CLS_ITEM    "Class item is not supported.", 3
+#define ERR_EMITTER_UNSUPPORTED_STATEMENT   "Statement is not supported", 4
+#define ERR_EMITTER_EVAL_FAILED_EXPRESSION  "Expression is failed to evaluate", 5
+#define ERR_EMITTER_FAILED_LEFT_EXPRESSION  "Left expression is failed to evaluate", 6
+#define ERR_EMITTER_FAILED_RIGHT_EXPRESSION "Right expression is failed to evaluate", 7
+#define ERR_EMITTER_BINARY_FAILED_EXPRESSION    "Binary expression evaluation failed", 8
 
-#define EMITTER_ERR_02 2
-#define EMITTER_ERR_02MSG "emitter: Definition not supported"
 
-#define EMITTER_ERR_03 3
-#define EMITTER_ERR_03MSG "emitter: Class body item not supported"
+#include <hoo/ast/Position.hh>
 
 #include <exception>
 #include <string>
+
+using namespace hoo::ast;
 
 namespace hoo
 {
@@ -40,6 +45,7 @@ namespace hoo
         private:
             std::string _message;
             int _error_no;
+
 
         public:
             EmitterException(const std::string &message, int error_no);

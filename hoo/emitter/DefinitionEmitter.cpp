@@ -64,7 +64,7 @@ namespace hoo
                 }
                 default:
                 {
-                    throw EmitterException(EMITTER_ERR_02MSG, EMITTER_ERR_02);
+                    throw EmitterException(ERR_EMITTER_UNSUPPORTED_DEFINITION);
                 }
             }
         }

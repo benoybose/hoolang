@@ -9,7 +9,8 @@ SET(HOO_EMITTER_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/emitter/DefinitionEmitter.hh
     ${CMAKE_SOURCE_DIR}/hoo/emitter/ClassDefinitionEmitter.hh
     ${CMAKE_SOURCE_DIR}/hoo/emitter/FunctionDefinitionEmitter.hh
-    ${CMAKE_SOURCE_DIR}/hoo/emitter/EmitterUtils.hh)
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/EmitterUtils.hh
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/HooJIT.hh)
 
 SET(HOO_EMITTER_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/emitter/UnitEmitter.cpp
@@ -18,7 +19,8 @@ SET(HOO_EMITTER_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/emitter/DefinitionEmitter.cpp
     ${CMAKE_SOURCE_DIR}/hoo/emitter/ClassDefinitionEmitter.cpp
     ${CMAKE_SOURCE_DIR}/hoo/emitter/FunctionDefinitionEmitter.cpp
-    ${CMAKE_SOURCE_DIR}/hoo/emitter/EmitterUtils.cpp)
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/EmitterUtils.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/HooJIT.cpp)
 
 ADD_LIBRARY(hooemitter STATIC
     ${HOO_EMITTER_HEADERS}

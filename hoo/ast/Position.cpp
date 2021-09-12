@@ -22,9 +22,21 @@ namespace hoo
 {
     namespace ast
     {
-        Position::Position(size_t line_number,
-                           size_t character_position) : _line(line_number),
-                                                        _char_pos(character_position)
+        Position::Position(size_t line_number, size_t character_position) :
+        _line(line_number),
+        _char_pos(character_position)
+        {
+        }
+
+        Position::Position(const Position& position) :
+        _line(position._line),
+        _char_pos(position._char_pos)
+        {
+        }
+
+        Position::Position() :
+        _line(-1),
+        _char_pos(-1)
         {
         }
 

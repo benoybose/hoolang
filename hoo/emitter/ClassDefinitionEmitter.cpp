@@ -62,7 +62,7 @@ namespace hoo
                     }
                     default:
                     {
-                        throw EmitterException(EMITTER_ERR_03MSG, EMITTER_ERR_03);
+                        throw EmitterException(ERR_EMITTER_UNSUPPORTED_CLS_ITEM);
                     }
                 }
             }            

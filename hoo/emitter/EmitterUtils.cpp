@@ -76,5 +76,12 @@ namespace hoo
             }
             return nullptr;
         }
+
+        bool EmitterUtils::IsSameType(Value* v1, Value* v2)
+        {
+            auto t1 = v1->getType()->getTypeID();
+            auto t2 = v2->getType()->getTypeID();
+            return t1 == t2;
+        }
     }
 }

@@ -48,6 +48,7 @@ namespace hoo
 
             public:
             void Emit();
+            std::string GetCode();
 
             private:
             void Emit(const std::shared_ptr<UnitItem>& unitItem);

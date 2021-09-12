@@ -33,9 +33,9 @@ namespace hoo {
         typedef enum {
             STMT_NOOP,
             STMT_COMPOUND,
+            STMT_DECLARATION,
             STMT_EXPRESSION,
             STMT_RETURN,
-            STMT_DECLARATION,
         } StatementType;
 
         class Statement : public UnitItem {

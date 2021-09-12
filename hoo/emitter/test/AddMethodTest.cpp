@@ -19,8 +19,10 @@
 #include <hoo/test/HooTest.hh>
 #include <hoo/parser/ParserDriver.hh>
 #include <hoo/emitter/UnitEmitter.hh>
+#include <hoo/emitter/HooJIT.hh>
 
 #include <string>
+#include <iostream>
 
 using namespace hoo::test;
 using namespace hoo::parser;
@@ -48,6 +50,14 @@ class AddMethodTest: public TestUnit
         const auto unit = driver.Build();
         UnitEmitter emitter(unit);
         emitter.Emit();
+
+        auto ir_module = emitter.GetModule();
+        auto name = emitter.GetUnitName();
+        auto ir = emitter.GetCode();
+        auto jit = HooJIT::Create();
+        (*jit)->Add(ir, name);
+        auto result = (*jit)->Execute<int64_t, int64_t, int64_t> ("Math$add", 321, 678);
+        Equal<int64_t>(result, 999);
     }
 };
 

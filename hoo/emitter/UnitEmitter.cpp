@@ -4,8 +4,12 @@
 #include <hoo/ast/DeclarationStatement.hh>
 #include <hoo/emitter/EmitterBase.hh>
 #include <hoo/emitter/DefinitionEmitter.hh>
+#include <llvm/Support/raw_ostream.h>
 
 #include <list>
+#include <string>
+
+using namespace llvm;
 
 namespace hoo
 {
@@ -24,6 +28,15 @@ namespace hoo
                     this->Emit(item);
                 }
             }
+        }
+
+        std::string UnitEmitter::GetCode()
+        {
+            auto module = this->GetModule();
+            std::string module_code;
+            raw_string_ostream ostream(module_code);
+            module->print(ostream, nullptr);
+            return module_code;
         }
 
         void UnitEmitter::Emit(const std::shared_ptr<UnitItem>& unitItem)
@@ -45,7 +58,7 @@ namespace hoo
                 }
                 default:
                 {
-                    throw EmitterException(EMITTER_ERR_01MSG, EMITTER_ERR_01);
+                    throw EmitterException(ERR_EMITTER_UNSUPPORTED_UNIT_ITEM);
                 }
             }
         }

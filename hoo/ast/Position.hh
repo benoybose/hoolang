@@ -37,6 +37,16 @@ namespace hoo
              * @param character_position Position of character in the line
              */
             Position(size_t line_number, size_t character_position);
+            /**
+             * @brief Copy
+             * 
+             * @param Source position
+             * */
+            Position(const Position& position);
+            /**
+             * @brief Default constructor
+             */
+            Position();
 
             /**
              * @brief Get the line number object
