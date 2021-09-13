@@ -2,6 +2,44 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "BasicClassDefinitionTest",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/hoo/parser/BasicClassDefinitionTest",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/hoo/parser",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "ClassMethodTest",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/hoo/parser/ClassMethodTest",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/build/hoo/parser",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "name": "AddMethodTest",
             "type": "cppdbg",
             "request": "launch",

@@ -109,11 +109,6 @@ namespace hoo
                         std::shared_ptr<ClassBodyItem> itemptr(item);
                         items.push_back(itemptr);
                     }
-                    else
-                    {
-                        _error_listener->Add(class_body_item_context,
-                                             "Invalid class body item.");
-                    }
                 }
                 catch (...)
                 {
@@ -170,7 +165,10 @@ namespace hoo
                 }
                 else
                 {
-                    _error_listener->Add(ctx, "Invalid class body item");
+                    std::cout << ctx->getText() << ctx->getStart()->getLine()
+                    << ":" << ctx->getStart()->getCharPositionInLine()
+                    << std::endl;
+                    _error_listener->Add(ctx, "Invalid token");
                 }
             }
             return Any(body_item);

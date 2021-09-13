@@ -34,15 +34,19 @@ namespace hoo
                                         size_t charPositionInLine, const std::string &msg,
                                         std::exception_ptr e)
         {
-            auto error = CreateSyntaxError(offendingSymbol, msg);
+            auto error = CreateSyntaxError(offendingSymbol, "Invalid syntax");
             this->_syntax_errors.push_back(error);
         }
 
         void ErrorListener::Add(ParserRuleContext *ctx, const std::string &message)
         {
-            auto start = ctx->getStart();
-            auto error = CreateSyntaxError(start, message);
-            this->_syntax_errors.push_back(error);
+            auto text = ctx->getText();
+            if (!text.empty())
+            {
+                auto start = ctx->getStart();
+                auto error = CreateSyntaxError(start, message);
+                this->_syntax_errors.push_back(error);
+            }
         }
 
         void ErrorListener::Add(ErrorCode error_code, const std::string &message)
@@ -55,9 +59,9 @@ namespace hoo
                                                                       const std::string &message)
         {
             auto errorText = start->getText();
-            if (20 > errorText.length())
+            if (100 > errorText.length())
             {
-                errorText = errorText.substr(0, 20);
+                errorText = errorText.substr(0, 100);
                 errorText = errorText += "...";
             }
 

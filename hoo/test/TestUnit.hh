@@ -312,7 +312,7 @@ namespace hoo
                 }
                 catch (...)
                 {
-                    return *(defaultValue);
+                    return nullptr;
                 }
             }
 

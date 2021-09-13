@@ -96,6 +96,7 @@ namespace hoo
                                   << std::endl;
                     }
                 }
+
                 throw ParseException(syntax_errors, parse_errors);
             }
 

@@ -35,8 +35,8 @@ class ClassMethodTest : public ParserTestUnitBase
 public:
     ClassMethodTest()
     {
-        // RegisterTestCase("TEST01",
-        //                  &ClassMethodTest::TEST01);
+        RegisterTestCase("TEST01",
+                         &ClassMethodTest::TEST01);
         RegisterTestCase("TEST02",
                          &ClassMethodTest::TEST02);
         RegisterTestCase("TEST03",
@@ -48,7 +48,7 @@ public:
     {
         const auto source = R"source(
         class Maths {
-            public func add() {
+            public add() {
             }
         }
         )source";
@@ -64,7 +64,7 @@ public:
     {
         const auto source = R"source(
         class Maths {
-            public func add(a:int, b:int) {
+            public add(a:int, b:int) {
             }
         }
         )source";
@@ -80,7 +80,7 @@ public:
     {
         const auto source = R"source(
         class Maths {
-            public func:int add(a:int, b:int) {
+            public add(a:int, b:int) : int {
                 return a + b;
             }
         }

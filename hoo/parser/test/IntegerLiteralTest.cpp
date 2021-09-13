@@ -45,7 +45,7 @@ public:
     {
         const auto source = R"source(
         class Bar {
-            public func:int foo() {
+            public foo() : int {
                 return 632880;
             }
         }
@@ -70,7 +70,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:int foo() {
+            private foo() : int {
                 return -362880;
             }
         }
@@ -95,7 +95,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:int foo() {
+            private foo() : int {
                 return 01304600;
             }
         }
@@ -120,7 +120,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:int foo() {
+            private foo() : int {
                 return 0b01011000100110000000;
             }
         }
@@ -145,7 +145,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:int foo() {
+            private foo() : int {
                 return 0B01011000100110000000;
             }
         }
@@ -170,7 +170,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:int foo() {
+            private foo() : int {
                 return 0x58980;
             }
         }
@@ -195,7 +195,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:int foo() {
+            private foo() : int {
                 return 0X58980;
             }
         }

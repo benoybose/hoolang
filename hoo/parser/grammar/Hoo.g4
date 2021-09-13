@@ -130,7 +130,7 @@ functionDefinition
     ;
 
 functionDeclaration
-    :   Declarator? 'func' ( ':' returnType=typeSpecifier )? name=Identifier '(' paramList? ')'
+    :   Declarator? name=Identifier '(' paramList? ')' ( ':' returnType=typeSpecifier)?
     ;
 
 variableDeclaration

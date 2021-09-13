@@ -41,20 +41,6 @@ namespace hoo
         class HooJIT
         {
         private:
-            // std::unique_ptr<LLVMContext> _context;
-            // std::map<std::string, std::unique_ptr<llvm::Module>> _modules;
-
-            std::map<std::string, std::string> _ir_codes;
-            // std::unique_ptr<ExecutionSession> _exe_session;
-
-            // DataLayout _data_layout;
-            // MangleAndInterner _mangler;
-
-            // RTDyldObjectLinkingLayer _object_layer;
-            // IRCompileLayer _ir_compiler_layer;
-
-            // JITDylib &_main_lib;
-
             ExecutionSession _exe_session;
             RTDyldObjectLinkingLayer _object_layer;
             IRCompileLayer _ir_compiler_layer;
@@ -71,10 +57,13 @@ namespace hoo
         public:
             JITDylib &GetMainLib();
             static Expected<std::unique_ptr<HooJIT>> Create();
-            Expected<JITEvaluatedSymbol> Lookup(const std::string &name);
+            void Evaluate(const std::string &source, const std::string &name);
 
+        private:
+            Expected<JITEvaluatedSymbol> Lookup(const std::string &name);
             void Add(const std::string &ir, const std::string &name);
 
+        public:
             template <typename TReturn, typename TParam1, typename TParam2>
             TReturn Execute(const std::string &function_name, TParam1 param1, TParam2 param2)
             {

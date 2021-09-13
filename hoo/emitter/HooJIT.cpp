@@ -16,7 +16,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <hoo/emitter/UnitEmitter.hh>
 #include <hoo/emitter/HooJIT.hh>
+#include <hoo/parser/ParserDriver.hh>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/ExecutionEngine/Orc/Core.h>
 #include <llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h>
@@ -34,6 +36,7 @@
 
 using namespace llvm;
 using namespace llvm::orc;
+using namespace hoo::parser;
 
 namespace hoo
 {
@@ -78,6 +81,19 @@ namespace hoo
                                             std::move(*data_layer));
         }
 
+        void HooJIT::Evaluate(const std::string &source, const std::string &name)
+        {
+            ParserDriver driver(source, name, true);
+            const auto unit = driver.Build();
+            UnitEmitter emitter(unit);
+            emitter.Emit();
+
+            auto ir_module = emitter.GetModule();
+            auto unit_name = emitter.GetUnitName();
+            auto ir = emitter.GetCode();
+            this->Add(ir, unit_name);
+        }
+
         Expected<JITEvaluatedSymbol> HooJIT::Lookup(const std::string &name)
         {
             auto symbol_names = _mangler(name);
@@ -91,7 +107,6 @@ namespace hoo
 
         void HooJIT::Add(const std::string &ir, const std::string &name)
         {
-            _ir_codes[name] = ir;
             SMDiagnostic diagnostic;
             MemoryBufferRef memory_buffer(ir, name);
             auto ir_module = llvm::parseIR(memory_buffer, diagnostic, *_context.getContext());

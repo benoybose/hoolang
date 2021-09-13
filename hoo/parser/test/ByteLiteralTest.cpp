@@ -35,7 +35,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:byte foo() {
+            private foo() : byte {
                 return 0xFF;
             }            
         }
@@ -60,7 +60,7 @@ public:
     {
         const std::string source = R"source(
         class Bar {
-            private func:byte foo() {
+            private foo() : byte {
                 return 0XFE;
             }            
         }

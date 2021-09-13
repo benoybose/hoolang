@@ -20,6 +20,7 @@
 #include <hoo/parser/ParserDriver.hh>
 #include <hoo/emitter/UnitEmitter.hh>
 #include <hoo/emitter/HooJIT.hh>
+#include <llvm/Support/Errno.h>
 
 #include <string>
 #include <iostream>
@@ -41,22 +42,14 @@ class AddMethodTest: public TestUnit
     {
         const std::string source = R"source(
         class Math {
-            public func:int add(a:int, b:int) {
+            public add(a:int, b:int) : int {
                 return a + b;
             }
         }
         )source";
-        ParserDriver driver(source, "test", true);
-        const auto unit = driver.Build();
-        UnitEmitter emitter(unit);
-        emitter.Emit();
-
-        auto ir_module = emitter.GetModule();
-        auto name = emitter.GetUnitName();
-        auto ir = emitter.GetCode();
-        auto jit = HooJIT::Create();
-        (*jit)->Add(ir, name);
-        auto result = (*jit)->Execute<int64_t, int64_t, int64_t> ("Math$add", 321, 678);
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test01");
+        auto result = jit->Execute<int64_t, int64_t, int64_t> ("Math$add", 321, 678);
         Equal<int64_t>(result, 999);
     }
 };

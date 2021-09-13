@@ -226,18 +226,24 @@ namespace hoo
             else
             {
                 auto &context = *(this->GetContext());
-                if (left_value->getType()->isIntegerTy())
+                if ((left_value->getType()->isIntegerTy()) && (right_value->getType()->isDoubleTy()))
                 {
                     left_value = builder->CreateSIToFP(left_value,
                     Type::getDoubleTy(context));
                 }
-                else
+                else if ((left_value->getType()->isDoubleTy()) && (right_value->getType()->isIntegerTy()))
                 {
                     right_value = builder->CreateSIToFP(right_value,
                     Type::getDoubleTy(context));
                 }
+                else
+                {
+                    return nullptr;
+                }
+
+                auto value = builder->CreateAdd(left_value, right_value, "", true);
+                return value;
             }
-            return nullptr;
         }
 
         void FunctionDefinitionEmitter::Emit(const std::shared_ptr<ReturnStatement> &statement)
