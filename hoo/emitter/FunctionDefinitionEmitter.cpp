@@ -218,32 +218,33 @@ namespace hoo
         Value* right_value)
         {
             auto builder = this->GetBuilder();
-            if (EmitterUtils::IsSameType(left_value, right_value))
+            auto const left_type = left_value->getType();
+            auto const right_type = right_value->getType();
+            auto &context = *(this->GetContext());
+            if ((left_type->isIntegerTy()) && (right_type->isIntegerTy()))
             {
-                auto value = builder->CreateAdd(left_value, right_value, "", true);
+                auto value = builder->CreateAdd(left_value, right_value, "");
+                return value;                
+            }
+            else if ((left_type->isIntegerTy()) && (right_type->isDoubleTy()))
+            {
+                left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(context));
+                auto value = builder->CreateFAdd(left_value, right_value, "");
                 return value;
             }
-            else
+            else if ((left_type->isDoubleTy()) && (right_type->isIntegerTy()))
             {
-                auto &context = *(this->GetContext());
-                if ((left_value->getType()->isIntegerTy()) && (right_value->getType()->isDoubleTy()))
-                {
-                    left_value = builder->CreateSIToFP(left_value,
-                    Type::getDoubleTy(context));
-                }
-                else if ((left_value->getType()->isDoubleTy()) && (right_value->getType()->isIntegerTy()))
-                {
-                    right_value = builder->CreateSIToFP(right_value,
-                    Type::getDoubleTy(context));
-                }
-                else
-                {
-                    return nullptr;
-                }
+                right_value = builder->CreateSIToFP(right_value, Type::getDoubleTy(context));
+                auto value = builder->CreateFAdd(left_value, right_value, "");
+                return value;
+            }
+            else if ((left_type->isDoubleTy()) && (right_type->isDoubleTy()))
+            {
+                auto value = builder->CreateFAdd(left_value, right_value, "");
+                return value;
+            }
 
-                auto value = builder->CreateAdd(left_value, right_value, "", true);
-                return value;
-            }
+            throw std::runtime_error("addidtion operation not supproted now.");
         }
 
         void FunctionDefinitionEmitter::Emit(const std::shared_ptr<ReturnStatement> &statement)

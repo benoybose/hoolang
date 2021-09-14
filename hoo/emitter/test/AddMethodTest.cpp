@@ -24,6 +24,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdlib>
 
 using namespace hoo::test;
 using namespace hoo::parser;
@@ -34,8 +35,12 @@ class AddMethodTest: public TestUnit
     public:
     AddMethodTest()
     {
-        RegisterTestCase("TEST01", 
-            &AddMethodTest::TEST01);
+        RegisterTestCase("TEST01",
+        &AddMethodTest::TEST01);
+        RegisterTestCase("TEST02",
+        &AddMethodTest::TEST02);
+        RegisterTestCase("TEST03",
+        &AddMethodTest::TEST03);
     }
 
     void TEST01()
@@ -51,6 +56,46 @@ class AddMethodTest: public TestUnit
         jit->Evaluate(source, "test01");
         auto result = jit->Execute<int64_t, int64_t, int64_t> ("Math$add", 321, 678);
         Equal<int64_t>(result, 999);
+
+        for (auto index = -10000; index <= 10000; index++)
+        {
+            auto const offset = rand();
+            auto sum = jit->Execute<int64_t, int64_t, int64_t> ("Math$add", index, offset);
+            Equal<int64_t>(sum, index + offset);
+        }        
+    }
+
+    void TEST02()
+    {
+        const std::string source = R"source(
+        public add(a:int, b:int) : int {
+            return a + b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test02");
+        auto result = jit->Execute<int64_t, int64_t, int64_t> ("add", 321, 678);
+        Equal<int64_t>(result, 999);
+
+        for (auto index = -10000; index <= 10000; index++)
+        {
+            auto const offset = rand();
+            auto sum = jit->Execute<int64_t, int64_t, int64_t> ("add", index, offset);
+            Equal<int64_t>(sum, index + offset);
+        }        
+    }
+
+    void TEST03()
+    {
+        const std::string source = R"source(
+        public add(a:double, b:double) : double {
+            return a + b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test03");
+        auto result = jit->Execute<double, double, double> ("add", 1.314, 34.076);
+        Equal<double>(result, 35.39);
     }
 };
 

@@ -33,6 +33,7 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <iostream>
 
 using namespace llvm;
 using namespace llvm::orc;
@@ -107,9 +108,14 @@ namespace hoo
 
         void HooJIT::Add(const std::string &ir, const std::string &name)
         {
+            std::cout << ir;
             SMDiagnostic diagnostic;
             MemoryBufferRef memory_buffer(ir, name);
             auto ir_module = llvm::parseIR(memory_buffer, diagnostic, *_context.getContext());
+            if (!ir_module)
+            {
+                throw std::runtime_error("failed to parse IR code " + name);
+            }
             auto module_add_error = _ir_compiler_layer.add(_main_lib, ThreadSafeModule(std::move(ir_module), _context));
             if (module_add_error)
             {
