@@ -76,6 +76,8 @@ namespace hoo
             }
 
             auto param_list = function_declaration->GetParamList();
+            param_list.reverse();
+
             std::vector<Type *> params;
             for (auto const &param : param_list)
             {
@@ -210,17 +212,52 @@ namespace hoo
             switch (operator_type)
             {
                 case OPERATOR_ADD: return EmitAdd(left_value, right_value);
+                case OPERATOR_SUB: return EmitSub(left_value, right_value);
                 default: throw EmitterException(ERR_EMITTER_BINARY_FAILED_EXPRESSION);
             }
+        }
+
+        Value* FunctionDefinitionEmitter::EmitSub(Value* left_value, Value* right_value)
+        {
+            auto builder = this->GetBuilder();
+            auto &context = *(this->GetContext());
+
+            auto const left_type = left_value->getType();
+            auto const right_type = right_value->getType();            
+            if ((left_type->isIntegerTy()) && (right_type->isIntegerTy()))
+            {
+                auto value = builder->CreateSub(left_value, right_value);
+                return value;
+            }
+            else if ((left_type->isIntegerTy()) && (right_type->isDoubleTy()))
+            {
+                left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(context));
+                auto value = builder->CreateFSub(left_value, right_value, "");
+                return value;
+            }
+            else if ((left_type->isDoubleTy()) && (right_type->isIntegerTy()))
+            {
+                right_value = builder->CreateSIToFP(right_value, Type::getDoubleTy(context));
+                auto value = builder->CreateFSub(left_value, right_value, "");
+                return value;
+            }
+            else if ((left_type->isDoubleTy()) && (right_type->isDoubleTy()))
+            {
+                auto value = builder->CreateFSub(left_value, right_value, "");
+                return value;
+            }
+
+            throw std::runtime_error("subtraction operation not supproted now.");
         }
         
         Value* FunctionDefinitionEmitter::EmitAdd(Value* left_value,
         Value* right_value)
         {
             auto builder = this->GetBuilder();
-            auto const left_type = left_value->getType();
-            auto const right_type = right_value->getType();
             auto &context = *(this->GetContext());
+
+            auto const left_type = left_value->getType();
+            auto const right_type = right_value->getType();            
             if ((left_type->isIntegerTy()) && (right_type->isIntegerTy()))
             {
                 auto value = builder->CreateAdd(left_value, right_value, "");

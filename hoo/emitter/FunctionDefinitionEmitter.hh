@@ -70,6 +70,7 @@ namespace hoo
             Value* Emit(const std::shared_ptr<BinaryExpression> &expression);
             Value* Emit(const std::shared_ptr<ReferenceExpression> &expression);
             Value* Emit(const OperatorType operator_type, Value* left_value, Value* right_value);
+            Value* EmitSub(Value* left_value, Value* right_value);
             Value* EmitAdd(Value* left_value, Value* right_value);
             Value* Emit(const std::shared_ptr<LiteralExpression> &expression);
             void Emit(const std::shared_ptr<ReturnStatement> &statement);
