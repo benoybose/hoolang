@@ -18,6 +18,8 @@
 
 #include <hoo/common/NotImplementedException.hh>
 
+#include <string>
+
 namespace hoo
 {
         namespace common

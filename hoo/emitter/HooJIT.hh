@@ -19,17 +19,23 @@
 #ifndef HOO_JIT_HH
 #define HOO_JIT_HH
 
-#include <llvm/IR/LLVMContext.h>
-#include <llvm/IR/Module.h>
-#include <llvm/ExecutionEngine/Orc/Core.h>
-#include <llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h>
-#include <llvm/ExecutionEngine/Orc/IRCompileLayer.h>
-#include <llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h>
-#include <llvm/ExecutionEngine/JITSymbol.h>
+#include "llvm/ADT/StringRef.h"
+#include "llvm/ExecutionEngine/JITSymbol.h"
+#include "llvm/ExecutionEngine/Orc/CompileUtils.h"
+#include "llvm/ExecutionEngine/Orc/Core.h"
+#include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
+#include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
+#include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
+#include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
+#include "llvm/ExecutionEngine/Orc/TargetProcessControl.h"
+#include "llvm/ExecutionEngine/SectionMemoryManager.h"
+#include "llvm/IR/DataLayout.h"
+#include "llvm/IR/LLVMContext.h"
 
 #include <memory>
 #include <string>
 #include <map>
+#include <exception>
 
 using namespace llvm;
 using namespace orc;
@@ -41,37 +47,49 @@ namespace hoo
         class HooJIT
         {
         private:
-            ExecutionSession _exe_session;
-            RTDyldObjectLinkingLayer _object_layer;
-            IRCompileLayer _ir_compiler_layer;
+        std::unique_ptr<TargetProcessControl> _taregt_process_control;
+        std::unique_ptr<ExecutionSession> _execution_session;
 
-            DataLayout _data_layout;
-            MangleAndInterner _mangler;
-            ThreadSafeContext _context;
+        DataLayout _data_layout;
+        MangleAndInterner _mangle;
 
-            JITDylib &_main_lib;
+        RTDyldObjectLinkingLayer _object_layer;
+        IRCompileLayer _ir_compile_layer;
 
-        public:
-            HooJIT(JITTargetMachineBuilder taget_machine_builder, DataLayout data_layer);
+        JITDylib &_main_lib;
 
         public:
-            JITDylib &GetMainLib();
-            static Expected<std::unique_ptr<HooJIT>> Create();
-            void Evaluate(const std::string &source, const std::string &name);
+        HooJIT(std::unique_ptr<TargetProcessControl> target_process_control,
+        std::unique_ptr<ExecutionSession> execution_session,
+        JITTargetMachineBuilder target_machine_builder, DataLayout data_layout);
+
+        public:
+        JITDylib &GetMainLib();
+        static Expected<std::unique_ptr<HooJIT>> Create();
+        void Evaluate(const std::string &source, const std::string &name);
 
         private:
-            Expected<JITEvaluatedSymbol> Lookup(const std::string &name);
-            void Add(const std::string &ir, const std::string &name);
+        Expected<JITEvaluatedSymbol> Lookup(const std::string &name);
+        void Add(const std::string &ir, const std::string &name);
+        Error Add(ThreadSafeModule thread_safe_module, ResourceTrackerSP resource_tracker = nullptr);
+        Error Add(std::unique_ptr<llvm::Module> module, std::unique_ptr<LLVMContext> context, ResourceTrackerSP resource_tracker = nullptr);
 
         public:
-            template <typename TReturn, typename TParam1, typename TParam2>
-            TReturn Execute(const std::string &function_name, TParam1 param1, TParam2 param2)
+        template <typename TReturn, typename TParam1, typename TParam2>
+        TReturn Execute(const std::string &function_name, TParam1 param1, TParam2 param2)
+        {
+            auto symbol = Lookup(function_name);
+            if (!symbol)
             {
-                auto symbol = Lookup(function_name);
-                auto *function = (TReturn(*)(TParam1, TParam2))(*symbol).getAddress();
-                auto result = function(param1, param2);
-                return result;
+                throw std::runtime_error("symbol not found " + function_name);
             }
+            auto *function = (TReturn(*)(TParam1, TParam2))(*symbol).getAddress();
+            auto result = function(param1, param2);
+            return result;
+        }
+
+        public:
+        ~HooJIT();
         };
     }
 }

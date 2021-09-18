@@ -111,6 +111,7 @@
         "string_view": "cpp",
         "*.tcc": "cpp",
         "memory_resource": "cpp",
-        "*.def": "cpp"
+        "*.def": "cpp",
+        "*.inc": "cpp"
     }
 }

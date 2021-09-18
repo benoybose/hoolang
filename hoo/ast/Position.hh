@@ -19,7 +19,7 @@
 #ifndef HOOLANG_POSITION_HH
 #define HOOLANG_POSITION_HH
 
-#include <cstdint>
+#include <cstdlib>
 
 using namespace std;
 

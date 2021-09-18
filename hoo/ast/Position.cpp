@@ -18,6 +18,10 @@
 
 #include <hoo/ast/Position.hh>
 
+#include <cstdlib>
+
+using namespace std;
+
 namespace hoo
 {
     namespace ast

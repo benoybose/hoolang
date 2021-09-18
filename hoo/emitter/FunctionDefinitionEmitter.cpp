@@ -123,7 +123,7 @@ namespace hoo
 
             if (!_blocks.empty())
             {
-                block_name = _function->getName();
+                block_name = _function->getName().str();
                 block_name += "_";
                 block_name += _blocks.size();
             }

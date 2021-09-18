@@ -51,8 +51,7 @@ TARGET_INCLUDE_DIRECTORIES(AddMethodTest PRIVATE
 TARGET_LINK_LIBRARIES(AddMethodTest PRIVATE
     hootest
     hooparser
-    hooemitter
-    LLVM-10)
+    hooemitter LLVM)
 ADD_TEST(AddMethodTest AddMethodTest)
 
 ADD_EXECUTABLE(SubMethodTest test/SubMethodTest.cpp)
@@ -63,6 +62,5 @@ TARGET_INCLUDE_DIRECTORIES(SubMethodTest PRIVATE
 TARGET_LINK_LIBRARIES(SubMethodTest PRIVATE
     hootest
     hooparser
-    hooemitter
-    LLVM-10)
+    hooemitter LLVM)
 ADD_TEST(SubMethodTest SubMethodTest)
