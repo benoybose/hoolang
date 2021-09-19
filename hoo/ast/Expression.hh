@@ -38,7 +38,7 @@ namespace hoo
             EXPRESSION_INVOKE
         };
 
-        class Expression : Node
+        class Expression : public Node
         {
 
         private:

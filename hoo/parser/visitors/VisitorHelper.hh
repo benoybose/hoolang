@@ -35,6 +35,7 @@ namespace hoo
         {
         public:
             static DeclaratorType GetDeclarator(const std::string &declarator);
+            static void AssignPositions(Node *node, ParserRuleContext *context);
         };
     } // namespace parser
 } // namespace hoo

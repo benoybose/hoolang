@@ -228,7 +228,7 @@ namespace hoo
             }
 
             template <typename TExceptionType>
-            void Throws(std::function<void()> code, const std::string &message = "")
+            TExceptionType Throws(std::function<void()> code, const std::string &message = "")
             {
                 try
                 {
@@ -243,9 +243,9 @@ namespace hoo
                         }
                         throw std::runtime_error("test \"Throws\" failed.");
                     }
-                    catch (TExceptionType)
+                    catch (TExceptionType ex)
                     {
-                        // do nothing
+                        return ex;
                     }
                 }
                 catch (...)

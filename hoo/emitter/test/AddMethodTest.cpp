@@ -20,6 +20,7 @@
 #include <hoo/parser/ParserDriver.hh>
 #include <hoo/emitter/UnitEmitter.hh>
 #include <hoo/emitter/HooJIT.hh>
+#include <hoo/emitter/EmitterException.hh>
 #include <llvm/Support/Errno.h>
 
 #include <string>
@@ -46,6 +47,16 @@ class AddMethodTest: public TestUnit
         &AddMethodTest::TEST04);
         RegisterTestCase("TEST05",
         &AddMethodTest::TEST05);
+        RegisterTestCase("TEST06",
+        &AddMethodTest::TEST06);
+        RegisterTestCase("TEST07",
+        &AddMethodTest::TEST07);
+        RegisterTestCase("TEST08",
+        &AddMethodTest::TEST08);
+        RegisterTestCase("TEST09",
+        &AddMethodTest::TEST09);
+        RegisterTestCase("TEST10",
+        &AddMethodTest::TEST10);
     }
 
     void TEST01()
@@ -126,9 +137,74 @@ class AddMethodTest: public TestUnit
         )source";
         auto jit = std::move(* HooJIT::Create());
         jit->Evaluate(source, "test05");
-        auto result = jit->Execute<double, double, int> ("add", 35.5, 2);
+        auto result = jit->Execute<double, double, long> ("add", 35.5, 2);
         auto offset = fabs(37.5 - result);
         True(offset < 0.01);
+    }
+
+    void TEST06()
+    {
+        const std::string source = R"source(
+        public add(a:byte, b:byte) : byte {
+            return a + b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test06");
+        auto result = jit->Execute<unsigned char, unsigned char, unsigned char> ("add", 117, 56);
+        Equal<unsigned char>(result, 173);
+    }
+
+    void TEST07()
+    {
+        const std::string source = R"source(public add(a:byte, b:int) : byte {
+            return a + b;
+        })source";
+        auto ex = Throws<EmitterException>([source] () {
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test07");
+        });
+        auto const error_code = ex.GetErrorNo();
+        Equal(error_code, 10);
+    }
+
+    void TEST08()
+    {
+        const std::string source = R"source(public add(a:byte, b:int) : int {
+            return a + b;
+        })source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test08");
+        auto result = jit->Execute<std::int64_t, unsigned char, std::int64_t>("add", 201, 2021);
+        Equal<std::int64_t>(result, 2222);
+    }
+
+    void TEST09()
+    {
+        auto ex = Throws<EmitterException>([] () {
+            const std::string source = R"source(
+            public add(a:int, b:byte) : byte {
+                return a + b;
+            }
+            )source";
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test09");
+        });
+        auto error_code = ex.GetErrorNo();
+        Equal<int>(error_code, 10);
+    }
+
+    void TEST10()
+    {
+        const std::string source = R"source(
+        public add(a:int, b:byte) : int {
+            return a + b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test10");
+        auto result = jit->Execute<unsigned char, unsigned char, std::int64_t> ("add", 117, 143);
+        Equal<unsigned char>(result, 4);
     }
 };
 

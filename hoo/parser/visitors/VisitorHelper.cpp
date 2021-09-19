@@ -22,6 +22,8 @@
 #include <hoo/parser/visitors/VisitorHelper.hh>
 #include <hoo/parser/visitors/ExpressionVisitor.hh>
 
+#include <memory>
+
 using namespace antlr4;
 using namespace hoo::ast;
 
@@ -51,6 +53,18 @@ namespace hoo
             {
                 return DECLARATOR_INVALID;
             }
+        }
+
+        void VisitorHelper::AssignPositions(Node *node, ParserRuleContext *context)
+        {
+            auto start = context->getStart();
+            auto start_pos = std::make_shared<Position>(start->getLine(),
+            start->getCharPositionInLine());
+            auto end = context->getStop();
+            auto end_pos = std::make_shared<Position>(end->getLine(),
+            end->getCharPositionInLine());
+            node->SetStart(start_pos);
+            node->SetEnd(end_pos);
         }
     } // namespace parser
 } // namespace hoo

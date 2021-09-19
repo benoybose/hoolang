@@ -19,20 +19,25 @@
 #ifndef EMITTER_EXCEPTION_HH
 #define EMITTER_EXCEPTION_HH
 
-#define ERR_EMITTER_UNSUPPORTED_UNIT_ITEM   "Unit item is not supported.", 1
-#define ERR_EMITTER_UNSUPPORTED_DEFINITION  "Definition is not supported.", 2
-#define ERR_EMITTER_UNSUPPORTED_CLS_ITEM    "Class item is not supported.", 3
-#define ERR_EMITTER_UNSUPPORTED_STATEMENT   "Statement is not supported", 4
-#define ERR_EMITTER_EVAL_FAILED_EXPRESSION  "Expression is failed to evaluate", 5
-#define ERR_EMITTER_FAILED_LEFT_EXPRESSION  "Left expression is failed to evaluate", 6
-#define ERR_EMITTER_FAILED_RIGHT_EXPRESSION "Right expression is failed to evaluate", 7
-#define ERR_EMITTER_BINARY_FAILED_EXPRESSION    "Binary expression evaluation failed", 8
+#define ERR_POS(x) x->GetStart(), x->GetEnd()
+#define ERR_EMITTER_UNSUPPORTED_UNIT_ITEM       "Unit item is not supported.", 1
+#define ERR_EMITTER_UNSUPPORTED_DEFINITION      "Definition is not supported.", 2
+#define ERR_EMITTER_UNSUPPORTED_CLS_ITEM        "Class item is not supported.", 3
+#define ERR_EMITTER_UNSUPPORTED_STATEMENT       "Statement is not supported.", 4
+#define ERR_EMITTER_EVAL_FAILED_EXPRESSION      "Expression is failed to evaluate.", 5
+#define ERR_EMITTER_FAILED_LEFT_EXPRESSION      "Left expression is failed to evaluate.", 6
+#define ERR_EMITTER_FAILED_RIGHT_EXPRESSION     "Right expression is failed to evaluate.", 7
+#define ERR_EMITTER_BINARY_FAILED_EXPRESSION    "Binary expression evaluation failed.", 8
+#define ERR_EMITTER_INVALID_CLASS_DEFINITION    "Invalid class definition.", 9
+#define ERR_EMITTER_EXPLICIT_CAST_REQUIRED      "An explicit cast operation must be required here.", 10
 
 
 #include <hoo/ast/Position.hh>
 
 #include <exception>
 #include <string>
+#include <memory>
+#include <stdexcept>
 
 using namespace hoo::ast;
 
@@ -40,15 +45,19 @@ namespace hoo
 {
     namespace emitter
     {
-        class EmitterException : virtual std::exception
+        class EmitterException : virtual std::runtime_error
         {
         private:
             std::string _message;
             int _error_no;
-
+            std::shared_ptr<Position> _start;
+            std::shared_ptr<Position> _end;
 
         public:
-            EmitterException(const std::string &message, int error_no);
+            EmitterException(const std::string &message,
+            int error_no,
+            std::shared_ptr<Position> start = nullptr,
+            std::shared_ptr<Position> end = nullptr);
 
         public:
             virtual ~EmitterException() throw() {}
@@ -56,6 +65,8 @@ namespace hoo
         public:
             const std::string &GetMessage();
             const int GetErrorNo();
+            const std::shared_ptr<Position> GetStart() const;
+            const std::shared_ptr<Position> GetEnd() const;
 
         public:
             virtual const char *what() const throw();

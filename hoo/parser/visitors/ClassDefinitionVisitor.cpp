@@ -21,6 +21,7 @@
 #include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
 #include <hoo/parser/visitors/DefinitionVisitor.hh>
 #include <hoo/parser/visitors/StatementVisitor.hh>
+#include <hoo/parser/visitors/VisitorHelper.hh>
 
 #include <string>
 
@@ -88,10 +89,11 @@ namespace hoo
                                      "Invalid class body on class definition.");
             }
 
-            auto classDefinition = new ClassDefinition(className,
-                                                       base_entity_names,
-                                                       class_body);
-            Definition *definition = (Definition *)classDefinition;
+            auto class_definition = new ClassDefinition(className,
+            base_entity_names,
+            class_body);
+            VisitorHelper::AssignPositions(class_definition, ctx);
+            Definition *definition = (Definition *)class_definition;
             return Any(definition);
         }
 

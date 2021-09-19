@@ -38,9 +38,10 @@ namespace hoo
     namespace emitter
     {
         FunctionDefinitionEmitter::FunctionDefinitionEmitter(std::shared_ptr<FunctionDefinition> function_definition,
-                                                             const EmitterBase &parent_emitter,
-                                                             std::shared_ptr<ClassDefinition> parent_class_definition) : DefinitionEmitterExtended(function_definition, parent_emitter, parent_class_definition),
-                                                                                                                         _function(nullptr)
+        const EmitterBase &parent_emitter,
+        std::shared_ptr<ClassDefinition> parent_class_definition) :
+        DefinitionEmitterExtended(function_definition, parent_emitter, parent_class_definition),
+        _function(nullptr)
         {
         }
 
@@ -50,7 +51,7 @@ namespace hoo
             auto const &parent_class = this->GetParentClass();
             if (!function_definition)
             {
-                throw std::runtime_error("valid function definition not found.");
+                throw EmitterException(ERR_EMITTER_INVALID_CLASS_DEFINITION);
             }
 
             auto const &function_declaration = function_definition->GetDeclaration();
@@ -154,12 +155,12 @@ namespace hoo
                 case EXPRESSION_BINARY:
                 {
                     auto const& binary_expression = dynamic_pointer_cast<BinaryExpression>(expression);
-                    return Emit(binary_expression);
+                    return EmitBinaryExpression(binary_expression);
                 }
                 case EXPRESSION_REFERENCE:
                 {
                     auto const& ref_expression = dynamic_pointer_cast<ReferenceExpression>(expression);
-                    return Emit(ref_expression);
+                    return EmitReferenceExpression(ref_expression);
                 }
                 break;
                 case EXPRESSION_ARRAY:
@@ -170,7 +171,7 @@ namespace hoo
             return nullptr;
         }
 
-        Value* FunctionDefinitionEmitter::Emit(const std::shared_ptr<BinaryExpression> &expression)
+        Value* FunctionDefinitionEmitter::EmitBinaryExpression(const std::shared_ptr<BinaryExpression> &expression)
         {
             auto const &left_expr = expression->GetLeftExpression();
             auto const &right_expr = expression->GetRightExpression();
@@ -179,20 +180,24 @@ namespace hoo
             auto left_value = Emit(left_expr);
             if (!left_value)
             {
-                throw EmitterException(ERR_EMITTER_FAILED_LEFT_EXPRESSION);
+                throw EmitterException(ERR_EMITTER_FAILED_LEFT_EXPRESSION,
+                ERR_POS(left_expr));
             }
+
             auto right_value = Emit(right_expr);
             if (!right_value)
             {
-                throw EmitterException(ERR_EMITTER_FAILED_RIGHT_EXPRESSION);
+                throw EmitterException(ERR_EMITTER_FAILED_RIGHT_EXPRESSION,
+                ERR_POS(right_expr));
             }
 
             auto const operator_type = opr->GetOperatorType();
-            auto value = Emit(operator_type, left_value, right_value);
+            auto value = EmitOperation(operator_type,
+            left_value, right_value, expression);
             return value;
         }
 
-        Value* FunctionDefinitionEmitter::Emit(const std::shared_ptr<ReferenceExpression> &expression)
+        Value* FunctionDefinitionEmitter::EmitReferenceExpression(const std::shared_ptr<ReferenceExpression> &expression)
         {
             std::string name = expression->GetName();
             auto iterator = _symbols.find(name);
@@ -205,15 +210,17 @@ namespace hoo
             return nullptr;
         }
 
-        Value* FunctionDefinitionEmitter::Emit(const OperatorType operator_type,
+        Value* FunctionDefinitionEmitter::EmitOperation(const OperatorType operator_type,
         Value* left_value,
-        Value* right_value)
+        Value* right_value,
+        const std::shared_ptr<BinaryExpression> &expression)
         {
             switch (operator_type)
             {
                 case OPERATOR_ADD: return EmitAdd(left_value, right_value);
                 case OPERATOR_SUB: return EmitSub(left_value, right_value);
-                default: throw EmitterException(ERR_EMITTER_BINARY_FAILED_EXPRESSION);
+                default: throw EmitterException(ERR_EMITTER_BINARY_FAILED_EXPRESSION,
+                ERR_POS(expression));
             }
         }
 
@@ -260,8 +267,21 @@ namespace hoo
             auto const right_type = right_value->getType();            
             if ((left_type->isIntegerTy()) && (right_type->isIntegerTy()))
             {
-                auto value = builder->CreateAdd(left_value, right_value, "");
-                return value;                
+                auto left_bits = left_type->getIntegerBitWidth();
+                auto right_bits = right_type->getIntegerBitWidth();                
+                if (left_bits < right_bits)
+                {
+                    left_value = builder->CreateCast(Instruction::CastOps::ZExt,
+                    left_value, right_type);
+                }
+                else if (left_bits > right_bits)
+                {
+                    right_value = builder->CreateCast(Instruction::CastOps::ZExt,
+                    right_value, left_type);
+                }
+
+                auto value = builder->CreateNSWAdd(left_value, right_value);
+                return value;
             }
             else if ((left_type->isIntegerTy()) && (right_type->isDoubleTy()))
             {
@@ -284,7 +304,7 @@ namespace hoo
             throw std::runtime_error("addidtion operation not supproted now.");
         }
 
-        void FunctionDefinitionEmitter::Emit(const std::shared_ptr<ReturnStatement> &statement)
+        void FunctionDefinitionEmitter::EmitReturn(const std::shared_ptr<ReturnStatement> &statement)
         {
             auto const &expr = statement->GetExpression();
             auto builder = this->GetBuilder();
@@ -294,11 +314,31 @@ namespace hoo
                 auto value = Emit(expr);
                 if (value)
                 {
+                    auto return_type = _function->getFunctionType()->getReturnType();
+                    if (!return_type)
+                    {
+                        throw std::runtime_error("function cannot return a value.");
+                    }
+                    auto value_type = value->getType();
+                    if ((return_type->isIntegerTy()) && (value_type->isIntegerTy()))
+                    {
+                        auto return_bits = return_type->getIntegerBitWidth();
+                        auto value_bits = value_type->getIntegerBitWidth();
+                        if (return_bits < value_bits)
+                        {
+                            throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
+                        }
+                        else if (value_bits < return_bits)
+                        {
+                            value = builder->CreateCast(Instruction::CastOps::ZExt,
+                            value, return_type);
+                        }
+                    }
                     builder->CreateRet(value);
                 }
                 else
                 {
-                    throw EmitterException(ERR_EMITTER_EVAL_FAILED_EXPRESSION);
+                    throw EmitterException(ERR_EMITTER_EVAL_FAILED_EXPRESSION, ERR_POS(expr));
                 }
             }
             else
@@ -333,7 +373,7 @@ namespace hoo
             case STMT_RETURN:
             {
                 auto const &ret_statement = dynamic_pointer_cast<ReturnStatement>(statement);
-                Emit(ret_statement);
+                EmitReturn(ret_statement);
                 break;
             }
             case STMT_NOOP:

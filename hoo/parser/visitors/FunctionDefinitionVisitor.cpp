@@ -80,6 +80,7 @@ namespace hoo
             if ((func_declaration) && (statement))
             {
                 definition = new FunctionDefinition(func_declaration, statement);
+                VisitorHelper::AssignPositions(definition, ctx);
             }
 
             return Any(definition);

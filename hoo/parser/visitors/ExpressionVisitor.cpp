@@ -20,6 +20,7 @@
 #include <hoo/parser/ErrorListener.hh>
 #include <hoo/parser/visitors/ExpressionVisitor.hh>
 #include <hoo/parser/InvalidExprType.hh>
+#include <hoo/parser/visitors/VisitorHelper.hh>
 
 #include <regex>
 #include <list>
@@ -48,6 +49,7 @@ namespace hoo
                 auto byte_text = byte_constant_terminal->getText();
                 auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_BYTE));
                 Expression *byte_expression = new LiteralExpression(type, byte_text);
+                VisitorHelper::AssignPositions(byte_expression, ctx);
                 return Any(byte_expression);
             }
 
@@ -57,16 +59,18 @@ namespace hoo
                 auto integer_text = integer_constant_terminal->getText();
                 auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_INT));
                 Expression *integer_expression = new LiteralExpression(type, integer_text);
+                VisitorHelper::AssignPositions(integer_expression, ctx);
                 return Any(integer_expression);
             }
 
-            auto floating_constant_terminal = ctx->DoubleLiteral();
-            if (nullptr != floating_constant_terminal)
+            auto double_constant_literal = ctx->DoubleLiteral();
+            if (nullptr != double_constant_literal)
             {
-                auto float_text = floating_constant_terminal->getText();
+                auto float_text = double_constant_literal->getText();
                 auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_DOUBLE));
-                Expression *fp_expression = new LiteralExpression(type, float_text);
-                return Any(fp_expression);
+                Expression *double_expression = new LiteralExpression(type, float_text);
+                VisitorHelper::AssignPositions(double_expression, ctx);
+                return Any(double_expression);
             }
 
             auto char_constant_terminal = ctx->CharLiteral();
@@ -75,6 +79,7 @@ namespace hoo
                 auto char_text = char_constant_terminal->getText();
                 auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_CHAR));
                 Expression *char_expression = new LiteralExpression(type, char_text);
+                VisitorHelper::AssignPositions(char_expression, ctx);
                 return Any(char_expression);
             }
 
@@ -84,11 +89,11 @@ namespace hoo
                 auto bool_text = bool_constant_terminal->getText();
                 auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_BOOL));
                 Expression *bool_expression = new LiteralExpression(type, bool_text);
+                VisitorHelper::AssignPositions(bool_expression, ctx);
                 return Any(bool_expression);
             }
 
-            _error_listener->Add(ctx,
-                                 "Invalid literal expression on constant expression.");
+            _error_listener->Add(ctx, "Invalid literal expression on constant expression.");
             return Any(expression);
         }
 
@@ -97,16 +102,18 @@ namespace hoo
             auto string_terminal = ctx->StringLiteral();
             auto string_text = string_terminal->getText();
             auto type = std::shared_ptr<TypeSpecification>(new BasicTypeSpec(BASIC_DATA_TYPE_STRING));
-            Expression *expression = new LiteralExpression(type, string_text);
-            return Any(expression);
+            Expression *string_expression = new LiteralExpression(type, string_text);
+            VisitorHelper::AssignPositions(string_expression, ctx);
+            return Any(string_expression);
         }
 
         Any ExpressionVisitor::visitIdentifierExpression(HooParser::IdentifierExpressionContext *ctx)
         {
             auto id_terminal = ctx->Identifier();
             auto id_name = id_terminal->getText();
-            Expression *expression = new ReferenceExpression(id_name);
-            return Any(expression);
+            Expression *id_expression = new ReferenceExpression(id_name);
+            VisitorHelper::AssignPositions(id_expression, ctx);
+            return Any(id_expression);
         }
 
         Any ExpressionVisitor::visitSimpleExpression(HooParser::SimpleExpressionContext *ctx)
@@ -114,8 +121,7 @@ namespace hoo
             Expression *expression = nullptr;
             try
             {
-                expression = this->visit(ctx->primaryExpression())
-                                 .as<Expression *>();
+                expression = this->visit(ctx->primaryExpression()).as<Expression *>();
             }
             catch (...)
             {
@@ -129,8 +135,7 @@ namespace hoo
             std::shared_ptr<Expression> container;
             try
             {
-                auto container_exp = this->visit(ctx->container)
-                                         .as<Expression *>();
+                auto container_exp = this->visit(ctx->container).as<Expression *>();
                 container = std::shared_ptr<Expression>(container_exp);
             }
             catch (...)
@@ -142,8 +147,7 @@ namespace hoo
             std::shared_ptr<Expression> access_index;
             try
             {
-                auto access_index_exp = this->visit(ctx->accessIndex)
-                                            .as<Expression *>();
+                auto access_index_exp = this->visit(ctx->accessIndex).as<Expression *>();
                 access_index = std::shared_ptr<Expression>(access_index_exp);
             }
             catch (...)
@@ -151,21 +155,19 @@ namespace hoo
                 _error_listener->Add(ctx->accessIndex, "Error while parsing index expression of array access expression.");
             }
 
-            Expression *expression = nullptr;
+            Expression *array_access_expression = nullptr;
             if ((container) && (access_index))
             {
-                expression = (Expression *)new ArrayAccessExpression(container,
-                                                                     access_index);
+                array_access_expression = (Expression *)new ArrayAccessExpression(container,
+                access_index);
+                VisitorHelper::AssignPositions(array_access_expression, ctx);
             }
-
-            return Any(expression);
+            return Any(array_access_expression);
         }
 
         Any ExpressionVisitor::visitInvokeExpression(HooParser::InvokeExpressionContext *ctx)
         {
             std::shared_ptr<Expression> receiver_expr;
-            Expression *expression = nullptr;
-
             try
             {
                 auto receiver = this->visit(ctx->receiver)
@@ -174,8 +176,7 @@ namespace hoo
             }
             catch (...)
             {
-                _error_listener->Add(ctx,
-                                     "Invalid expression on invocation expression.");
+                _error_listener->Add(ctx, "Invalid expression on invocation expression.");
             }
 
             std::list<std::shared_ptr<Expression>> argument_list;
@@ -186,8 +187,7 @@ namespace hoo
                 {
                     try
                     {
-                        auto expr = this->visit(arg_ctx)
-                                        .as<Expression *>();
+                        auto expr = this->visit(arg_ctx).as<Expression *>();
                         auto arg = std::shared_ptr<Expression>(expr);
                         argument_list.push_back(arg);
                     }
@@ -199,17 +199,17 @@ namespace hoo
                 }
             }
 
+            Expression *invoke_expression = nullptr;
             if (receiver_expr)
             {
-                expression = new InvokeExpression(receiver_expr,
-                                                  argument_list);
+                invoke_expression = new InvokeExpression(receiver_expr, argument_list);
+                VisitorHelper::AssignPositions(invoke_expression, ctx);
             }
             else
             {
                 _error_listener->Add(ctx, "Invalid invocation expression.");
             }
-
-            return Any(expression);
+            return Any(invoke_expression);
         }
 
         Any ExpressionVisitor::visitNestedExpression(HooParser::NestedExpressionContext *ctx)
@@ -222,8 +222,7 @@ namespace hoo
             }
             catch (...)
             {
-                _error_listener->Add(ctx->parent,
-                                     "Invalid expression on nested reference expression.");
+                _error_listener->Add(ctx->parent, "Invalid expression on nested reference expression.");
             }
 
             std::string name = "";
@@ -236,8 +235,9 @@ namespace hoo
                 _error_listener->Add(ctx, "Invalid name on nested reference expression.");
             }
 
-            Expression *expression = new ReferenceExpression(parent, name);
-            return Any(expression);
+            Expression *reference_expression = new ReferenceExpression(parent, name);
+            VisitorHelper::AssignPositions(reference_expression, ctx);
+            return Any(reference_expression);
         }
 
         Any ExpressionVisitor::visitBinaryBitExpression(HooParser::BinaryBitExpressionContext *ctx)
@@ -277,14 +277,14 @@ namespace hoo
             HooParser::BinaryAssignmentExpressionContext *ctx)
         {
             Expression *expr = CreateBinaryExpression(ctx->lvalue,
-                                                      ctx->opr, ctx->rvalue, ctx);
+            ctx->opr, ctx->rvalue, ctx);
             return Any((Expression *)expr);
         }
 
         Any ExpressionVisitor::visitGroupedExpression(HooParser::GroupedExpressionContext *ctx)
         {
-            auto expression = this->visit(ctx->expression())
-                                  .as<Expression *>();
+            auto expression = this->visit(ctx->expression()).as<Expression *>();
+            VisitorHelper::AssignPositions(expression, ctx);
             return Any(expression);
         }
 
@@ -297,8 +297,7 @@ namespace hoo
             std::shared_ptr<Expression> left_expression;
             try
             {
-                auto left = this->visit(lvalue)
-                                .as<Expression *>();
+                auto left = this->visit(lvalue).as<Expression *>();
                 left_expression = std::shared_ptr<Expression>(left);
             }
             catch (...)
@@ -325,18 +324,17 @@ namespace hoo
                 opr_expression = std::shared_ptr<Operator>(expr_operator);
             }
 
-            Expression *expression = nullptr;
+            Expression *binary_expression = nullptr;
             if ((left_expression) && (opr_expression) && (right_expression))
             {
                 auto type = DeduceType(left_expression,
-                                       opr_expression,
-                                       right_expression);
-                expression = new BinaryExpression(left_expression,
-                                                  opr_expression,
-                                                  right_expression,
-                                                  type);
+                opr_expression, right_expression);
+                binary_expression = new BinaryExpression(left_expression,
+                opr_expression, right_expression, type);
+                VisitorHelper::AssignPositions(binary_expression, context);
+
             }
-            return Any(expression);
+            return Any(binary_expression);
         }
 
         std::shared_ptr<TypeSpecification>

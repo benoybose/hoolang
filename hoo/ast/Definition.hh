@@ -20,6 +20,7 @@
 #define HOOLANG_DEFINITION_HH
 
 #include <hoo/ast/UnitItem.hh>
+#include <hoo/ast/Node.hh>
 
 namespace hoo
 {
@@ -29,7 +30,7 @@ namespace hoo
             DEFINITION_FUNCTION
         } DefinitionType;
 
-        class Definition: public UnitItem {
+        class Definition: public UnitItem, public Node {
         private:
             DefinitionType _definition_type;
         public:
