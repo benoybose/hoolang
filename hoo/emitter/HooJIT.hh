@@ -66,7 +66,7 @@ namespace hoo
         public:
         JITDylib &GetMainLib();
         static Expected<std::unique_ptr<HooJIT>> Create();
-        void Evaluate(const std::string &source, const std::string &name);
+        void Evaluate(const std::string &source, const std::string &name, bool dump = false);
 
         private:
         Expected<JITEvaluatedSymbol> Lookup(const std::string &name);

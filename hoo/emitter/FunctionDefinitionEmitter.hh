@@ -66,16 +66,18 @@ namespace hoo
             void Emit(Function* function, const shared_ptr<Statement>& body);
             void Emit(const std::shared_ptr<CompoundStatement> &statement);
             void Emit(const std::shared_ptr<DeclarationStatement> &statement);
+            void EmitExpressionStatement(const std::shared_ptr<ExpressionStatement> &expression_statement);
             Value* Emit(const std::shared_ptr<Expression> &expression);
             Value* EmitBinaryExpression(const std::shared_ptr<BinaryExpression> &expression);
             Value* EmitReferenceExpression(const std::shared_ptr<ReferenceExpression> &expression);
             Value* EmitOperation(const OperatorType operator_type, Value* left_value, Value* right_value,
             const std::shared_ptr<BinaryExpression> &expression);
-            Value* EmitSub(Value* left_value, Value* right_value);
+            Value* EmitSub(Value* left_value, Value* right_value,
+            const std::shared_ptr<BinaryExpression> &expression);
             Value* EmitAdd(Value* left_value, Value* right_value);
             Value* Emit(const std::shared_ptr<LiteralExpression> &expression);
             void EmitReturn(const std::shared_ptr<ReturnStatement> &statement);
-            void Emit(const std::shared_ptr<Statement> &statement);            
+            void EmitStatement(const std::shared_ptr<Statement> &statement);
         };     
     }
 }

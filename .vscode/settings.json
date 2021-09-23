@@ -112,6 +112,8 @@
         "*.tcc": "cpp",
         "memory_resource": "cpp",
         "*.def": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "ranges": "cpp",
+        "stop_token": "cpp"
     }
 }

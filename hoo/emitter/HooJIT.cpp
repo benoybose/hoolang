@@ -100,7 +100,7 @@ namespace hoo
                                             std::move(*data_layout));
         }
 
-        void HooJIT::Evaluate(const std::string &source, const std::string &name)
+        void HooJIT::Evaluate(const std::string &source, const std::string &name, bool dump)
         {
             ParserDriver driver(source, name, true);
             const auto unit = driver.Build();
@@ -110,6 +110,10 @@ namespace hoo
             auto ir_module = emitter.GetModule();
             auto unit_name = emitter.GetUnitName();
             auto ir = emitter.GetCode();
+            if (dump)
+            {
+                std::cout << ir;
+            }
             this->Add(ir, unit_name);
         }
 
@@ -120,7 +124,6 @@ namespace hoo
 
         void HooJIT::Add(const std::string &ir, const std::string &name)
         {
-            std::cout << ir;
             SMDiagnostic diagnostic;
             MemoryBufferRef memory_buffer(ir, name);
             auto context = std::make_unique<LLVMContext>();

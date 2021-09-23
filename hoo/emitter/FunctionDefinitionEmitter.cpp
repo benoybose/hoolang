@@ -99,8 +99,13 @@ namespace hoo
 
             auto &current_module = *(this->GetModule());
             _function = Function::Create(function_type,
-                                         Function::ExternalLinkage,
-                                         function_name, current_module);
+            Function::ExternalLinkage,
+            function_name, current_module);
+
+            if (function_return_type->isIntegerTy(8))
+            {
+                _function->addAttribute(0, Attribute::ZExt);
+            }
 
             unsigned int arg_index = 0;
             for (auto const &param : param_list)
@@ -108,12 +113,16 @@ namespace hoo
                 auto arg = this->_function->getArg(arg_index);
                 auto const &arg_name = param->GetName();
                 arg->setName(arg_name);
+                if (arg->getType()->isIntegerTy(8))
+                {
+                    arg->addAttr(Attribute::ZExt);
+                }
                 _symbols[arg_name] = arg;
                 arg_index += 1;
             }
 
             auto const &body = function_definition->GetBody();
-            Emit(body);
+            EmitStatement(body);
         }
 
         void FunctionDefinitionEmitter::Emit(const std::shared_ptr<CompoundStatement> &statement)
@@ -134,15 +143,21 @@ namespace hoo
             auto &builder = *(this->GetBuilder());
             builder.SetInsertPoint(block);
             auto const &statements = statement->GetStatements();
-            for (auto const &stmt : statements)
+            for (auto const &statement : statements)
             {
-                Emit(stmt);
+                EmitStatement(statement);
             }
             _blocks.pop();
         }
 
         void FunctionDefinitionEmitter::Emit(const std::shared_ptr<DeclarationStatement> &statement)
         {
+            // todo: to be implemented
+        }
+
+        void FunctionDefinitionEmitter::EmitExpressionStatement(const std::shared_ptr<ExpressionStatement> &expression_statement)
+        {
+            // todo: to be implemented 
         }
 
         Value *FunctionDefinitionEmitter::Emit(const std::shared_ptr<Expression> &expression)
@@ -218,31 +233,32 @@ namespace hoo
             switch (operator_type)
             {
                 case OPERATOR_ADD: return EmitAdd(left_value, right_value);
-                case OPERATOR_SUB: return EmitSub(left_value, right_value);
+                case OPERATOR_SUB: return EmitSub(left_value, right_value, expression);
                 default: throw EmitterException(ERR_EMITTER_BINARY_FAILED_EXPRESSION,
                 ERR_POS(expression));
             }
         }
 
-        Value* FunctionDefinitionEmitter::EmitSub(Value* left_value, Value* right_value)
+        Value* FunctionDefinitionEmitter::EmitSub(Value* left_value, Value* right_value,
+        const std::shared_ptr<BinaryExpression> &expression)
         {
             auto builder = this->GetBuilder();
             auto &context = *(this->GetContext());
 
             auto const left_type = left_value->getType();
             auto const right_type = right_value->getType();            
-            if ((left_type->isIntegerTy()) && (right_type->isIntegerTy()))
+            if ((left_type->isIntegerTy(64)) && (right_type->isIntegerTy(64)))
             {
-                auto value = builder->CreateSub(left_value, right_value);
+                auto value = builder->CreateNSWSub(left_value, right_value);
                 return value;
             }
-            else if ((left_type->isIntegerTy()) && (right_type->isDoubleTy()))
+            else if ((left_type->isIntegerTy(64)) && (right_type->isDoubleTy()))
             {
                 left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(context));
                 auto value = builder->CreateFSub(left_value, right_value, "");
                 return value;
             }
-            else if ((left_type->isDoubleTy()) && (right_type->isIntegerTy()))
+            else if ((left_type->isDoubleTy()) && (right_type->isIntegerTy(64)))
             {
                 right_value = builder->CreateSIToFP(right_value, Type::getDoubleTy(context));
                 auto value = builder->CreateFSub(left_value, right_value, "");
@@ -253,8 +269,27 @@ namespace hoo
                 auto value = builder->CreateFSub(left_value, right_value, "");
                 return value;
             }
+            else if ((left_type->isIntegerTy(8)) && (right_type->isIntegerTy(8)))
+            {
+                left_value = builder->CreateCast(Instruction::ZExt, left_value, Type::getInt32Ty(context));
+                right_value = builder->CreateCast(Instruction::ZExt, right_value, Type::getInt32Ty(context));
+                auto value = builder->CreateNSWSub(left_value, right_value);
+                return value;
+            }
+            else if ((left_type->isIntegerTy(8)) && (right_type->isIntegerTy(64)))
+            {
+                left_value = builder->CreateCast(Instruction::ZExt, left_value, right_type);
+                auto value = builder->CreateNSWSub(left_value, right_value);
+                return value;
+            }
+            else if ((left_type->isIntegerTy(64)) && (right_type->isIntegerTy(8)))
+            {
+                right_value = builder->CreateCast(Instruction::ZExt, right_value, left_type);
+                auto value = builder->CreateNSWSub(left_value, right_value);
+                return value;
+            }
 
-            throw std::runtime_error("subtraction operation not supproted now.");
+            throw EmitterException(ERR_EMITTER_SUB_OPERATION_UNSUPPORTED, ERR_POS(expression));
         }
         
         Value* FunctionDefinitionEmitter::EmitAdd(Value* left_value,
@@ -320,19 +355,17 @@ namespace hoo
                         throw std::runtime_error("function cannot return a value.");
                     }
                     auto value_type = value->getType();
-                    if ((return_type->isIntegerTy()) && (value_type->isIntegerTy()))
+                    if ((return_type->isIntegerTy(8)) && (value_type->isIntegerTy(64)))
                     {
-                        auto return_bits = return_type->getIntegerBitWidth();
-                        auto value_bits = value_type->getIntegerBitWidth();
-                        if (return_bits < value_bits)
-                        {
-                            throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
-                        }
-                        else if (value_bits < return_bits)
-                        {
-                            value = builder->CreateCast(Instruction::CastOps::ZExt,
-                            value, return_type);
-                        }
+                        throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
+                    }
+                    else if ((return_type->isIntegerTy(64)) && (value_type->isIntegerTy(8)))
+                    {
+                        value = builder->CreateCast(Instruction::CastOps::ZExt, value, return_type);
+                    }
+                    else if ((return_type->isIntegerTy(8)) && (value_type->isIntegerTy(32)))
+                    {
+                        value = builder->CreateCast(Instruction::Trunc, value, return_type);
                     }
                     builder->CreateRet(value);
                 }
@@ -347,7 +380,7 @@ namespace hoo
             }
         }
 
-        void FunctionDefinitionEmitter::Emit(const std::shared_ptr<Statement> &statement)
+        void FunctionDefinitionEmitter::EmitStatement(const std::shared_ptr<Statement> &statement)
         {
             auto const statement_type = statement->GetStatementType();
             switch (statement_type)
@@ -367,7 +400,7 @@ namespace hoo
             case STMT_EXPRESSION:
             {
                 auto const &expr_statement = dynamic_pointer_cast<ExpressionStatement>(statement);
-                Emit(expr_statement);
+                EmitExpressionStatement(expr_statement);
                 break;
             }
             case STMT_RETURN:

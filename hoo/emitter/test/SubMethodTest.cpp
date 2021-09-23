@@ -17,9 +17,10 @@
  */
 
 #include <hoo/test/HooTest.hh>
-#include <hoo/parser/ParserDriver.hh>
 #include <hoo/emitter/UnitEmitter.hh>
 #include <hoo/emitter/HooJIT.hh>
+#include <hoo/emitter/EmitterException.hh>
+#include <hoo/parser/ParserDriver.hh>
 #include <llvm/Support/Errno.h>
 
 #include <string>
@@ -46,6 +47,16 @@ class SubMethodTest: public TestUnit
         &SubMethodTest::TEST04);
         RegisterTestCase("TEST05",
         &SubMethodTest::TEST05);
+        RegisterTestCase("TEST06",
+        &SubMethodTest::TEST06);
+        RegisterTestCase("TEST07",
+        &SubMethodTest::TEST07);
+        RegisterTestCase("TEST08",
+        &SubMethodTest::TEST08);
+        RegisterTestCase("TEST09",
+        &SubMethodTest::TEST09);
+        RegisterTestCase("TEST10",
+        &SubMethodTest::TEST10);
     }
 
     void TEST01()
@@ -129,6 +140,76 @@ class SubMethodTest: public TestUnit
         auto result = jit->Execute<double, double, int> ("sub", 35.5, 2);
         auto offset = fabs(33.5 - result);
         True(offset < 0.01);
+    }
+
+    void TEST06()
+    {
+        const std::string source = R"source(
+        public sub(a:byte, b:byte) : byte {
+            return a - b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test06");
+        auto result = jit->Execute<unsigned char, unsigned char, unsigned char> ("sub", 117, 56);
+        Equal<unsigned char>(result, 61);
+    }
+
+    void TEST07()
+    {
+        auto ex = Throws<EmitterException>([] () {
+            const std::string source = R"source(
+                public sub(a:byte, b:int) : byte {
+                return a - b;
+            }
+            )source";
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test07", true);
+        });
+        auto const error_code = ex.GetErrorNo();
+        Equal(error_code, 10);
+    }
+
+    void TEST08()
+    {
+        const std::string source = R"source(
+            public sub(a:byte, b:int) : int {
+            return a - b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test08");
+        auto result = jit->Execute<long, unsigned char, long>("sub", 100, 300);
+        Equal<long>(result, -200);
+    }
+
+    void TEST09()
+    {
+        auto ex = Throws<EmitterException>([] () {
+            const std::string source = R"source(
+            public sub(a:int, b:byte) : byte {
+                return a - b;
+            }
+            )source";
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test09");
+        });
+
+        auto error_code = ex.GetErrorNo();
+        Equal<int>(error_code, 10);
+    }
+
+    void TEST10()
+    {
+        const std::string source = R"source(
+        public sub(a:int, b:byte) : int {
+            return a - b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test10");
+        auto result = jit->Execute<long, long, unsigned char> ("sub", -200, 100);
+        Equal<long>(result, -300);
     }
 };
 
