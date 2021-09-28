@@ -21,6 +21,7 @@
 
 #include <hoo/emitter/EmitterBase.hh>
 #include <hoo/emitter/DefinitionEmitter.hh>
+#include <hoo/emitter/EmitterContext.hh>
 #include <hoo/ast/FunctionDefinition.hh>
 #include <hoo/ast/ClassDefinition.hh>
 #include <hoo/ast/Statement.hh>
@@ -32,6 +33,7 @@
 #include <hoo/ast/BinaryExpression.hh>
 #include <hoo/ast/ReferenceExpression.hh>
 #include <hoo/ast/Operator.hh>
+#include <hoo/ast/CastExpression.hh>
 
 #include <llvm/IR/Function.h>
 #include <llvm/IR/Value.h>
@@ -49,35 +51,20 @@ namespace hoo
     {
         class FunctionDefinitionEmitter : public DefinitionEmitterExtended <FunctionDefinition>
         {
-            private:
-            Function* _function;
-            std::stack<BasicBlock*> _blocks;
-            std::map<const std::string, Value*> _symbols;
+            // private:
+            // Function* _function;
+            // std::stack<BasicBlock*> _blocks;
+            // std::map<const std::string, Value*> _symbols;
 
             public:
             FunctionDefinitionEmitter (std::shared_ptr<FunctionDefinition> function_definition,
-            const EmitterBase& parent_emitter,
+            const EmitterContext& emitter_context,
             std::shared_ptr<ClassDefinition> parent_class_definition);
 
             public:
             void Emit();
-
-            private:
-            void Emit(Function* function, const shared_ptr<Statement>& body);
-            void Emit(const std::shared_ptr<CompoundStatement> &statement);
-            void Emit(const std::shared_ptr<DeclarationStatement> &statement);
-            void EmitExpressionStatement(const std::shared_ptr<ExpressionStatement> &expression_statement);
-            Value* Emit(const std::shared_ptr<Expression> &expression);
-            Value* EmitBinaryExpression(const std::shared_ptr<BinaryExpression> &expression);
-            Value* EmitReferenceExpression(const std::shared_ptr<ReferenceExpression> &expression);
-            Value* EmitOperation(const OperatorType operator_type, Value* left_value, Value* right_value,
-            const std::shared_ptr<BinaryExpression> &expression);
-            Value* EmitSub(Value* left_value, Value* right_value,
-            const std::shared_ptr<BinaryExpression> &expression);
-            Value* EmitAdd(Value* left_value, Value* right_value);
-            Value* Emit(const std::shared_ptr<LiteralExpression> &expression);
-            void EmitReturn(const std::shared_ptr<ReturnStatement> &statement);
-            void EmitStatement(const std::shared_ptr<Statement> &statement);
+            // std::map<const std::string, Value*> &GetSymbols() { return _symbols; }
+            // std::stack<BasicBlock*> GetBlocks() { return _blocks; }
         };     
     }
 }

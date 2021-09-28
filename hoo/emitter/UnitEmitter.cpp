@@ -32,10 +32,10 @@ namespace hoo
 
         std::string UnitEmitter::GetCode()
         {
-            auto module = this->GetModule();
+            auto current_module = _emitter_context.GetModule();
             std::string module_code;
             raw_string_ostream ostream(module_code);
-            module->print(ostream, nullptr);
+            current_module->print(ostream, nullptr);
             return module_code;
         }
 
@@ -47,7 +47,7 @@ namespace hoo
                 case UNIT_ITEM_DEFINITION:
                 {
                     auto const& definition = dynamic_pointer_cast<Definition>(unitItem);
-                    DefinitionEmitter emitter(definition, *this, nullptr);
+                    DefinitionEmitter emitter(definition, _emitter_context);
                     emitter.Emit();
                     break;
                 }

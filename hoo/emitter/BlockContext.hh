@@ -16,31 +16,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _CLASS_DEFINITION_EMITTER_HH
-#define _CLASS_DEFINITION_EMITTER_HH
+#ifndef BLOCK_CONTEXT_HH
+#define BLOCK_CONTEXT_HH
 
-#include <hoo/emitter/DefinitionEmitter.hh>
-#include <hoo/emitter/EmitterContext.hh>
-#include <hoo/ast/ClassDefinition.hh>
+#include <llvm/IR/BasicBlock.h>
+#include <llvm/IR/Value.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Function.h>
 
+#include <map>
+#include <string>
 #include <memory>
 
-using namespace hoo::ast;
+using namespace llvm;
 
 namespace hoo
 {
     namespace emitter
     {
-        class ClassDefinitionEmitter : public DefinitionEmitterExtended<ClassDefinition>
+        class BlockContext
         {
-            public:
-            ClassDefinitionEmitter(std::shared_ptr<ClassDefinition>  classDefinition,
-            const EmitterContext &emitter_context,
-            std::shared_ptr<ClassDefinition> parent_class_definition);
+            private:
+            std::shared_ptr<std::map<std::string, Value*>> _symbols;
+            BasicBlock  *_block;
+            BlockContext *_parent;
 
             public:
-            void Emit();
+            BlockContext(LLVMContext &context,
+            Function* parent_function = nullptr,
+            const std::string& name = "",
+            BlockContext *parent = nullptr);
+
+            public:
+            BasicBlock *GetBlock() { return _block; }
+            BlockContext* GetParent() { return _parent; }
+            void AddSymbol(const std::string& name, Value* symbol);
+            Value* Lookup(const std::string& name);
         };
     }
 }
-#endif
+
+#endif //BLOCK_CONTEXT_HH

@@ -31,6 +31,8 @@
 #define ERR_EMITTER_INVALID_CLASS_DEFINITION    "Invalid class definition.", 9
 #define ERR_EMITTER_EXPLICIT_CAST_REQUIRED      "An explicit cast operation must be required here.", 10
 #define ERR_EMITTER_SUB_OPERATION_UNSUPPORTED   "Subtraction operatio is not supported yet", 11
+#define ERR_EMITTER_NOT_IMPLEMENTED_EMITTING    "Emitting not implemented", 12
+#define ERR_EMITTER_INVALID_RETURN              "Invaid return statement", 13
 
 
 #include <hoo/ast/Position.hh>

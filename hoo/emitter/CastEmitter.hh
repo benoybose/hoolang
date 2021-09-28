@@ -16,31 +16,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _CLASS_DEFINITION_EMITTER_HH
-#define _CLASS_DEFINITION_EMITTER_HH
-
-#include <hoo/emitter/DefinitionEmitter.hh>
+#include <hoo/ast/CastExpression.hh>
+#include <hoo/emitter/EmitterBase.hh>
 #include <hoo/emitter/EmitterContext.hh>
-#include <hoo/ast/ClassDefinition.hh>
+#include <hoo/ast/BasicDataTypes.hh>
+#include <llvm/IR/Value.h>
 
 #include <memory>
 
 using namespace hoo::ast;
+using namespace llvm;
 
 namespace hoo
 {
     namespace emitter
     {
-        class ClassDefinitionEmitter : public DefinitionEmitterExtended<ClassDefinition>
+        class CastEmitter : public EmitterBase
         {
-            public:
-            ClassDefinitionEmitter(std::shared_ptr<ClassDefinition>  classDefinition,
-            const EmitterContext &emitter_context,
-            std::shared_ptr<ClassDefinition> parent_class_definition);
+            private:
+            std::shared_ptr<CastExpression> _expression;
+            std::shared_ptr<Expression> _source_expression;
+            Value* _source_value;
+            BasicDataTypeType _basic_data_type;
 
             public:
-            void Emit();
+            CastEmitter(const std::shared_ptr<CastExpression> &cast_expression,
+            const EmitterContext& emittter_context);
+
+            public:
+            bool    IsBasicType();
+            Value   *Emit();
+            Value   *EmitCastBasicDataTypes();
+            Value   *EmitCastReferenceTypes();
+            Value   *CastToInt();
         };
     }
 }
-#endif

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Benoy Bose
+ * Copyright 2020 Benoy Bose
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -16,31 +16,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef EMITTER_BASE_HH
-#define EMITTER_BASE_HH
+#ifndef EMITTER_CONTEXT_HH
+#define EMITTER_CONTEXT_HH
 
-#include <hoo/emitter/EmitterContext.hh>
+#include <hoo/emitter/BlockContext.hh>
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IR/IRBuilder.h>
+#include <llvm/IR/Function.h>
 
-#include <memory.h>
 #include <string>
-
-using namespace llvm;
+#include <memory>
+#include <stack>
 
 namespace hoo
 {
     namespace emitter
     {
-        class EmitterBase {
-            protected:
-            EmitterContext _emitter_context;
+        class EmitterContext
+        {
+            private:
+            std::shared_ptr<llvm::LLVMContext> _context;
+            std::shared_ptr<llvm::Module> _module;
+            std::shared_ptr<llvm::IRBuilder<>> _builder;
+            std::string _unit_name;
+            Function* _function;
+            std::shared_ptr<std::stack<BlockContext*>> _block_stack;
 
             public:
-            EmitterBase(const std::string& unit_name);
-            EmitterBase(const EmitterContext &emitter_context);
+            EmitterContext(const std::string &unit_name);
+
+            public:
+            llvm::LLVMContext *GetContext() { return _context.get(); }
+            llvm::Module *GetModule() { return _module.get(); }
+            llvm::IRBuilder<> *GetBuilder() { return _builder.get(); };
+            std::string &GetUnitName() { return _unit_name; }
+            BlockContext *BeginBlock(const std::string &name = "");
+            void EndBlock();
+            BlockContext *GetCurrentBlockContext();
+
+            void SetFunction(Function* function) { _function = function; }
+            Function* GetFunction() { return _function; }
         };
     }
 }
-#endif
+
+#endif // EMITTER_CONTEXT_HH

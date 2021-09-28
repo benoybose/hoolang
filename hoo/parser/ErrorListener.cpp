@@ -59,7 +59,7 @@ namespace hoo
                                                                       const std::string &message)
         {
             auto errorText = start->getText();
-            if (100 > errorText.length())
+            if (100 < errorText.length())
             {
                 errorText = errorText.substr(0, 100);
                 errorText = errorText += "...";

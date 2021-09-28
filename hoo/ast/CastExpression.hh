@@ -16,31 +16,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _CLASS_DEFINITION_EMITTER_HH
-#define _CLASS_DEFINITION_EMITTER_HH
+#ifndef CAST_EXPRESSION_HH
+#define CAST_EXPRESSION_HH
 
-#include <hoo/emitter/DefinitionEmitter.hh>
-#include <hoo/emitter/EmitterContext.hh>
-#include <hoo/ast/ClassDefinition.hh>
+#include <hoo/ast/Expression.hh>
+#include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/BasicDataTypes.hh>
 
 #include <memory>
-
-using namespace hoo::ast;
+#include <string>
 
 namespace hoo
 {
-    namespace emitter
+    namespace ast
     {
-        class ClassDefinitionEmitter : public DefinitionEmitterExtended<ClassDefinition>
+        class CastExpression : public Expression
         {
-            public:
-            ClassDefinitionEmitter(std::shared_ptr<ClassDefinition>  classDefinition,
-            const EmitterContext &emitter_context,
-            std::shared_ptr<ClassDefinition> parent_class_definition);
+            private:
+            std::shared_ptr<TypeSpecification> _type_spec;
+            std::shared_ptr<Expression> _expression;
+            TypeSpecificationType _type_spec_type;
 
             public:
-            void Emit();
+            CastExpression(std::shared_ptr<TypeSpecification> type_spec,
+            std::shared_ptr<Expression> expr);
+
+            public:
+            std::shared_ptr<TypeSpecification> GetType();
+            std::shared_ptr<Expression> GetSourceExpression();
+            bool IsBasicType();
+            BasicDataTypeType GetBasicDataType();
         };
     }
 }
-#endif
+
+#endif 

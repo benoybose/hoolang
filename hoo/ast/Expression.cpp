@@ -17,6 +17,10 @@
  */
 
 #include <hoo/ast/Expression.hh>
+#include <hoo/ast/BasicDataTypes.hh>
+#include <hoo/ast/BasicTypeSpec.hh>
+
+#include <memory>
 
 namespace hoo
 {
@@ -41,6 +45,27 @@ namespace hoo
         std::shared_ptr<TypeSpecification> Expression::GetType()
         {
             return this->_type;
+        }
+
+        bool Expression::IsBasicType()
+        {
+            if (!_type)
+            {
+                return false;
+            }
+
+            return TYPE_SPEC_BASIC == _type->GetType();
+        }
+
+        BasicDataTypeType Expression::GetBasicDataType()
+        {
+            if (!IsBasicType())
+            {
+                return BASIC_DATA_TYPE_INVALID;
+            }
+
+            auto basic_type = dynamic_pointer_cast<BasicTypeSpec>(_type);
+            return basic_type->GetDataType();
         }
     } // namespace ast
 } // namespace hoo

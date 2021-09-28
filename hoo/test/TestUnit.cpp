@@ -20,6 +20,7 @@
 #include <iostream>
 #include <list>
 #include <exception>
+#include <cmath>
 
 #include <hoo/test/TestResult.hh>
 #include <hoo/test/TestUnit.hh>
@@ -116,6 +117,34 @@ namespace hoo
             {
                 this->_failed_count += 1;
                 throw std::runtime_error("test \"StringEqual\" failed.");
+            }
+        }
+
+        void TestUnit::DoubleEqual(double original, double expected, double precision,
+        const std::string &message)
+        {
+            try
+            {
+                auto offset = std::fabs(original - expected);
+                if (offset > precision)
+                {
+                     this->_failed_count += 1;
+                    Out() << "Double equality failed. Actual = \""
+                          << original << "\". "
+                          << "Expected = \""
+                          << expected << "\"."
+                          << std::endl;
+                    if (!message.empty())
+                    {
+                        Out() << message << std::endl;
+                    }
+                    throw std::runtime_error("test \"StringEqual\" failed.");
+                }
+            }
+            catch (...)
+            {
+                this->_failed_count += 1;
+                throw std::runtime_error("test \"DoubleEqual\" failed.");
             }
         }
 

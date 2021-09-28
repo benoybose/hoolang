@@ -58,6 +58,7 @@ expression
     |   lvalue=expression opr=( '&&' | '||' ) rvalue=expression #binaryLogicExpression
     |   lvalue=expression opr=( '=' | '+=' | '-=' | '/=' | '*=' ) rvalue=expression #binaryAssignmentExpression
     |   '(' expression ')' #groupedExpression
+    |   '(' typeSpecifier  expression ')' #castExpression
     ;
 
 typeSpecifier

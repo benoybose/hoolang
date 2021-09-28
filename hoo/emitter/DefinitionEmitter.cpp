@@ -31,9 +31,9 @@ namespace hoo
     namespace emitter
     {
         DefinitionEmitter::DefinitionEmitter(std::shared_ptr<Definition>  definition,
-        const EmitterBase& parent_emitter,
+        const EmitterContext& context,
         std::shared_ptr<ClassDefinition> parent_class_definition) :
-        EmitterBase(parent_emitter),
+        EmitterBase(context),
         _definition(definition),
         _parent_class_definition (parent_class_definition)
         {
@@ -51,14 +51,18 @@ namespace hoo
                 case DEFINITION_CLASS:
                 {
                     auto classDefinition = std::dynamic_pointer_cast<ClassDefinition>(_definition);
-                    ClassDefinitionEmitter emitter(classDefinition, *this, _parent_class_definition);
+                    ClassDefinitionEmitter emitter(classDefinition,
+                    _emitter_context,
+                    _parent_class_definition);
                     emitter.Emit();
                     break;
                 }
                 case DEFINITION_FUNCTION:
                 {
                     auto function_definition = std::dynamic_pointer_cast<FunctionDefinition>(_definition);
-                    FunctionDefinitionEmitter emitter(function_definition, *this, _parent_class_definition);
+                    FunctionDefinitionEmitter emitter(function_definition,
+                    _emitter_context,
+                    _parent_class_definition);
                     emitter.Emit();
                     break;
                 }

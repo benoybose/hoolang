@@ -28,9 +28,9 @@ namespace hoo
     namespace emitter
     {
         ClassDefinitionEmitter::ClassDefinitionEmitter(std::shared_ptr<ClassDefinition>  class_definition,
-        const EmitterBase& parent_emitter,
+        const EmitterContext &emitter_context,
         std::shared_ptr<ClassDefinition> parent_class_definition) : 
-        DefinitionEmitterExtended(class_definition, parent_emitter, parent_class_definition)
+        DefinitionEmitterExtended(class_definition, emitter_context, parent_class_definition)
         {
         }
 
@@ -56,7 +56,7 @@ namespace hoo
                     case CLSBODY_DEFINITION:
                     {
                         auto const& definition = class_body_item->GetDefinition();
-                        DefinitionEmitter emitter(definition, *this, class_definition);
+                        DefinitionEmitter emitter(definition, _emitter_context, class_definition);
                         emitter.Emit();                        
                         break;
                     }

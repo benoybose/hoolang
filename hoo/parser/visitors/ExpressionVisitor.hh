@@ -58,6 +58,7 @@ namespace hoo
             Any visitBinaryLogicExpression(HooParser::BinaryLogicExpressionContext *ctx) override;
             Any visitBinaryAssignmentExpression(HooParser::BinaryAssignmentExpressionContext *ctx) override;
             Any visitGroupedExpression(HooParser::GroupedExpressionContext *ctx) override;
+            Any visitCastExpression(HooParser::CastExpressionContext *ctx) override;
 
         private:
             Expression *CreateBinaryExpression(HooParser::ExpressionContext *lvalue,

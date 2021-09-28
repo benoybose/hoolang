@@ -16,31 +16,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _CLASS_DEFINITION_EMITTER_HH
-#define _CLASS_DEFINITION_EMITTER_HH
+#include <hoo/emitter/BlockContext.hh>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/BasicBlock.h>
 
-#include <hoo/emitter/DefinitionEmitter.hh>
-#include <hoo/emitter/EmitterContext.hh>
-#include <hoo/ast/ClassDefinition.hh>
-
-#include <memory>
-
-using namespace hoo::ast;
+using namespace llvm;
 
 namespace hoo
 {
     namespace emitter
     {
-        class ClassDefinitionEmitter : public DefinitionEmitterExtended<ClassDefinition>
+        BlockContext::BlockContext(LLVMContext &context,
+        Function* parent_function,
+        const std::string& name,
+        BlockContext *parent) :
+        _symbols(std::make_shared<std::map<std::string, Value*>>()),
+        _block(BasicBlock::Create(context, name, parent_function)),
+        _parent(parent)
         {
-            public:
-            ClassDefinitionEmitter(std::shared_ptr<ClassDefinition>  classDefinition,
-            const EmitterContext &emitter_context,
-            std::shared_ptr<ClassDefinition> parent_class_definition);
+        }
 
-            public:
-            void Emit();
-        };
+        void BlockContext::AddSymbol(const std::string& name, Value* symbol)
+        {
+            _symbols->insert(_symbols->begin(),
+            std::pair<std::string,
+            Value*>(name, symbol));
+        }
+
+        Value *BlockContext::Lookup(const std::string& name)
+        {
+            auto iterator = _symbols->find(name);
+            if (iterator != _symbols->end())
+            {
+                auto &symbol = *(iterator);
+                return symbol.second;
+            }
+            return nullptr;
+        }
     }
 }
-#endif

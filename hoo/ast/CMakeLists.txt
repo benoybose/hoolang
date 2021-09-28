@@ -35,7 +35,8 @@ SET (HOO_AST_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBodyItem.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBody.hh
     ${CMAKE_SOURCE_DIR}/hoo/ast/StorageItem.hh
-    ${CMAKE_SOURCE_DIR}/hoo/ast/Param.hh)
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Param.hh
+    ${CMAKE_SOURCE_DIR}/hoo/ast/CastExpression.hh)
 
 SET (HOO_AST_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/ast/ArrayAccessExpression.cpp
@@ -69,7 +70,8 @@ SET (HOO_AST_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBodyItem.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/ClassBody.cpp
     ${CMAKE_SOURCE_DIR}/hoo/ast/StorageItem.cpp
-    ${CMAKE_SOURCE_DIR}/hoo/ast/Param.cpp)
+    ${CMAKE_SOURCE_DIR}/hoo/ast/Param.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/ast/CastExpression.cpp)
 
 ADD_LIBRARY(hooast STATIC ${HOO_AST_HEADERS} ${HOO_AST_SOURCES})
 SET_TARGET_PROPERTIES(hooast 

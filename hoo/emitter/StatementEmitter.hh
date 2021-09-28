@@ -16,14 +16,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef _CLASS_DEFINITION_EMITTER_HH
-#define _CLASS_DEFINITION_EMITTER_HH
+#ifndef STATEMENT_EMITTER_HH
+#define STATEMENT_EMITTER_HH
 
+#include <hoo/emitter/EmitterBase.hh>
 #include <hoo/emitter/DefinitionEmitter.hh>
-#include <hoo/emitter/EmitterContext.hh>
-#include <hoo/ast/ClassDefinition.hh>
+#include <hoo/ast/Statement.hh>
+#include <hoo/ast/CompoundStatement.hh>
+#include <hoo/ast/ExpressionStatement.hh>
+#include <hoo/ast/ReturnStatement.hh>
+#include <llvm/IR/Function.h>
+#include <llvm/IR/BasicBlock.h>
 
 #include <memory>
+#include <stack>
+#include <map>
 
 using namespace hoo::ast;
 
@@ -31,16 +38,25 @@ namespace hoo
 {
     namespace emitter
     {
-        class ClassDefinitionEmitter : public DefinitionEmitterExtended<ClassDefinition>
+        class StatementEmitter : EmitterBase
         {
-            public:
-            ClassDefinitionEmitter(std::shared_ptr<ClassDefinition>  classDefinition,
-            const EmitterContext &emitter_context,
-            std::shared_ptr<ClassDefinition> parent_class_definition);
+            private:
+            std::shared_ptr<Statement> _statement;
 
             public:
-            void Emit();
+            StatementEmitter(const std::shared_ptr<Statement> &statement,
+            const EmitterContext& emitter_context);
+
+            public:
+            void Emit(const std::shared_ptr<Statement> &statement);
+
+            private:
+            void EmitCompound(const std::shared_ptr<CompoundStatement> &statement);
+            void EmitDeclaration(const std::shared_ptr<DeclarationStatement> &statement);
+            void EmitExpression(const std::shared_ptr<ExpressionStatement> &expression_statement);
+            void EmitReturn(const std::shared_ptr<ReturnStatement> &statement);
         };
     }
 }
+
 #endif

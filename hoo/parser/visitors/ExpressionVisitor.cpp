@@ -17,10 +17,12 @@
  */
 
 #include <hoo/ast/AST.hh>
+#include <hoo/ast/CastExpression.hh>
 #include <hoo/parser/ErrorListener.hh>
 #include <hoo/parser/visitors/ExpressionVisitor.hh>
 #include <hoo/parser/InvalidExprType.hh>
 #include <hoo/parser/visitors/VisitorHelper.hh>
+#include <hoo/parser/visitors/TypeSpecificationVisitor.hh>
 
 #include <regex>
 #include <list>
@@ -285,6 +287,20 @@ namespace hoo
         {
             auto expression = this->visit(ctx->expression()).as<Expression *>();
             VisitorHelper::AssignPositions(expression, ctx);
+            return Any(expression);
+        }
+
+        Any ExpressionVisitor::visitCastExpression(HooParser::CastExpressionContext *ctx)
+        {
+            TypeSpecificationVisitor type_spec_visitor(_error_listener);
+            auto type_spec_ctx = ctx->typeSpecifier();
+            auto type_spec = type_spec_visitor.visit(type_spec_ctx)
+            .as<TypeSpecification*>();
+            auto expr_ctx = ctx->expression();
+            auto expr = this->visit(expr_ctx)
+            .as<Expression*>();
+            Expression* expression = (Expression*) new CastExpression(std::shared_ptr<TypeSpecification>(type_spec),
+            std::shared_ptr<Expression>(expr));
             return Any(expression);
         }
 

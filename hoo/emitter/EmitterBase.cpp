@@ -10,40 +10,14 @@ namespace hoo
 {
     namespace emitter
     {
-        EmitterBase::EmitterBase(const std::string& unit_name) :
-            _unit_name(unit_name),
-            _context(std::make_shared<llvm::LLVMContext>()),
-            _module(std::make_shared<llvm::Module>(unit_name, *_context)),
-            _builder(std::make_shared<llvm::IRBuilder<>>(*_context))
+        EmitterBase::EmitterBase(const std::string &unit_name)
+        : _emitter_context(unit_name)
         {
         }
 
-        EmitterBase::EmitterBase(const EmitterBase& emitter_base) :
-            _unit_name(emitter_base._unit_name),
-            _context(emitter_base._context),
-            _module(emitter_base._module),
-            _builder(emitter_base._builder)
+        EmitterBase::EmitterBase(const EmitterContext &emitter_context)
+        : _emitter_context(emitter_context)
         {
-        }
-
-        std::shared_ptr<LLVMContext> EmitterBase::GetContext()
-        {
-            return _context;
-        }
-        
-        std::shared_ptr<Module> EmitterBase::GetModule()
-        {
-            return _module;
-        }
-        
-        std::shared_ptr<IRBuilder<>> EmitterBase::GetBuilder()
-        {
-            return _builder;
-        }
-        
-        const std::string& EmitterBase::GetUnitName()
-        {
-            return _unit_name;
         }
     }
 }

@@ -22,6 +22,7 @@
 #include <hoo/emitter/EmitterBase.hh>
 #include <hoo/ast/Definition.hh>
 #include <hoo/ast/ClassDefinition.hh>
+#include <hoo/emitter/EmitterContext.hh>
 
 #include <memory>
 
@@ -39,8 +40,8 @@ namespace hoo
 
             public:
             DefinitionEmitter(std::shared_ptr<Definition>  definition,
-            const EmitterBase& parent_emitter,
-            std::shared_ptr<ClassDefinition> parent_class_definition);
+            const EmitterContext& context,
+            std::shared_ptr<ClassDefinition> parent_class_definition = nullptr);
 
             public:
             std::shared_ptr<ClassDefinition> GetParentClass();
@@ -54,9 +55,9 @@ namespace hoo
 
             public:
             DefinitionEmitterExtended(std::shared_ptr<T>  definition,
-            const EmitterBase& parent_emitter,
+            const EmitterContext& context,
             std::shared_ptr<ClassDefinition> parent_class_definition) : 
-            DefinitionEmitter(dynamic_pointer_cast<Definition> (definition), parent_emitter, parent_class_definition),
+            DefinitionEmitter(dynamic_pointer_cast<Definition> (definition), context, parent_class_definition),
             _typed_definition (definition)
             {}
 

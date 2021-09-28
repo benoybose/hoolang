@@ -49,6 +49,8 @@ namespace hoo
             public:
             void Emit();
             std::string GetCode();
+            llvm::Module *GetModule() { return _emitter_context.GetModule(); }
+            std::string GetUnitName() { return _emitter_context.GetUnitName(); }
 
             private:
             void Emit(const std::shared_ptr<UnitItem>& unitItem);

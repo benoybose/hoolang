@@ -114,15 +114,13 @@ namespace hoo
                 try
                 {
                     ExpressionVisitor visitor(_error_listener);
-                    auto expression = visitor.visit(ctx->returnValue)
-                                          .as<Expression *>();
+                    auto expression = visitor.visit(ctx->returnValue).as<Expression *>();
                     return_expr = std::shared_ptr<Expression>(expression);
                     statement = new ReturnStatement(return_expr);
                 }
                 catch (...)
                 {
-                    _error_listener->Add(ctx,
-                                         "Invalid expression on return statement.");
+                    _error_listener->Add(ctx, "Invalid expression on return statement.");
                 }
             }
             else

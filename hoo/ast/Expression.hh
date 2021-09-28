@@ -19,11 +19,13 @@
 #ifndef HCEXPR_H
 #define HCEXPR_H
 
-#include <memory>
-#include <string>
-
 #include <hoo/ast/Node.hh>
 #include <hoo/ast/TypeSpecification.hh>
+#include <hoo/ast/BasicDataTypes.hh>
+#include <hoo/ast/BasicTypeSpec.hh>
+
+#include <memory>
+#include <string>
 
 namespace hoo
 {
@@ -35,6 +37,7 @@ namespace hoo
             EXPRESSION_BINARY,
             EXPRESSION_REFERENCE,
             EXPRESSION_ARRAY,
+            EXPRESSION_CAST,
             EXPRESSION_INVOKE
         };
 
@@ -42,19 +45,21 @@ namespace hoo
         {
 
         private:
-            ExpressionType _expressionType;
-            std::shared_ptr<TypeSpecification> _type;
+        ExpressionType _expressionType;
+        std::shared_ptr<TypeSpecification> _type;
 
         public:
-            Expression(ExpressionType expressionType,
-                       std::shared_ptr<TypeSpecification> type);
+        Expression(ExpressionType expressionType,
+        std::shared_ptr<TypeSpecification> type);
 
         public:
-            const ExpressionType GetExpressionType() const;
-            std::shared_ptr<TypeSpecification> GetType();
+        const ExpressionType GetExpressionType() const;
+        std::shared_ptr<TypeSpecification> GetType();
+        bool IsBasicType();
+        BasicDataTypeType GetBasicDataType();
 
         public:
-            virtual ~Expression();
+        virtual ~Expression();
         };
     } // namespace ast
 } // namespace hoo

@@ -1,29 +1,9 @@
-long subll(long a, long b)
+long sub (long a, long b)
 {
     return a - b;
 }
 
-double subdd(double a, double b)
+long TEST04SUB(long a, double b)
 {
-    return a - b;
-}
-
-double subld(long a, double b)
-{
-    return a - b;
-}
-
-double subdl(double a, long b)
-{
-    return a - b;
-}
-
-unsigned char subbb(unsigned char a, unsigned char b)
-{
-    return a - b;
-}
-
-unsigned char subbl(unsigned char a, long b)
-{
-    return a - b;
+    return (long) (a - b);
 }

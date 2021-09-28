@@ -79,7 +79,9 @@ namespace hoo
             void True(bool expr, const std::string &message = "");
             void False(bool expr, const std::string &message = "");
             void StringEqual(std::string orignal, std::string expected,
-                             const std::string &message = "");
+            const std::string &message = "");
+            void DoubleEqual(double original, double expected, double precision = 0.0001,
+            const std::string &message = "");
 
             template <typename T>
             void Equal(T original, T expected, const std::string &message = "")
