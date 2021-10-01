@@ -19,15 +19,16 @@
 #include <hoo/emitter/ExpressionEmitter.hh>
 #include <hoo/emitter/EmitterException.hh>
 #include <hoo/emitter/CastEmitter.hh>
+#include <hoo/emitter/EmitterUtils.hh>
 
 namespace hoo
 {
     namespace emitter
     {
         ExpressionEmitter::ExpressionEmitter(const std::shared_ptr<Expression> expression,
-        const EmitterContext& emitter_context)
-        : EmitterBase(emitter_context),
-        _expression(expression)
+                                             const EmitterContext &emitter_context)
+            : EmitterBase(emitter_context),
+              _expression(expression)
         {
         }
 
@@ -159,36 +160,8 @@ namespace hoo
             auto builder = _emitter_context.GetBuilder();
             auto context = _emitter_context.GetContext();
 
-            auto const left_type = left_value->getType();
-            auto const right_type = right_value->getType();
-            auto left_basic_type = BASIC_DATA_TYPE_INVALID;
-            auto right_basic_type = BASIC_DATA_TYPE_INVALID;
-
-            if (left_type->isIntegerTy(8))
-            {
-                left_basic_type = BASIC_DATA_TYPE_BYTE;
-            }
-            else if (left_type->isIntegerTy(64))
-            {
-                left_basic_type = BASIC_DATA_TYPE_INT;
-            }
-            else if (left_type->isDoubleTy())
-            {
-                left_basic_type = BASIC_DATA_TYPE_DOUBLE;
-            }
-
-            if (right_type->isIntegerTy(8))
-            {
-                right_basic_type = BASIC_DATA_TYPE_BYTE;
-            }
-            else if (right_type->isIntegerTy(64))
-            {
-                right_basic_type = BASIC_DATA_TYPE_INT;
-            }
-            else if (right_type->isDoubleTy())
-            {
-                right_basic_type = BASIC_DATA_TYPE_DOUBLE;
-            }
+            auto left_basic_type = EmitterUtils::GetBasicDataType(left_value);
+            auto right_basic_type = EmitterUtils::GetBasicDataType(right_value);
 
             if ((left_basic_type == BASIC_DATA_TYPE_INVALID) ||
                 (right_basic_type == BASIC_DATA_TYPE_INVALID))
@@ -201,91 +174,89 @@ namespace hoo
                 switch (left_basic_type)
                 {
                 case BASIC_DATA_TYPE_INT:
-                {
-                    switch (right_basic_type)
-                    {
-                    case BASIC_DATA_TYPE_INT:
-                    {
-                        auto value = builder->CreateNSWSub(left_value, right_value);
-                        return value;
-                    }
-                    case BASIC_DATA_TYPE_DOUBLE:
-                    {
-                        left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(*context));
-                        auto value = builder->CreateFSub(left_value, right_value);
-                        return value;
-                    }
-                    default:
-                        throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING,
-                                               ERR_POS(expression));
-                    }
-                    break;
-                }
+                    return EmitSubFromInt(left_value, right_value, expression, right_basic_type);
+                case BASIC_DATA_TYPE_DOUBLE:
+                    return EmitSubFromDouble(left_value, right_value, expression, right_basic_type);
                 default:
-                    throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING,
-                                           ERR_POS(expression));
+                    throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(expression));
                 }
             }
 
-            // auto const left_type = left_value->getType();
-            // auto const right_type = right_value->getType();
-            // if ((left_type->isIntegerTy(64)) && (right_type->isIntegerTy(64)))
-            // {
-            //     auto value = builder->CreateNSWSub(left_value, right_value);
-            //     return value;
-            // }
-            // else if ((left_type->isIntegerTy(64)) && (right_type->isDoubleTy()))
-            // {
-            //     left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(context));
-            //     auto value = builder->CreateFSub(left_value, right_value, "");
-            //     return value;
-            // }
-            // else if ((left_type->isDoubleTy()) && (right_type->isIntegerTy(64)))
-            // {
-            //     right_value = builder->CreateSIToFP(right_value, Type::getDoubleTy(context));
-            //     auto value = builder->CreateFSub(left_value, right_value, "");
-            //     return value;
-            // }
-            // else if ((left_type->isDoubleTy()) && (right_type->isDoubleTy()))
-            // {
-            //     auto value = builder->CreateFSub(left_value, right_value, "");
-            //     return value;
-            // }
-            // else if ((left_type->isIntegerTy(8)) && (right_type->isIntegerTy(8)))
-            // {
-            //     left_value = builder->CreateCast(Instruction::ZExt, left_value, Type::getInt32Ty(context));
-            //     right_value = builder->CreateCast(Instruction::ZExt, right_value, Type::getInt32Ty(context));
-            //     auto value = builder->CreateNSWSub(left_value, right_value);
-            //     return value;
-            // }
-            // else if ((left_type->isIntegerTy(8)) && (right_type->isIntegerTy(64)))
-            // {
-            //     left_value = builder->CreateCast(Instruction::ZExt, left_value, right_type);
-            //     auto value = builder->CreateNSWSub(left_value, right_value);
-            //     return value;
-            // }
-            // else if ((left_type->isIntegerTy(64)) && (right_type->isIntegerTy(8)))
-            // {
-            //     right_value = builder->CreateCast(Instruction::ZExt, right_value, left_type);
-            //     auto value = builder->CreateNSWSub(left_value, right_value);
-            //     return value;
-            // }
-            // else if ((left_type->isIntegerTy(8)) && (right_type->isDoubleTy()))
-            // {
-            //     left_value = builder->CreateCast(Instruction::ZExt, left_value, Type::getInt32Ty(context));
-            //     left_value = builder->CreateSIToFP(left_value, right_type);
-            //     auto value = builder->CreateFSub(left_value, right_value);
-            //     return value;
-            // }
-            // else if ((left_type->isDoubleTy()) && (right_type->isIntegerTy(8)))
-            // {
-            //     right_value = builder->CreateCast(Instruction::ZExt, right_value, Type::getInt32Ty(context));
-            //     right_value = builder->CreateSIToFP(right_value, left_type);
-            //     auto value = builder->CreateFSub(left_value, right_value);
-            //     return value;
-            // }
-
             throw EmitterException(ERR_EMITTER_SUB_OPERATION_UNSUPPORTED, ERR_POS(expression));
+        }
+
+        Value *ExpressionEmitter::EmitSubFromInt(Value *left_value, Value *right_value,
+                                                 const std::shared_ptr<BinaryExpression> &expression,
+                                                 BasicDataTypeType right_basic_type)
+        {
+            auto builder = _emitter_context.GetBuilder();
+            auto context = _emitter_context.GetContext();
+            switch (right_basic_type)
+            {
+            case BASIC_DATA_TYPE_BOOL:
+            case BASIC_DATA_TYPE_CHAR:
+            case BASIC_DATA_TYPE_STRING:
+            case BASIC_DATA_TYPE_INVALID:
+                throw EmitterException(ERR_EMITTER_INVALID_SUB, ERR_POS(expression));
+
+            case BASIC_DATA_TYPE_BYTE:
+            {
+                right_value = builder->CreateZExt(right_value, Type::getInt64Ty(*context));
+                auto value = builder->CreateNSWSub(left_value, right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_DOUBLE:
+            {
+                left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(*context));
+                auto value = builder->CreateFSub(left_value, right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_INT:
+            {
+                auto value = builder->CreateNSWSub(left_value, right_value);
+                return value;
+            }
+            default:
+                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(expression));
+            }
+        }
+
+        Value *ExpressionEmitter::EmitSubFromDouble(Value *left_value, Value *right_value,
+                                 const std::shared_ptr<BinaryExpression> &expression, BasicDataTypeType right_basic_type)
+        {
+            auto builder = _emitter_context.GetBuilder();
+            auto context = _emitter_context.GetContext();
+            auto double_type = Type::getDoubleTy(*context);
+
+            switch (right_basic_type)
+            {
+            case BASIC_DATA_TYPE_BOOL:
+            case BASIC_DATA_TYPE_CHAR:
+            case BASIC_DATA_TYPE_STRING:
+            case BASIC_DATA_TYPE_INVALID:
+                throw EmitterException(ERR_EMITTER_INVALID_SUB, ERR_POS(expression));
+
+            case BASIC_DATA_TYPE_BYTE:
+            {
+                right_value = builder->CreateZExt(right_value, Type::getInt64Ty(*context));
+                right_value = builder->CreateSIToFP(right_value, double_type);
+                auto value = builder->CreateFSub(left_value, right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_DOUBLE:
+            {
+                auto value = builder->CreateFSub(left_value, right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_INT:
+            {
+                right_value = builder->CreateSIToFP(right_value, double_type);
+                auto value = builder->CreateFSub(left_value, right_value);
+                return value;
+            }
+            default:
+                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(expression));
+            }
         }
 
         Value *ExpressionEmitter::EmitAdd(Value *left_value,

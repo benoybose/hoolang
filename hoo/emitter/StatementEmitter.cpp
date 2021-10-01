@@ -2,6 +2,7 @@
 #include <hoo/emitter/EmitterBase.hh>
 #include <hoo/emitter/EmitterException.hh>
 #include <hoo/emitter/ExpressionEmitter.hh>
+#include <hoo/emitter/EmitterUtils.hh>
 #include <hoo/ast/ExpressionStatement.hh>
 #include <hoo/ast/ReturnStatement.hh>
 
@@ -12,7 +13,7 @@ namespace hoo
     namespace emitter
     {
         StatementEmitter::StatementEmitter(const std::shared_ptr<Statement> &statement,
-            const EmitterContext& emitter_context)
+                                           const EmitterContext &emitter_context)
             : EmitterBase(emitter_context)
         {
         }
@@ -76,6 +77,8 @@ namespace hoo
         {
             auto const &expr = statement->GetExpression();
             auto builder = _emitter_context.GetBuilder();
+            auto context = _emitter_context.GetContext();
+
             auto block_context = _emitter_context.GetCurrentBlockContext();
             if (!block_context)
             {
@@ -95,28 +98,187 @@ namespace hoo
                     {
                         throw std::runtime_error("function cannot return a value.");
                     }
+
                     auto value_type = value->getType();
-                    if ((return_type->isIntegerTy(8)) && (value_type->isIntegerTy(64)))
+                    auto return_basic_type = EmitterUtils::GetBasicDataType(return_type);
+                    auto value_basic_type = EmitterUtils::GetBasicDataType(value_type);
+
+                    if ((return_basic_type == BASIC_DATA_TYPE_INVALID) ||
+                        (value_basic_type == BASIC_DATA_TYPE_INVALID))
                     {
-                        throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
+                        throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING);
                     }
-                    else if ((return_type->isIntegerTy(64)) && (value_type->isIntegerTy(8)))
+                    else
                     {
-                        value = builder->CreateCast(Instruction::CastOps::ZExt, value, return_type);
+                        switch (return_basic_type)
+                        {
+                        case BASIC_DATA_TYPE_BOOL:
+                        {
+                            switch (value_basic_type)
+                            {
+                            case BASIC_DATA_TYPE_BOOL:
+                            {
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_BYTE:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_CHAR:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_DOUBLE:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INT:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INVALID:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_STRING:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            }
+                            break;
+                        }
+
+                        case BASIC_DATA_TYPE_BYTE:
+                        {
+                            switch (value_basic_type)
+                            {
+                            case BASIC_DATA_TYPE_BOOL:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_BYTE:
+                            {
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_CHAR:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_DOUBLE:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INT:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INVALID:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_STRING:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CONV_REQUIRED, ERR_POS(expr));
+                            }
+                            break;
+                        }
+
+                        case BASIC_DATA_TYPE_CHAR:
+                        {
+                            switch (value_basic_type)
+                            {
+                            case BASIC_DATA_TYPE_BOOL:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_BYTE:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_CHAR:
+                            {
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_DOUBLE:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INT:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INVALID:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_STRING:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CONV_REQUIRED, ERR_POS(expr));
+                            }
+                            break;
+                        }
+
+                        case BASIC_DATA_TYPE_DOUBLE:
+                        {
+                            switch (value_basic_type)
+                            {
+                            case BASIC_DATA_TYPE_BOOL:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_BYTE:
+                            {
+                                value = builder->CreateCast(Instruction::SExt, value, Type::getInt64Ty(*context));
+                                value = builder->CreateSIToFP(value, return_type);
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_CHAR:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_DOUBLE:
+                            {
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_INT:
+                            {
+                                value = builder->CreateSIToFP(value, return_type);
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_INVALID:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_STRING:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CONV_REQUIRED, ERR_POS(expr));
+                            }
+                            break;
+                        }
+
+                        case BASIC_DATA_TYPE_INT:
+                        {
+                            switch (value_basic_type)
+                            {
+                            case BASIC_DATA_TYPE_BOOL:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_BYTE:
+                            {
+                                value = builder->CreateCast(Instruction::SExt, value, return_type);
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_CHAR:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_DOUBLE:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INT:
+                            {
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            case BASIC_DATA_TYPE_INVALID:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_STRING:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CONV_REQUIRED, ERR_POS(expr));
+                            }
+                            break;
+                        }
+
+                        case BASIC_DATA_TYPE_INVALID:
+                            throw EmitterException(ERR_EMITTER_INVALID_RETURN);
+
+                        case BASIC_DATA_TYPE_STRING:
+                        {
+                            switch (value_basic_type)
+                            {
+                            case BASIC_DATA_TYPE_BOOL:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_BYTE:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_CHAR:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_DOUBLE:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INT:
+                                throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_INVALID:
+                                throw EmitterException(ERR_EMITTER_INVALID_RETURN, ERR_POS(expr));
+                            case BASIC_DATA_TYPE_STRING:
+                            {
+                                builder->CreateRet(value);
+                                break;
+                            }
+                            }
+                            break;
+                        }
+                        }
                     }
-                    else if ((return_type->isIntegerTy(8)) && (value_type->isIntegerTy(32)))
-                    {
-                        value = builder->CreateCast(Instruction::Trunc, value, return_type);
-                    }
-                    else if ((return_type->isIntegerTy(8)) && (value_type->isDoubleTy()))
-                    {
-                        throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
-                    }
-                    else if ((return_type->isIntegerTy(64)) && (value_type->isDoubleTy()))
-                    {
-                        throw EmitterException(ERR_EMITTER_EXPLICIT_CAST_REQUIRED, ERR_POS(expr));
-                    }
-                    builder->CreateRet(value);
                 }
                 else
                 {

@@ -37,7 +37,7 @@ namespace hoo
             std::shared_ptr<CastExpression> _expression;
             std::shared_ptr<Expression> _source_expression;
             Value* _source_value;
-            BasicDataTypeType _basic_data_type;
+            BasicDataTypeType _source_basic_type;
 
             public:
             CastEmitter(const std::shared_ptr<CastExpression> &cast_expression,
@@ -48,6 +48,7 @@ namespace hoo
             Value   *Emit();
             Value   *EmitCastBasicDataTypes();
             Value   *EmitCastReferenceTypes();
+            Value   *CastToByte();
             Value   *CastToInt();
         };
     }

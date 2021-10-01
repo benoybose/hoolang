@@ -30,9 +30,12 @@
 #define ERR_EMITTER_BINARY_FAILED_EXPRESSION    "Binary expression evaluation failed.", 8
 #define ERR_EMITTER_INVALID_CLASS_DEFINITION    "Invalid class definition.", 9
 #define ERR_EMITTER_EXPLICIT_CAST_REQUIRED      "An explicit cast operation must be required here.", 10
-#define ERR_EMITTER_SUB_OPERATION_UNSUPPORTED   "Subtraction operatio is not supported yet", 11
+#define ERR_EMITTER_SUB_OPERATION_UNSUPPORTED   "Subtraction operation is not supported yet", 11
 #define ERR_EMITTER_NOT_IMPLEMENTED_EMITTING    "Emitting not implemented", 12
 #define ERR_EMITTER_INVALID_RETURN              "Invaid return statement", 13
+#define ERR_EMITTER_EXPLICIT_CONV_REQUIRED      "An explicit conversion must be required here", 14
+#define ERR_EMITTER_INVALID_CAST                "Invalid cast operations", 15
+#define ERR_EMITTER_INVALID_SUB                 "Invalid subtraction operation", 16
 
 
 #include <hoo/ast/Position.hh>

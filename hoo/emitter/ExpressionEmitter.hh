@@ -58,6 +58,10 @@ namespace hoo
             const std::shared_ptr<BinaryExpression> &expression);
             Value* EmitSub(Value* left_value, Value* right_value,
             const std::shared_ptr<BinaryExpression> &expression);
+            Value* EmitSubFromInt(Value* left_value, Value* right_value,
+            const std::shared_ptr<BinaryExpression> &expression, BasicDataTypeType right_basic_type);
+            Value* EmitSubFromDouble(Value* left_value, Value* right_value,
+            const std::shared_ptr<BinaryExpression> &expression, BasicDataTypeType right_basic_type);
             Value* EmitAdd(Value* left_value, Value* right_value);
             
         };

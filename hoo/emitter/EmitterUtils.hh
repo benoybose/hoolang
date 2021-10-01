@@ -26,6 +26,7 @@
 #include <memory>
 #include <llvm/IR/Type.h>
 #include <llvm/IR/Value.h>
+#include <llvm/IR/Type.h>
 
 using namespace hoo::ast;
 using namespace llvm;
@@ -41,7 +42,8 @@ namespace hoo
             LLVMContext& context);
             static llvm::Type* ResolveType(std::shared_ptr<BasicTypeSpec> basic_type_spec,
             LLVMContext& context);
-            static bool IsSameType(Value* v1, Value* v2);
+            static BasicDataTypeType GetBasicDataType(Value *value);
+            static BasicDataTypeType GetBasicDataType(Type *type);
         };
     }
 }

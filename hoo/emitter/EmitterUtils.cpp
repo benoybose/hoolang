@@ -77,11 +77,34 @@ namespace hoo
             return nullptr;
         }
 
-        bool EmitterUtils::IsSameType(Value* v1, Value* v2)
+        BasicDataTypeType EmitterUtils::GetBasicDataType(Value *value)
         {
-            auto t1 = v1->getType()->getTypeID();
-            auto t2 = v2->getType()->getTypeID();
-            return t1 == t2;
+            auto type = value->getType();
+            return GetBasicDataType(type);
+        }
+
+        BasicDataTypeType EmitterUtils::GetBasicDataType(Type *type)
+        {
+            if (type->isIntegerTy(1))
+            {
+                return BASIC_DATA_TYPE_BOOL;
+            }
+            else if (type->isIntegerTy(8))
+            {
+                return BASIC_DATA_TYPE_BYTE;
+            }
+            else if (type->isIntegerTy(64))
+            {
+                return BASIC_DATA_TYPE_INT;
+            }
+            else if (type->isDoubleTy())
+            {
+                return BASIC_DATA_TYPE_DOUBLE;
+            }
+            else
+            {
+                return BASIC_DATA_TYPE_INVALID;
+            }
         }
     }
 }
