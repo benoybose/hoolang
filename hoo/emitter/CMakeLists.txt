@@ -15,7 +15,8 @@ SET(HOO_EMITTER_HEADERS
     ${CMAKE_SOURCE_DIR}/hoo/emitter/StatementEmitter.hh
     ${CMAKE_SOURCE_DIR}/hoo/emitter/ExpressionEmitter.hh
     ${CMAKE_SOURCE_DIR}/hoo/emitter/EmitterContext.hh
-    ${CMAKE_SOURCE_DIR}/hoo/emitter/BlockContext.hh)
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/BlockContext.hh
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/BinaryExpressionEmitter.hh)
 
 SET(HOO_EMITTER_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/emitter/UnitEmitter.cpp
@@ -30,7 +31,8 @@ SET(HOO_EMITTER_SOURCES
     ${CMAKE_SOURCE_DIR}/hoo/emitter/StatementEmitter.cpp
     ${CMAKE_SOURCE_DIR}/hoo/emitter/ExpressionEmitter.cpp
     ${CMAKE_SOURCE_DIR}/hoo/emitter/EmitterContext.cpp
-    ${CMAKE_SOURCE_DIR}/hoo/emitter/BlockContext.cpp)
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/BlockContext.cpp
+    ${CMAKE_SOURCE_DIR}/hoo/emitter/BinaryExpressionEmitter.cpp)
 
 ADD_LIBRARY(hooemitter STATIC
     ${HOO_EMITTER_HEADERS}

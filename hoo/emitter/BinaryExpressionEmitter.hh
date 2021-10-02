@@ -17,43 +17,51 @@
  */
 
 #include <hoo/emitter/EmitterBase.hh>
-#include <hoo/ast/Expression.hh>
-#include <hoo/ast/CastExpression.hh>
-#include <hoo/ast/LiteralExpression.hh>
 #include <hoo/ast/BinaryExpression.hh>
-#include <hoo/ast/ReferenceExpression.hh>
-#include <hoo/ast/ArrayAccessExpression.hh>
-#include <hoo/ast/InvokeExpression.hh>
+#include <hoo/ast/Expression.hh>
+#include <hoo/ast/Operator.hh>
+#include <hoo/ast/BasicDataTypes.hh>
 #include <llvm/IR/Value.h>
 
 #include <memory>
 
 using namespace hoo::ast;
+using namespace llvm;
 
 namespace hoo
 {
     namespace emitter
     {
-        class ExpressionEmitter : public EmitterBase
+        class BinaryExpressionEmitter : public EmitterBase
         {
             private:
-            std::shared_ptr<Expression> _expression;
+            std::shared_ptr<BinaryExpression> _binary_expression;
+            std::shared_ptr<Expression> _left_expression;
+            std::shared_ptr<Expression> _right_expression;
+            std::shared_ptr<hoo::ast::Operator> _operator;
+            Value* _left_value;
+            Value* _right_value;
+            Type* _left_type;
+            Type* _right_type;
+            BasicDataTypeType _left_basic_type;
+            BasicDataTypeType _right_basic_type;
 
             public:
-            ExpressionEmitter(const std::shared_ptr<Expression> expression,
-            const EmitterContext& emitter_context);
+            BinaryExpressionEmitter (std::shared_ptr<BinaryExpression> binary_expression,
+            const EmitterContext &emitter_context);
 
             public:
+            bool IsBothBasicDataType();
             Value *Emit();
 
             private:
-            Value* Emit(const std::shared_ptr<Expression> &expression);
-            Value* EmitLiteral(const std::shared_ptr<LiteralExpression> &expression);
-            Value* EmitBinary(const std::shared_ptr<BinaryExpression> &expression);
-            Value* EmitReference(const std::shared_ptr<ReferenceExpression> &expression);
-            Value* EmitArrayAccessExpression(const std::shared_ptr<ArrayAccessExpression> &expression);
-            Value* EmitCast(const std::shared_ptr<CastExpression> &expression);
-            Value* EmitInvoke(const std::shared_ptr<InvokeExpression> &expression);            
+            Value *EmitOperation(const OperatorType operator_type);
+            Value *EmitAdd();
+            Value *EmitSub();
+
+            Value *EmitSubFromDouble();
+            Value *EmitSubFromInt();
+            Value *EmitSubFromByte();
         };
     }
 }

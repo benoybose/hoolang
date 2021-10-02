@@ -80,6 +80,24 @@ class SubMethodTest: public TestUnit
         &SubMethodTest::TEST22);
         RegisterTestCase("TEST23",
         &SubMethodTest::TEST23);
+        RegisterTestCase("TEST24",
+        &SubMethodTest::TEST24);
+        RegisterTestCase("TEST25",
+        &SubMethodTest::TEST25);
+        RegisterTestCase("TEST26",
+        &SubMethodTest::TEST26);
+        RegisterTestCase("TEST27",
+        &SubMethodTest::TEST27);
+        RegisterTestCase("TEST28",
+        &SubMethodTest::TEST28);
+        RegisterTestCase("TEST29",
+        &SubMethodTest::TEST29);
+        RegisterTestCase("TEST30",
+        &SubMethodTest::TEST30);
+        RegisterTestCase("TEST31",
+        &SubMethodTest::TEST31);
+        RegisterTestCase("TEST32",
+        &SubMethodTest::TEST32);
     }
 
     /**
@@ -224,7 +242,7 @@ class SubMethodTest: public TestUnit
             }
             )source";
             auto jit = std::move(* HooJIT::Create());
-            jit->Evaluate(source, "test08", true);
+            jit->Evaluate(source, "test08");
         });
 
         auto error_code = ex.GetErrorNo();
@@ -363,7 +381,7 @@ class SubMethodTest: public TestUnit
         }
         )source";
         auto jit = std::move(* HooJIT::Create());
-        jit->Evaluate(source, "test16", true);
+        jit->Evaluate(source, "test16");
         auto result = jit->Execute<int64_t, double, int64_t>("sub", 10.24, 46);
         Equal<int64_t>(result, -35);
     }
@@ -380,7 +398,7 @@ class SubMethodTest: public TestUnit
             }
             )source";
             auto jit = std::move(* HooJIT::Create());
-            jit->Evaluate(source, "test17", true);
+            jit->Evaluate(source, "test17");
         });
         
         auto error_code = ex.GetErrorNo();
@@ -399,7 +417,7 @@ class SubMethodTest: public TestUnit
             }
             )source";
             auto jit = std::move(* HooJIT::Create());
-            jit->Evaluate(source, "test18", true);
+            jit->Evaluate(source, "test18");
         });
         
         auto error_code = ex.GetErrorNo();
@@ -494,6 +512,165 @@ class SubMethodTest: public TestUnit
         auto error_code = ex.GetErrorNo();
         Equal(error_code, 15);
     }
+
+    /**
+     * Test subtract an integer from a byte and return int 
+     **/
+    void TEST24()
+    {
+        const std::string source = R"source(
+        public sub(a:byte, b:int) : int {
+            return a - b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test24");
+        auto result = jit->Execute<int64_t, unsigned char, int64_t>("sub", 251, 117);
+        Equal<int64_t>(result, 134);
+        result = jit->Execute<int64_t, unsigned char, int64_t>("sub", 15, 2248);
+        Equal<int64_t>(result, -2233);
+    }
+
+    /**
+     * Test subtract an integer from a byte and return double
+     **/
+    void TEST25()
+    {
+        const std::string source = R"source(
+        public sub(a:byte, b:int) : double {
+            return a - b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test25");
+        auto result = jit->Execute<double, unsigned char, int64_t>("sub", 252, 119);
+        DoubleEqual(result, 133);
+    }
+
+    /**
+     * Test subtract an integer from a byte and return byte
+     **/
+    void TEST26()
+    {
+        auto ex = Throws<EmitterException>([] () {
+            const std::string source = R"source(
+            public sub(a:byte, b:int) : byte {
+                return a - b;
+            }
+            )source";
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test26");
+        });
+        auto error_code = ex.GetErrorNo();
+        Equal(error_code, 10);
+    }
+
+    /**
+     * Test subtract an integer from a byte and return byte through casting
+     **/
+    void TEST27()
+    {
+        const std::string source = R"source(
+        public sub(a:byte, b:int) : byte {
+            return (byte a - b);
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test27");
+        auto result = jit->Execute<unsigned char, unsigned char, int64_t>("sub", 200, 147);
+        Equal<unsigned char>(result, 53);
+    }
+
+    /**
+     * Test subtract a double from a byte and return integer
+     **/
+    void TEST28()
+    {
+        auto ex = Throws<EmitterException>([] () {
+            const std::string source = R"source(
+            public sub(a:byte, b:double) : int {
+                return a - b;
+            }
+            )source";
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test28");
+        });
+        auto error_code = ex.GetErrorNo();
+        Equal(error_code, 10);
+    }
+
+    /**
+     * Test subtract a double from a byte and return integer through casting
+     **/
+    void TEST29()
+    {
+        const std::string source = R"source(
+        public sub(a:byte, b:double) : int {
+            return (int a - b);
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test29");
+        auto result = jit->Execute<int64_t, unsigned char, double>("sub", 20, 147.1);
+        Equal<unsigned char>(result, -127);
+    }
+
+    /**
+     * Test subtract a double from a byte and return a double
+     **/
+    void TEST30()
+    {
+        const std::string source = R"source(
+        public sub(a:byte, b:double) : double {
+            return a - b;
+        }
+        )source";
+        auto jit = std::move(* HooJIT::Create());
+        jit->Evaluate(source, "test30");
+        auto result = jit->Execute<double, unsigned char, double>("sub", 21, 147.1);
+        DoubleEqual(result, -126.1);
+    }
+
+    /**
+     * Test subtract a double from a byte and return byte
+     **/
+    void TEST31()
+    {
+        auto ex = Throws<EmitterException>([] ()
+        {
+            const std::string source = R"source(
+            public sub(a:byte, b:double) : byte {
+                return a - b;
+            }
+            )source";
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test31");
+        });
+
+        auto error_code = ex.GetErrorNo();
+        Equal(error_code, 13);
+    }
+
+    /**
+     * Test subtract a double from a byte and return byte through casting
+     **/
+    void TEST32()
+    {
+        auto ex = Throws<EmitterException>([] ()
+        {
+            const std::string source = R"source(
+            public sub(a:byte, b:double) : byte {
+                return (byte a - b);
+            }
+            )source";
+            auto jit = std::move(* HooJIT::Create());
+            jit->Evaluate(source, "test31");
+        });
+
+        auto error_code = ex.GetErrorNo();
+        Equal(error_code, 15);
+    }
+    
 };
 
 HOO_TEST_CASE(SubMethodTest)

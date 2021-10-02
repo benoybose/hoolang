@@ -20,6 +20,7 @@
 #include <hoo/emitter/EmitterException.hh>
 #include <hoo/emitter/CastEmitter.hh>
 #include <hoo/emitter/EmitterUtils.hh>
+#include <hoo/emitter/BinaryExpressionEmitter.hh>
 
 namespace hoo
 {
@@ -89,27 +90,8 @@ namespace hoo
 
         Value *ExpressionEmitter::EmitBinary(const std::shared_ptr<BinaryExpression> &expression)
         {
-            auto const &left_expr = expression->GetLeftExpression();
-            auto const &right_expr = expression->GetRightExpression();
-            auto const &opr = expression->GetOperator();
-
-            auto left_value = Emit(left_expr);
-            if (!left_value)
-            {
-                throw EmitterException(ERR_EMITTER_FAILED_LEFT_EXPRESSION,
-                                       ERR_POS(left_expr));
-            }
-
-            auto right_value = Emit(right_expr);
-            if (!right_value)
-            {
-                throw EmitterException(ERR_EMITTER_FAILED_RIGHT_EXPRESSION,
-                                       ERR_POS(right_expr));
-            }
-
-            auto const operator_type = opr->GetOperatorType();
-            auto value = EmitOperation(operator_type,
-                                       left_value, right_value, expression);
+            BinaryExpressionEmitter emitter(expression, _emitter_context);
+            auto value = emitter.Emit();
             return value;
         }
 
@@ -135,175 +117,6 @@ namespace hoo
         Value *ExpressionEmitter::EmitInvoke(const std::shared_ptr<InvokeExpression> &expression)
         {
             throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING);
-        }
-
-        Value *ExpressionEmitter::EmitOperation(const OperatorType operator_type,
-                                                Value *left_value,
-                                                Value *right_value,
-                                                const std::shared_ptr<BinaryExpression> &expression)
-        {
-            switch (operator_type)
-            {
-            case OPERATOR_ADD:
-                return EmitAdd(left_value, right_value);
-            case OPERATOR_SUB:
-                return EmitSub(left_value, right_value, expression);
-            default:
-                throw EmitterException(ERR_EMITTER_BINARY_FAILED_EXPRESSION,
-                                       ERR_POS(expression));
-            }
-        }
-
-        Value *ExpressionEmitter::EmitSub(Value *left_value, Value *right_value,
-                                          const std::shared_ptr<BinaryExpression> &expression)
-        {
-            auto builder = _emitter_context.GetBuilder();
-            auto context = _emitter_context.GetContext();
-
-            auto left_basic_type = EmitterUtils::GetBasicDataType(left_value);
-            auto right_basic_type = EmitterUtils::GetBasicDataType(right_value);
-
-            if ((left_basic_type == BASIC_DATA_TYPE_INVALID) ||
-                (right_basic_type == BASIC_DATA_TYPE_INVALID))
-            {
-                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING,
-                                       ERR_POS(expression));
-            }
-            else
-            {
-                switch (left_basic_type)
-                {
-                case BASIC_DATA_TYPE_INT:
-                    return EmitSubFromInt(left_value, right_value, expression, right_basic_type);
-                case BASIC_DATA_TYPE_DOUBLE:
-                    return EmitSubFromDouble(left_value, right_value, expression, right_basic_type);
-                default:
-                    throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(expression));
-                }
-            }
-
-            throw EmitterException(ERR_EMITTER_SUB_OPERATION_UNSUPPORTED, ERR_POS(expression));
-        }
-
-        Value *ExpressionEmitter::EmitSubFromInt(Value *left_value, Value *right_value,
-                                                 const std::shared_ptr<BinaryExpression> &expression,
-                                                 BasicDataTypeType right_basic_type)
-        {
-            auto builder = _emitter_context.GetBuilder();
-            auto context = _emitter_context.GetContext();
-            switch (right_basic_type)
-            {
-            case BASIC_DATA_TYPE_BOOL:
-            case BASIC_DATA_TYPE_CHAR:
-            case BASIC_DATA_TYPE_STRING:
-            case BASIC_DATA_TYPE_INVALID:
-                throw EmitterException(ERR_EMITTER_INVALID_SUB, ERR_POS(expression));
-
-            case BASIC_DATA_TYPE_BYTE:
-            {
-                right_value = builder->CreateZExt(right_value, Type::getInt64Ty(*context));
-                auto value = builder->CreateNSWSub(left_value, right_value);
-                return value;
-            }
-            case BASIC_DATA_TYPE_DOUBLE:
-            {
-                left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(*context));
-                auto value = builder->CreateFSub(left_value, right_value);
-                return value;
-            }
-            case BASIC_DATA_TYPE_INT:
-            {
-                auto value = builder->CreateNSWSub(left_value, right_value);
-                return value;
-            }
-            default:
-                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(expression));
-            }
-        }
-
-        Value *ExpressionEmitter::EmitSubFromDouble(Value *left_value, Value *right_value,
-                                 const std::shared_ptr<BinaryExpression> &expression, BasicDataTypeType right_basic_type)
-        {
-            auto builder = _emitter_context.GetBuilder();
-            auto context = _emitter_context.GetContext();
-            auto double_type = Type::getDoubleTy(*context);
-
-            switch (right_basic_type)
-            {
-            case BASIC_DATA_TYPE_BOOL:
-            case BASIC_DATA_TYPE_CHAR:
-            case BASIC_DATA_TYPE_STRING:
-            case BASIC_DATA_TYPE_INVALID:
-                throw EmitterException(ERR_EMITTER_INVALID_SUB, ERR_POS(expression));
-
-            case BASIC_DATA_TYPE_BYTE:
-            {
-                right_value = builder->CreateZExt(right_value, Type::getInt64Ty(*context));
-                right_value = builder->CreateSIToFP(right_value, double_type);
-                auto value = builder->CreateFSub(left_value, right_value);
-                return value;
-            }
-            case BASIC_DATA_TYPE_DOUBLE:
-            {
-                auto value = builder->CreateFSub(left_value, right_value);
-                return value;
-            }
-            case BASIC_DATA_TYPE_INT:
-            {
-                right_value = builder->CreateSIToFP(right_value, double_type);
-                auto value = builder->CreateFSub(left_value, right_value);
-                return value;
-            }
-            default:
-                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(expression));
-            }
-        }
-
-        Value *ExpressionEmitter::EmitAdd(Value *left_value,
-                                          Value *right_value)
-        {
-            auto builder = _emitter_context.GetBuilder();
-            auto context = _emitter_context.GetContext();
-
-            auto const left_type = left_value->getType();
-            auto const right_type = right_value->getType();
-            if ((left_type->isIntegerTy()) && (right_type->isIntegerTy()))
-            {
-                auto left_bits = left_type->getIntegerBitWidth();
-                auto right_bits = right_type->getIntegerBitWidth();
-                if (left_bits < right_bits)
-                {
-                    left_value = builder->CreateCast(Instruction::CastOps::ZExt,
-                                                     left_value, right_type);
-                }
-                else if (left_bits > right_bits)
-                {
-                    right_value = builder->CreateCast(Instruction::CastOps::ZExt,
-                                                      right_value, left_type);
-                }
-
-                auto value = builder->CreateNSWAdd(left_value, right_value);
-                return value;
-            }
-            else if ((left_type->isIntegerTy()) && (right_type->isDoubleTy()))
-            {
-                left_value = builder->CreateSIToFP(left_value, Type::getDoubleTy(*context));
-                auto value = builder->CreateFAdd(left_value, right_value, "");
-                return value;
-            }
-            else if ((left_type->isDoubleTy()) && (right_type->isIntegerTy()))
-            {
-                right_value = builder->CreateSIToFP(right_value, Type::getDoubleTy(*context));
-                auto value = builder->CreateFAdd(left_value, right_value, "");
-                return value;
-            }
-            else if ((left_type->isDoubleTy()) && (right_type->isDoubleTy()))
-            {
-                auto value = builder->CreateFAdd(left_value, right_value, "");
-                return value;
-            }
-
-            throw std::runtime_error("addidtion operation not supproted now.");
         }
     }
 }
