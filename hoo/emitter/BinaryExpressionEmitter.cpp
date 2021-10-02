@@ -88,43 +88,132 @@ namespace hoo
             auto builder = _emitter_context.GetBuilder();
             auto context = _emitter_context.GetContext();
 
-            if ((_left_type->isIntegerTy()) && (_right_type->isIntegerTy()))
+            if (!IsBothBasicDataType())
             {
-                auto left_bits = _left_type->getIntegerBitWidth();
-                auto right_bits = _right_type->getIntegerBitWidth();
-                if (left_bits < right_bits)
+                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(_binary_expression));
+            }
+            else
+            {
+                switch (_left_basic_type)
                 {
-                    _left_value = builder->CreateCast(Instruction::CastOps::ZExt,
-                                                      _left_value, _right_type);
+                case BASIC_DATA_TYPE_INT:
+                    return EmitAddToInt(builder, context);
+                case BASIC_DATA_TYPE_DOUBLE:
+                    return EmitAddToDouble(builder, context);
+                case BASIC_DATA_TYPE_BYTE:
+                    return EmitAddToByte(builder, context);
+                default:
+                    throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(_binary_expression));
                 }
-                else if (left_bits > right_bits)
-                {
-                    _right_value = builder->CreateCast(Instruction::CastOps::ZExt,
-                                                       _right_value, _left_type);
-                }
+            }
 
+            throw EmitterException(ERR_EMITTER_SUB_OPERATION_UNSUPPORTED, ERR_POS(_binary_expression));
+        }
+
+        Value *BinaryExpressionEmitter::EmitAddToInt(IRBuilder<> *builder, LLVMContext *context)
+        {
+            switch (_right_basic_type)
+            {
+            case BASIC_DATA_TYPE_BOOL:
+            case BASIC_DATA_TYPE_CHAR:
+            case BASIC_DATA_TYPE_STRING:
+            case BASIC_DATA_TYPE_INVALID:
+                throw EmitterException(ERR_EMITTER_INVALID_SUB, ERR_POS(_binary_expression));
+
+            case BASIC_DATA_TYPE_BYTE:
+            {
+                auto right_value = builder->CreateZExt(_right_value, Type::getInt64Ty(*context));
+                auto value = builder->CreateNSWAdd(_left_value, right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_DOUBLE:
+            {
+                auto left_value = builder->CreateSIToFP(_left_value, Type::getDoubleTy(*context));
+                auto value = builder->CreateFAdd(left_value, _right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_INT:
+            {
                 auto value = builder->CreateNSWAdd(_left_value, _right_value);
                 return value;
             }
-            else if ((_left_type->isIntegerTy()) && (_right_type->isDoubleTy()))
-            {
-                _left_value = builder->CreateSIToFP(_left_value, Type::getDoubleTy(*context));
-                auto value = builder->CreateFAdd(_left_value, _right_value, "");
-                return value;
+            default:
+                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(_binary_expression));
             }
-            else if ((_left_type->isDoubleTy()) && (_right_type->isIntegerTy()))
-            {
-                _right_value = builder->CreateSIToFP(_right_value, Type::getDoubleTy(*context));
-                auto value = builder->CreateFAdd(_left_value, _right_value, "");
-                return value;
-            }
-            else if ((_left_type->isDoubleTy()) && (_right_type->isDoubleTy()))
-            {
-                auto value = builder->CreateFAdd(_left_value, _right_value, "");
-                return value;
-            }
+        }
 
-            throw std::runtime_error("addidtion operation not supproted now.");
+        Value *BinaryExpressionEmitter::EmitAddToDouble(IRBuilder<> *builder, LLVMContext *context)
+        {
+            auto double_type = Type::getDoubleTy(*context);
+            switch (_right_basic_type)
+            {
+            case BASIC_DATA_TYPE_BOOL:
+            case BASIC_DATA_TYPE_CHAR:
+            case BASIC_DATA_TYPE_STRING:
+            case BASIC_DATA_TYPE_INVALID:
+                throw EmitterException(ERR_EMITTER_INVALID_SUB, ERR_POS(_binary_expression));
+
+            case BASIC_DATA_TYPE_BYTE:
+            {
+                auto right_value = builder->CreateZExt(_right_value, Type::getInt64Ty(*context));
+                right_value = builder->CreateSIToFP(right_value, double_type);
+                auto value = builder->CreateFAdd(_left_value, right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_DOUBLE:
+            {
+                auto value = builder->CreateFAdd(_left_value, _right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_INT:
+            {
+                auto right_value = builder->CreateSIToFP(_right_value, double_type);
+                auto value = builder->CreateFAdd(_left_value, right_value);
+                return value;
+            }
+            default:
+                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(_binary_expression));
+            }
+        }
+
+        Value *BinaryExpressionEmitter::EmitAddToByte(IRBuilder<> *builder, LLVMContext *context)
+        {
+            auto int_type = Type::getInt64Ty(*context);
+            auto byte_type = Type::getInt8Ty(*context);
+            auto double_type = Type::getDoubleTy(*context);
+
+            switch (_right_basic_type)
+            {
+            case BASIC_DATA_TYPE_BOOL:
+            case BASIC_DATA_TYPE_CHAR:
+            case BASIC_DATA_TYPE_STRING:
+            case BASIC_DATA_TYPE_INVALID:
+                throw EmitterException(ERR_EMITTER_INVALID_SUB, ERR_POS(_binary_expression));
+
+            case BASIC_DATA_TYPE_BYTE:
+            {
+                auto left_value = builder->CreateCast(Instruction::ZExt, _left_value, int_type);
+                auto right_value = builder->CreateCast(Instruction::ZExt, _right_value, int_type);
+                auto value = builder->CreateAdd(left_value, right_value);
+                value = builder->CreateTrunc(value, byte_type);
+                return value;
+            }
+            case BASIC_DATA_TYPE_DOUBLE:
+            {
+                auto left_value = builder->CreateCast(Instruction::ZExt, _left_value, int_type);
+                left_value = builder->CreateSIToFP(left_value, double_type);
+                auto value = builder->CreateFAdd(left_value, _right_value);
+                return value;
+            }
+            case BASIC_DATA_TYPE_INT:
+            {
+                auto left_value = builder->CreateCast(Instruction::ZExt, _left_value, int_type);
+                auto value = builder->CreateNSWAdd(left_value, _right_value);
+                return value;
+            }
+            default:
+                throw EmitterException(ERR_EMITTER_NOT_IMPLEMENTED_EMITTING, ERR_POS(_binary_expression));
+            }
         }
 
         Value *BinaryExpressionEmitter::EmitSub()
@@ -244,7 +333,7 @@ namespace hoo
             {
                 auto left_value = builder->CreateCast(Instruction::ZExt, _left_value, int_type);
                 auto right_value = builder->CreateCast(Instruction::ZExt, _right_value, int_type);
-                auto value = builder->CreateNSWSub(left_value, right_value);
+                auto value = builder->CreateSub(left_value, right_value);
                 value = builder->CreateTrunc(value, byte_type);
                 return value;
             }

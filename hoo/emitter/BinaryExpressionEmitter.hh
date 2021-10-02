@@ -57,8 +57,11 @@ namespace hoo
             private:
             Value *EmitOperation(const OperatorType operator_type);
             Value *EmitAdd();
-            Value *EmitSub();
+            Value *EmitAddToInt(IRBuilder<> *builder, LLVMContext *context);
+            Value *EmitAddToDouble(IRBuilder<> *builder, LLVMContext *context);
+            Value *EmitAddToByte(IRBuilder<> *builder, LLVMContext *context);
 
+            Value *EmitSub();
             Value *EmitSubFromDouble();
             Value *EmitSubFromInt();
             Value *EmitSubFromByte();
