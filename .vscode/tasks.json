@@ -6,19 +6,20 @@
             "type": "shell",
             "command": "cmake",
             "args": [
-                "-G", "Unix Makefiles",
+                "-G", "Ninja",
                 "-B", "${workspaceFolder}/build/debug",
                 "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-15",
                 "-DCMAKE_C_COMPILER=/usr/bin/clang-15",
                 "-DCMAKE_BUILD_TYPE=Debug",
-                "-DANTLR4_JAR_LOCATION:STRING=/tools/antlr4-4.7.2-complete.jar"
+                "-DANTLR4_JAR_LOCATION:STRING=/usr/share/java/antlr-4.7.2-complete.jar"
             ],
             "problemMatcher": []
         },
         {
             "label": "Build Linux Debug",
             "type": "shell",
-            "command": "make",
+            "command": "ninja",
+            "args": [ "-j", "5" ],
             "options": {
                 "cwd": "${workspaceFolder}/build/debug"
             },
@@ -36,19 +37,20 @@
             "type": "shell",
             "command": "cmake",
             "args": [
-                "-G", "Unix Makefiles",
+                "-G", "Ninja",
                 "-B", "${workspaceFolder}/build/release",
                 "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-15",
                 "-DCMAKE_C_COMPILER=/usr/bin/clang-15",
                 "-DCMAKE_BUILD_TYPE=Release",
-                "-DANTLR4_JAR_LOCATION:STRING=/tools/antlr4-4.7.2-complete.jar"
+                "-DANTLR4_JAR_LOCATION:STRING=/usr/share/java/antlr-4.7.2-complete.jar"
             ],
             "problemMatcher": []
         },
         {
             "label": "Build Linux Release",
             "type": "shell",
-            "command": "make",
+            "command": "ninja",
+            "args": ["-j", "5"],
             "options": {
                 "cwd": "${workspaceFolder}/build/release"                
             },

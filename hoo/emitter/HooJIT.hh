@@ -19,16 +19,16 @@
 #ifndef HOO_JIT_HH
 #define HOO_JIT_HH
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ExecutionEngine/JITSymbol.h"
-#include "llvm/ExecutionEngine/Orc/CompileUtils.h"
+// #include "llvm/ADT/StringRef.h"
+// #include "llvm/ExecutionEngine/JITSymbol.h"
+// #include "llvm/ExecutionEngine/Orc/CompileUtils.h"
 #include "llvm/ExecutionEngine/Orc/Core.h"
-#include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
+// #include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
 #include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
 #include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
 #include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
-#include "llvm/ExecutionEngine/Orc/TargetProcessControl.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
+// #include "llvm/ExecutionEngine/Orc/TargetProcessControl.h"
+// #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/LLVMContext.h"
 
@@ -47,21 +47,15 @@ namespace hoo
         class HooJIT
         {
         private:
-        std::unique_ptr<TargetProcessControl> _taregt_process_control;
-        std::unique_ptr<ExecutionSession> _execution_session;
-
-        DataLayout _data_layout;
-        MangleAndInterner _mangle;
-
+        std::unique_ptr<ExecutionSession> _session;
         RTDyldObjectLinkingLayer _object_layer;
-        IRCompileLayer _ir_compile_layer;
-
+        IRCompileLayer _compiler_layer;
+        DataLayout _layout;
+        MangleAndInterner _mangler;
         JITDylib &_main_lib;
 
         public:
-        HooJIT(std::unique_ptr<TargetProcessControl> target_process_control,
-        std::unique_ptr<ExecutionSession> execution_session,
-        JITTargetMachineBuilder target_machine_builder, DataLayout data_layout);
+        HooJIT(std::unique_ptr<ExecutionSession> session, JITTargetMachineBuilder builder, DataLayout layout);
 
         public:
         JITDylib &GetMainLib();

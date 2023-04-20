@@ -19,21 +19,23 @@
 #include <hoo/emitter/UnitEmitter.hh>
 #include <hoo/emitter/HooJIT.hh>
 #include <hoo/parser/ParserDriver.hh>
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ExecutionEngine/JITSymbol.h"
-#include "llvm/ExecutionEngine/Orc/CompileUtils.h"
-#include "llvm/ExecutionEngine/Orc/Core.h"
+// #include "llvm/ADT/StringRef.h"
+// #include "llvm/ExecutionEngine/JITSymbol.h"
+// #include "llvm/ExecutionEngine/Orc/CompileUtils.h"
+// #include "llvm/ExecutionEngine/Orc/Core.h"
 #include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
-#include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
-#include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
-#include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
-#include "llvm/ExecutionEngine/Orc/TargetProcessControl.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
+// #include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
+// #include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
+// #include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
+// #include "llvm/ExecutionEngine/SectionMemoryManager.h"
+// #include "llvm/IR/DataLayout.h"
+// #include "llvm/IR/LLVMContext.h"
 #include "llvm/Support/SourceMgr.h"
 #include "llvm/IRReader/IRReader.h"
 #include "llvm/Support/TargetSelect.h"
+#include <llvm/ExecutionEngine/Orc/CompileUtils.h>
+#include <llvm/ExecutionEngine/Orc/ExecutorProcessControl.h>
+#include <llvm/ExecutionEngine/SectionMemoryManager.h>
 
 #include <exception>
 #include <string>
@@ -49,24 +51,37 @@ namespace hoo
 {
     namespace emitter
     {
-        HooJIT::HooJIT(std::unique_ptr<TargetProcessControl> target_process_control,
-                       std::unique_ptr<ExecutionSession> execution_session,
-                       JITTargetMachineBuilder target_machine_builder, DataLayout data_layout)
-            : _taregt_process_control(std::move(target_process_control)),
-              _execution_session(std::move(execution_session)),
-              _data_layout(std::move(data_layout)),
-              _mangle(*this->_execution_session, this->_data_layout),
-              _object_layer(*this->_execution_session,
-                            []()
-                            { return std::make_unique<SectionMemoryManager>(); }),
-              _ir_compile_layer(*this->_execution_session, _object_layer,
-                                std::make_unique<ConcurrentIRCompiler>(std::move(target_machine_builder))),
-              _main_lib(this->_execution_session->createBareJITDylib("<main>"))
-        {
+        HooJIT::HooJIT(std::unique_ptr<ExecutionSession> session,
+            JITTargetMachineBuilder builder,
+            DataLayout layout):
+        _session(std::move(session)),
+        _mangler(*_session, _layout),
+        _object_layer(*_session, []() { return std::unique_ptr<SectionMemoryManager>(); }),
+        _compiler_layer(*_session, _object_layer, std::make_unique<ConcurrentIRCompiler>(builder)),
+        _layout(std::move(layout)),
+        _main_lib(_session->createBareJITDylib("<main>")) {
             _main_lib.addGenerator(
                 cantFail(DynamicLibrarySearchGenerator::GetForCurrentProcess(
-                    _data_layout.getGlobalPrefix())));
+                    _layout.getGlobalPrefix())));
         }
+        // HooJIT::HooJIT(std::unique_ptr<TargetProcessControl> target_process_control,
+        //                std::unique_ptr<ExecutionSession> execution_session,
+        //                JITTargetMachineBuilder target_machine_builder, DataLayout data_layout)
+        //     : _taregt_process_control(std::move(target_process_control)),
+        //       _execution_session(std::move(execution_session)),
+        //       _data_layout(std::move(data_layout)),
+        //       _mangle(*this->_execution_session, this->_data_layout),
+        //       _object_layer(*this->_execution_session,
+        //                     []()
+        //                     { return std::make_unique<SectionMemoryManager>(); }),
+        //       _ir_compile_layer(*this->_execution_session, _object_layer,
+        //                         std::make_unique<ConcurrentIRCompiler>(std::move(target_machine_builder))),
+        //       _main_lib(this->_execution_session->createBareJITDylib("<main>"))
+        // {
+        //     _main_lib.addGenerator(
+        //         cantFail(DynamicLibrarySearchGenerator::GetForCurrentProcess(
+        //             _data_layout.getGlobalPrefix())));
+        // }
 
         JITDylib &HooJIT::GetMainLib()
         {
@@ -78,26 +93,18 @@ namespace hoo
             InitializeNativeTarget();
             InitializeAllAsmPrinters();
 
-            auto ssp = std::make_shared<SymbolStringPool>();
-            auto tpc = SelfTargetProcessControl::Create(ssp);
-            if (!tpc)
-            {
-                return tpc.takeError();
+            auto process_control = SelfExecutorProcessControl::Create();
+            if (!process_control) {
+                return process_control.takeError();
             }
-
-            auto execution_session = std::make_unique<ExecutionSession>(ssp);
-            JITTargetMachineBuilder tmb((*tpc)->getTargetTriple());
-
-            auto data_layout = tmb.getDefaultDataLayoutForTarget();
-            if (!data_layout)
-            {
-                return data_layout.takeError();
+            auto session = std::make_unique<ExecutionSession>(std::move(*process_control));
+            JITTargetMachineBuilder builder(session->getExecutorProcessControl().getTargetTriple());
+            auto layout = builder.getDefaultDataLayoutForTarget();
+            if (!layout) {
+                return layout.takeError();
             }
-
-            return std::make_unique<HooJIT>(std::move(*tpc),
-                                            std::move(execution_session),
-                                            std::move(tmb),
-                                            std::move(*data_layout));
+            return std::make_unique<HooJIT>(std::move(session), std::move(builder),
+                                                     std::move(*layout));
         }
 
         void HooJIT::Evaluate(const std::string &source, const std::string &name, bool dump)
@@ -119,7 +126,7 @@ namespace hoo
 
         Expected<JITEvaluatedSymbol> HooJIT::Lookup(const std::string &name)
         {
-            return _execution_session->lookup({&_main_lib}, _mangle(name));
+            return _session->lookup({&_main_lib}, _mangler(name));
         }
 
         void HooJIT::Add(const std::string &ir, const std::string &name)
@@ -142,11 +149,10 @@ namespace hoo
 
         Error HooJIT::Add(ThreadSafeModule thread_safe_module, ResourceTrackerSP resource_tracker)
         {
-            if (!resource_tracker)
-            {
+            if (!resource_tracker) {
                 resource_tracker = _main_lib.getDefaultResourceTracker();
             }
-            return _ir_compile_layer.add(resource_tracker, std::move(thread_safe_module));
+            return _compiler_layer.add(resource_tracker, std::move(thread_safe_module));
         }
 
         Error HooJIT::Add(std::unique_ptr<llvm::Module> module,
@@ -160,9 +166,9 @@ namespace hoo
 
         HooJIT::~HooJIT()
         {
-            if (auto error = _execution_session->endSession())
+            if (auto error = _session->endSession())
             {
-                _execution_session->reportError(std::move(error));
+                _session->reportError(std::move(error));
             }
         }
     }

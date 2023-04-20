@@ -105,7 +105,7 @@ namespace hoo
 
             if (function_return_type->isIntegerTy(8))
             {
-                function->addAttribute(0, Attribute::ZExt);
+                function->addRetAttr(llvm::Attribute::ZExt);
             }
 
             _emitter_context.SetFunction(function);

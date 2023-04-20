@@ -23,18 +23,18 @@ ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/hoo/parser")
 MESSAGE("Parser files are generated at ${GENERATED_PARSER_DIR}")
 ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/hoo/emitter")
 
-INSTALL(TARGETS hooemitter
-    PUBLIC_HEADER DESTINATION include/hoo/emitter)
-INSTALL(TARGETS hooparser
-    PUBLIC_HEADER DESTINATION include/hoo/parser)
-INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/hoo/parser/visitors"
-    DESTINATION include/hoo/parser
-    FILES_MATCHING PATTERN *.hh)
-INSTALL(TARGETS hooast
-    PUBLIC_HEADER DESTINATION include/hoo/ast)
-INSTALL(TARGETS hoocommon
-    PUBLIC_HEADER DESTINATION include/hoo/common)
-INSTALL(TARGETS hootest
-    PUBLIC_HEADER DESTINATION include/hoo/test)
-INSTALL(FILES "${CMAKE_SOURCE_DIR}/LICENSE.md"
-    DESTINATION share)
+# INSTALL(TARGETS hooemitter
+#     PUBLIC_HEADER DESTINATION include/hoo/emitter)
+# INSTALL(TARGETS hooparser
+#     PUBLIC_HEADER DESTINATION include/hoo/parser)
+# INSTALL(DIRECTORY "${CMAKE_SOURCE_DIR}/hoo/parser/visitors"
+#     DESTINATION include/hoo/parser
+#     FILES_MATCHING PATTERN *.hh)
+# INSTALL(TARGETS hooast
+#     PUBLIC_HEADER DESTINATION include/hoo/ast)
+# INSTALL(TARGETS hoocommon
+#     PUBLIC_HEADER DESTINATION include/hoo/common)
+# INSTALL(TARGETS hootest
+#     PUBLIC_HEADER DESTINATION include/hoo/test)
+# INSTALL(FILES "${CMAKE_SOURCE_DIR}/LICENSE.md"
+#     DESTINATION share)
