@@ -36,8 +36,21 @@ namespace hoo
 {
     namespace emitter
     {
+        ExitOnError HooJIT::ExitOnErr;
+
+        Expected<std::unique_ptr<HooJIT>> HooJIT::Create()
+        {
+            auto jit = ExitOnErr(LLJITBuilder().create());
+            return std::make_unique<HooJIT>(std::move(jit));
+        }
+
         HooJIT::HooJIT() {
             _jit = ExitOnErr(LLJITBuilder().create());
+        }
+
+        HooJIT::HooJIT(std::unique_ptr<LLJIT> jit)
+        {
+            _jit = std::move(jit);
         }
 
         JITDylib &HooJIT::GetMainLib()

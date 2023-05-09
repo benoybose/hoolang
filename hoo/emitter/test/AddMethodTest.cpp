@@ -122,7 +122,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test01");
         auto result = jit->Execute<int64_t, int64_t, int64_t> ("add", 321, 678);
         Equal<int64_t>(result, 999);
@@ -141,7 +141,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test02");
         });
 
@@ -159,7 +159,7 @@ class AddMethodTest: public TestUnit
             return (byte a + b);
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test03");
         auto result = jit->Execute<uint8_t, int64_t, int64_t>("add", 300, 141);
         Equal<uint8_t>(result, 185);
@@ -175,7 +175,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test04");
         auto result = jit->Execute<double, int64_t, int64_t>("add", 300, 141);
         Equal<double>(result, 441);
@@ -192,7 +192,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test05");
         });
 
@@ -210,7 +210,7 @@ class AddMethodTest: public TestUnit
             return (int a + b);
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test06");
         auto result = jit->Execute<int64_t, int64_t, double>("add", 10, 1.2);
         Equal<int64_t>(result, 11);
@@ -226,7 +226,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test07");
         auto result = jit->Execute<double, int64_t, double> ("add", 4, 1.6);
         DoubleEqual(result, 5.6);
@@ -249,7 +249,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test08");
         });
 
@@ -268,7 +268,7 @@ class AddMethodTest: public TestUnit
                 return (byte a + b);
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test09");
         });
 
@@ -286,7 +286,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test10");
         auto result = jit->Execute<int64_t, int64_t, uint8_t>("add", 3456, 56);
         Equal<int64_t>(result, 3512);
@@ -304,7 +304,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test11");
         auto result = jit->Execute<double, int64_t, uint8_t>("add", 1024, 46);
         Equal<double>(result, 1070);
@@ -321,7 +321,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test11");
         });
         auto error_code = ex.GetErrorNo();
@@ -338,7 +338,7 @@ class AddMethodTest: public TestUnit
             return (byte a + b);
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test13");
         auto result = jit->Execute<uint8_t, int64_t, uint8_t>("add", 1024, 46);
         Equal<int>(result, 46);
@@ -354,7 +354,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test14");
         auto result = jit->Execute<double, double, int64_t>("add", 10.24, 46);
         DoubleEqual(result, 56.24);
@@ -371,7 +371,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test15");
         });
         auto error_code = ex.GetErrorNo();
@@ -388,7 +388,7 @@ class AddMethodTest: public TestUnit
             return (int a + b);
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test16");
         auto result = jit->Execute<int64_t, double, int64_t>("add", 10.24, 46);
         Equal<int64_t>(result, 56);
@@ -405,7 +405,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test17");
         });
         
@@ -424,7 +424,7 @@ class AddMethodTest: public TestUnit
                 return (byte a + b);
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test18");
         });
         
@@ -442,7 +442,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test19");
         auto result = jit->Execute<double, double, int8_t>("add", 10.24, 46);
         DoubleEqual(result, 56.24);
@@ -459,7 +459,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test20");
         });
 
@@ -477,7 +477,7 @@ class AddMethodTest: public TestUnit
             return (int a + b);
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test21");
         auto result = jit->Execute<int64_t, double, int8_t>("add", 129.921, 127);
         Equal<int64_t>(result, 256);
@@ -494,7 +494,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test22");
         });
 
@@ -513,7 +513,7 @@ class AddMethodTest: public TestUnit
                 return (byte a + b);
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test23");
         });
 
@@ -531,7 +531,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test24");
         auto result = jit->Execute<int64_t, unsigned char, int64_t>("add", 251, 117);
         Equal<int64_t>(result, 368);
@@ -549,7 +549,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test25");
         auto result = jit->Execute<double, unsigned char, int64_t>("add", 252, 119);
         DoubleEqual(result, 371);
@@ -566,7 +566,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test26");
         });
         auto error_code = ex.GetErrorNo();
@@ -583,7 +583,7 @@ class AddMethodTest: public TestUnit
             return (byte a + b);
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test27");
         auto result = jit->Execute<unsigned char, unsigned char, int64_t>("add", 200, 147);
         Equal<unsigned char>(result, 91);
@@ -600,7 +600,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test28");
         });
         auto error_code = ex.GetErrorNo();
@@ -617,7 +617,7 @@ class AddMethodTest: public TestUnit
             return (int a + b);
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test29");
         auto result = jit->Execute<int64_t, unsigned char, double>("add", 20, 147.1);
         Equal<unsigned char>(result, 167);
@@ -633,7 +633,7 @@ class AddMethodTest: public TestUnit
             return a + b;
         }
         )source";
-        auto jit = std::unique_ptr<HooJIT>();
+        auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test30");
         auto result = jit->Execute<double, unsigned char, double>("add", 21, 147.1);
         DoubleEqual(result, 168.1);
@@ -651,7 +651,7 @@ class AddMethodTest: public TestUnit
                 return a + b;
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test31");
         });
 
@@ -671,7 +671,7 @@ class AddMethodTest: public TestUnit
                 return (byte a + b);
             }
             )source";
-            auto jit = std::unique_ptr<HooJIT>();
+            auto jit = std::move(*HooJIT::Create());
             jit->Evaluate(source, "test31");
         });
 

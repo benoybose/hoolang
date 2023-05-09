@@ -36,18 +36,15 @@ namespace hoo
         class HooJIT
         {
         private:
-        // std::unique_ptr<ExecutionSession> _session;
-        // RTDyldObjectLinkingLayer _object_layer;
-        // IRCompileLayer _compiler_layer;
-        // DataLayout _layout;
-        // MangleAndInterner _mangler;
-        // JITDylib &_main_lib;
-        ExitOnError ExitOnErr;
+        static ExitOnError ExitOnErr;
         std::unique_ptr<llvm::orc::LLJIT> _jit;
 
         public:
-        // HooJIT(std::unique_ptr<ExecutionSession> session, JITTargetMachineBuilder builder, DataLayout layout);
+        static Expected<std::unique_ptr<HooJIT>> Create();
+
+        public:
         HooJIT();
+        HooJIT(std::unique_ptr<LLJIT> jit);
 
         public:
         JITDylib &GetMainLib();
@@ -69,9 +66,7 @@ namespace hoo
                 throw std::runtime_error("symbol not found " + function_name);
             }
 
-
             TReturn (*function)(TParam1, TParam2) = symbol->toPtr<TReturn(TParam1, TParam2)>();
-            // auto *function = (TReturn(*)(TParam1, TParam2))(*symbol).getAddress();
             auto result = function(param1, param2);
             return result;
         }
