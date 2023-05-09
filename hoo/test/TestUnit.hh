@@ -71,6 +71,7 @@ namespace hoo
              * @return std::list<TestResult> Result of the test running
              */
             std::list<TestResult> Run();
+            virtual void Initialize(int argc, char *argv[]) {}
 
         private:
             std::ostream &Out() { return _out; }

@@ -19,19 +19,8 @@
 #ifndef HOO_JIT_HH
 #define HOO_JIT_HH
 
-#include "llvm/ADT/StringRef.h"
-#include "llvm/ExecutionEngine/JITSymbol.h"
-#include "llvm/ExecutionEngine/Orc/CompileUtils.h"
-#include "llvm/ExecutionEngine/Orc/Core.h"
-#include "llvm/ExecutionEngine/Orc/ExecutionUtils.h"
-#include "llvm/ExecutionEngine/Orc/IRCompileLayer.h"
-#include "llvm/ExecutionEngine/Orc/JITTargetMachineBuilder.h"
-#include "llvm/ExecutionEngine/Orc/RTDyldObjectLinkingLayer.h"
-#include "llvm/ExecutionEngine/Orc/TargetProcessControl.h"
-#include "llvm/ExecutionEngine/SectionMemoryManager.h"
-#include "llvm/IR/DataLayout.h"
-#include "llvm/IR/LLVMContext.h"
-
+#include <llvm/ExecutionEngine/Orc/LLJIT.h>
+#include <llvm/Support/Errno.h>
 #include <memory>
 #include <string>
 #include <map>
@@ -47,32 +36,28 @@ namespace hoo
         class HooJIT
         {
         private:
-        std::unique_ptr<TargetProcessControl> _taregt_process_control;
-        std::unique_ptr<ExecutionSession> _execution_session;
-
-        DataLayout _data_layout;
-        MangleAndInterner _mangle;
-
-        RTDyldObjectLinkingLayer _object_layer;
-        IRCompileLayer _ir_compile_layer;
-
-        JITDylib &_main_lib;
+        // std::unique_ptr<ExecutionSession> _session;
+        // RTDyldObjectLinkingLayer _object_layer;
+        // IRCompileLayer _compiler_layer;
+        // DataLayout _layout;
+        // MangleAndInterner _mangler;
+        // JITDylib &_main_lib;
+        ExitOnError ExitOnErr;
+        std::unique_ptr<llvm::orc::LLJIT> _jit;
 
         public:
-        HooJIT(std::unique_ptr<TargetProcessControl> target_process_control,
-        std::unique_ptr<ExecutionSession> execution_session,
-        JITTargetMachineBuilder target_machine_builder, DataLayout data_layout);
+        // HooJIT(std::unique_ptr<ExecutionSession> session, JITTargetMachineBuilder builder, DataLayout layout);
+        HooJIT();
 
         public:
         JITDylib &GetMainLib();
-        static Expected<std::unique_ptr<HooJIT>> Create();
         void Evaluate(const std::string &source, const std::string &name, bool dump = false);
 
         private:
-        Expected<JITEvaluatedSymbol> Lookup(const std::string &name);
+        Expected<ExecutorAddr> Lookup(const std::string &name);
         void Add(const std::string &ir, const std::string &name);
-        Error Add(ThreadSafeModule thread_safe_module, ResourceTrackerSP resource_tracker = nullptr);
-        Error Add(std::unique_ptr<llvm::Module> module, std::unique_ptr<LLVMContext> context, ResourceTrackerSP resource_tracker = nullptr);
+        Error Add(ThreadSafeModule thread_safe_module);
+        Error Add(std::unique_ptr<llvm::Module> module, std::unique_ptr<LLVMContext> context);
 
         public:
         template <typename TReturn, typename TParam1, typename TParam2>
@@ -83,7 +68,10 @@ namespace hoo
             {
                 throw std::runtime_error("symbol not found " + function_name);
             }
-            auto *function = (TReturn(*)(TParam1, TParam2))(*symbol).getAddress();
+
+
+            TReturn (*function)(TParam1, TParam2) = symbol->toPtr<TReturn(TParam1, TParam2)>();
+            // auto *function = (TReturn(*)(TParam1, TParam2))(*symbol).getAddress();
             auto result = function(param1, param2);
             return result;
         }

@@ -115,5 +115,8 @@
         "*.inc": "cpp",
         "ranges": "cpp",
         "stop_token": "cpp"
+    },
+    "cmake.configureSettings": {
+        "ANTLR4_JAR_LOCATION": "/tools/antlr4-4.7.2-complete.jar"
     }
 }

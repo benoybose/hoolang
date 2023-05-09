@@ -4,14 +4,15 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}"
+                "/usr/include/llvm-15",
+                "/usr/include/llvm-c-15",
+                "/usr/include/antlr4-runtime"
             ],
             "defines": [],
-            "compilerPath": "/usr/local/bin/clang",
-            "cStandard": "c11",
+            "compilerPath": "/usr/bin/clang-15",
+            "cStandard": "c17",
             "cppStandard": "c++14",
-            "intelliSenseMode": "linux-clang-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "intelliSenseMode": "linux-clang-x64"
         }
     ],
     "version": 4

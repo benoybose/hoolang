@@ -5,6 +5,7 @@ INCLUDE(extras.cmake)
 
 ADD_DEFINITIONS(-DANTLR4CPP_STATIC)
 
+## https://github.com/antlr/antlr4/blob/master/runtime/Cpp/cmake/Antlr4Package.md
 ANTLR4_GENERATE(HooANTLR4
 	${CMAKE_SOURCE_DIR}/hoo/parser/grammar/Hoo.g4
         BOTH FALSE TRUE)

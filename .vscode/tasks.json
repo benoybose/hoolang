@@ -1,5 +1,69 @@
 {
     "version": "2.0.0",
     "tasks": [
+        {
+            "label": "Configure Linux Debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G", "Ninja",
+                "-B", "${workspaceFolder}/build/debug",
+                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-15",
+                "-DCMAKE_C_COMPILER=/usr/bin/clang-15",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DANTLR4_JAR_LOCATION:STRING=/usr/share/java/antlr-4.7.2-complete.jar"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Linux Debug",
+            "type": "shell",
+            "command": "ninja",
+            "args": [ "-j", "5" ],
+            "options": {
+                "cwd": "${workspaceFolder}/build/debug"
+            },
+            "problemMatcher": [],
+            "dependsOn": [ "Configure Linux Debug" ]
+        },
+        {
+            "label": "Clean Linux Debug",
+            "type": "shell",
+            "command": "rm",
+            "args": ["-rf", "${workspaceFolder}/build/debug"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Configure Linux Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G", "Ninja",
+                "-B", "${workspaceFolder}/build/release",
+                "-DCMAKE_CXX_COMPILER=/usr/bin/clang++-15",
+                "-DCMAKE_C_COMPILER=/usr/bin/clang-15",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DANTLR4_JAR_LOCATION:STRING=/usr/share/java/antlr-4.7.2-complete.jar"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Linux Release",
+            "type": "shell",
+            "command": "ninja",
+            "args": ["-j", "5"],
+            "options": {
+                "cwd": "${workspaceFolder}/build/release"                
+            },
+            "problemMatcher": [],
+            "dependsOn": [ "Configure Linux Release" ]
+        },
+        {
+            "label": "Clean Linux Release",
+            "type": "shell",
+            "command": "rm",
+            "args": ["-rf", "${workspaceFolder}/build/release"],
+            "problemMatcher": []
+        }
     ]
 }

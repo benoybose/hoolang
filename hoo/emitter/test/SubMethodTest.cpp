@@ -110,7 +110,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test01");
         auto result = jit->Execute<int64_t, int64_t, int64_t> ("sub", 321, 678);
         Equal<int64_t>(result, -357);
@@ -133,7 +133,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test02");
         });
 
@@ -151,7 +151,7 @@ class SubMethodTest: public TestUnit
             return (byte a - b);
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test03");
         auto result = jit->Execute<uint8_t, int64_t, int64_t>("sub", 300, 141);
         Equal<uint8_t>(result, 159);
@@ -167,7 +167,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test04");
         auto result = jit->Execute<double, int64_t, int64_t>("sub", 300, 141);
         Equal<double>(result, 159);
@@ -184,7 +184,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test05");
         });
 
@@ -202,7 +202,7 @@ class SubMethodTest: public TestUnit
             return (int a - b);
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test06");
         auto result = jit->Execute<int64_t, int64_t, double>("sub", 10, 1.2);
         Equal<int64_t>(result, 8);
@@ -218,7 +218,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test07");
         auto result = jit->Execute<double, int64_t, double> ("sub", 4, 1.6);
         DoubleEqual(result, 2.4);
@@ -241,7 +241,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test08");
         });
 
@@ -260,7 +260,7 @@ class SubMethodTest: public TestUnit
                 return (byte a - b);
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test09");
         });
 
@@ -278,7 +278,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test10");
         auto result = jit->Execute<int64_t, int64_t, uint8_t>("sub", 3456, 56);
         Equal<int64_t>(result, 3400);
@@ -296,7 +296,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test11");
         auto result = jit->Execute<double, int64_t, uint8_t>("sub", 1024, 46);
         Equal<double>(result, 978);
@@ -313,7 +313,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test11");
         });
         auto error_code = ex.GetErrorNo();
@@ -330,7 +330,7 @@ class SubMethodTest: public TestUnit
             return (byte a - b);
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test13");
         auto result = jit->Execute<uint8_t, int64_t, uint8_t>("sub", 1024, 46);
         Equal<int>(result, 210);
@@ -346,7 +346,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test14");
         auto result = jit->Execute<double, double, int64_t>("sub", 10.24, 46);
         DoubleEqual(result, -35.76);
@@ -363,7 +363,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test15");
         });
         auto error_code = ex.GetErrorNo();
@@ -380,7 +380,7 @@ class SubMethodTest: public TestUnit
             return (int a - b);
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test16");
         auto result = jit->Execute<int64_t, double, int64_t>("sub", 10.24, 46);
         Equal<int64_t>(result, -35);
@@ -397,7 +397,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test17");
         });
         
@@ -416,7 +416,7 @@ class SubMethodTest: public TestUnit
                 return (byte a - b);
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test18");
         });
         
@@ -434,7 +434,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test19");
         auto result = jit->Execute<double, double, int8_t>("sub", 10.24, 46);
         DoubleEqual(result, -35.76);
@@ -451,7 +451,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test20");
         });
 
@@ -469,7 +469,7 @@ class SubMethodTest: public TestUnit
             return (int a - b);
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test21");
         auto result = jit->Execute<int64_t, double, int8_t>("sub", 129.921, 127);
         Equal<int64_t>(result, 2);
@@ -486,7 +486,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test22");
         });
 
@@ -505,7 +505,7 @@ class SubMethodTest: public TestUnit
                 return (byte a - b);
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test23");
         });
 
@@ -523,7 +523,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test24");
         auto result = jit->Execute<int64_t, unsigned char, int64_t>("sub", 251, 117);
         Equal<int64_t>(result, 134);
@@ -541,7 +541,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test25");
         auto result = jit->Execute<double, unsigned char, int64_t>("sub", 252, 119);
         DoubleEqual(result, 133);
@@ -558,7 +558,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test26");
         });
         auto error_code = ex.GetErrorNo();
@@ -575,7 +575,7 @@ class SubMethodTest: public TestUnit
             return (byte a - b);
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test27");
         auto result = jit->Execute<unsigned char, unsigned char, int64_t>("sub", 200, 147);
         Equal<unsigned char>(result, 53);
@@ -592,7 +592,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test28");
         });
         auto error_code = ex.GetErrorNo();
@@ -609,7 +609,7 @@ class SubMethodTest: public TestUnit
             return (int a - b);
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test29");
         auto result = jit->Execute<int64_t, unsigned char, double>("sub", 20, 147.1);
         Equal<unsigned char>(result, -127);
@@ -625,7 +625,7 @@ class SubMethodTest: public TestUnit
             return a - b;
         }
         )source";
-        auto jit = std::move(* HooJIT::Create());
+        auto jit = std::unique_ptr<HooJIT>();
         jit->Evaluate(source, "test30");
         auto result = jit->Execute<double, unsigned char, double>("sub", 21, 147.1);
         DoubleEqual(result, -126.1);
@@ -643,7 +643,7 @@ class SubMethodTest: public TestUnit
                 return a - b;
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test31");
         });
 
@@ -663,7 +663,7 @@ class SubMethodTest: public TestUnit
                 return (byte a - b);
             }
             )source";
-            auto jit = std::move(* HooJIT::Create());
+            auto jit = std::unique_ptr<HooJIT>();
             jit->Evaluate(source, "test31");
         });
 
