@@ -4,9 +4,10 @@
 #include <hoo/test/TestUnit.hh>
 
 #define HOO_TEST_CASE(TESTCLASSNAME) \
-int main() \
+int main(int argc, char *argv[]) \
 { \
     TESTCLASSNAME test;\
+    test.Initialize(argc, argv);\
     auto results = test.Run();\
     for (auto result : results)\
     {\

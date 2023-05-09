@@ -22,6 +22,7 @@ SET(GENERATED_PARSER_DIR "")
 ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/hoo/parser")
 MESSAGE("Parser files are generated at ${GENERATED_PARSER_DIR}")
 ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/hoo/emitter")
+ADD_SUBDIRECTORY("${CMAKE_SOURCE_DIR}/experiments/llvm-examples/HowToUseLLJIT")
 
 # INSTALL(TARGETS hooemitter
 #     PUBLIC_HEADER DESTINATION include/hoo/emitter)
