@@ -55,24 +55,18 @@ TARGET_INCLUDE_DIRECTORIES(hooemitter PRIVATE
 TARGET_LINK_LIBRARIES(hooemitter PRIVATE
     hooparser)
 
-ADD_EXECUTABLE(AddMethodTest test/AddMethodTest.cpp)
-TARGET_INCLUDE_DIRECTORIES(AddMethodTest PRIVATE
+ADD_EXECUTABLE(emitter-test
+    test/AddIntegersTest.cpp
+    test/EmitterTest.cpp)
+TARGET_INCLUDE_DIRECTORIES(emitter-test PRIVATE
     ${CMAKE_SOURCE_DIR}
     ${ANTLR4_INCLUDE_DIR}
     ${GENERATED_PARSER_DIR})
-TARGET_LINK_LIBRARIES(AddMethodTest PRIVATE
+TARGET_LINK_LIBRARIES(emitter-test PRIVATE
     hootest
     hooparser
-    hooemitter LLVM)
-ADD_TEST(AddMethodTest AddMethodTest)
+    hooemitter
+    LLVM
+    gtest)
+ADD_TEST(emitter-test)
 
-ADD_EXECUTABLE(SubMethodTest test/SubMethodTest.cpp)
-TARGET_INCLUDE_DIRECTORIES(SubMethodTest PRIVATE
-    ${CMAKE_SOURCE_DIR}
-    ${ANTLR4_INCLUDE_DIR}
-    ${GENERATED_PARSER_DIR})
-TARGET_LINK_LIBRARIES(SubMethodTest PRIVATE
-    hootest
-    hooparser
-    hooemitter LLVM)
-ADD_TEST(SubMethodTest SubMethodTest)
