@@ -19,9 +19,37 @@
 #include <gtest/gtest.h>
 #include <hoo/emitter/HooJIT.hh>
 
+#include <list>
+#include <cstdint>
+
 using namespace hoo::emitter;
 
-TEST(AddIntegersTest, AddTwoIntegers) 
+std::list<std::int64_t> GetSpecimen()
+{
+    std::int64_t max64 = INT64_MAX;
+    std::int64_t min64 = INT64_MIN;
+    std::list<std::int64_t> divisors = {1, 2, 3, 5, 8, 13, 21, 34, 55, 89};
+    std::list<std::int64_t> specimen;
+
+    specimen.insert(specimen.end(), divisors.begin(), divisors.end());
+    for (const std::int64_t& divisor : divisors) {
+        auto outcome = max64 / divisor;
+        specimen.push_back(outcome);
+    }
+
+    std::list<std::int64_t> negative_specimen;
+    for (auto item: specimen) {
+        negative_specimen.push_back(item * -1);        
+    }
+    specimen.insert(specimen.end(), negative_specimen.begin(), negative_specimen.end());
+    for (auto item: specimen) {
+        std::cout << item << std::endl;
+    }
+    return specimen;
+}
+
+
+TEST(IntegerArithmeticTest, AddTwoIntegers) 
 {
     const std::string source = R"source(
         public add(a:int, b:int) : int {
@@ -30,8 +58,14 @@ TEST(AddIntegersTest, AddTwoIntegers)
         )source";
         auto jit = std::move(*HooJIT::Create());
         jit->Evaluate(source, "test01");
-        auto result = jit->Execute<int64_t, int64_t, int64_t> ("add", 321, 678);
-        EXPECT_EQ(result, 999);
-        result = jit->Execute<int64_t, int64_t, int64_t> ("add", 678, 321);
-        EXPECT_EQ(result, 999);
+        auto specimen = GetSpecimen();
+        for (auto left: specimen) {
+            for (auto right: specimen) {
+                auto outcome = left + right;
+                auto result = jit->Execute<int64_t, int64_t, int64_t> ("add", left, right);
+                EXPECT_EQ(outcome, result) << left << "+"
+                    << right << "=" << "expected: " << outcome
+                    << "resulted:" << result;
+            }
+        }
 }

@@ -56,7 +56,7 @@ TARGET_LINK_LIBRARIES(hooemitter PRIVATE
     hooparser)
 
 ADD_EXECUTABLE(emitter-test
-    test/AddIntegersTest.cpp
+    test/IntegerArithmeticTest.cpp
     test/EmitterTest.cpp)
 TARGET_INCLUDE_DIRECTORIES(emitter-test PRIVATE
     ${CMAKE_SOURCE_DIR}
@@ -68,5 +68,5 @@ TARGET_LINK_LIBRARIES(emitter-test PRIVATE
     hooemitter
     LLVM
     gtest)
-ADD_TEST(emitter-test)
+ADD_TEST(NAME emitter-test COMMAND emitter-test)
 

@@ -28,7 +28,9 @@
 				"ms-vscode.cmake-tools",
 				"twxs.cmake",
 				"mike-lischke.vscode-antlr4",
-				"vadimcn.vscode-lldb"
+				"vadimcn.vscode-lldb",
+				"hbenl.vscode-test-explorer",
+				"openningia.vscode-google-test-adapter"
 			]
 		}
 	},
